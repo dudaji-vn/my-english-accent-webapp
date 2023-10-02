@@ -6,9 +6,11 @@ import { Provider } from "react-redux";
 
 import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
 
+import "./input.css";
 import App from "@/App";
 import theme from "@/config/theme";
 import { store } from "@/store";
+import { CssBaseline } from "@mui/material";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,6 +21,7 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <CssVarsProvider theme={theme}>
+          <CssBaseline />
           <App />
         </CssVarsProvider>
       </BrowserRouter>

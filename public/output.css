@@ -583,3 +583,13 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
+
+@font-face {
+  font-family: InterMedium;
+
+  src: url("../public/fonts/Inter-Medium.ttf");
+
+  format: ("ttf");
+
+  font-display: swap;
+}
