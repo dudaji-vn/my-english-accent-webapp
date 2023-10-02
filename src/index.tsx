@@ -4,7 +4,6 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import CssBaseline from "@mui/material/CssBaseline";
 import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
 
 import App from "@/App";
@@ -20,7 +19,6 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <CssVarsProvider theme={theme}>
-          <CssBaseline />
           <App />
         </CssVarsProvider>
       </BrowserRouter>
