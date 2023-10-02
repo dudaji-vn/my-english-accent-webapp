@@ -13,7 +13,7 @@ export default function CardRecord() {
         <img src={AvatarIcon} alt="favorite-icon" />
       </Grid>
       <Grid item xs={8}>
-        <Typography>User name 01</Typography>
+        <Typography color="primary">User name 01</Typography>
         <Typography>Country of birth</Typography>
       </Grid>
       <Grid item xs={2} textAlign={"end"}>
@@ -21,7 +21,7 @@ export default function CardRecord() {
           <img src={HeartIcon} alt="favorite-icon" />
         </IconButton>
       </Grid>
-      <Grid item xs={12} spacing={2}>
+      <Grid item xs={12}>
         <Box
           sx={{
             display: "flex",
