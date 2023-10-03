@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: InterMedium;
+  src: url("../public/fonts/Inter-Medium.ttf");
+  format: ("ttf");
+  font-display: swap;
+}

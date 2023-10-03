@@ -5,7 +5,7 @@ import { useAppSelector } from "./store/hook";
 
 function App() {
   const token = useAppSelector((state) => state.user.token);
-  const routing = useRoutes(routes(!!token));
+  const routing = useRoutes(routes(!token));
   return <>{routing}</>;
 }
 

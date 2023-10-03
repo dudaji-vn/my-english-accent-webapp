@@ -4,9 +4,6 @@ module.exports = {
   },
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   important: "#root",
-  variants: {
-    extend: {},
-  },
   plugins: [],
   theme: {
     extend: {
@@ -18,6 +15,10 @@ module.exports = {
           accent: "#0f30ab",
           "contrast-text": "#ffffff",
         },
+      },
+      fontFamily: {
+        display: ["Inter", "sans-serif"],
+        body: ["Inter", "sans-serif"],
       },
     },
   },
