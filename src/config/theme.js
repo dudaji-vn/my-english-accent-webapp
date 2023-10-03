@@ -18,6 +18,13 @@ const theme = extendTheme({
     fontFamily: "Inter, Arial",
   },
   components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          background: "white",
+        },
+      },
+    },
     MuiCssBaseline: {
       styleOverrides: `
         @font-face {
