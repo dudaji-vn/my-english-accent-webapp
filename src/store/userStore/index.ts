@@ -4,10 +4,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Type {
   token: string;
+  national: "kr" | "vi";
 }
 
 const initialState: Type = {
   token: "",
+  national: "kr",
 };
 
 const userSlice = createSlice({
