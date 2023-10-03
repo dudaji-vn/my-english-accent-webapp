@@ -1,10 +1,10 @@
 const ROUTER = {
-    ROOT: '/',
-    MEA: '/my-english-accent',
-    LOGIN: '/login',
+  ROOT: "/",
+  MEA: "/my-english-accent",
+  LOGIN: "/login",
 
-    EXPLORE: 'explore',
-    MEMBERS: 'members'
-}
+  RECORD: "/record",
+  LISTENING: "/listening",
+};
 
 export default ROUTER;
