@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import { Avatar, Checkbox, Grid, SvgIcon, Typography } from "@mui/material";
+import { Avatar, Checkbox, Grid, Typography } from "@mui/material";
 import AvatarIcon from "@/assets/icon/avatar-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import MicrophoneIcon from "@/assets/icon/microphone-icon.svg";
@@ -15,7 +15,7 @@ export default function CardRecord() {
         <Avatar alt="avatar-icon" src={AvatarIcon} />
       </Grid>
       <Grid item xs={8}>
-        <Typography color="primary">User name 01</Typography>
+        <Typography>User name 01</Typography>
         <Box display={"flex"} alignItems={"center"} gap={1}>
           <Avatar
             alt="national-flag-icon"
@@ -30,8 +30,8 @@ export default function CardRecord() {
       </Grid>
       <Grid item xs={2} textAlign={"end"}>
         <Checkbox
-          icon={<img src={UncheckIcon} style={{ padding: "2px" }} />}
-          checkedIcon={<img src={CheckIcon} />}
+          icon={<img src={UncheckIcon} alt="uncheck-icon" />}
+          checkedIcon={<img src={CheckIcon} alt="uncheck-icon" />}
         ></Checkbox>
       </Grid>
       <Grid item xs={12}>
