@@ -4,13 +4,15 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
+import {
+  Experimental_CssVarsProvider as CssVarsProvider,
+  StyledEngineProvider,
+} from "@mui/material/styles";
 
 import "./input.css";
 import App from "@/App";
-import theme from "@/config/theme";
+import theme from "../theme";
 import { store } from "@/store";
-import { CssBaseline } from "@mui/material";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,10 +22,11 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <CssVarsProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </CssVarsProvider>
+        <StyledEngineProvider injectFirst>
+          <CssVarsProvider theme={theme}>
+            <App />
+          </CssVarsProvider>
+        </StyledEngineProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

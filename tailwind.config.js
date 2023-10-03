@@ -1,10 +1,9 @@
 module.exports = {
   corePlugins: {
-    preflight: false,
+    preflight: true,
   },
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   important: "#root",
-  plugins: [],
   theme: {
     extend: {
       colors: {
@@ -16,10 +15,9 @@ module.exports = {
           "contrast-text": "#ffffff",
         },
       },
-      fontFamily: {
-        display: ["Inter", "sans-serif"],
-        body: ["Inter", "sans-serif"],
-      },
+    },
+    fontFamily: {
+      inter: ["Inter"],
     },
   },
 };

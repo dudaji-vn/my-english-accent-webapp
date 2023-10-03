@@ -434,6 +434,14 @@ video {
   display: none;
 }
 
+html {
+  font-family: Inter !important;
+}
+
+body {
+  font-family: Inter !important;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -584,12 +592,49 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-@font-face {
-  font-family: InterMedium;
+.container {
+  width: 100%;
+}
 
-  src: url("../public/fonts/Inter-Medium.ttf");
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
 
-  format: ("ttf");
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
 
-  font-display: swap;
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+#root :is(.static) {
+  position: static;
+}
+
+#root :is(.flex) {
+  display: flex;
+}
+
+#root :is(.text-sm) {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
