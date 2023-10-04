@@ -41,7 +41,13 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar position="static" sx={{ boxShadow: "none" }}>
+    <AppBar
+      position="static"
+      sx={{
+        background: "white",
+        boxShadow: "none",
+      }}
+    >
       <Container>
         <Toolbar disableGutters>
           <IconButton>
@@ -58,7 +64,7 @@ export default function Navbar() {
               </>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: "40px" }}
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: "top",
