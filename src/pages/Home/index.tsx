@@ -14,7 +14,11 @@ export default function HomePage() {
   };
   return (
     <Container>
-      <Typography marginTop={"1.375rem"} marginBottom={"1.5rem"}>
+      <Typography
+        className="text-sm"
+        marginTop={"1.375rem"}
+        marginBottom={"1.5rem"}
+      >
         Home
       </Typography>
       <Box
