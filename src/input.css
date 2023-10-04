@@ -13,7 +13,7 @@
 
 @layer base {
   h6 {
-    @apply text-2xl font-semibold;
+    @apply text-2xl font-semibold !important;
   }
   .text-large-regular {
     @apply text-lg font-normal;

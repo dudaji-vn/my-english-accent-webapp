@@ -14,11 +14,7 @@ export default function HomePage() {
   };
   return (
     <Container>
-      <Typography
-        className="text-sm"
-        marginTop={"1.375rem"}
-        marginBottom={"1.5rem"}
-      >
+      <Typography className="text-sm my-6" component={"h6"}>
         Home
       </Typography>
       <Box
@@ -30,12 +26,16 @@ export default function HomePage() {
           borderRadius: 1,
           boxShadow:
             "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+          background: "white",
+          marginBottom: 2,
         }}
         onClick={() => redirectTo(ROUTER.RECORD)}
       >
         <Avatar src={MicrophoneIcon}></Avatar>
-        <Typography>Practice pronunciation</Typography>
-        <Typography>Common phrase practice for work</Typography>
+        <Typography className="text-large-semibold">
+          Practice pronunciation
+        </Typography>
+        <Typography variant="body2">Common phrase practice for work</Typography>
       </Box>
       <Box
         sx={{
@@ -46,17 +46,14 @@ export default function HomePage() {
           borderRadius: 1,
           boxShadow:
             "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+          background: "white",
         }}
         onClick={() => redirectTo(ROUTER.LISTENING)}
       >
         <Avatar src={HeadphoneIcon}></Avatar>
-        <Typography>Listening</Typography>
-        <Typography>Your colleague’s english accent</Typography>
+        <Typography className="text-large-semibold">Listening</Typography>
+        <Typography variant="body2">Your colleague’s english accent</Typography>
       </Box>
-      {/* <Box display={"flex"} gap={1} padding={2}>
-        <img alt="chevron-left-icon" src={ChevronIcon} />
-        <Typography>Practice pronunciation</Typography>
-      </Box> */}
     </Container>
   );
 }
