@@ -14,7 +14,6 @@ export default function HomePage() {
   };
   return (
     <Container>
-      <div>123123123</div>
       <Typography
         className="text-sm"
         marginTop={"1.375rem"}

@@ -16,7 +16,7 @@
   /* 2 */
   border-style: solid;
   /* 2 */
-  border-color: #e5e7eb;
+  border-color: currentColor;
   /* 2 */
 }
 
@@ -440,6 +440,12 @@ html {
 
 body {
   font-family: Inter !important;
+}
+
+h6 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
 }
 
 *, ::before, ::after {

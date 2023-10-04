@@ -8,6 +8,7 @@ import {
   Experimental_CssVarsProvider as CssVarsProvider,
   StyledEngineProvider,
 } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
 
 import "./input.css";
 import App from "@/App";
@@ -24,6 +25,7 @@ root.render(
       <BrowserRouter>
         <StyledEngineProvider injectFirst>
           <CssVarsProvider theme={theme}>
+            <CssBaseline />
             <App />
           </CssVarsProvider>
         </StyledEngineProvider>
