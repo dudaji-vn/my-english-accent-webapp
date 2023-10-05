@@ -1,7 +1,9 @@
 import React from "react";
-import { Box, Avatar, Typography, Container } from "@mui/material";
+import { Box, Avatar, Typography, IconButton } from "@mui/material";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import Category, { CategoryPropType } from "@/components/Category";
+import Recording from "@/components/TranslationCard";
+
 export default function RecordingPage() {
   const categoryList: CategoryPropType[] = [
     {
@@ -10,6 +12,7 @@ export default function RecordingPage() {
         {
           categoryItemName: "General",
           progressNumber: 6,
+          categoryImg: "",
         },
       ],
     },
@@ -19,35 +22,46 @@ export default function RecordingPage() {
         {
           categoryItemName: "Product Development",
           progressNumber: 6,
+          categoryImg: "",
         },
         {
           categoryItemName: "Product design",
           progressNumber: 6,
+          categoryImg: "",
         },
       ],
     },
   ];
 
+  const onBack = () => {
+    console.log("back to home");
+  };
+
   const renderCategory = () => {
     return categoryList.map((category: CategoryPropType) => {
       return (
-        <Category
-          categoryName={category.categoryName}
-          categoryItems={category.categoryItems}
-        />
+        <>
+          <Category
+            categoryName={category.categoryName}
+            categoryItems={category.categoryItems}
+          />
+        </>
       );
     });
   };
 
   return (
     <Box className="bg-white">
-      <Box className="p-4 flex items-center gap-2">
-        <Avatar src={ChevronIcon} sx={{ width: "1.5rem", height: "1.5rem" }} />
+      {/* <Box className="p-4 flex items-center gap-2">
+        <IconButton onClick={onBack}>
+          <Avatar src={ChevronIcon} className="w-6 h-6" />
+        </IconButton>
         <Typography className="text-large-semibold">
-          Practice pronunciation
+          Practice pronounciation
         </Typography>
       </Box>
-      {renderCategory()}
+      {renderCategory()} */}
+      <Recording />
     </Box>
   );
 }

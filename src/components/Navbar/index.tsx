@@ -46,6 +46,7 @@ export default function Navbar() {
       sx={{
         background: "white",
         boxShadow: "none",
+        borderBottom: "1px solid #F3F4F6",
       }}
     >
       <Container>
@@ -87,10 +88,7 @@ export default function Navbar() {
                   <Avatar
                     alt={setting.title + "icon"}
                     src={setting.icon}
-                    sx={{
-                      width: "1rem",
-                      height: "1rem",
-                    }}
+                    className="w-4 h-4"
                   />
                   <Typography textAlign="center" paddingLeft={"12px"}>
                     {setting.title}

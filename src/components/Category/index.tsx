@@ -1,6 +1,8 @@
 import React from "react";
-import { Box, Typography, Avatar } from "@mui/material";
-import CategoryItem, { CategoryItemPropType } from "./CategoryItem";
+import { Box, Typography } from "@mui/material";
+import CategoryItem, {
+  CategoryItemPropType,
+} from "@/components/Category/CategoryItem";
 
 export interface CategoryPropType {
   categoryName: string;
@@ -14,10 +16,13 @@ export default function Category({
   const renderCategoryItem = () => {
     return categoryItems.map((item) => {
       return (
-        <CategoryItem
-          categoryItemName={item.categoryItemName}
-          progressNumber={item.progressNumber}
-        />
+        <Box className="mb-4 last:mb-0">
+          <CategoryItem
+            categoryItemName={item.categoryItemName}
+            progressNumber={item.progressNumber}
+            categoryImg={item.categoryImg}
+          />
+        </Box>
       );
     });
   };

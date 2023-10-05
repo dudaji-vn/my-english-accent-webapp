@@ -1,36 +1,33 @@
-import { Box, Typography, Avatar } from "@mui/material";
-import GalleryIcon from "@/assets/icon/gallery-icon.svg";
+import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
+import BoxCard from "@/components/Card";
 
 export interface CategoryItemPropType {
   categoryItemName: string;
   progressNumber: number;
+  categoryImg: string;
 }
 
 export default function CategoryItem({
   categoryItemName,
   progressNumber,
+  categoryImg,
 }: CategoryItemPropType) {
   return (
-    <Box
-      className="p-4 flex justify-between items-end mb-4 last:mb-0"
-      sx={{
-        boxShadow: "0px 1px 3px 0px #A6AFC366",
-        borderRadius: "0.5rem",
-      }}
-    >
-      <Box>
-        <Typography className="text-base-semibold">
-          {categoryItemName}
-        </Typography>
-        <Typography className="text-extra-small-regular">
-          {progressNumber} phrases
-        </Typography>
+    <BoxCard>
+      <Box className="p-4 flex justify-between items-center">
+        <Box>
+          <Typography className="text-base-semibold">
+            {categoryItemName}
+          </Typography>
+          <Typography className="text-extra-small-regular">
+            {progressNumber} phrases
+          </Typography>
+        </Box>
+        <Avatar src={categoryImg} alt="gallery-icon" className="w-6 h-6" />
       </Box>
-      <Avatar
-        src={GalleryIcon}
-        alt="gallery-icon"
-        sx={{ width: "1.5rem", height: "1.5rem" }}
-      />
-    </Box>
+      <Box className="px-4 pb-4">
+        <LinearProgress variant="determinate" value={50} />
+      </Box>
+    </BoxCard>
   );
 }

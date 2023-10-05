@@ -15,6 +15,7 @@ module.exports = {
           100: "#f3f4f6",
         },
         white: "#FFF",
+        stroke: "#DFE4EA",
       },
     },
     fontFamily: {

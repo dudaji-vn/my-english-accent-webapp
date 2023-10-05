@@ -17,14 +17,7 @@ export default function Nationality() {
   };
   return (
     <Box display={"flex"} alignItems={"center"} gap={1}>
-      <Avatar
-        alt="national-flag-icon"
-        src={getFlag()}
-        sx={{
-          width: "1rem",
-          height: "1rem",
-        }}
-      />
+      <Avatar alt="national-flag-icon" src={getFlag()} className="w-4 h-4" />
       <Typography>Nationality</Typography>
     </Box>
   );
