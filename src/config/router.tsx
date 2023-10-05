@@ -6,6 +6,8 @@ import Login from "@/pages/Auth";
 import NotFoundPage from "@/pages/NotFound";
 import RecordingPage from "@/pages/Record";
 import Navbar from "@/components/Navbar";
+import RecordingProgressPage from "@/pages/Record/RecordProgress";
+import RecordSummaryPage from "@/pages/Record/RecordSummary";
 
 function RequireAuth({
   isLoggedIn,
@@ -43,6 +45,22 @@ const routes = (isLoggedIn: boolean) => [
     element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
         <RecordingPage />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: ROUTER.RECORD + "/:category",
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn}>
+        <RecordingProgressPage />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: ROUTER.RECORD + "/:category" + ROUTER.SUMMARY,
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn}>
+        <RecordSummaryPage />
       </RequireAuth>
     ),
   },

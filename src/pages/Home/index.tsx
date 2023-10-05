@@ -7,11 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const redirectTo = (path: string) => {
-    navigate({
-      pathname: path,
-    });
-  };
   return (
     <Container>
       <Typography className="text-sm my-6" component={"h6"}>
@@ -29,7 +24,7 @@ export default function HomePage() {
           background: "white",
           marginBottom: 2,
         }}
-        onClick={() => redirectTo(ROUTER.RECORD)}
+        onClick={() => navigate(ROUTER.RECORD)}
       >
         <Avatar src={MicrophoneIcon}></Avatar>
         <Typography className="text-large-semibold">
@@ -48,9 +43,9 @@ export default function HomePage() {
             "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
           background: "white",
         }}
-        onClick={() => redirectTo(ROUTER.LISTENING)}
+        onClick={() => navigate(ROUTER.LISTENING)}
       >
-        <Avatar src={HeadphoneIcon}></Avatar>
+        <Avatar src={HeadphoneIcon} alt="headphone-icon"></Avatar>
         <Typography className="text-large-semibold">Listening</Typography>
         <Typography variant="body2">Your colleague’s english accent</Typography>
       </Box>

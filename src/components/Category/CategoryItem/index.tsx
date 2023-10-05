@@ -1,5 +1,7 @@
 import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
 import BoxCard from "@/components/Card";
+import { Route, useNavigate } from "react-router-dom";
+import ROUTER from "@/shared/const/router.const";
 
 export interface CategoryItemPropType {
   categoryItemName: string;
@@ -12,9 +14,17 @@ export default function CategoryItem({
   progressNumber,
   categoryImg,
 }: CategoryItemPropType) {
+  const navigate = useNavigate();
+  const gotoRecordProgressPage = (id: string) => {
+    const encode = encodeURI(id.toLowerCase());
+    navigate(ROUTER.RECORD + `/${encode}`);
+  };
   return (
     <BoxCard>
-      <Box className="p-4 flex justify-between items-center">
+      <Box
+        className="p-4 flex justify-between items-center"
+        onClick={() => gotoRecordProgressPage(categoryItemName)}
+      >
         <Box>
           <Typography className="text-base-semibold">
             {categoryItemName}

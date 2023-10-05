@@ -18,6 +18,12 @@ h6 {
   font-weight: 600
 }
 
+.text-base-regular {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400
+}
+
 .text-base-semibold {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -226,18 +232,22 @@ h6 {
   }
 }
 
+#root :is(.invisible) {
+  visibility: hidden
+}
+
 #root :is(.static) {
   position: static
+}
+
+#root :is(.sticky) {
+  position: -webkit-sticky;
+  position: sticky
 }
 
 #root :is(.my-6) {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem
-}
-
-#root :is(.my-4) {
-  margin-top: 1rem;
-  margin-bottom: 1rem
 }
 
 #root :is(.mb-4) {
@@ -256,6 +266,14 @@ h6 {
   display: flex
 }
 
+#root :is(.hidden) {
+  display: none
+}
+
+#root :is(.h-10) {
+  height: 2.5rem
+}
+
 #root :is(.h-4) {
   height: 1rem
 }
@@ -264,24 +282,24 @@ h6 {
   height: 1.5rem
 }
 
+#root :is(.h-\[169px\]) {
+  height: 169px
+}
+
 #root :is(.h-screen) {
   height: 100vh
 }
 
-#root :is(.h-10) {
-  height: 2.5rem
+#root :is(.h-5) {
+  height: 1.25rem
 }
 
-#root :is(.h-1) {
-  height: 0.25rem
+#root :is(.h-\[92px\]) {
+  height: 92px
 }
 
-#root :is(.h-full) {
-  height: 100%
-}
-
-#root :is(.h-28) {
-  height: 7rem
+#root :is(.w-10) {
+  width: 2.5rem
 }
 
 #root :is(.w-4) {
@@ -292,16 +310,16 @@ h6 {
   width: 1.5rem
 }
 
-#root :is(.w-10) {
-  width: 2.5rem
+#root :is(.w-5) {
+  width: 1.25rem
 }
 
 #root :is(.w-full) {
   width: 100%
 }
 
-#root :is(.w-1) {
-  width: 0.25rem
+#root :is(.grow) {
+  flex-grow: 1
 }
 
 #root :is(.flex-col) {
@@ -312,36 +330,20 @@ h6 {
   align-items: center
 }
 
-#root :is(.justify-between) {
-  justify-content: space-between
+#root :is(.justify-center) {
+  justify-content: center
 }
 
-#root :is(.gap-2) {
-  gap: 0.5rem
+#root :is(.justify-between) {
+  justify-content: space-between
 }
 
 #root :is(.gap-1) {
   gap: 0.25rem
 }
 
-#root :is(.gap-4) {
-  gap: 1rem
-}
-
-#root :is(.divide-y-2 > :not([hidden]) ~ :not([hidden])) {
-  --tw-divide-y-reverse: 0;
-  border-top-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
-  border-bottom-width: calc(2px * var(--tw-divide-y-reverse))
-}
-
-#root :is(.divide-stroke > :not([hidden]) ~ :not([hidden])) {
-  --tw-divide-opacity: 1;
-  border-color: rgb(223 228 234 / var(--tw-divide-opacity))
-}
-
-#root :is(.divide-primary > :not([hidden]) ~ :not([hidden])) {
-  --tw-divide-opacity: 1;
-  border-color: rgb(134 70 244 / var(--tw-divide-opacity))
+#root :is(.gap-2) {
+  gap: 0.5rem
 }
 
 #root :is(.rounded-lg) {
@@ -352,8 +354,12 @@ h6 {
   border-width: 1px
 }
 
-#root :is(.border-b-4) {
-  border-bottom-width: 4px
+#root :is(.border-0) {
+  border-width: 0px
+}
+
+#root :is(.border-b-\[1px\]) {
+  border-bottom-width: 1px
 }
 
 #root :is(.border-solid) {
@@ -370,22 +376,22 @@ h6 {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity))
 }
 
-#root :is(.bg-white) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity))
-}
-
 #root :is(.bg-primary) {
   --tw-bg-opacity: 1;
   background-color: rgb(134 70 244 / var(--tw-bg-opacity))
 }
 
-#root :is(.p-4) {
-  padding: 1rem
+#root :is(.bg-white) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity))
 }
 
 #root :is(.p-0) {
   padding: 0px
+}
+
+#root :is(.p-4) {
+  padding: 1rem
 }
 
 #root :is(.p-5) {
@@ -406,26 +412,12 @@ h6 {
   padding-bottom: 1rem
 }
 
-#root :is(.py-10) {
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem
-}
-
-#root :is(.py-2) {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem
-}
-
 #root :is(.pb-4) {
   padding-bottom: 1rem
 }
 
 #root :is(.text-center) {
   text-align: center
-}
-
-#root :is(.align-middle) {
-  vertical-align: middle
 }
 
 #root :is(.text-sm) {

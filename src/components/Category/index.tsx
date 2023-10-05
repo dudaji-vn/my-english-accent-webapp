@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import CategoryItem, {
   CategoryItemPropType,
 } from "@/components/Category/CategoryItem";
+import { nanoid } from "@reduxjs/toolkit";
 
 export interface CategoryPropType {
   categoryName: string;
@@ -16,7 +17,7 @@ export default function Category({
   const renderCategoryItem = () => {
     return categoryItems.map((item) => {
       return (
-        <Box className="mb-4 last:mb-0">
+        <Box className="mb-4 last:mb-0" key={nanoid()}>
           <CategoryItem
             categoryItemName={item.categoryItemName}
             progressNumber={item.progressNumber}

@@ -51,6 +51,15 @@ const theme = extendTheme({
         borderRadius: "8px",
       },
     },
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: {
+          borderRadius: "10px",
+          height: "10px",
+          backgroundColor: tailwindConfig.theme.colors.stroke,
+        },
+      },
+    },
   },
 });
 

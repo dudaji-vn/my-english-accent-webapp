@@ -4,7 +4,9 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
+  mode: "jit",
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+
   important: "#root",
   theme: {
     extend: {

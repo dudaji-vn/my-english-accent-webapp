@@ -3,7 +3,7 @@ import { ReactElement, ReactNode } from "react";
 
 export default function BoxCard({ children }: { children: ReactNode }) {
   return (
-    <Box className="shadow-[0_1px_3px_0px_#A6AFC366] rounded-lg ">
+    <Box className="shadow-[0_1px_3px_0px_#A6AFC366] rounded-lg bg-white">
       {children}
     </Box>
   );
