@@ -20,9 +20,9 @@ export default function CategoryItem({
     navigate(ROUTER.RECORD + `/${encode}`);
   };
   return (
-    <BoxCard>
+    <BoxCard classes="bg-white p-4">
       <Box
-        className="p-4 flex justify-between items-center"
+        className="flex justify-between items-center"
         onClick={() => gotoRecordProgressPage(categoryItemName)}
       >
         <Box>
@@ -35,9 +35,7 @@ export default function CategoryItem({
         </Box>
         <Avatar src={categoryImg} alt="gallery-icon" className="w-6 h-6" />
       </Box>
-      <Box className="px-4 pb-4">
-        <LinearProgress variant="determinate" value={50} />
-      </Box>
+      <LinearProgress variant="determinate" value={50} />
     </BoxCard>
   );
 }
