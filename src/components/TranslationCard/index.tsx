@@ -14,7 +14,7 @@ import RecordingBtn from "../RecordingBtn";
 
 export default function TranslationCard() {
   return (
-    <Container className="py-4 bg-gray-100 flex flex-col grow justify-between">
+    <Container id="translationCard" className="py-4 bg-gray-100 flex flex-col grow justify-between">
       <Box>
         <BoxCard>
           <Container className="py-4 h-[169px]">

@@ -13,8 +13,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 export default function RecordingProgressPage() {
   const goBack = useNavigate();
   return (
-    <Box>
-      <Container className="py-4 border-solid border-stroke border-0 border-b-[1px] bg-white">
+    <Box className="flex flex-col grow">
+      <Container className="py-4 divider bg-white">
         <Box className="flex items-center gap-2">
           <IconButton onClick={() => goBack(-1)}>
             <Avatar src={CloseIcon} className="w-6 h-6" />

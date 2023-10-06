@@ -51,7 +51,7 @@ export default function RecordingPage() {
 
   return (
     <Box>
-      <Box className="p-4 flex items-center gap-2 border-solid border-stroke border-0 border-b-[1px] bg-white">
+      <Box className="p-4 flex items-center gap-2 divider bg-white">
         <IconButton onClick={() => goBack(-1)}>
           <Avatar src={ChevronIcon} className="w-6 h-6" />
         </IconButton>

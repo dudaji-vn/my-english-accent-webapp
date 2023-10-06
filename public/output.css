@@ -24,6 +24,12 @@ h6 {
   font-weight: 400
 }
 
+.text-base-medium {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500
+}
+
 .text-base-semibold {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -46,6 +52,14 @@ h6 {
   font-size: 0.75rem;
   line-height: 1rem;
   font-weight: 400
+}
+
+.divider {
+  border-width: 0px;
+  border-bottom-width: 1px;
+  border-style: solid;
+  --tw-border-opacity: 1;
+  border-color: rgb(223 228 234 / var(--tw-border-opacity))
 }
 
 *, ::before, ::after {
@@ -240,9 +254,21 @@ h6 {
   position: static
 }
 
+#root :is(.fixed) {
+  position: fixed
+}
+
 #root :is(.sticky) {
   position: -webkit-sticky;
   position: sticky
+}
+
+#root :is(.bottom-0) {
+  bottom: 0px
+}
+
+#root :is(.m-auto) {
+  margin: auto
 }
 
 #root :is(.my-6) {
@@ -266,16 +292,16 @@ h6 {
   display: flex
 }
 
-#root :is(.hidden) {
-  display: none
-}
-
 #root :is(.h-10) {
   height: 2.5rem
 }
 
 #root :is(.h-4) {
   height: 1rem
+}
+
+#root :is(.h-5) {
+  height: 1.25rem
 }
 
 #root :is(.h-6) {
@@ -290,12 +316,8 @@ h6 {
   height: 100vh
 }
 
-#root :is(.h-5) {
-  height: 1.25rem
-}
-
-#root :is(.h-\[92px\]) {
-  height: 92px
+#root :is(.h-24) {
+  height: 6rem
 }
 
 #root :is(.w-10) {
@@ -306,12 +328,12 @@ h6 {
   width: 1rem
 }
 
-#root :is(.w-6) {
-  width: 1.5rem
-}
-
 #root :is(.w-5) {
   width: 1.25rem
+}
+
+#root :is(.w-6) {
+  width: 1.5rem
 }
 
 #root :is(.w-full) {
@@ -350,6 +372,19 @@ h6 {
   border-radius: 0.5rem
 }
 
+#root :is(.rounded-2xl) {
+  border-radius: 1rem
+}
+
+#root :is(.rounded-md) {
+  border-radius: 0.375rem
+}
+
+#root :is(.rounded-t-lg) {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem
+}
+
 #root :is(.border) {
   border-width: 1px
 }
@@ -360,6 +395,10 @@ h6 {
 
 #root :is(.border-b-\[1px\]) {
   border-bottom-width: 1px
+}
+
+#root :is(.border-t-\[1px\]) {
+  border-top-width: 1px
 }
 
 #root :is(.border-solid) {
@@ -402,6 +441,10 @@ h6 {
   padding: 1.75rem
 }
 
+#root :is(.p-6) {
+  padding: 1.5rem
+}
+
 #root :is(.px-4) {
   padding-left: 1rem;
   padding-right: 1rem
@@ -431,6 +474,32 @@ h6 {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
 }
 
+#root :is(.drop-shadow-md) {
+  --tw-drop-shadow: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));
+  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+}
+
+#root :is(.drop-shadow-lg) {
+  --tw-drop-shadow: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+}
+
 #root :is(.last\:mb-0:last-child) {
   margin-bottom: 0px
+}
+
+#root :is(.last\:rounded-lg:last-child) {
+  border-radius: 0.5rem
+}
+
+#root :is(.last\:rounded-t-lg:last-child) {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem
+}
+
+#root :is(.last\:rounded-b-lg:last-child) {
+  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem
 }

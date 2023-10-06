@@ -51,4 +51,7 @@
   .text-extra-small-medium {
     @apply text-xs font-medium;
   }
+  .divider {
+    @apply border-solid border-stroke border-0 border-b-[1px];
+  }
 }
