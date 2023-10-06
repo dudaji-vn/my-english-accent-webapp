@@ -1,10 +1,12 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
 import userReducer from "@/store/userStore";
+import exerciseReduer from "@/store/ExerciseStore";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    exercise: exerciseReduer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

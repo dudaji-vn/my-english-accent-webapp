@@ -1,52 +1,20 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Box, Avatar, Typography, IconButton } from "@mui/material";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
-import Category, { CategoryPropType } from "@/components/Category";
+import Category from "@/components/Category";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "@reduxjs/toolkit";
+import { useAppSelector } from "@/store/hook";
+import BoxCard from "@/components/Card";
 
 export default function RecordingPage() {
   const goBack = useNavigate();
-
-  const categoryList: CategoryPropType[] = [
-    {
-      categoryName: "In progress",
-      categoryItems: [
-        {
-          categoryItemName: "General",
-          progressNumber: 6,
-          categoryImg: "",
-        },
-      ],
-    },
-    {
-      categoryName: "Explore",
-      categoryItems: [
-        {
-          categoryItemName: "Product Development",
-          progressNumber: 6,
-          categoryImg: "",
-        },
-        {
-          categoryItemName: "Product design",
-          progressNumber: 6,
-          categoryImg: "",
-        },
-      ],
-    },
-  ];
+  const data = useAppSelector((state) => state.exercise.store);
 
   const renderCategory = () => {
-    return categoryList.map((category: CategoryPropType) => {
-      return (
-        <Fragment key={nanoid()}>
-          <Category
-            categoryName={category.categoryName}
-            categoryItems={category.categoryItems}
-          />
-        </Fragment>
-      );
-    });
+    return Object.entries(data).map(([key, value]) => (
+      <Category key={nanoid()} stage={key} categoryItems={value} />
+    ));
   };
 
   return (
