@@ -11,8 +11,9 @@ import {
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingBtn from "../RecordingBtn";
+import { ExerciseType } from "@/shared/type";
 
-export default function TranslationCard() {
+export default function TranslationCard(props: Partial<ExerciseType>) {
   return (
     <Container
       id="translationCard"
@@ -23,12 +24,12 @@ export default function TranslationCard() {
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography className="text-small-medium">
-                Please unshare your screen, I will share my screen.
+                {props.phraseSecondaryLanguage}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body2" className="text-small-regular">
-                /pliz unshare jɔr skrin aɪ wɪl ʃɛr maɪ skrin/
+                {props.ipa}
               </Typography>
             </Grid>
             <Grid item xs={12} className="py-4">
@@ -53,8 +54,7 @@ export default function TranslationCard() {
             className="w-4 h-4 mt-1"
           />
           <Typography variant="body2" className="text-small-regular">
-            Vui lòng hủy chia sẻ màn hình của bạn, tôi sẽ chia sẻ màn hình của
-            tôi.
+            {props.phrasePrimaryLanguage}
           </Typography>
         </Box>
       </Box>

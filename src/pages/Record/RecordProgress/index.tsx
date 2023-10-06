@@ -8,10 +8,23 @@ import {
   LinearProgress,
 } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/store/hook";
+import { ExerciseStage, ExerciseType } from "@/shared/type";
+import { useMemo } from "react";
 
 export default function RecordingProgressPage() {
   const goBack = useNavigate();
+  const data: Partial<ExerciseType> = useAppSelector(
+    (state) => state.exercise.filter
+  );
+  const currentProgress = useMemo(() => {
+    if (data.currentPhrase && data.totalPhrase)
+      return (data.currentPhrase * 100) / data.totalPhrase;
+  }, []);
+
+  if (data === undefined || data === null) return <></>;
+
   return (
     <Box className="flex flex-col grow">
       <Container className="py-4 divider bg-white">
@@ -19,11 +32,13 @@ export default function RecordingProgressPage() {
           <IconButton onClick={() => goBack(-1)}>
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
-          <Typography className="text-large-semibold">Development</Typography>
+          <Typography className="text-large-semibold">{data.title}</Typography>
         </Box>
-        <LinearProgress value={50} variant="determinate" />
+        {data.stage != ExerciseStage.Open && (
+          <LinearProgress value={currentProgress} variant="determinate" />
+        )}
       </Container>
-      <TranslationCard />
+      <TranslationCard {...data} />
     </Box>
   );
 }
