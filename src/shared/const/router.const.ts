@@ -5,6 +5,9 @@ const ROUTER = {
 
   RECORD: "/record",
   LISTENING: "/listening",
+
+  // subpath
+  SUMMARY: "/summary",
 };
 
 export default ROUTER;

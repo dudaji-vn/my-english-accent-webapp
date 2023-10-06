@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { Avatar, Checkbox, Grid, Typography } from "@mui/material";
-import Nationality from "../NationalityCard";
+import Nationality from "@/components/NationalityCard";
 import AvatarIcon from "@/assets/icon/avatar-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import MicrophoneIcon from "@/assets/icon/microphone-icon.svg";
@@ -35,10 +35,7 @@ export default function RecordCard() {
           <Avatar
             alt="microphone-icon"
             src={MicrophoneIcon}
-            sx={{
-              width: "1rem",
-              height: "1rem",
-            }}
+            className="w-4 h-4"
           />
           <Typography component={"span"}>2 recorded</Typography>
         </Box>
@@ -51,14 +48,7 @@ export default function RecordCard() {
             gap: ".5rem",
           }}
         >
-          <Avatar
-            alt="message-icon"
-            src={MessageIcon}
-            sx={{
-              width: "1rem",
-              height: "1rem",
-            }}
-          />
+          <Avatar alt="message-icon" src={MessageIcon} className="w-4 h-4" />
           <Typography component={"span"}>
             Speak Korean (native), English
           </Typography>
