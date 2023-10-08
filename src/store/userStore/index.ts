@@ -2,12 +2,12 @@ import Store from "@/shared/const/store.const";
 import { ILogin } from "@/shared/type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Type {
+interface UserType {
   token: string;
   national: "kr" | "vi";
 }
 
-const initialState: Type = {
+const initialState: UserType = {
   token: "",
   national: "kr",
 };
@@ -16,12 +16,12 @@ const userSlice = createSlice({
   name: Store.user,
   initialState,
   reducers: {
-    login: (state: Type, action: PayloadAction<ILogin>) => {
+    login: (state: UserType, action: PayloadAction<ILogin>) => {
       const { user, password } = action.payload;
       state.token = user + password;
       console.log("store::login::", state.token);
     },
-    logout: (state: Type) => {
+    logout: (state: UserType) => {
       state.token = "";
     },
   },

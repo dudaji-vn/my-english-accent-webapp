@@ -9,21 +9,27 @@ import {
 } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { ExerciseType, StageExercise, VocabularyType } from "@/shared/type";
+import { persist } from "@/shared/utils/persist.util";
 import { useAppSelector } from "@/store/hook";
-import { ExerciseStage, ExerciseType } from "@/shared/type";
-import { useMemo } from "react";
 
 export default function RecordingProgressPage() {
   const goBack = useNavigate();
-  const data: Partial<ExerciseType> = useAppSelector(
-    (state) => state.exercise.filter
-  );
-  const currentProgress = useMemo(() => {
-    if (data.currentPhrase && data.totalPhrase)
-      return (data.currentPhrase * 100) / data.totalPhrase;
-  }, []);
 
-  if (data === undefined || data === null) return <></>;
+  // const [persistData] = useState<VocabularyType & ExerciseType>(() => {
+  //   const data = persist.getVocabulary();
+  //   if (data) return JSON.parse(data);
+  // });
+
+  const data = useAppSelector((state) => state.exercise.filter);
+
+  const currentProgress = useMemo(() => {
+    if (data.currentPhrase?.toString() && data.totalPhrase) {
+      return (data.currentPhrase * 100) / data.totalPhrase;
+    }
+    return 0;
+  }, []);
 
   return (
     <Box className="flex flex-col grow">
@@ -32,9 +38,11 @@ export default function RecordingProgressPage() {
           <IconButton onClick={() => goBack(-1)}>
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
-          <Typography className="text-large-semibold">{data.title}</Typography>
+          <Typography className="text-large-semibold">
+            {data.exerciseName}
+          </Typography>
         </Box>
-        {data.stage != ExerciseStage.Open && (
+        {data.stage != StageExercise.Open && (
           <LinearProgress value={currentProgress} variant="determinate" />
         )}
       </Container>

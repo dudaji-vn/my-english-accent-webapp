@@ -11,20 +11,22 @@ import {
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingBtn from "../RecordingBtn";
-import { ExerciseType } from "@/shared/type";
+import { IExerciseFilterType } from "@/shared/type";
+import RecordingAudio from "../RecordingAudio";
 
-export default function TranslationCard(props: Partial<ExerciseType>) {
+export default function TranslationCard(props: IExerciseFilterType) {
+  console.log("TranslationCard", props);
   return (
     <Container
       id="translationCard"
       className="py-4 bg-gray-100 flex flex-col grow justify-between"
     >
-      <Box>
+      <Box >
         <BoxCard classes="p-4">
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography className="text-small-medium">
-                {props.phraseSecondaryLanguage}
+                {props.titleSecondaryLanguage}
               </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -54,11 +56,15 @@ export default function TranslationCard(props: Partial<ExerciseType>) {
             className="w-4 h-4 mt-1"
           />
           <Typography variant="body2" className="text-small-regular">
-            {props.phrasePrimaryLanguage}
+            {props.titlePrimaryLanguage}
           </Typography>
         </Box>
       </Box>
-      <RecordingBtn />
+      <RecordingAudio
+        stage={props.stage}
+        step={props.currentPhrase}
+        voiceSrc={props.voiceSrc}
+      />
     </Container>
   );
 }

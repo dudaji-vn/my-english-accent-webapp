@@ -1,105 +1,25 @@
+import { dummyExercise, dummyVocabulary } from "@/config/dummyData";
 import Store from "@/shared/const/store.const";
-import { ExerciseStage, ExerciseType } from "@/shared/type";
-import { PayloadAction, createSlice, current, nanoid } from "@reduxjs/toolkit";
+import { ExerciseType, IExerciseType, StageExercise } from "@/shared/type";
+import { persist } from "@/shared/utils/persist.util";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface IExerciseStoreType {
-  [k: number]: Omit<ExerciseType, "stage">[];
-}
-export interface IExerciseType {
-  store: IExerciseStoreType;
-  filter: Partial<ExerciseType>;
-}
 const initialState: IExerciseType = {
-  store: {
-    0: [
-      {
-        imgSrc: "",
-        title: "General",
-        currentPhrase: 2,
-        totalPhrase: 6,
-        phraseSecondaryLanguage:
-          "Please unshare your screen, I will share my screen.",
-        ipa: "/pliz unshare jɔr skrin aɪ wɪl ʃɛr maɪ skrin/",
-        phrasePrimaryLanguage:
-          "Vui lòng hủy chia sẻ màn hình của bạn, tôi sẽ chia sẻ màn hình của tôi.",
-        id: nanoid(),
-      },
-      {
-        imgSrc: "",
-        title: "General1",
-        currentPhrase: 2,
-        totalPhrase: 6,
-        phraseSecondaryLanguage:
-          "Please unshare your screen, I will share my screen.",
-        ipa: "/pliz unshare jɔr skrin aɪ wɪl ʃɛr maɪ skrin/",
-        phrasePrimaryLanguage:
-          "Vui lòng hủy chia sẻ màn hình của bạn, tôi sẽ chia sẻ màn hình của tôi.",
-        id: nanoid(),
-      },
-    ],
-    1: [
-      {
-        imgSrc: "",
-        title: "Product Design",
-        currentPhrase: 2,
-        totalPhrase: 6,
-        phraseSecondaryLanguage:
-          "Please unshare your screen, I will share my screen.",
-        ipa: "/pliz unshare jɔr skrin aɪ wɪl ʃɛr maɪ skrin/",
-        phrasePrimaryLanguage:
-          "Vui lòng hủy chia sẻ màn hình của bạn, tôi sẽ chia sẻ màn hình của tôi.",
-        id: nanoid(),
-      },
-      {
-        imgSrc: "",
-        title: "Product Design1",
-        currentPhrase: 2,
-        totalPhrase: 6,
-        phraseSecondaryLanguage:
-          "Please unshare your screen, I will share my screen.",
-        ipa: "/pliz unshare jɔr skrin aɪ wɪl ʃɛr maɪ skrin/",
-        phrasePrimaryLanguage:
-          "Vui lòng hủy chia sẻ màn hình của bạn, tôi sẽ chia sẻ màn hình của tôi.",
-        id: nanoid(),
-      },
-    ],
-    2: [
-      {
-        imgSrc: "",
-        title: "Product Development",
-        currentPhrase: 2,
-        totalPhrase: 6,
-        phraseSecondaryLanguage:
-          "Please unshare your screen, I will share my screen.",
-        ipa: "/pliz unshare jɔr skrin aɪ wɪl ʃɛr maɪ skrin/",
-        phrasePrimaryLanguage:
-          "Vui lòng hủy chia sẻ màn hình của bạn, tôi sẽ chia sẻ màn hình của tôi.",
-        id: nanoid(),
-      },
-      {
-        imgSrc: "",
-        title: "Product Development1",
-        currentPhrase: 2,
-        totalPhrase: 6,
-        phraseSecondaryLanguage:
-          "Please unshare your screen, I will share my screen.",
-        ipa: "/pliz unshare jɔr skrin aɪ wɪl ʃɛr maɪ skrin/",
-        phrasePrimaryLanguage:
-          "Vui lòng hủy chia sẻ màn hình của bạn, tôi sẽ chia sẻ màn hình của tôi.",
-        id: nanoid(),
-      },
-    ],
-  },
+  store: [],
   filter: {
+    idExercise: "",
+    exerciseName: "",
     imgSrc: "",
-    title: "",
-    currentPhrase: 0,
-    totalPhrase: 0,
-    phraseSecondaryLanguage: ",",
-    ipa: ".",
-    id: "",
     stage: 0,
+    totalPhrase: 0,
+    currentPhrase: 0,
+    titlePrimaryLanguage: "",
+    titleSecondaryLanguage: "",
+    ipa: "",
+    voiceSrc: "",
+    idVocabulary: [],
   },
+  populatedVocabulary: [],
 };
 
 const exerciseStore = createSlice({
@@ -108,20 +28,77 @@ const exerciseStore = createSlice({
   reducers: {
     getExerciseByStage: (
       state: any,
-      { payload }: PayloadAction<ExerciseStage>
+      { payload }: PayloadAction<StageExercise>
     ) => {},
     filterExerciseBy: (
       state,
-      { payload }: PayloadAction<Partial<ExerciseType>>
+      { payload }: PayloadAction<Pick<ExerciseType, "idExercise">>
     ) => {
-      state.filter = {
-        ...state.store[payload.stage!!].find((item) => item.id == payload.id),
-        stage: payload.stage!!,
-      };
+      dummyExercise.forEach((item) => {
+        if (item.idExercise == payload.idExercise) {
+          const isFound = dummyVocabulary.find((dVoca) =>
+            item.idVocabulary.includes(dVoca.idVocabulary)
+          );
+          console.log(item);
+          if (isFound) {
+            const result = {
+              ...state.filter,
+              ...isFound,
+              ...item,
+            };
+            state.filter = result;
+            persist.saveVocabulary(result);
+          }
+        }
+      });
+    },
+    nextVocabulary: (
+      state,
+      { payload }: PayloadAction<{ currentStep: number }>
+    ) => {
+      const nextStep = payload.currentStep + 1;
+      const result = JSON.parse(persist.getVocabulary()!!);
+
+      const foundItem = dummyVocabulary.find(
+        (dVoca) => dVoca.idVocabulary === result.idVocabulary[nextStep]
+      );
+
+      if (!!foundItem) {
+        const { idVocabulary, ...restValue } = foundItem;
+        const result = {
+          ...state.filter,
+          ...restValue,
+          currentPhrase: nextStep,
+        };
+
+        console.log("result::::", result);
+        state.filter = result;
+        persist.saveVocabulary(result);
+      } else {
+        state.filter = {
+          ...state.filter,
+          stage: StageExercise.Close,
+        };
+      }
+    },
+    populatedVoca: (state) => {
+      dummyExercise.forEach((item) => {
+        if (item.idExercise === state.filter?.idExercise) {
+          const result = dummyVocabulary.filter((dVoca) =>
+            item.idVocabulary.includes(dVoca.idVocabulary)
+          );
+          state.populatedVocabulary = [...result];
+        }
+      });
     },
   },
 });
 
-export const { getExerciseByStage, filterExerciseBy } = exerciseStore.actions;
+export const {
+  getExerciseByStage,
+  filterExerciseBy,
+  populatedVoca,
+  nextVocabulary,
+} = exerciseStore.actions;
 
 export default exerciseStore.reducer;
