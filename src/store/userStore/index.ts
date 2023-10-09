@@ -1,5 +1,6 @@
 import Store from "@/shared/const/store.const";
 import { ILogin } from "@/shared/type";
+import { persist } from "@/shared/utils/persist.util";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserType {
@@ -19,6 +20,7 @@ const userSlice = createSlice({
     login: (state: UserType, action: PayloadAction<ILogin>) => {
       const { user, password } = action.payload;
       state.token = user + password;
+      persist.login(user + password);
     },
     logout: (state: UserType) => {
       state.token = "";

@@ -311,10 +311,6 @@ h6 {
   height: 100%
 }
 
-#root :is(.h-screen) {
-  height: 100vh
-}
-
 #root :is(.min-h-screen) {
   min-height: 100vh
 }
@@ -365,6 +361,10 @@ h6 {
 
 #root :is(.gap-2) {
   gap: 0.5rem
+}
+
+#root :is(.gap-3) {
+  gap: 0.75rem
 }
 
 #root :is(.rounded-lg) {
