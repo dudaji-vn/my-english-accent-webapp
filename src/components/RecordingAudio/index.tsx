@@ -42,14 +42,13 @@ export default function RecordingAudio({
   const [toggleSubBtn, setToggleSubBtn] = useState(() => status === "stopped");
 
   const onHandlePlay = () => {
-    setIsRecord(() => !isRecord);
-
     if (isRecord) {
       stopRecording();
       setToggleSubBtn(() => true);
     } else {
       startRecording();
     }
+    setIsRecord(() => !isRecord);
   };
 
   const onRepeat = () => {
@@ -104,13 +103,13 @@ export default function RecordingAudio({
           </IconButton>
         )}
 
-        <div>
+        <Box>
           {/* <p>{status}</p> */}
           <IconButton className="bg-primary p-5" onClick={onHandlePlay}>
             <Avatar src={isRecord ? SoundIcon : MicrophoneIcon} />
           </IconButton>
           <audio src={mediaBlobUrl} ref={audioEle}></audio>
-        </div>
+        </Box>
         {toggleSubBtn && (
           <IconButton
             onClick={() => onHandleNext()}

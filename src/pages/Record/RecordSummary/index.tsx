@@ -41,7 +41,7 @@ export default function RecordSummaryPage() {
     <Box>
       <Container className="py-4 divider bg-white">
         <Box className="flex items-center gap-2">
-          <IconButton onClick={() => navigate(-1)}>
+          <IconButton onClick={() => navigate(ROUTER.RECORD)}>
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
           <Typography className="text-large-semibold">Finished</Typography>
