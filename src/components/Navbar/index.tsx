@@ -88,7 +88,10 @@ export default function Navbar() {
                   <Avatar
                     alt={setting.title + "icon"}
                     src={setting.icon}
-                    className="w-4 h-4"
+                    sx={{
+                      width: "16px",
+                      height: "16px",
+                    }}
                   />
                   <Typography textAlign="center" paddingLeft={"12px"}>
                     {setting.title}

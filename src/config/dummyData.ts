@@ -1,4 +1,9 @@
-import { ExerciseType, UserType, VocabularyType, StageExercise } from "../type";
+import {
+  VocabularyType,
+  UserType,
+  ExerciseType,
+  StageExercise,
+} from "../shared/type";
 
 export interface IRelationUserAndExercise extends ExerciseType {
   idUser: string;

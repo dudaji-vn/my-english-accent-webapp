@@ -1,41 +1,39 @@
 import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
 import BoxCard from "@/components/Card";
-import { Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { useMemo } from "react";
-import { ExerciseStage, ExerciseType } from "@/shared/type";
+import { ExerciseType, StageExercise } from "@/shared/type";
 import { useAppDispatch } from "@/store/hook";
 import { filterExerciseBy } from "@/store/ExerciseStore";
 
 export interface CategoryItemPropType {
-  title: string;
-  categoryImg: string;
-  currentPhrase: number;
+  idExercise: string;
+  exerciseName: string;
+  imgSrc: string;
   totalPhrase: number;
-  stage: string;
-  id: string;
+  currentPhrase: number;
+  stage: StageExercise;
 }
 
 export default function CategoryItem({
-  title,
-  currentPhrase,
-  categoryImg,
+  idExercise,
+  exerciseName,
+  imgSrc,
   totalPhrase,
+  currentPhrase,
   stage,
-  id,
 }: CategoryItemPropType) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const gotoRecordProgressPage = () => {
     navigate({
-      pathname: ROUTER.RECORD + `/${title.toLowerCase()}`,
+      pathname: ROUTER.RECORD + `/${exerciseName.toLowerCase()}`,
     });
-
     dispatch(
       filterExerciseBy({
-        id,
-        stage,
-      } as unknown as Partial<ExerciseType>)
+        idExercise,
+      } as Pick<ExerciseType, "idExercise">)
     );
   };
 
@@ -44,20 +42,22 @@ export default function CategoryItem({
   }, []);
 
   return (
-    <BoxCard classes="bg-white p-4">
+    <BoxCard classes="p-4">
       <Box
         className="flex justify-between items-center"
         onClick={() => gotoRecordProgressPage()}
       >
         <Box>
-          <Typography className="text-base-semibold">{title}</Typography>
+          <Typography className="text-base-semibold">{exerciseName}</Typography>
           <Typography className="text-extra-small-regular">
-            {currentPhrase}/{totalPhrase} phrases
+            {stage != StageExercise.Open
+              ? `${currentPhrase}/${totalPhrase} phrases`
+              : `${totalPhrase} phrases`}
           </Typography>
         </Box>
-        <Avatar src={categoryImg} alt="gallery-icon" className="w-6 h-6" />
+        <Avatar src={imgSrc} alt="gallery-icon" className="w-6 h-6" />
       </Box>
-      {parseInt(stage) != ExerciseStage.Open && (
+      {stage != StageExercise.Open && (
         <LinearProgress
           variant="determinate"
           value={currentProgress}

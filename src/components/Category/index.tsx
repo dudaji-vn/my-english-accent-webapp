@@ -4,10 +4,10 @@ import CategoryItem, {
   CategoryItemPropType,
 } from "@/components/Category/CategoryItem";
 import { nanoid } from "@reduxjs/toolkit";
-import { ExerciseStage } from "@/shared/type";
+import { StageExercise, StageLabel } from "@/shared/type";
 
 export interface CategoryPropType {
-  stage: string;
+  stage: StageExercise;
   categoryItems: CategoryItemPropType[];
 }
 
@@ -17,39 +17,22 @@ export default function Category({ stage, categoryItems }: CategoryPropType) {
       return (
         <Box className="mb-4 last:mb-0" key={nanoid()}>
           <CategoryItem
-            title={item.title}
+            exerciseName={item.exerciseName}
             currentPhrase={item.currentPhrase}
             totalPhrase={item.totalPhrase}
-            categoryImg={item.categoryImg}
-            stage={stage}
-            id={item.id}
+            imgSrc={item.imgSrc}
+            stage={item.stage}
+            idExercise={item.idExercise}
           />
         </Box>
       );
     });
   };
 
-  const convertStage = () => {
-    let label = "";
-    switch (parseInt(stage)) {
-      case ExerciseStage.Close:
-        label = "Archived";
-        break;
-      case ExerciseStage.Inprogress:
-        label = "In progress";
-
-        break;
-      case ExerciseStage.Open:
-        label = "Explore";
-        break;
-    }
-    return label;
-  };
-
   return (
     <Box className="p-4">
       <Typography className="pb-4 text-large-semibold">
-        {convertStage()}
+        {StageLabel[stage]}
       </Typography>
       {renderCategoryItem()}
     </Box>
