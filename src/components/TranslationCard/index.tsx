@@ -10,18 +10,16 @@ import {
 } from "@mui/material";
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
-import RecordingBtn from "../RecordingBtn";
 import { IExerciseFilterType } from "@/shared/type";
-import RecordingAudio from "../RecordingAudio";
+import RecordingAudio from "@/components/RecordingAudio";
 
 export default function TranslationCard(props: IExerciseFilterType) {
-  console.log("TranslationCard", props);
   return (
     <Container
       id="translationCard"
       className="py-4 bg-gray-100 flex flex-col grow justify-between"
     >
-      <Box >
+      <Box>
         <BoxCard classes="p-4">
           <Grid container spacing={1}>
             <Grid item xs={12}>

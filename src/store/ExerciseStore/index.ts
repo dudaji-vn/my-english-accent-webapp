@@ -39,7 +39,6 @@ const exerciseStore = createSlice({
           const isFound = dummyVocabulary.find((dVoca) =>
             item.idVocabulary.includes(dVoca.idVocabulary)
           );
-          console.log(item);
           if (isFound) {
             const result = {
               ...state.filter,
@@ -71,7 +70,6 @@ const exerciseStore = createSlice({
           currentPhrase: nextStep,
         };
 
-        console.log("result::::", result);
         state.filter = result;
         persist.saveVocabulary(result);
       } else {

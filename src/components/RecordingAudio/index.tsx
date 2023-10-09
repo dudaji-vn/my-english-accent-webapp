@@ -78,7 +78,6 @@ export default function RecordingAudio({
   };
 
   useEffect(() => {
-    console.log(stage);
     if (stage === StageExercise.Close) {
       const path = `/${params.category}`;
       navigate({

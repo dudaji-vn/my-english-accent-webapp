@@ -19,7 +19,6 @@ const userSlice = createSlice({
     login: (state: UserType, action: PayloadAction<ILogin>) => {
       const { user, password } = action.payload;
       state.token = user + password;
-      console.log("store::login::", state.token);
     },
     logout: (state: UserType) => {
       state.token = "";
