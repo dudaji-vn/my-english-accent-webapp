@@ -1,16 +1,10 @@
-import firebaseDB from "@/config/firebase";
-import { nanoid } from "@reduxjs/toolkit";
+import { firebaseDB } from "@/config/firebase";
 import {
-  FieldPath,
-  addDoc,
   and,
   collection,
-  doc,
-  getDoc,
   getDocs,
   limit,
   query,
-  setDoc,
   where,
 } from "firebase/firestore";
 
