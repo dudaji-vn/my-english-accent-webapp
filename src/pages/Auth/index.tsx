@@ -9,7 +9,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/config/firebase";
-import { saveToken } from "@/store/userStore";
+import { saveToken } from "@/store/UserStore";
 
 export default function Login() {
   const elementDiv = useRef<HTMLDivElement | null>(null);

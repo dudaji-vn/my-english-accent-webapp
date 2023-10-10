@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Avatar, Typography, IconButton } from "@mui/material";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import Category from "@/components/Category";
@@ -8,6 +8,7 @@ import { dummyExercise } from "@/config/dummyData";
 import { groupBy } from "@/shared/utils/groupBy.util";
 import { StageExercise } from "@/shared/type";
 import ROUTER from "@/shared/const/router.const";
+import TopicService from "@/core/services/topic.service";
 
 export default function RecordingPage() {
   const goBack = useNavigate();
@@ -23,6 +24,11 @@ export default function RecordingPage() {
     ));
   };
 
+  useEffect(() => {
+    const res = TopicService.getTopics().then((value) => {
+      console.log(value);
+    });
+  }, []);
   return (
     <Box>
       <Box className="p-4 flex items-center gap-2 divider bg-white">

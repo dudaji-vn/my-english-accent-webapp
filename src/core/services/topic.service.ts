@@ -11,6 +11,9 @@ const TopicService = {
   removeTopic: async (id: string) => {
     return TopicController.removeTopic(id);
   },
+  getTopics: async () => {
+    return TopicController.getTopics();
+  },
 };
 
 export default TopicService;

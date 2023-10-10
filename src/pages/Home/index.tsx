@@ -1,16 +1,13 @@
 import React from "react";
-import { Avatar, Box, Button, Container, Typography } from "@mui/material";
+import { Avatar, Container, Typography } from "@mui/material";
 import HeadphoneIcon from "@/assets/icon/music-play-icon.svg";
 import MicrophoneIcon from "@/assets/icon/microphone-2-icon.svg";
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
 import BoxCard from "@/components/Card";
-import TopicService from "@/core/services/topic.service";
 
 export default function HomePage() {
   const navigate = useNavigate();
-
-  const generateData = () => {};
 
   return (
     <Container>
@@ -35,7 +32,6 @@ export default function HomePage() {
         <Typography className="text-large-semibold">Listening</Typography>
         <Typography variant="body2">Your colleague’s english accent</Typography>
       </BoxCard>
-      <Button onClick={generateData}>Generate data</Button>
     </Container>
   );
 }

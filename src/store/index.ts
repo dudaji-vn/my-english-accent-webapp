@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
-import userReducer from "@/store/userStore";
+import userReducer from "@/store/UserStore";
 import exerciseReduer from "@/store/ExerciseStore";
 
 export const store = configureStore({
