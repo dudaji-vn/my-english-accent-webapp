@@ -30,13 +30,27 @@ export const TopicApi = createApi({
             records.push({ recordId: value.id, ...value.data() });
           });
 
-          const tmp = records.filter((record: any) => {
-            return vocabularies.find(
-              (vocabulary: any) =>
-                vocabulary.vocabularyId === record.vocabularyId
+          // const populated = _.chain(vocabularies)
+          //   .groupBy("topicId")
+          //   .map((value, key) => {
+          //     return { topicId: key, vocabulary: value };
+          //   })
+          //   .value();
+
+          const tmp = vocabularies.map((vocabulary: any) => {
+            const condition = records.find(
+              (record: any) => record.vocabularyId === vocabulary.vocabularyId
             );
+            if (condition) {
+              console.log("a");
+            } else {
+              console.log("b");
+            }
           });
 
+          console.log("tmp", tmp);
+
+          const merged = _.mergeWith;
           console.log("topics=>>", topics);
           console.log("vocabularies", vocabularies[0]);
           console.log("records", records[0]);
