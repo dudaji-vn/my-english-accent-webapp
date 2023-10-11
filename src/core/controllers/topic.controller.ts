@@ -24,16 +24,8 @@ const TopicController = {
   removeTopic: async (id: string) => {
     await deleteDoc(doc(topicCollection, id));
   },
-  getTopics: async () => {
-    const topicsResult: any[] = [];
-    const querySnapshot = await getDocs(topicCollection);
-    querySnapshot.forEach((doc) => {
-      topicsResult.push({
-        ...doc.data(),
-        topicId: doc.id,
-      });
-    });
-    return topicsResult;
+  getTopics: () => {
+    return getDocs(topicCollection);
   },
 };
 

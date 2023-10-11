@@ -26,9 +26,9 @@ export interface VocabularyType {
   voiceSrc: string;
 }
 
-export interface ExerciseType {
-  idExercise: string;
-  exerciseName: string;
+export interface TopicType {
+  topicId: string;
+  topicName: string;
   imgSrc: string;
   stage: StageExercise;
   totalPhrase: number;
@@ -37,11 +37,11 @@ export interface ExerciseType {
 
 export interface IExerciseFilterType
   extends Omit<VocabularyType, "idVocabulary">,
-    ExerciseType {
+    TopicType {
   idVocabulary: string[];
 }
 export interface IExerciseType {
-  store: ExerciseType[];
+  store: TopicType[];
   filter: IExerciseFilterType;
   populatedVocabulary: any[];
 }

@@ -1,14 +1,14 @@
 import { dummyExercise, dummyVocabulary } from "@/config/dummyData";
 import Store from "@/shared/const/store.const";
-import { ExerciseType, IExerciseType, StageExercise } from "@/shared/type";
+import { TopicType, IExerciseType, StageExercise } from "@/shared/type";
 import { persist } from "@/shared/utils/persist.util";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: IExerciseType = {
   store: [],
   filter: {
-    idExercise: "",
-    exerciseName: "",
+    topicId: "",
+    topicName: "",
     imgSrc: "",
     stage: 0,
     totalPhrase: 0,
@@ -32,10 +32,10 @@ const exerciseStore = createSlice({
     ) => {},
     filterExerciseBy: (
       state,
-      { payload }: PayloadAction<Pick<ExerciseType, "idExercise">>
+      { payload }: PayloadAction<Pick<TopicType, "topicId">>
     ) => {
       dummyExercise.forEach((item) => {
-        if (item.idExercise == payload.idExercise) {
+        if (item.topicId == payload.topicId) {
           const isFound = dummyVocabulary.find((dVoca) =>
             item.idVocabulary.includes(dVoca.idVocabulary)
           );
@@ -81,7 +81,7 @@ const exerciseStore = createSlice({
     },
     populatedVoca: (state) => {
       dummyExercise.forEach((item) => {
-        if (item.idExercise === state.filter?.idExercise) {
+        if (item.topicId === state.filter?.topicId) {
           const result = dummyVocabulary.filter((dVoca) =>
             item.idVocabulary.includes(dVoca.idVocabulary)
           );

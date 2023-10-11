@@ -1,16 +1,27 @@
+import Query from "@/shared/const/queryApi.const";
 import VocabularyController from "../controllers/vocabulary.controller";
-import { VocabularyRequest } from "@/core/request";
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const VocabularyService = {
-  addVocabulary: async (payload: VocabularyRequest) => {
-    return VocabularyController.addVocabulary(payload);
-  },
-  updateVocabulary: async (id: string, payload: VocabularyRequest) => {
-    return VocabularyController.updateVocabulary(id, payload);
-  },
-  removeVocabulary: async (id: string) => {
-    return VocabularyController.removeVocabulary(id);
-  },
-};
+export const VocabularyApi = createApi({
+  reducerPath: Query.vocabulary,
+  baseQuery: fakeBaseQuery(),
+  endpoints: (builder) => ({
+    getVocabularies: builder.query<any, void>({
+      async queryFn() {
+        try {
+          const vocabularies: any = [];
+          await (
+            await VocabularyController.getVocabularies()
+          ).forEach((value) => {
+            vocabularies.push({ vocabularyId: value.id, ...value.data() });
+          });
+          return { data: vocabularies };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
+  }),
+});
 
-export default VocabularyService;
+export const { useGetVocabulariesQuery } = VocabularyApi;

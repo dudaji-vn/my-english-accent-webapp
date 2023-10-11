@@ -17,12 +17,12 @@ export default function Category({ stage, categoryItems }: CategoryPropType) {
       return (
         <Box className="mb-4 last:mb-0" key={nanoid()}>
           <CategoryItem
-            exerciseName={item.exerciseName}
+            topicName={item.topicName}
             currentPhrase={item.currentPhrase}
             totalPhrase={item.totalPhrase}
             imgSrc={item.imgSrc}
             stage={item.stage}
-            idExercise={item.idExercise}
+            topicId={item.topicId}
           />
         </Box>
       );

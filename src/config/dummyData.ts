@@ -1,15 +1,15 @@
 import {
   VocabularyType,
   UserType,
-  ExerciseType,
+  TopicType,
   StageExercise,
 } from "../shared/type";
 
-export interface IRelationUserAndExercise extends ExerciseType {
+export interface IRelationUserAndExercise extends TopicType {
   idUser: string;
 }
 
-export interface IRelationVocabularyAndExercise extends ExerciseType {
+export interface IRelationVocabularyAndExercise extends TopicType {
   idVocabulary: string[];
 }
 
@@ -62,18 +62,18 @@ export const dummyVocabulary: VocabularyType[] = [
 
 export const dummyExercise: IRelationVocabularyAndExercise[] = [
   {
-    exerciseName: "General",
+    topicName: "General",
     imgSrc: "",
-    idExercise: "id_exercise1",
+    topicId: "id_exercise1",
     stage: StageExercise.Open,
     currentPhrase: 0,
     totalPhrase: 0,
     idVocabulary: ["id_vacabulary1"],
   },
   {
-    exerciseName: "General 1",
+    topicName: "General 1",
     imgSrc: "",
-    idExercise: "id_exercise2",
+    topicId: "id_exercise2",
     stage: StageExercise.Inprogress,
     currentPhrase: 0,
     totalPhrase: 4,
@@ -85,18 +85,18 @@ export const dummyExercise: IRelationVocabularyAndExercise[] = [
     ],
   },
   {
-    exerciseName: "General 2",
+    topicName: "General 2",
     imgSrc: "",
-    idExercise: "id_exercise3",
+    topicId: "id_exercise3",
     stage: StageExercise.Close,
     currentPhrase: 5,
     totalPhrase: 5,
     idVocabulary: ["id_vacabulary3"],
   },
   {
-    exerciseName: "General 3",
+    topicName: "General 3",
     imgSrc: "",
-    idExercise: "id_exercise4",
+    topicId: "id_exercise4",
     stage: StageExercise.Close,
     currentPhrase: 3,
     totalPhrase: 3,

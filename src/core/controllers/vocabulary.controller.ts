@@ -1,6 +1,12 @@
 import { firebaseDB } from "@/config/firebase";
 import { nanoid } from "@reduxjs/toolkit";
-import { collection, deleteDoc, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import { VocabularyRequest } from "@/core/request";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 
@@ -17,6 +23,9 @@ const VocabularyController = {
   },
   removeVocabulary: async (id: string) => {
     await deleteDoc(doc(vocabularyCollection, id));
+  },
+  getVocabularies: () => {
+    return getDocs(vocabularyCollection);
   },
 };
 

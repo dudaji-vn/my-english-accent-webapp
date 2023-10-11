@@ -10,7 +10,7 @@ import {
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
-import { ExerciseType, StageExercise, VocabularyType } from "@/shared/type";
+import { TopicType, StageExercise, VocabularyType } from "@/shared/type";
 import { persist } from "@/shared/utils/persist.util";
 import { useAppSelector } from "@/store/hook";
 
@@ -39,7 +39,7 @@ export default function RecordingProgressPage() {
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
           <Typography className="text-large-semibold">
-            {data.exerciseName}
+            {data.topicName}
           </Typography>
         </Box>
         {data.stage != StageExercise.Open && (

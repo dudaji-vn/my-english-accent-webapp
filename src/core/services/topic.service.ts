@@ -1,19 +1,53 @@
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import TopicController from "../controllers/topic.controller";
-import { TopicRequest } from "../request";
+import Query from "@/shared/const/queryApi.const";
+import VocabularyController from "../controllers/vocabulary.controller";
+import RecordController from "../controllers/record.controller";
+import _ from "lodash";
 
-const TopicService = {
-  addTopic: async (payload: TopicRequest) => {
-    return TopicController.addTopic(payload);
-  },
-  updateTopic: async (id: string, payload: TopicRequest) => {
-    return TopicController.updateTopic(id, payload);
-  },
-  removeTopic: async (id: string) => {
-    return TopicController.removeTopic(id);
-  },
-  getTopics: async () => {
-    return TopicController.getTopics();
-  },
-};
+export const TopicApi = createApi({
+  reducerPath: Query.topic,
+  baseQuery: fakeBaseQuery(),
+  endpoints: (builder) => ({
+    getTopics: builder.query<any, void>({
+      async queryFn() {
+        try {
+          const userId = "idUser2JLpns9SQblwSgNigfTwF";
 
-export default TopicService;
+          let topics: any = [];
+          let vocabularies: any = [];
+          let records: any = [];
+
+          (await TopicController.getTopics()).forEach((value) => {
+            topics.push({ topicId: value.id, ...value.data() });
+          });
+
+          (await VocabularyController.getVocabularies()).forEach((value) => {
+            vocabularies.push({ vocabularyId: value.id, ...value.data() });
+          });
+
+          (await RecordController.getRecords(userId)).forEach((value) => {
+            records.push({ recordId: value.id, ...value.data() });
+          });
+
+          const tmp = records.filter((record: any) => {
+            return vocabularies.find(
+              (vocabulary: any) =>
+                vocabulary.vocabularyId === record.vocabularyId
+            );
+          });
+
+          console.log("topics=>>", topics);
+          console.log("vocabularies", vocabularies[0]);
+          console.log("records", records[0]);
+
+          return { data: topics };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
+  }),
+});
+
+export const { useGetTopicsQuery } = TopicApi;

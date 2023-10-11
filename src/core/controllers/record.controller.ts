@@ -1,6 +1,18 @@
 import { firebaseDB } from "@/config/firebase";
 import { nanoid } from "@reduxjs/toolkit";
-import { collection, deleteDoc, doc, setDoc } from "firebase/firestore";
+import {
+  FieldPath,
+  and,
+  collection,
+  deleteDoc,
+  doc,
+  documentId,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { RecordRequest } from "@/core/request";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 
@@ -19,6 +31,10 @@ const RecordController = {
   removeRecord: async (id: string) => {
     const docRef = await deleteDoc(doc(recordCollection, id));
     console.log("Document remove with ID: ", docRef);
+  },
+  getRecords: (userId: string) => {
+    const q = query(recordCollection, where("userId", "==", userId));
+    return getDocs(q);
   },
 };
 

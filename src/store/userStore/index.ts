@@ -25,6 +25,7 @@ const userSlice = createSlice({
       state.token = "";
     },
   },
+  
 });
 
 export const { saveToken, logout } = userSlice.actions;
