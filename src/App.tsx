@@ -2,7 +2,7 @@ import React from "react";
 import { useRoutes } from "react-router-dom";
 import routes from "@/config/router";
 import Box from "@mui/material/Box";
-import { persist } from "./shared/utils/persist.util";
+import persist from "./shared/utils/persist.util";
 
 function App() {
   const token = persist.getToken();

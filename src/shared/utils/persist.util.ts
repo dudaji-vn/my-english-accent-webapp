@@ -1,10 +1,10 @@
-import { IExerciseFilterType } from "../type";
+import { TopicUIType, VocabularyType } from "../type";
 
 const VOCABULARY = "vocabulary";
 const TOKEN = "token";
 
-export const persist = {
-  saveVocabulary: (value: IExerciseFilterType) => {
+const persist = {
+  saveVocabulary: (value: Omit<TopicUIType, "imgSrc"> & VocabularyType) => {
     localStorage.setItem(VOCABULARY, JSON.stringify(value));
   },
   getVocabulary: () => {
@@ -17,3 +17,5 @@ export const persist = {
     return localStorage.getItem(TOKEN);
   },
 };
+
+export default persist;

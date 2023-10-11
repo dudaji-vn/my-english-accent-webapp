@@ -1,4 +1,4 @@
-import UserController from "../controllers/user.controller";
+import UserController from "@/core/controllers/user.controller";
 
 const UserService = {
   login: async ({

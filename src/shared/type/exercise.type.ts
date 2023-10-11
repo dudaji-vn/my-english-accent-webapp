@@ -1,14 +1,5 @@
-export enum StageExercise {
-  Inprogress = 0,
-  Open = 1,
-  Close = 2,
-}
-
-export const StageLabel: Record<StageExercise, string> = {
-  "0": "In progress",
-  "1": "Explore",
-  "2": "Archived",
-};
+import { StageExercise, TopicUIType } from "./topic.type";
+import { VocabularyType } from "./vocabulary.type";
 
 export interface UserType {
   idUser: string;
@@ -18,7 +9,7 @@ export interface UserType {
   nativeLanguage: string;
 }
 
-export interface VocabularyType {
+export interface VocabularyType2 {
   idVocabulary: string;
   titlePrimaryLanguage: string;
   titleSecondaryLanguage: string;
@@ -26,7 +17,7 @@ export interface VocabularyType {
   voiceSrc: string;
 }
 
-export interface TopicType {
+export interface TopicType2 {
   topicId: string;
   topicName: string;
   imgSrc: string;
@@ -37,11 +28,12 @@ export interface TopicType {
 
 export interface IExerciseFilterType
   extends Omit<VocabularyType, "idVocabulary">,
-    TopicType {
+    TopicUIType {
   idVocabulary: string[];
 }
 export interface IExerciseType {
-  store: TopicType[];
-  filter: IExerciseFilterType;
-  populatedVocabulary: any[];
+  store: TopicType2[];
+  filter: Omit<TopicUIType, "imgSrc">;
+  vocabularies: any[];
+  vocabularyIndex: number;
 }

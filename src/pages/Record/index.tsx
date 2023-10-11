@@ -1,63 +1,31 @@
-import React, { useEffect } from "react";
 import { Box, Avatar, Typography, IconButton } from "@mui/material";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import Category from "@/components/Category";
 import { useNavigate } from "react-router-dom";
-import { nanoid } from "@reduxjs/toolkit";
-import { dummyExercise } from "@/config/dummyData";
-import { groupBy } from "@/shared/utils/groupBy.util";
-import { StageExercise } from "@/shared/type";
+import { StageExercise, TopicUIType } from "@/shared/type";
 import ROUTER from "@/shared/const/router.const";
-import {
-  useGetRecordsQuery,
-  useGetTopicsQuery,
-  useGetVocabulariesQuery,
-} from "@/core/services";
+import { useGetTopicsQuery } from "@/core/services";
 
 import * as _ from "lodash";
+import { nanoid } from "@reduxjs/toolkit";
 
 export default function RecordingPage() {
   const goBack = useNavigate();
-  const dataDummy = groupBy(dummyExercise, "stage");
 
-  const { data: dataTopic, isLoading: isTopicFetching } = useGetTopicsQuery();
+  const { data } = useGetTopicsQuery();
 
-  useEffect(() => {
-    // console.log("dataRecord", dataRecord);
-    // let progress = {
-    //   stage: StageExercise.Open,
-    //   currentPhrase: 0,
-    // };
-    // if (_.isEmpty(dataRecord)) {
-    //   progress = {
-    //     stage: StageExercise.Open,
-    //     currentPhrase: 0,
-    //   };
-    // } else {
-    //   console.log("dataRecord");
-    // }
-    // const populated = _.chain(dataVocabulary)
-    //   .groupBy("topicId")
-    //   .map((value, key) => {
-    //     return { topicId: key, vocabulary: value };
-    //   })
-    //   .value();
-    // const mergeArry = _.merge(populated, dataTopic);
-    // console.log(mergeArry);
-  }, [isTopicFetching]);
+  if (_.isNull(data) || _.isUndefined(data)) return <></>;
 
-  // console.log(dataRecord);
-  // const renderCategory = () => {
-  //   return dataTopic.map((value: any) => {
-  //     return (
-  //       <Category
-  //         key={value.topicId}
-  //         stage={StageExercise.Open}
-  //         categoryItems={value}
-  //       />
-  //     );
-  //   });
-  // };
+  const renderCategory = () => {
+    const groupStage = _.groupBy(data, "stage");
+    return Object.entries(groupStage).map(([key, value]) => (
+      <Category
+        key={nanoid()}
+        stage={key as unknown as StageExercise}
+        topicItems={value}
+      />
+    ));
+  };
 
   return (
     <Box>
@@ -69,7 +37,7 @@ export default function RecordingPage() {
           Practice pronounciation
         </Typography>
       </Box>
-      {/* {renderCategory()} */}
+      {renderCategory()}
     </Box>
   );
 }

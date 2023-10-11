@@ -10,26 +10,30 @@ import {
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
-import { TopicType, StageExercise, VocabularyType } from "@/shared/type";
-import { persist } from "@/shared/utils/persist.util";
-import { useAppSelector } from "@/store/hook";
+import { StageExercise, TopicUIType, VocabularyType } from "@/shared/type";
+import { useGetVocabulariesQuery } from "@/core/services";
+import _ from "lodash";
 
 export default function RecordingProgressPage() {
   const goBack = useNavigate();
 
-  // const [persistData] = useState<VocabularyType & ExerciseType>(() => {
-  //   const data = persist.getVocabulary();
-  //   if (data) return JSON.parse(data);
+  const { data, isLoading } = useGetVocabulariesQuery(
+    "topic_eSlx-3QrYaTls2VLfK2Lp"
+  );
+  if (!data) return <></>;
+
+  console.log(data);
+  // const [data] = useState<Omit<TopicUIType, "imgSrc"> & VocabularyType>(() => {
+  //   const vocabulary = persist.getVocabulary();
+  //   if (vocabulary) return JSON.parse(vocabulary);
   // });
 
-  const data = useAppSelector((state) => state.exercise.filter);
-
-  const currentProgress = useMemo(() => {
-    if (data.currentPhrase?.toString() && data.totalPhrase) {
-      return (data.currentPhrase * 100) / data.totalPhrase;
-    }
-    return 0;
-  }, []);
+  // const currentProgress = useMemo(() => {
+  //   if (data.currentPhrase?.toString() && data.totalPhrase) {
+  //     return (data.currentPhrase * 100) / data.totalPhrase;
+  //   }
+  //   return 0;
+  // }, []);
 
   return (
     <Box className="flex flex-col grow">
@@ -38,12 +42,10 @@ export default function RecordingProgressPage() {
           <IconButton onClick={() => goBack(-1)}>
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
-          <Typography className="text-large-semibold">
-            {data.topicName}
-          </Typography>
+          <Typography className="text-large-semibold">{data.name}</Typography>
         </Box>
         {data.stage != StageExercise.Open && (
-          <LinearProgress value={currentProgress} variant="determinate" />
+          <LinearProgress value={0} variant="determinate" />
         )}
       </Container>
       <TranslationCard {...data} />

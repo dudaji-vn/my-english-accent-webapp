@@ -18,9 +18,7 @@ import ROUTER from "@/shared/const/router.const";
 export default function RecordSummaryPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const dataVoca = useAppSelector(
-    (state) => state.exercise.populatedVocabulary
-  );
+  const dataVoca = useAppSelector((state) => state.exercise.vocabularies);
 
   const renderWordFinished = () => {
     return dataVoca.map((word) => (

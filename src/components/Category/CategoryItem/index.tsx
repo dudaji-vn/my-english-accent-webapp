@@ -3,37 +3,34 @@ import BoxCard from "@/components/Card";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { useMemo } from "react";
-import { TopicType, StageExercise } from "@/shared/type";
+import { StageExercise, TopicUIType } from "@/shared/type";
 import { useAppDispatch } from "@/store/hook";
-import { filterExerciseBy } from "@/store/ExerciseStore";
-
-export interface CategoryItemPropType {
-  topicId: string;
-  topicName: string;
-  imgSrc: string;
-  totalPhrase: number;
-  currentPhrase: number;
-  stage: StageExercise;
-}
+import { saveSelection } from "@/store/ExerciseStore";
 
 export default function CategoryItem({
   topicId,
-  topicName,
+  name,
   imgSrc,
   totalPhrase,
   currentPhrase,
   stage,
-}: CategoryItemPropType) {
+  vocabularies,
+}: TopicUIType) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const gotoRecordProgressPage = () => {
     navigate({
-      pathname: ROUTER.RECORD + `/${topicName.toLowerCase()}`,
+      pathname: ROUTER.RECORD + `/${name.toLowerCase()}`,
     });
     dispatch(
-      filterExerciseBy({
+      saveSelection({
         topicId,
-      } as Pick<TopicType, "topicId">)
+        stage,
+        name,
+        currentPhrase,
+        totalPhrase,
+        vocabularies,
+      })
     );
   };
 
@@ -48,7 +45,7 @@ export default function CategoryItem({
         onClick={() => gotoRecordProgressPage()}
       >
         <Box>
-          <Typography className="text-base-semibold">{topicName}</Typography>
+          <Typography className="text-base-semibold">{name}</Typography>
           <Typography className="text-extra-small-regular">
             {stage != StageExercise.Open
               ? `${currentPhrase}/${totalPhrase} phrases`

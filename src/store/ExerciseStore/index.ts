@@ -1,25 +1,26 @@
-import { dummyExercise, dummyVocabulary } from "@/config/dummyData";
 import Store from "@/shared/const/store.const";
-import { TopicType, IExerciseType, StageExercise } from "@/shared/type";
-import { persist } from "@/shared/utils/persist.util";
+import {
+  TopicType,
+  IExerciseType,
+  StageExercise,
+  TopicUIType,
+  VocabularyType,
+} from "@/shared/type";
+import persist from "@/shared/utils/persist.util";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: IExerciseType = {
   store: [],
   filter: {
     topicId: "",
-    topicName: "",
-    imgSrc: "",
+    vocabularies: [],
     stage: 0,
     totalPhrase: 0,
     currentPhrase: 0,
-    titlePrimaryLanguage: "",
-    titleSecondaryLanguage: "",
-    ipa: "",
-    voiceSrc: "",
-    idVocabulary: [],
+    name: "",
   },
-  populatedVocabulary: [],
+  vocabularies: [],
+  vocabularyIndex: 0,
 };
 
 const exerciseStore = createSlice({
@@ -30,71 +31,44 @@ const exerciseStore = createSlice({
       state: any,
       { payload }: PayloadAction<StageExercise>
     ) => {},
-    filterExerciseBy: (
+    saveSelection: (
       state,
-      { payload }: PayloadAction<Pick<TopicType, "topicId">>
+      { payload }: PayloadAction<Omit<TopicUIType, "imgSrc">>
     ) => {
-      dummyExercise.forEach((item) => {
-        if (item.topicId == payload.topicId) {
-          const isFound = dummyVocabulary.find((dVoca) =>
-            item.idVocabulary.includes(dVoca.idVocabulary)
-          );
-          if (isFound) {
-            const result = {
-              ...state.filter,
-              ...isFound,
-              ...item,
-            };
-            state.filter = result;
-            persist.saveVocabulary(result);
-          }
-        }
-      });
+      const result = {
+        ...state.filter,
+        ...payload,
+        ...payload.vocabularies[state.vocabularyIndex],
+      };
+      state.filter = result;
+      state.vocabularies = payload.vocabularies;
+      persist.saveVocabulary(result);
     },
-    nextVocabulary: (
-      state,
-      { payload }: PayloadAction<{ currentStep: number }>
-    ) => {
-      const nextStep = payload.currentStep + 1;
-      const result = JSON.parse(persist.getVocabulary()!!);
-
-      const foundItem = dummyVocabulary.find(
-        (dVoca) => dVoca.idVocabulary === result.idVocabulary[nextStep]
-      );
-
-      if (!!foundItem) {
-        const { idVocabulary, ...restValue } = foundItem;
-        const result = {
-          ...state.filter,
-          ...restValue,
-          currentPhrase: nextStep,
-        };
-
-        state.filter = result;
-        persist.saveVocabulary(result);
-      } else {
-        state.filter = {
-          ...state.filter,
-          stage: StageExercise.Close,
-        };
-      }
+    nextVocabulary: (state) => {
+      const result = {
+        ...state.filter,
+        ...state.vocabularies[state.vocabularyIndex],
+      };
+      console.log(result);
+      // state.filter = result;
+      // persist.saveVocabulary(result);
     },
     populatedVoca: (state) => {
-      dummyExercise.forEach((item) => {
-        if (item.topicId === state.filter?.topicId) {
-          const result = dummyVocabulary.filter((dVoca) =>
-            item.idVocabulary.includes(dVoca.idVocabulary)
-          );
-          state.populatedVocabulary = [...result];
-        }
-      });
+      // dummyExercise.forEach((item) => {
+      //   if (item.topicId === state.filter?.topicId) {
+      //     const result = dummyVocabulary.filter((dVoca) =>
+      //       item.idVocabulary.includes(dVoca.idVocabulary)
+      //     );
+      //     state.populatedVocabulary = [...result];
+      //   }
+      // });
     },
   },
 });
 
 export const {
   getExerciseByStage,
-  filterExerciseBy,
+  saveSelection,
   populatedVoca,
   nextVocabulary,
 } = exerciseStore.actions;

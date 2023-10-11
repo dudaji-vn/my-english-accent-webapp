@@ -10,10 +10,12 @@ import {
 } from "@mui/material";
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
-import { IExerciseFilterType } from "@/shared/type";
 import RecordingAudio from "@/components/RecordingAudio";
+import { TopicUIType, VocabularyType } from "@/shared/type";
 
-export default function TranslationCard(props: IExerciseFilterType) {
+export default function TranslationCard(
+  props: Omit<TopicUIType, "imgSrc"> & VocabularyType
+) {
   return (
     <Container
       id="translationCard"
@@ -24,12 +26,12 @@ export default function TranslationCard(props: IExerciseFilterType) {
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography className="text-small-medium">
-                {props.titleSecondaryLanguage}
+                {props.titleNativeLanguage}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body2" className="text-small-regular">
-                {props.ipa}
+                {props.ipaDisplayLanguage}
               </Typography>
             </Grid>
             <Grid item xs={12} className="py-4">
@@ -54,15 +56,11 @@ export default function TranslationCard(props: IExerciseFilterType) {
             className="w-4 h-4 mt-1"
           />
           <Typography variant="body2" className="text-small-regular">
-            {props.titlePrimaryLanguage}
+            {(props as any).titleDisplayLanguluage}
           </Typography>
         </Box>
       </Box>
-      <RecordingAudio
-        stage={props.stage}
-        step={props.currentPhrase}
-        voiceSrc={props.voiceSrc}
-      />
+      <RecordingAudio stage={props.stage} />
     </Container>
   );
 }

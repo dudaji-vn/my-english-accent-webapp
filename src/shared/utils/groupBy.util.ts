@@ -1,4 +1,4 @@
-export const groupBy = (items: any[], key: string): Record<any, any> =>
+const groupBy = (items: any[], key: string): Record<any, any> =>
   items.reduce((accumulation, currentValue) => {
     return {
       ...accumulation,
@@ -8,3 +8,4 @@ export const groupBy = (items: any[], key: string): Record<any, any> =>
       ],
     };
   }, {});
+export default groupBy;

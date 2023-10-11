@@ -13,15 +13,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 interface RecordingAudioProp {
   stage: StageExercise;
-  step: number;
-  voiceSrc: string;
 }
 
-export default function RecordingAudio({
-  stage,
-  step,
-  voiceSrc,
-}: RecordingAudioProp) {
+export default function RecordingAudio({ stage }: RecordingAudioProp) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const params = useParams();
@@ -74,7 +68,7 @@ export default function RecordingAudio({
     // });
 
     setToggleSubBtn(false);
-    dispatch(nextVocabulary({ currentStep: step }));
+    dispatch(nextVocabulary());
   };
 
   useEffect(() => {
