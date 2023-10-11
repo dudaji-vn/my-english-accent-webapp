@@ -98,3 +98,110 @@ export const dummyExercise: IRelationVocabularyAndExercise[] = [
     idVocabulary: ["id_vacabulary2"],
   },
 ];
+
+// const vocabulary = [
+//   {
+//     vocabulary_id: "vocabulary1",
+//     lesson_category_id: "lessoncategory1",
+//   },
+//   {
+//     vocabulary_id: "vocabulary2",
+//     lesson_category_id: "lessoncategory1",
+//   },
+//   {
+//     vocabulary_id: "vocabulary3",
+//     lesson_category_id: "lessoncategory2",
+//   },
+//   {
+//     vocabulary_id: "vocabulary4",
+//     lesson_category_id: "lessoncategory2",
+//   },
+// ];
+
+// const lessonCategory = [
+//   {
+//     lesson_category_id: "lessoncategory1",
+//   },
+//   {
+//     lesson_category_id: "lessoncategory2",
+//   },
+// ];
+
+// const user = [
+//   {
+//     user_id: "user1",
+//   },
+//   {
+//     user_id: "user2",
+//   },
+// ];
+
+// const enrollment = [
+//   {
+//     user_id: "user1",
+//     lesson_category_id: "lessoncategory1",
+//   },
+//   {
+//     user_id: "user1",
+//     lesson_category_id: "lessoncategory2",
+//   },
+//   {
+//     user_id: "user2",
+//     lesson_category_id: "lessoncategory1",
+//   },
+//   {
+//     user_id: "user2",
+//     lesson_category_id: "lessoncategory2",
+//   },
+// ];
+
+// const record = [
+//   {
+//     record_id: "record1",
+//     vocabulary_id: "vocabulary1",
+//     voice_src: "string",
+//   },
+//   {
+//     record_id: "record2",
+//     vocabulary_id: "vocabulary2",
+//     voice_src: "string",
+//   },
+//   {
+//     record_id: "record3",
+//     vocabulary_id: "vocabulary3",
+//     voice_src: "string",
+//   },
+//   {
+//     record_id: "record4",
+//     vocabulary_id: "vocabulary4",
+//     voice_src: "string",
+//   },
+// ];
+
+
+// const record1 = [
+//   {
+//     record_id: "record1",
+//     vocabulary_id: "vocabulary1",
+//     user_id: "user1",
+//     voice_src: "string",
+//   },
+//   {
+//     record_id: "record2",
+//     vocabulary_id: "vocabulary2",
+//     user_id: "user2",
+//     voice_src: "string",
+//   },
+//   {
+//     record_id: "record3",
+//     vocabulary_id: "vocabulary3",
+//     user_id: "user2",
+//     voice_src: "string",
+//   },
+//   {
+//     record_id: "record4",
+//     vocabulary_id: "vocabulary4",
+//     user_id: "user1",
+//     voice_src: "string",
+//   },
+// ];
