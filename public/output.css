@@ -48,6 +48,12 @@ h6 {
   font-weight: 500
 }
 
+.text-small-semibold {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600
+}
+
 .text-extra-small-regular {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -347,6 +353,10 @@ h6 {
   align-items: center
 }
 
+#root :is(.justify-end) {
+  justify-content: flex-end
+}
+
 #root :is(.justify-center) {
   justify-content: center
 }
@@ -367,6 +377,10 @@ h6 {
   gap: 0.75rem
 }
 
+#root :is(.gap-4) {
+  gap: 1rem
+}
+
 #root :is(.rounded-lg) {
   border-radius: 0.5rem
 }
@@ -380,6 +394,11 @@ h6 {
   border-top-right-radius: 0.5rem
 }
 
+#root :is(.rounded-b-lg) {
+  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem
+}
+
 #root :is(.border) {
   border-width: 1px
 }
@@ -390,6 +409,10 @@ h6 {
 
 #root :is(.border-t-\[1px\]) {
   border-top-width: 1px
+}
+
+#root :is(.border-b-\[1px\]) {
+  border-bottom-width: 1px
 }
 
 #root :is(.border-solid) {
@@ -409,6 +432,11 @@ h6 {
 #root :is(.bg-primary) {
   --tw-bg-opacity: 1;
   background-color: rgb(134 70 244 / var(--tw-bg-opacity))
+}
+
+#root :is(.bg-purple-50) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 245 255 / var(--tw-bg-opacity))
 }
 
 #root :is(.bg-white) {
@@ -436,13 +464,26 @@ h6 {
   padding: 1.75rem
 }
 
+#root :is(.px-4) {
+  padding-left: 1rem;
+  padding-right: 1rem
+}
+
 #root :is(.py-4) {
   padding-top: 1rem;
   padding-bottom: 1rem
 }
 
+#root :is(.pb-2) {
+  padding-bottom: 0.5rem
+}
+
 #root :is(.pb-4) {
   padding-bottom: 1rem
+}
+
+#root :is(.pt-4) {
+  padding-top: 1rem
 }
 
 #root :is(.text-center) {
@@ -452,6 +493,11 @@ h6 {
 #root :is(.text-sm) {
   font-size: 0.875rem;
   line-height: 1.25rem
+}
+
+#root :is(.text-primary) {
+  --tw-text-opacity: 1;
+  color: rgb(134 70 244 / var(--tw-text-opacity))
 }
 
 #root :is(.shadow-\[0_1px_3px_0px_\#A6AFC366\]) {

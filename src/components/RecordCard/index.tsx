@@ -8,14 +8,24 @@ import MicrophoneIcon from "@/assets/icon/microphone-icon.svg";
 import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CheckIcon from "@/assets/icon/circle-check-icon.svg";
 
-export default function RecordCard() {
+interface RecordType {
+  className: string;
+}
+export default function RecordCard(props: RecordType) {
   return (
-    <Grid container spacing={1} padding={2} maxHeight={"120px"}>
+    <Grid
+      container
+      margin={0}
+      width={"100%"}
+      spacing={1}
+      padding={2}
+      className={props.className}
+    >
       <Grid item xs={2}>
         <Avatar alt="avatar-icon" src={AvatarIcon} />
       </Grid>
       <Grid item xs={8}>
-        <Typography>User name 01</Typography>
+        <Typography className="text-small-medium">User name 01</Typography>
         <Nationality />
       </Grid>
       <Grid item xs={2} textAlign={"end"}>
@@ -37,7 +47,9 @@ export default function RecordCard() {
             src={MicrophoneIcon}
             className="w-4 h-4"
           />
-          <Typography component={"span"}>2 recorded</Typography>
+          <Typography variant={"body2"} className="text-extra-small-regular">
+            2 recorded
+          </Typography>
         </Box>
       </Grid>
       <Grid item xs={12}>
@@ -49,7 +61,7 @@ export default function RecordCard() {
           }}
         >
           <Avatar alt="message-icon" src={MessageIcon} className="w-4 h-4" />
-          <Typography component={"span"}>
+          <Typography variant={"body2"} className="text-extra-small-regular">
             Speak Korean (native), English
           </Typography>
         </Box>

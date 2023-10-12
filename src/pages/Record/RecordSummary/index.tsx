@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import ROUTER from "@/shared/const/router.const";
 import { useGetTopicsQuery } from "@/core/services";
 import { resetVocabularyIndex } from "@/store/ExerciseStore";
+import FooterBtn from "@/components/FooterBtn";
 
 export default function RecordSummaryPage() {
   const navigate = useNavigate();

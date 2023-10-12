@@ -8,6 +8,7 @@ const ROUTER = {
 
   // subpath
   SUMMARY: "/summary",
+  ADDUSER: "/adduser",
 };
 
 export default ROUTER;

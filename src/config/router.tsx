@@ -8,6 +8,8 @@ import RecordingPage from "@/pages/Record";
 import Navbar from "@/components/Navbar";
 import RecordingProgressPage from "@/pages/Record/RecordProgress";
 import RecordSummaryPage from "@/pages/Record/RecordSummary";
+import ListenPage from "@/pages/Listen";
+import AddUserPage from "@/pages/Listen/AddUser";
 
 function RequireAuth({
   isLoggedIn,
@@ -68,7 +70,15 @@ const routes = (isLoggedIn: boolean) => [
     path: ROUTER.LISTENING,
     element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
-        <RecordingPage />
+        <ListenPage />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: ROUTER.LISTENING + ROUTER.ADDUSER,
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn}>
+        <AddUserPage />
       </RequireAuth>
     ),
   },

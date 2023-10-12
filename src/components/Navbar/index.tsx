@@ -57,12 +57,19 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box>
             <Tooltip title="Open settings">
-              <>
+              <Box className="flex items-center">
                 <IconButton onClick={handleOpenUserMenu} disableRipple>
-                  <Avatar alt="avatar-icon" src={AvatarIcon} />
+                  <Avatar
+                    alt="avatar-icon"
+                    sx={{
+                      width: "24px",
+                      height: "24px",
+                    }}
+                    children={<Typography color={"white"}>H</Typography>}
+                  />
                 </IconButton>
                 <img alt="arrow-down-icon" src={ArrowdownIcon} />
-              </>
+              </Box>
             </Tooltip>
             <Menu
               sx={{ mt: "40px" }}
