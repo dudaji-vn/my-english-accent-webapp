@@ -46,8 +46,9 @@ export default function RecordingProgressPage() {
         });
       }
     }
-  }, [data?.stage]);
+  }, [data, data?.stage]);
 
+  console.log("data::", data);
   return (
     <Box className="flex flex-col grow">
       <Container className="py-4 divider bg-white">

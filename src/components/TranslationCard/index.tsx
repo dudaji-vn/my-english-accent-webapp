@@ -12,10 +12,24 @@ import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingAudio from "@/components/RecordingAudio";
 import { VocabularyType } from "@/shared/type";
+import { useEffect, useRef } from "react";
 
 export default function TranslationCard(
   props: VocabularyType & { refetch: any }
 ) {
+  const audioEle = useRef<HTMLAudioElement | null>(null);
+  const onRepeat = () => {
+    if (audioEle && audioEle.current) {
+      audioEle.current.play();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      audioEle.current = null;
+    };
+  }, []);
+
   return (
     <Container
       id="translationCard"
@@ -38,12 +52,13 @@ export default function TranslationCard(
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <IconButton className="p-0">
+              <IconButton className="p-0" onClick={onRepeat}>
                 <Avatar
                   alt="message-icon"
                   src={SpeakingIcon}
                   className="w-10 h-10"
                 />
+                <audio src={props.voiceRecordSrc} ref={audioEle}></audio>
               </IconButton>
             </Grid>
           </Grid>
@@ -56,7 +71,7 @@ export default function TranslationCard(
             className="w-4 h-4 mt-1"
           />
           <Typography variant="body2" className="text-small-regular">
-            {(props as any).titleDisplayLanguluage}
+            {props.titleDisplayLanguage}
           </Typography>
         </Box>
       </Box>

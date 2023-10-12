@@ -25,8 +25,9 @@ export default function RecordSummaryPage() {
     return dataVoca.map((word) => (
       <WordTag
         key={nanoid()}
-        sentence={word.titleDisplayLanguage}
+        sentence={word.titleNativeLanguage}
         ipa={word.ipaDisplayLanguage}
+        voiceSrc={word.voiceRecordSrc}
         classes="divider last:rounded-b-lg"
       />
     ));
