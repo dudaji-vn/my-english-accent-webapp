@@ -11,35 +11,38 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import WordTag from "@/components/WordTag";
 import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { populatedVoca } from "@/store/ExerciseStore";
-import { useEffect } from "react";
 import ROUTER from "@/shared/const/router.const";
+import { useGetTopicsQuery } from "@/core/services";
+import { resetVocabularyIndex } from "@/store/ExerciseStore";
 
 export default function RecordSummaryPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const dataVoca = useAppSelector((state) => state.exercise.vocabularies);
+  const { refetch } = useGetTopicsQuery();
 
   const renderWordFinished = () => {
     return dataVoca.map((word) => (
       <WordTag
         key={nanoid()}
-        sentence={word.titleSecondaryLanguage}
-        ipa={word.ipa}
+        sentence={word.titleDisplayLanguage}
+        ipa={word.ipaDisplayLanguage}
         classes="divider last:rounded-b-lg"
       />
     ));
   };
 
-  useEffect(() => {
-    dispatch(populatedVoca());
-  }, []);
+  const onHandleContinue = () => {
+    navigate(ROUTER.RECORD);
+    dispatch(resetVocabularyIndex());
+    refetch();
+  };
 
   return (
     <Box>
       <Container className="py-4 divider bg-white">
         <Box className="flex items-center gap-2">
-          <IconButton onClick={() => navigate(ROUTER.RECORD)}>
+          <IconButton onClick={onHandleContinue}>
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
           <Typography className="text-large-semibold">Finished</Typography>
@@ -64,7 +67,7 @@ export default function RecordSummaryPage() {
         <Button
           variant="contained"
           className="rounded-md m-auto"
-          onClick={() => navigate(ROUTER.RECORD)}
+          onClick={onHandleContinue}
         >
           <Typography className="text-base-medium" color={"white"}>
             Continue practice

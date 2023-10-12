@@ -22,7 +22,17 @@ export const RecordApi = createApi({
         }
       },
     }),
+    saveRecord: builder.mutation<any, any>({
+      async queryFn(payload) {
+        try {
+          const response = await RecordController.addRecord(payload);
+          return { data: response };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
   }),
 });
-export const { useGetRecordsQuery } = RecordApi;
+export const { useGetRecordsQuery, useSaveRecordMutation } = RecordApi;
 export default RecordApi;

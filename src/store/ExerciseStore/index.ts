@@ -1,19 +1,11 @@
 import Store from "@/shared/const/store.const";
-import {
-  TopicType,
-  IExerciseType,
-  StageExercise,
-  TopicUIType,
-  VocabularyType,
-} from "@/shared/type";
-import persist from "@/shared/utils/persist.util";
+import { IExerciseType, TopicUIType, VocabularyType } from "@/shared/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: IExerciseType = {
   store: [],
   filter: {
     topicId: "",
-    vocabularies: [],
     stage: 0,
     totalPhrase: 0,
     currentPhrase: 0,
@@ -27,50 +19,38 @@ const exerciseStore = createSlice({
   name: Store.exercise,
   initialState,
   reducers: {
-    getExerciseByStage: (
-      state: any,
-      { payload }: PayloadAction<StageExercise>
-    ) => {},
     saveSelection: (
       state,
       { payload }: PayloadAction<Omit<TopicUIType, "imgSrc">>
     ) => {
+      const { vocabularies, ...restPayload } = payload;
       const result = {
         ...state.filter,
-        ...payload,
-        ...payload.vocabularies[state.vocabularyIndex],
+        ...restPayload,
       };
-      state.filter = result;
-      state.vocabularies = payload.vocabularies;
-      persist.saveVocabulary(result);
+      //store
+      state.filter = {
+        ...result,
+      };
+      state.vocabularies = vocabularies;
     },
     nextVocabulary: (state) => {
-      const result = {
-        ...state.filter,
-        ...state.vocabularies[state.vocabularyIndex],
-      };
-      console.log(result);
-      // state.filter = result;
-      // persist.saveVocabulary(result);
+      state.vocabularyIndex = state.vocabularyIndex + 1;
     },
-    populatedVoca: (state) => {
-      // dummyExercise.forEach((item) => {
-      //   if (item.topicId === state.filter?.topicId) {
-      //     const result = dummyVocabulary.filter((dVoca) =>
-      //       item.idVocabulary.includes(dVoca.idVocabulary)
-      //     );
-      //     state.populatedVocabulary = [...result];
-      //   }
-      // });
+    resetVocabularyIndex: (state) => {
+      state.vocabularyIndex = 0;
+    },
+    saveVocabularies: (state, { payload }: PayloadAction<VocabularyType[]>) => {
+      state.vocabularies = payload;
     },
   },
 });
 
 export const {
-  getExerciseByStage,
   saveSelection,
-  populatedVoca,
+  saveVocabularies,
   nextVocabulary,
+  resetVocabularyIndex,
 } = exerciseStore.actions;
 
 export default exerciseStore.reducer;

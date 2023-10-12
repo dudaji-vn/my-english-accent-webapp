@@ -33,7 +33,7 @@ export interface IExerciseFilterType
 }
 export interface IExerciseType {
   store: TopicType2[];
-  filter: Omit<TopicUIType, "imgSrc">;
-  vocabularies: any[];
+  filter: Omit<TopicUIType, "imgSrc" | "vocabularies">;
+  vocabularies: VocabularyType[];
   vocabularyIndex: number;
 }

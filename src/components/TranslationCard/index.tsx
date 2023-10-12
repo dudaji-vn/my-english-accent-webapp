@@ -11,10 +11,10 @@ import {
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingAudio from "@/components/RecordingAudio";
-import { TopicUIType, VocabularyType } from "@/shared/type";
+import { VocabularyType } from "@/shared/type";
 
 export default function TranslationCard(
-  props: Omit<TopicUIType, "imgSrc"> & VocabularyType
+  props: VocabularyType & { refetch: any }
 ) {
   return (
     <Container
@@ -60,7 +60,11 @@ export default function TranslationCard(
           </Typography>
         </Box>
       </Box>
-      <RecordingAudio stage={props.stage} />
+      <RecordingAudio
+        vocabularyId={props.vocabularyId}
+        topicId={props.topicId}
+        refetch={props.refetch}
+      />
     </Container>
   );
 }

@@ -2,7 +2,7 @@ import { Box, Avatar, Typography, IconButton } from "@mui/material";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import Category from "@/components/Category";
 import { useNavigate } from "react-router-dom";
-import { StageExercise, TopicUIType } from "@/shared/type";
+import { StageExercise } from "@/shared/type";
 import ROUTER from "@/shared/const/router.const";
 import { useGetTopicsQuery } from "@/core/services";
 
@@ -10,9 +10,8 @@ import * as _ from "lodash";
 import { nanoid } from "@reduxjs/toolkit";
 
 export default function RecordingPage() {
-  const goBack = useNavigate();
-
   const { data } = useGetTopicsQuery();
+  const goBack = useNavigate();
 
   if (_.isNull(data) || _.isUndefined(data)) return <></>;
 

@@ -90,7 +90,6 @@ export const TopicApi = createApi({
             _.chain(vocaPopulateRecord)
               .groupBy("topicId")
               .map((value, key) => {
-                console.log("topicId", value);
                 return { topicId: key, vocabularies: value };
               })
               .value();

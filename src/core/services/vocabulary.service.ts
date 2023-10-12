@@ -3,6 +3,14 @@ import VocabularyController from "@/core/controllers/vocabulary.controller";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RecordType, StageExercise, VocabularyType } from "@/shared/type";
 import RecordController from "../controllers/record.controller";
+import { useGetRecordsQuery } from "./record.service";
+
+export interface VocabularyResponseType {
+  stage: StageExercise;
+  totalPhrase: number;
+  currentPhrase: number;
+  vocabularies: VocabularyType[];
+}
 
 const calculateStage = (vocabularies: VocabularyType[]) => {
   const result = {};
@@ -33,7 +41,7 @@ export const VocabularyApi = createApi({
   reducerPath: Query.vocabulary,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    getVocabularies: builder.query<any, string>({
+    getVocabularies: builder.query<VocabularyResponseType, string>({
       async queryFn(topicId: string) {
         try {
           const userId = "idUser2JLpns9SQblwSgNigfTwF";
@@ -49,11 +57,9 @@ export const VocabularyApi = createApi({
             }
           );
 
-          console.log("vocabularies", vocabularies);
           (await RecordController.getRecords(userId)).forEach((value) => {
             records.push({ recordId: value.id, ...value.data() } as RecordType);
           });
-          console.log("records", records);
 
           const vocaPopulateRecord: VocabularyType[] = vocabularies.map(
             (vocabulary: VocabularyType) => {
@@ -74,11 +80,12 @@ export const VocabularyApi = createApi({
                   };
             }
           );
+
           const progress = calculateStage(vocaPopulateRecord);
           const result = {
             ...progress,
             vocabularies,
-          };
+          } as VocabularyResponseType;
           return { data: result };
         } catch (error) {
           return { error };

@@ -8,47 +8,67 @@ import {
   LinearProgress,
 } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
-import { StageExercise, TopicUIType, VocabularyType } from "@/shared/type";
+import { useNavigate, useParams } from "react-router-dom";
+import { StageExercise } from "@/shared/type";
 import { useGetVocabulariesQuery } from "@/core/services";
 import _ from "lodash";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import ROUTER from "@/shared/const/router.const";
+import { saveVocabularies } from "@/store/ExerciseStore";
+import { useEffect } from "react";
 
 export default function RecordingProgressPage() {
-  const goBack = useNavigate();
+  const navigate = useNavigate();
+  const params = useParams();
 
-  const { data, isLoading } = useGetVocabulariesQuery(
-    "topic_eSlx-3QrYaTls2VLfK2Lp"
+  const topicFilterStore = useAppSelector((state) => state.exercise.filter);
+  const currentIndexStore = useAppSelector(
+    (state) => state.exercise.vocabularyIndex
   );
-  if (!data) return <></>;
 
-  console.log(data);
-  // const [data] = useState<Omit<TopicUIType, "imgSrc"> & VocabularyType>(() => {
-  //   const vocabulary = persist.getVocabulary();
-  //   if (vocabulary) return JSON.parse(vocabulary);
-  // });
+  const { data, refetch } = useGetVocabulariesQuery(topicFilterStore.topicId);
 
-  // const currentProgress = useMemo(() => {
-  //   if (data.currentPhrase?.toString() && data.totalPhrase) {
-  //     return (data.currentPhrase * 100) / data.totalPhrase;
-  //   }
-  //   return 0;
-  // }, []);
+  const currentProgress = () => {
+    if (data) {
+      if (data.currentPhrase.toString() && data.totalPhrase) {
+        return (data.currentPhrase * 100) / data.totalPhrase;
+      }
+    }
+    return 0;
+  };
+
+  useEffect(() => {
+    if (data) {
+      if (data.stage === StageExercise.Close) {
+        const path = `/${params.category}`;
+        navigate({
+          pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
+        });
+      }
+    }
+  }, [data?.stage]);
 
   return (
     <Box className="flex flex-col grow">
       <Container className="py-4 divider bg-white">
         <Box className="flex items-center gap-2">
-          <IconButton onClick={() => goBack(-1)}>
+          <IconButton onClick={() => navigate(-1)}>
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
-          <Typography className="text-large-semibold">{data.name}</Typography>
+          <Typography className="text-large-semibold">
+            {topicFilterStore.name}
+          </Typography>
         </Box>
-        {data.stage != StageExercise.Open && (
-          <LinearProgress value={0} variant="determinate" />
+        {data && data.stage != StageExercise.Open && (
+          <LinearProgress value={currentProgress()} variant="determinate" />
         )}
       </Container>
-      <TranslationCard {...data} />
+      {data && (
+        <TranslationCard
+          {...data.vocabularies[currentIndexStore]}
+          refetch={refetch}
+        />
+      )}
     </Box>
   );
 }
