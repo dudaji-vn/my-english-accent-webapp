@@ -10,6 +10,8 @@ import RecordingProgressPage from "@/pages/Record/RecordProgress";
 import RecordSummaryPage from "@/pages/Record/RecordSummary";
 import ListenPage from "@/pages/Listen";
 import AddUserPage from "@/pages/Listen/AddUser";
+import IndividualPage from "@/pages/Listen/Individual";
+import TeamPage from "@/pages/Listen/Team";
 
 function RequireAuth({
   isLoggedIn,
@@ -69,10 +71,26 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.LISTENING,
     element: (
+      <Navigate to={ROUTER.LISTENING + "/" + ROUTER.INDIVIDUAL} replace />
+    ),
+  },
+  {
+    path: ROUTER.LISTENING,
+    element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
         <ListenPage />
       </RequireAuth>
     ),
+    children: [
+      {
+        path: ROUTER.INDIVIDUAL,
+        element: <IndividualPage />,
+      },
+      {
+        path: ROUTER.TEAM,
+        element: <TeamPage />,
+      },
+    ],
   },
   {
     path: ROUTER.LISTENING + ROUTER.ADDUSER,

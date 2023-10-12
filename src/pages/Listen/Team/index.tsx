@@ -10,18 +10,17 @@ import {
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import UserAddIcon from "@/assets/icon/user-add-icon.svg";
 import RightIcon from "@/assets/icon/arrow-right-icon.svg";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { useState } from "react";
-import RecordCard from "@/components/RecordCard";
 
-export default function ListenPage() {
+export default function TeamPage() {
   const navigate = useNavigate();
-  const [value, setValue] = useState(ROUTER.INDIVIDUAL);
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    console.log(newValue);
     setValue(newValue);
-    navigate(ROUTER.LISTENING + "/" + newValue);
   };
 
   const onHandlePlayAll = () => {};
@@ -51,44 +50,36 @@ export default function ListenPage() {
           label="Individual"
           className="text-small-medium"
           aria-controls={`listen-tabpanel-${value}`}
-          value={ROUTER.INDIVIDUAL}
         />
         <Tab
           id={`listen-tab-${value}`}
           label="Team"
           className="text-small-medium"
           aria-controls={`listten-tabpanel-${value}`}
-          value={ROUTER.TEAM}
         />
       </Tabs>
-      <Outlet />
-      <Box className="flex flex-col fixed bottom-0 w-full p-6 gap-4 bg-white border-solid border-stroke border-0 border-t-[1px]">
-        <Box>
-          <RecordCard />
-        </Box>
-        <Box>
-          <IconButton
-            onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
-            className="border border-stroke border-solid"
-          >
-            <Avatar src={ChevronIcon} className="w-6 h-6" />
-          </IconButton>
-          <Button
-            variant="contained"
-            className="rounded-md m-auto grow"
-            onClick={onHandlePlayAll}
-          >
-            <Typography className="text-base-medium " color={"white"}>
-              LIsten all
-            </Typography>
-          </Button>
-          <IconButton
-            onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
-            className="border border-stroke border-solid"
-          >
-            <Avatar src={RightIcon} className="w-6 h-6" />
-          </IconButton>
-        </Box>
+      <Box className="flex fixed bottom-0 w-full p-6 gap-4 bg-white border-solid border-stroke border-0 border-t-[1px]">
+        <IconButton
+          onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
+          className="border border-stroke border-solid"
+        >
+          <Avatar src={ChevronIcon} className="w-6 h-6" />
+        </IconButton>
+        <Button
+          variant="contained"
+          className="rounded-md m-auto grow"
+          onClick={onHandlePlayAll}
+        >
+          <Typography className="text-base-medium " color={"white"}>
+            LIsten all
+          </Typography>
+        </Button>
+        <IconButton
+          onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
+          className="border border-stroke border-solid"
+        >
+          <Avatar src={RightIcon} className="w-6 h-6" />
+        </IconButton>
       </Box>
     </Box>
   );

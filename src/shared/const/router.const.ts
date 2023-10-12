@@ -9,6 +9,10 @@ const ROUTER = {
   // subpath
   SUMMARY: "/summary",
   ADDUSER: "/adduser",
+
+  //
+  INDIVIDUAL: "individual",
+  TEAM: "team",
 };
 
 export default ROUTER;

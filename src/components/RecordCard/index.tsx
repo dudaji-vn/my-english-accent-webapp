@@ -9,7 +9,7 @@ import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CheckIcon from "@/assets/icon/circle-check-icon.svg";
 
 interface RecordType {
-  className: string;
+  className?: string;
 }
 export default function RecordCard(props: RecordType) {
   return (
