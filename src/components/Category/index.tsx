@@ -1,29 +1,19 @@
-import React from "react";
 import { Box, Typography } from "@mui/material";
-import CategoryItem, {
-  CategoryItemPropType,
-} from "@/components/Category/CategoryItem";
+import CategoryItem from "@/components/Category/CategoryItem";
 import { nanoid } from "@reduxjs/toolkit";
-import { StageExercise, StageLabel } from "@/shared/type";
+import { StageExercise, StageLabel, TopicUIType } from "@/shared/type";
 
 export interface CategoryPropType {
   stage: StageExercise;
-  categoryItems: CategoryItemPropType[];
+  topicItems: TopicUIType[];
 }
 
-export default function Category({ stage, categoryItems }: CategoryPropType) {
+export default function Category({ stage, topicItems }: CategoryPropType) {
   const renderCategoryItem = () => {
-    return categoryItems.map((item) => {
+    return topicItems.map((item) => {
       return (
         <Box className="mb-4 last:mb-0" key={nanoid()}>
-          <CategoryItem
-            exerciseName={item.exerciseName}
-            currentPhrase={item.currentPhrase}
-            totalPhrase={item.totalPhrase}
-            imgSrc={item.imgSrc}
-            stage={item.stage}
-            idExercise={item.idExercise}
-          />
+          <CategoryItem {...item} />
         </Box>
       );
     });

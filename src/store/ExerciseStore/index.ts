@@ -1,102 +1,56 @@
-import { dummyExercise, dummyVocabulary } from "@/config/dummyData";
 import Store from "@/shared/const/store.const";
-import { ExerciseType, IExerciseType, StageExercise } from "@/shared/type";
-import { persist } from "@/shared/utils/persist.util";
+import { IExerciseType, TopicUIType, VocabularyType } from "@/shared/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: IExerciseType = {
   store: [],
   filter: {
-    idExercise: "",
-    exerciseName: "",
-    imgSrc: "",
+    topicId: "",
     stage: 0,
     totalPhrase: 0,
     currentPhrase: 0,
-    titlePrimaryLanguage: "",
-    titleSecondaryLanguage: "",
-    ipa: "",
-    voiceSrc: "",
-    idVocabulary: [],
+    name: "",
   },
-  populatedVocabulary: [],
+  vocabularies: [],
+  vocabularyIndex: 0,
 };
 
 const exerciseStore = createSlice({
   name: Store.exercise,
   initialState,
   reducers: {
-    getExerciseByStage: (
-      state: any,
-      { payload }: PayloadAction<StageExercise>
-    ) => {},
-    filterExerciseBy: (
+    saveSelection: (
       state,
-      { payload }: PayloadAction<Pick<ExerciseType, "idExercise">>
+      { payload }: PayloadAction<Omit<TopicUIType, "imgSrc">>
     ) => {
-      dummyExercise.forEach((item) => {
-        if (item.idExercise == payload.idExercise) {
-          const isFound = dummyVocabulary.find((dVoca) =>
-            item.idVocabulary.includes(dVoca.idVocabulary)
-          );
-          if (isFound) {
-            const result = {
-              ...state.filter,
-              ...isFound,
-              ...item,
-            };
-            state.filter = result;
-            persist.saveVocabulary(result);
-          }
-        }
-      });
+      const { vocabularies, ...restPayload } = payload;
+      const result = {
+        ...state.filter,
+        ...restPayload,
+      };
+      //store
+      state.filter = {
+        ...result,
+      };
+      state.vocabularies = vocabularies;
     },
-    nextVocabulary: (
-      state,
-      { payload }: PayloadAction<{ currentStep: number }>
-    ) => {
-      const nextStep = payload.currentStep + 1;
-      const result = JSON.parse(persist.getVocabulary()!!);
-
-      const foundItem = dummyVocabulary.find(
-        (dVoca) => dVoca.idVocabulary === result.idVocabulary[nextStep]
-      );
-
-      if (!!foundItem) {
-        const { idVocabulary, ...restValue } = foundItem;
-        const result = {
-          ...state.filter,
-          ...restValue,
-          currentPhrase: nextStep,
-        };
-
-        state.filter = result;
-        persist.saveVocabulary(result);
-      } else {
-        state.filter = {
-          ...state.filter,
-          stage: StageExercise.Close,
-        };
-      }
+    nextVocabulary: (state) => {
+      state.vocabularyIndex = state.vocabularyIndex + 1;
     },
-    populatedVoca: (state) => {
-      dummyExercise.forEach((item) => {
-        if (item.idExercise === state.filter?.idExercise) {
-          const result = dummyVocabulary.filter((dVoca) =>
-            item.idVocabulary.includes(dVoca.idVocabulary)
-          );
-          state.populatedVocabulary = [...result];
-        }
-      });
+    resetVocabularyIndex: (state) => {
+      state.vocabularyIndex = 0;
+    },
+    saveVocabularies: (state, { payload }: PayloadAction<VocabularyType[]>) => {
+      state.vocabularies = payload;
     },
   },
 });
 
 export const {
-  getExerciseByStage,
-  filterExerciseBy,
-  populatedVoca,
+  saveSelection,
+  saveVocabularies,
   nextVocabulary,
+  resetVocabularyIndex,
 } = exerciseStore.actions;
 
 export default exerciseStore.reducer;

@@ -53,6 +53,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
+    "@types/lodash": "^4.14.199",
     "i18next": "^23.5.1",
     "nanoid": "^5.0.1",
     "react-i18next": "^13.2.2",

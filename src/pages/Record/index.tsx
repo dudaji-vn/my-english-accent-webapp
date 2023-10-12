@@ -1,34 +1,31 @@
-import React, { useEffect } from "react";
 import { Box, Avatar, Typography, IconButton } from "@mui/material";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import Category from "@/components/Category";
 import { useNavigate } from "react-router-dom";
-import { nanoid } from "@reduxjs/toolkit";
-import { dummyExercise } from "@/config/dummyData";
-import { groupBy } from "@/shared/utils/groupBy.util";
 import { StageExercise } from "@/shared/type";
 import ROUTER from "@/shared/const/router.const";
-import TopicService from "@/core/services/topic.service";
+import { useGetTopicsQuery } from "@/core/services";
+
+import * as _ from "lodash";
+import { nanoid } from "@reduxjs/toolkit";
 
 export default function RecordingPage() {
+  const { data } = useGetTopicsQuery();
   const goBack = useNavigate();
-  const dataDummy = groupBy(dummyExercise, "stage");
+
+  if (_.isNull(data) || _.isUndefined(data)) return <></>;
 
   const renderCategory = () => {
-    return Object.entries(dataDummy).map(([key, value]) => (
+    const groupStage = _.groupBy(data, "stage");
+    return Object.entries(groupStage).map(([key, value]) => (
       <Category
         key={nanoid()}
         stage={key as unknown as StageExercise}
-        categoryItems={value}
+        topicItems={value}
       />
     ));
   };
 
-  useEffect(() => {
-    const res = TopicService.getTopics().then((value) => {
-      console.log(value);
-    });
-  }, []);
   return (
     <Box>
       <Box className="p-4 flex items-center gap-2 divider bg-white">

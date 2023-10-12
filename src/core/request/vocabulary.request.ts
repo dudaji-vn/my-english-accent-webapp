@@ -1,5 +1,5 @@
 export interface VocabularyRequest {
-  titleDisplayLanguluage: string;
+  titleDisplayLanguage: string;
   titleNativeLanguage: string;
   ipaDisplayLanguage: string;
   voice_src: string;

@@ -1,30 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Box, Avatar, IconButton, Typography } from "@mui/material";
 import { useReactMediaRecorder } from "react-media-recorder-2";
 import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import HearingIcon from "@/assets/icon/hearing-icon.svg";
 import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
-import ROUTER from "@/shared/const/router.const";
 import { StageExercise } from "@/shared/type";
 import { nextVocabulary } from "@/store/ExerciseStore";
 import { useAppDispatch } from "@/store/hook";
-import { useNavigate, useParams } from "react-router-dom";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { useSaveRecordMutation } from "@/core/services";
+import UploadFileController from "@/core/controllers/uploadFile.controller";
 
-interface RecordingAudioProp {
-  stage: StageExercise;
-  step: number;
-  voiceSrc: string;
+export interface RecordingAudioProp {
+  topicId: string;
+  vocabularyId: string;
+  refetch: any;
 }
 
 export default function RecordingAudio({
-  stage,
-  step,
-  voiceSrc,
+  vocabularyId,
+  topicId,
+  refetch,
 }: RecordingAudioProp) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const params = useParams();
+  const [saveRecord] = useSaveRecordMutation();
 
   const audioEle = useRef<HTMLAudioElement | null>(null);
   const { status, startRecording, stopRecording, mediaBlobUrl } =
@@ -58,33 +58,17 @@ export default function RecordingAudio({
   };
 
   const onHandleNext = async () => {
-    // const audioBlob = await fetch(mediaBlobUrl as any).then((r) => r.blob());
-    // const audiofile = new File([audioBlob], "audiofile.mp3", {
-    //   type: "audio/mp3",
-    // });
-    // const formData = new FormData();
-    // formData.append("file", audiofile);
-    // // console.log(formData);
-    // fetch("http://localhost:3001/api_test", {
-    //   method: "POST",
-    //   body: formData,
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //   },
-    // });
+    const audioBlob = await fetch(mediaBlobUrl as any).then((r) => r.blob());
+    const audiofile = new File([audioBlob], "audiofile.mp3", {
+      type: "audio/mp3",
+    });
 
+    await UploadFileController.uploadAudio(audiofile, topicId, vocabularyId);
+
+    refetch();
     setToggleSubBtn(false);
-    dispatch(nextVocabulary({ currentStep: step }));
+    dispatch(nextVocabulary());
   };
-
-  useEffect(() => {
-    if (stage === StageExercise.Close) {
-      const path = `/${params.category}`;
-      navigate({
-        pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
-      });
-    }
-  }, [stage]);
 
   return (
     <Box className="text-center">

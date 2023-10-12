@@ -1,5 +1,5 @@
 import Store from "@/shared/const/store.const";
-import { persist } from "@/shared/utils/persist.util";
+import persist from "@/shared/utils/persist.util";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserType {

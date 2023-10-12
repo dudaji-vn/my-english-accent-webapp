@@ -10,10 +10,26 @@ import {
 } from "@mui/material";
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
-import { IExerciseFilterType } from "@/shared/type";
 import RecordingAudio from "@/components/RecordingAudio";
+import { VocabularyType } from "@/shared/type";
+import { useEffect, useRef } from "react";
 
-export default function TranslationCard(props: IExerciseFilterType) {
+export default function TranslationCard(
+  props: VocabularyType & { refetch: any }
+) {
+  const audioEle = useRef<HTMLAudioElement | null>(null);
+  const onRepeat = () => {
+    if (audioEle && audioEle.current) {
+      audioEle.current.play();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      audioEle.current = null;
+    };
+  }, []);
+
   return (
     <Container
       id="translationCard"
@@ -24,24 +40,25 @@ export default function TranslationCard(props: IExerciseFilterType) {
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography className="text-small-medium">
-                {props.titleSecondaryLanguage}
+                {props.titleNativeLanguage}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body2" className="text-small-regular">
-                {props.ipa}
+                {props.ipaDisplayLanguage}
               </Typography>
             </Grid>
             <Grid item xs={12} className="py-4">
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <IconButton className="p-0">
+              <IconButton className="p-0" onClick={onRepeat}>
                 <Avatar
                   alt="message-icon"
                   src={SpeakingIcon}
                   className="w-10 h-10"
                 />
+                <audio src={props.voiceRecordSrc} ref={audioEle}></audio>
               </IconButton>
             </Grid>
           </Grid>
@@ -54,14 +71,14 @@ export default function TranslationCard(props: IExerciseFilterType) {
             className="w-4 h-4 mt-1"
           />
           <Typography variant="body2" className="text-small-regular">
-            {props.titlePrimaryLanguage}
+            {props.titleDisplayLanguage}
           </Typography>
         </Box>
       </Box>
       <RecordingAudio
-        stage={props.stage}
-        step={props.currentPhrase}
-        voiceSrc={props.voiceSrc}
+        vocabularyId={props.vocabularyId}
+        topicId={props.topicId}
+        refetch={props.refetch}
       />
     </Container>
   );

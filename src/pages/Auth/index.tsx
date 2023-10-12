@@ -9,7 +9,6 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/config/firebase";
-import { saveToken } from "@/store/UserStore";
 
 export default function Login() {
   const elementDiv = useRef<HTMLDivElement | null>(null);
@@ -43,7 +42,7 @@ export default function Login() {
         // // The signed-in user info.
         const user = result.user;
         const { displayName, email } = user;
-        dispatch(saveToken({ token: token! }));
+        // dispatch(saveToken({ token: token! }));
         navigate("/login");
         // // IdP data available using getAdditionalUserInfo(result)
       })
