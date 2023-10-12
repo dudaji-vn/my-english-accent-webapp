@@ -1,21 +1,17 @@
 import { Box, Button, Typography } from "@mui/material";
-import { FunctionComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 
-interface FooterBtn {
-  onClick: ReactNode;
+interface FooterCardType {
+  onClick?: () => void;
+  classes?: string;
+  children: ReactNode;
 }
-export default function FooterBtn(props: FooterBtn) {
+export default function FooterCard(props: FooterCardType) {
   return (
-    <Box className="flex fixed bottom-0 w-full p-6 bg-white border-solid border-stroke border-0 border-t-[1px]">
-      <Button
-        variant="contained"
-        className="rounded-md m-auto"
-        onClick={() => props.onClick}
-      >
-        <Typography className="text-base-medium" color={"white"}>
-          Continue practice
-        </Typography>
-      </Button>
+    <Box
+      className={`flex sticky bottom-0 w-full gap-4 p-6 bg-white border-solid border-stroke border-0 border-t-[1px] ${props.classes}`}
+    >
+      {props.children}
     </Box>
   );
 }

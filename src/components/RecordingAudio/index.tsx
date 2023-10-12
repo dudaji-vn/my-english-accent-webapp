@@ -11,6 +11,7 @@ import { useAppDispatch } from "@/store/hook";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useSaveRecordMutation } from "@/core/services";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
+import AudioCustom from "../AudioCustom";
 
 export interface RecordingAudioProp {
   topicId: string;

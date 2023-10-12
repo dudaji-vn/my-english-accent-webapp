@@ -15,8 +15,10 @@ import App from "@/App";
 import theme from "../theme";
 import { store } from "@/store";
 
-declare global {
-  interface Window { google: any; }
+declare module "@mui/material/Tabs" {
+  interface AdditionalProps {
+    tabchip: true;
+  }
 }
 
 const root = ReactDOM.createRoot(

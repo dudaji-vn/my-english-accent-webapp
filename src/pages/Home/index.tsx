@@ -4,7 +4,7 @@ import HeadphoneIcon from "@/assets/icon/music-play-icon.svg";
 import MicrophoneIcon from "@/assets/icon/microphone-2-icon.svg";
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
-import BoxCard from "@/components/Card";
+import BoxCard from "@/components/BoxCard";
 
 export default function HomePage() {
   const navigate = useNavigate();

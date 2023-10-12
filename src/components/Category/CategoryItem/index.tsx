@@ -1,5 +1,5 @@
 import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
-import BoxCard from "@/components/Card";
+import BoxCard from "@/components/BoxCard";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { useMemo } from "react";

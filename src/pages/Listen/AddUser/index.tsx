@@ -4,39 +4,41 @@ import {
   Typography,
   IconButton,
   Container,
-  Tabs,
-  Tab,
   Chip,
   Button,
   InputBase,
-  TextField,
-  Autocomplete,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
+import SearchIcon from "@/assets/icon/search-icon.svg";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
-import React from "react";
 import RecordCard from "@/components/RecordCard";
+import FooterCard from "@/components/FooterBtn";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
 
 export default function AddUserPage() {
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(0);
+  const [search, setSearch] = useState("");
+  const [tabIndex, setTabIndex] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChangeTabIndex = (event: SyntheticEvent, newValue: number) => {
+    setTabIndex(newValue);
   };
-
   const listRecord = ["", ""];
 
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearch(value);
+  };
   const renderRecord = () => {
     return listRecord.map(() => {
-      return (
-        <RecordCard className="rounded-b-lg border-solid border-stroke border-0 border-b-[1px]" />
-      );
+      return <RecordCard className="rounded-b-lg divider" />;
     });
   };
   return (
-    <Box>
+    <Box className="flex flex-col grow">
       <Box className="p-4 flex items-center gap-2 divider bg-white">
         <IconButton onClick={() => navigate(ROUTER.LISTENING)}>
           <Avatar src={ChevronIcon} className="w-6 h-6" />
@@ -47,8 +49,32 @@ export default function AddUserPage() {
         <Box className="bg-white">
           <Box className="flex flex-col p-4 rounded-t-lg">
             <Typography className="text-small-medium">Browse by</Typography>
-            <Box className="flex gap-2 mt-4">
-              <Chip
+            <Tabs
+              value={tabIndex}
+              onChange={handleChangeTabIndex}
+              variant="scrollable"
+              allowScrollButtonsMobile
+              // TabIndicatorProps={{
+              //   indica
+              // }}
+              classes={{
+                indicator: "text-white",
+              }}
+              aria-label="scrollable tabs add user"
+            >
+              <Tab
+                // sx={{
+                //   border: "1px solid #D0D5DD",
+                //   borderRadius: "8px",
+                //   height: "20px",
+                //   padding: "8px 14px",
+                // }}
+                label="General"
+              />
+              <Tab label="Develop" />
+              <Tab label="Design" />
+
+              {/* <Chip
                 className="text-small-semibold rounded-lg  text-primary bg-purple-50"
                 label="General"
                 variant="filled"
@@ -62,13 +88,22 @@ export default function AddUserPage() {
                 className="text-small-semibold rounded-lg"
                 label="Design"
                 variant="outlined"
-              />
-            </Box>
+              /> */}
+            </Tabs>
           </Box>
+          <Container className="flex gap-1 items-center">
+            <Avatar src={SearchIcon} alt="search-icon" className="w-4 h-4" />
+            <InputBase
+              className="text-small-regular text-textSecondary"
+              placeholder="Search by name"
+              value={search}
+              onChange={handleSearch}
+            />
+          </Container>
           {renderRecord()}
         </Box>
       </Container>
-      <Box className="flex fixed items-center bottom-0 w-full p-6 gap-4 bg-white border-solid border-stroke border-0 border-t-[1px]">
+      <FooterCard classes="items-center ">
         <Typography variant="body2" className="text-base-regular">
           1 member selected
         </Typography>
@@ -77,11 +112,9 @@ export default function AddUserPage() {
           className="rounded-md m-auto grow"
           onClick={() => {}}
         >
-          <Typography className="text-base-medium" color={"white"}>
-            Add
-          </Typography>
+          <Typography className="text-base-medium text-white">Add</Typography>
         </Button>
-      </Box>
+      </FooterCard>
     </Box>
   );
 }

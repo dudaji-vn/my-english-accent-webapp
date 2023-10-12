@@ -1,4 +1,4 @@
-import BoxCard from "@/components/Card";
+import BoxCard from "@/components/BoxCard";
 import {
   Avatar,
   Box,
@@ -13,6 +13,7 @@ import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingAudio from "@/components/RecordingAudio";
 import { VocabularyType } from "@/shared/type";
 import { useEffect, useRef } from "react";
+import AudioCustom from "../AudioCustom";
 
 export default function TranslationCard(
   props: VocabularyType & { refetch: any }
@@ -52,14 +53,11 @@ export default function TranslationCard(
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <IconButton className="p-0" onClick={onRepeat}>
-                <Avatar
-                  alt="message-icon"
-                  src={SpeakingIcon}
-                  className="w-10 h-10"
-                />
-                <audio src={props.voiceRecordSrc} ref={audioEle}></audio>
-              </IconButton>
+              <AudioCustom
+                voiceSrc={props.voiceRecordSrc}
+                icon={SpeakingIcon}
+                classes="w-10 h-10"
+              />
             </Grid>
           </Grid>
         </BoxCard>

@@ -41,14 +41,7 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar
-      position="static"
-      sx={{
-        background: "white",
-        boxShadow: "none",
-        borderBottom: "1px solid #F3F4F6",
-      }}
-    >
+    <AppBar className="sticky bg-white shadow-none divider">
       <Container>
         <Toolbar disableGutters>
           <IconButton>

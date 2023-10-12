@@ -41,7 +41,7 @@ export default function RecordSummaryPage() {
   };
 
   return (
-    <Box>
+    <Box className="flex flex-col grow">
       <Container className="py-4 divider bg-white">
         <Box className="flex items-center gap-2">
           <IconButton onClick={onHandleContinue}>
@@ -51,7 +51,7 @@ export default function RecordSummaryPage() {
         </Box>
       </Container>
 
-      <Container className="py-4 bg-gray-100 flex flex-col grow justify-between">
+      <Container className="py-4 bg-gray-100 flex flex-col grow ">
         <Box className="flex flex-col justify-center items-center p-4 bg-white border rounded-t-lg">
           <Typography component={"h6"}>{dataVoca.length}</Typography>
           <Typography variant="body2" className="text-base-regular">
@@ -61,11 +61,7 @@ export default function RecordSummaryPage() {
         {renderWordFinished()}
       </Container>
 
-      {/* pesudo tag */}
-      <Box className="p-6 invisible">
-        <Button>pesudo tag</Button>
-      </Box>
-      <Box className="flex fixed bottom-0 w-full p-6 bg-white border-solid border-stroke border-0 border-t-[1px]">
+      <FooterBtn>
         <Button
           variant="contained"
           className="rounded-md m-auto"
@@ -75,7 +71,7 @@ export default function RecordSummaryPage() {
             Continue practice
           </Typography>
         </Button>
-      </Box>
+      </FooterBtn>
     </Box>
   );
 }

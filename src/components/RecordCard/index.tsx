@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { Avatar, Checkbox, Grid, Typography } from "@mui/material";
-import Nationality from "@/components/NationalityCard";
+import PersonInfo from "@/components/NationalityCard";
 import AvatarIcon from "@/assets/icon/avatar-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import MicrophoneIcon from "@/assets/icon/microphone-icon.svg";
@@ -25,8 +25,7 @@ export default function RecordCard(props: RecordType) {
         <Avatar alt="avatar-icon" src={AvatarIcon} />
       </Grid>
       <Grid item xs={8}>
-        <Typography className="text-small-medium">User name 01</Typography>
-        <Nationality />
+        <PersonInfo isShowName isShowNationality />
       </Grid>
       <Grid item xs={2} textAlign={"end"}>
         <Checkbox

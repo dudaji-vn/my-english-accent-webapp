@@ -1,6 +1,7 @@
 import { Grid, Avatar, Typography } from "@mui/material";
 import VolumnIcon from "@/assets/icon/volume-icon.svg";
 import { useRef } from "react";
+import AudioCustom from "../AudioCustom";
 
 interface WordTagPropType {
   sentence: string;
@@ -8,18 +9,16 @@ interface WordTagPropType {
   classes: string;
   voiceSrc: string;
 }
-export default function WordTag({ sentence, ipa, classes, voiceSrc }: WordTagPropType) {
-  const audioEle = useRef<HTMLAudioElement | null>(null);
-  const onRepeat = () => {
-    if (audioEle && audioEle.current) {
-      audioEle.current.play();
-    }
-  };
+export default function WordTag({
+  sentence,
+  ipa,
+  classes,
+  voiceSrc,
+}: WordTagPropType) {
   return (
     <Grid container gap={1} className={`p-4 bg-white ${classes}`}>
       <Grid item xs={1}>
-        <Avatar src={VolumnIcon} alt="volumn-icon" className="w-5 h-5" onClick={onRepeat}/>
-        <audio src={voiceSrc} ref={audioEle}></audio>
+        <AudioCustom voiceSrc={voiceSrc} icon={VolumnIcon} />
       </Grid>
       <Grid item xs={10}>
         <Typography className="text-small-medium">{sentence}</Typography>

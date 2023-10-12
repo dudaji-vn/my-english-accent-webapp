@@ -68,6 +68,18 @@ const theme = extendTheme({
       },
     },
     MuiTab: {
+      variants: [
+        {
+          props: { variant: "tabchip" },
+          styleOverrides: {
+            border: "1px solid #D0D5DD",
+            borderRadius: "8px",
+            padding: "8px 14px",
+            background: "#000",
+            color: "#FFF",
+          },
+        },
+      ],
       styleOverrides: {
         root: {
           textTransform: "none",

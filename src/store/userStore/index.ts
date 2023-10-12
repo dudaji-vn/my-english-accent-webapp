@@ -4,12 +4,17 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserType {
   token: string;
-  national: "kr" | "vi";
+  userInfo: any;
 }
 
 const initialState: UserType = {
   token: "",
-  national: "kr",
+  userInfo: {
+    name: "Thien",
+    nickName: "Thien dev",
+    displayLanguage: "en",
+    nativeLanguage: "vi",
+  },
 };
 
 const userSlice = createSlice({
