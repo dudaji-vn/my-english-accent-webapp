@@ -36,15 +36,17 @@ const UserController = {
   getUsers: () => {
     const myId = "idUser2JLpns9SQblwSgNigfTwF";
     const q = query(userCollection, and(where(documentId(), "!=", myId)));
-
     return getDocs(q);
   },
-  favoriteUsers: (usersId: string[]) => {
-    const myId = "idUser2JLpns9SQblwSgNigfTwF";
+  favoriteUsers: (myId: string, usersId: string[]) => {
     const userRef = doc(userCollection, myId);
-    updateDoc(userRef, {
-      favoriteUserIds: usersId,
-    });
+    return setDoc(
+      userRef,
+      {
+        favoriteUserIds: usersId,
+      },
+      { merge: true }
+    );
   },
 };
 

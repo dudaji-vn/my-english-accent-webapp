@@ -23,7 +23,7 @@ const RecordController = {
   addRecord: async (payload: RecordRequest) => {
     const request = addTimeStamp(payload);
     await setDoc(doc(recordCollection, "record_" + nanoid()), request);
-  },  
+  },
   updateRecord: async (id: string, payload: RecordRequest) => {
     const docRef = await setDoc(doc(recordCollection, id), payload);
     console.log("Document updated with ID: ", docRef);
@@ -34,6 +34,10 @@ const RecordController = {
   },
   getRecords: (userId: string) => {
     const q = query(recordCollection, where("userId", "==", userId));
+    return getDocs(q);
+  },
+  getRecordsByManyUser: (usersId: string[]) => {
+    const q = query(recordCollection, where("userId", "in", usersId));
     return getDocs(q);
   },
 };

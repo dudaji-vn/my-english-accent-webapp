@@ -4,6 +4,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  documentId,
   getDocs,
   query,
   setDoc,
@@ -33,6 +34,13 @@ const VocabularyController = {
     } else {
       return getDocs(vocabularyCollection);
     }
+  },
+  filterVocabularies: (vocabularies: string[]) => {
+    const q = query(
+      vocabularyCollection,
+      where(documentId(), "in", vocabularies)
+    );
+    return getDocs(q);
   },
 };
 

@@ -38,8 +38,18 @@ export const UserApi = createApi({
     favoriteUsers: builder.mutation<any, string[]>({
       async queryFn(usersId: string[]) {
         try {
-          const response = await UserController.favoriteUsers(usersId);
-          return { data: response };
+          const myInfo = persist.getMyInfo();
+          const res = await UserController.favoriteUsers(
+            myInfo.userId,
+            usersId
+          );
+          persist.saveMyInfo({
+            ...myInfo,
+            favoriteUserIds: usersId,
+          });
+          return {
+            data: res,
+          };
         } catch (error) {
           return { error };
         }

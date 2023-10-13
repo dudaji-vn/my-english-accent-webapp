@@ -68,7 +68,7 @@ export default function ChooseUserPage() {
   };
 
   const onHandleAddFavorite = () => {
-    favoriteUsers(listUser);
+    favoriteUsers(listUser).then((value) => console.log(value));
   };
   return (
     <Box className="flex flex-col grow">

@@ -1,7 +1,8 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import Query from "@/shared/const/queryApi.const";
 import RecordController from "@/core/controllers/record.controller";
-import { RecordType } from "@/shared/type";
+import { RecordType, VocabularyType } from "@/shared/type";
+import VocabularyController from "../controllers/vocabulary.controller";
 
 export const RecordApi = createApi({
   reducerPath: Query.record,
@@ -32,7 +33,43 @@ export const RecordApi = createApi({
         }
       },
     }),
+    getRecordsByManyUser: builder.query<any, string[]>({
+      async queryFn(usersId: string[]) {
+        try {
+          const records: RecordType[] = [];
+          const vocabulariesId: string[] = [];
+          const vocabularies: VocabularyType[] = [];
+
+          const recordResponse = await RecordController.getRecordsByManyUser(
+            usersId
+          );
+          recordResponse.forEach((value) => {
+            vocabulariesId.push(value.data().vocabularyId);
+            records.push({ recordId: value.id, ...value.data() } as RecordType);
+          });
+
+          const vocabularyResponse =
+            await VocabularyController.filterVocabularies(vocabulariesId);
+          vocabularyResponse.forEach((value) => {
+            vocabularies.push({
+              vocabularyId: value.id,
+              ...value.data(),
+            } as VocabularyType);
+          });
+
+          console.log("getRecordsByManyUser::", records);
+          console.log("vocabularyResponse", vocabularies);
+          return { data: vocabularies };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
   }),
 });
-export const { useGetRecordsQuery, useSaveRecordMutation } = RecordApi;
+export const {
+  useGetRecordsQuery,
+  useSaveRecordMutation,
+  useGetRecordsByManyUserQuery,
+} = RecordApi;
 export default RecordApi;
