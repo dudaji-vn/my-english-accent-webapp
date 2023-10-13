@@ -37,6 +37,11 @@ export default function RecordingProgressPage() {
     return 0;
   };
 
+  const onHandleClose = () => {
+    refetch();
+    navigate(-1);
+  };
+
   useEffect(() => {
     if (data) {
       if (data.stage === StageExercise.Close) {
@@ -53,7 +58,7 @@ export default function RecordingProgressPage() {
     <Box className="flex flex-col grow">
       <Container className="py-4 divider bg-white">
         <Box className="flex items-center gap-2">
-          <IconButton onClick={() => navigate(-1)}>
+          <IconButton onClick={onHandleClose}>
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
           <Typography className="text-large-semibold">

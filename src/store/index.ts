@@ -3,12 +3,13 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import userReducer from "@/store/UserStore";
 import exerciseReduer from "@/store/ExerciseStore";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { RecordApi, TopicApi, VocabularyApi } from "@/core/services";
+import { RecordApi, TopicApi, UserApi, VocabularyApi } from "@/core/services";
 
 const middleware = [
   TopicApi.middleware,
   RecordApi.middleware,
   VocabularyApi.middleware,
+  UserApi.middleware,
 ] as any;
 
 export const store = configureStore({
@@ -18,6 +19,7 @@ export const store = configureStore({
     TopicApi: TopicApi.reducer,
     RecordApi: RecordApi.reducer,
     VocabularyApi: VocabularyApi.reducer,
+    UserApi: UserApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

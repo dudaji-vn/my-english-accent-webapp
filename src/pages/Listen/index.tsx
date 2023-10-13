@@ -9,18 +9,20 @@ import {
   Divider,
   Chip,
   Container,
+  SvgIcon,
 } from "@mui/material";
-import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
+import ArrowLeft from "@/assets/icon/arrow-left-icon.svg";
 import UserAddIcon from "@/assets/icon/user-add-icon.svg";
+import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import RightIcon from "@/assets/icon/arrow-right-icon.svg";
 import MicrophoneIcon from "@/assets/icon/microphone-icon.svg";
 import QuoteIcon from "@/assets/icon/quote-icon.svg";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { useState } from "react";
-import RecordCard from "@/components/RecordCard";
 import PersonInfo from "@/components/NationalityCard";
 import FooterCard from "@/components/FooterBtn";
+import TabCustom from "@/components/TabCustom";
 
 export default function ListenPage() {
   const navigate = useNavigate();
@@ -33,6 +35,10 @@ export default function ListenPage() {
   ) => {
     setPath(newValue);
     navigate(ROUTER.LISTENING + "/" + newValue);
+  };
+
+  const handleChangeTabIndex = (newValue: number) => {
+    console.log(newValue);
   };
 
   const onHandlePlayAll = () => {};
@@ -76,23 +82,10 @@ export default function ListenPage() {
       <Container className="mt-4 grow">
         <Box className="flex flex-col p-4 rounded-t-lg bg-white">
           <Typography className="text-small-medium">Browse by</Typography>
-          <Box className="flex gap-2 mt-4">
-            <Chip
-              className="text-small-semibold rounded-lg  text-primary bg-purple-50"
-              label="General"
-              variant="filled"
-            />
-            <Chip
-              className="text-small-semibold rounded-lg"
-              label="Develop"
-              variant="outlined"
-            />
-            <Chip
-              className="text-small-semibold rounded-lg"
-              label="Design"
-              variant="outlined"
-            />
-          </Box>
+          <TabCustom
+            tabsName={["General", "Develop", "Design"]}
+            callback={handleChangeTabIndex}
+          />
         </Box>
         <Outlet />
       </Container>
@@ -134,7 +127,7 @@ export default function ListenPage() {
             onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
             className="border border-stroke border-solid"
           >
-            <Avatar src={ChevronIcon} className="w-6 h-6" />
+            <Avatar src={ArrowLeft} className="w-6 h-6" />
           </IconButton>
           <Button
             variant="contained"

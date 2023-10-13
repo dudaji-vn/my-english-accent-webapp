@@ -1,7 +1,7 @@
 import { Grid, Avatar, Typography } from "@mui/material";
 import VolumnIcon from "@/assets/icon/volume-icon.svg";
 import { useRef } from "react";
-import AudioCustom from "../AudioCustom";
+import AudioPlayer from "../AudioPlayer";
 
 interface WordTagPropType {
   sentence: string;
@@ -18,7 +18,7 @@ export default function WordTag({
   return (
     <Grid container gap={1} className={`p-4 bg-white ${classes}`}>
       <Grid item xs={1}>
-        <AudioCustom voiceSrc={voiceSrc} icon={VolumnIcon} />
+        <AudioPlayer voiceSrc={voiceSrc} icon={VolumnIcon} />
       </Grid>
       <Grid item xs={10}>
         <Typography className="text-small-medium">{sentence}</Typography>

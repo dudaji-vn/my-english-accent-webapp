@@ -13,7 +13,7 @@ import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingAudio from "@/components/RecordingAudio";
 import { VocabularyType } from "@/shared/type";
 import { useEffect, useRef } from "react";
-import AudioCustom from "../AudioCustom";
+import AudioPlayer from "../AudioPlayer";
 
 export default function TranslationCard(
   props: VocabularyType & { refetch: any }
@@ -53,7 +53,7 @@ export default function TranslationCard(
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <AudioCustom
+              <AudioPlayer
                 voiceSrc={props.voiceRecordSrc}
                 icon={SpeakingIcon}
                 classes="w-10 h-10"

@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import RecordingProgressPage from "@/pages/Record/RecordProgress";
 import RecordSummaryPage from "@/pages/Record/RecordSummary";
 import ListenPage from "@/pages/Listen";
-import AddUserPage from "@/pages/Listen/AddUser";
+import ChooseUserPage from "@/pages/Listen/ChooseUser";
 import IndividualPage from "@/pages/Listen/Individual";
 import TeamPage from "@/pages/Listen/Team";
 
@@ -96,7 +96,7 @@ const routes = (isLoggedIn: boolean) => [
     path: ROUTER.LISTENING + ROUTER.ADDUSER,
     element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
-        <AddUserPage />
+        <ChooseUserPage />
       </RequireAuth>
     ),
   },

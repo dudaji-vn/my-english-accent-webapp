@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { Avatar, Typography } from "@mui/material";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import KoreaFlag from "@/assets/icon/korea-flag-icon.svg";
 import { useAppSelector } from "@/store/hook";
+import { UserType } from "@/shared/type";
 
 interface PersonInfoType {
   isShowName?: boolean;
   isShowAvatar?: boolean;
   isShowNationality?: boolean;
+  userInfo?: UserType;
 }
 
 export default function PersonInfo(props: PersonInfoType) {
-  const userInfo = useAppSelector((state) => state.user.userInfo);
+  const myInfo = useAppSelector((state) => state.user.userInfo);
+
+  const [userInfo] = useState(() => {
+    return props.userInfo ? props.userInfo : myInfo;
+  });
+
   const getFlag = () => {
     switch (userInfo.nativeLanguage) {
       case "kr":

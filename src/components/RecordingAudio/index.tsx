@@ -11,7 +11,7 @@ import { useAppDispatch } from "@/store/hook";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useSaveRecordMutation } from "@/core/services";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import AudioCustom from "../AudioCustom";
+import AudioPlayer from "../AudioPlayer";
 
 export interface RecordingAudioProp {
   topicId: string;
@@ -25,7 +25,6 @@ export default function RecordingAudio({
   refetch,
 }: RecordingAudioProp) {
   const dispatch = useAppDispatch();
-  const [saveRecord] = useSaveRecordMutation();
 
   const audioEle = useRef<HTMLAudioElement | null>(null);
   const { status, startRecording, stopRecording, mediaBlobUrl } =

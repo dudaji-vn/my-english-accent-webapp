@@ -1,29 +1,13 @@
-import { StageExercise, TopicUIType } from "./topic.type";
+import { TopicUIType } from "./topic.type";
 import { VocabularyType } from "./vocabulary.type";
 
 export interface UserType {
-  idUser: string;
+  userId: string;
   userName: string;
   password: string;
   displayLanguage: string;
   nativeLanguage: string;
-}
-
-export interface VocabularyType2 {
-  idVocabulary: string;
-  titlePrimaryLanguage: string;
-  titleSecondaryLanguage: string;
-  ipa: string;
-  voiceSrc: string;
-}
-
-export interface TopicType2 {
-  topicId: string;
-  topicName: string;
-  imgSrc: string;
-  stage: StageExercise;
-  totalPhrase: number;
-  currentPhrase: number;
+  favoriteUserIds: string[];
 }
 
 export interface IExerciseFilterType
@@ -32,7 +16,7 @@ export interface IExerciseFilterType
   idVocabulary: string[];
 }
 export interface IExerciseType {
-  store: TopicType2[];
+  store: TopicUIType[];
   filter: Omit<TopicUIType, "imgSrc" | "vocabularies">;
   vocabularies: VocabularyType[];
   vocabularyIndex: number;

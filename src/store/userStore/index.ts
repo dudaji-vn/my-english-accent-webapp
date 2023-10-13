@@ -24,7 +24,6 @@ const userSlice = createSlice({
     saveToken: (state: UserType, action: PayloadAction<{ token: string }>) => {
       const { token } = action.payload;
       state.token = token;
-      persist.login(token);
     },
     logout: (state: UserType) => {
       state.token = "";

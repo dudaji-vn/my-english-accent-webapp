@@ -9,54 +9,46 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/config/firebase";
+import { useLoginMutation } from "@/core/services";
 
 export default function Login() {
   const elementDiv = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-
+  const [login] = useLoginMutation();
   const provider = new GoogleAuthProvider();
   provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 
-  const login = () => {
-    // signInWithEmailAndPassword(auth, "thien@gmail.com", "password")
-    //   .then((userCredential) => {
-    //     // Signed in
-    //     const user = userCredential.user;
-    //     navigate("/home");
-    //     console.log(user);
+  const loginApp = () => {
+    login({
+      userName,
+      password,
+    });
+    //TODO: NEED REWORK
+    // signInWithPopup(auth, provider)
+    //   .then((result) => {
+    //     const credential = GoogleAuthProvider.credentialFromResult(result);
+    //     const token = credential?.accessToken;
+    //     console.log(credential, result);
+    //     // // The signed-in user info.
+    //     const user = result.user;
+    //     const { displayName, email } = user;
+    //     // dispatch(saveToken({ token: token! }));
+    //     navigate("/login");
+    //     // // IdP data available using getAdditionalUserInfo(result)
     //   })
     //   .catch((error) => {
+    //     // Handle Errors here.
     //     const errorCode = error.code;
     //     const errorMessage = error.message;
-    //     console.log(errorCode, errorMessage);
+    //     // The email of the user's account used.
+    //     const email = error.customData.email;
+    //     // The AuthCredential type that was used.
+    //     const credential = GoogleAuthProvider.credentialFromError(error);
+    //     // ...
+    //     console.log(error);
     //   });
-
-    //TODO: NEED REWORK
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential?.accessToken;
-        // // The signed-in user info.
-        const user = result.user;
-        const { displayName, email } = user;
-        // dispatch(saveToken({ token: token! }));
-        navigate("/login");
-        // // IdP data available using getAdditionalUserInfo(result)
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-        console.log(error);
-      });
   };
 
   const register = async () => {
@@ -97,7 +89,7 @@ export default function Login() {
         onClick={() => {
           // dispatch(login({ user: userName, password: password } as ILogin));
           // UserController.login({ userName, password });
-          login();
+          loginApp();
           navigate(ROUTER.ROOT);
         }}
       >
