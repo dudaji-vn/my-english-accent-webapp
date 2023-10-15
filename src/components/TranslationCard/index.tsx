@@ -11,26 +11,12 @@ import {
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingAudio from "@/components/RecordingAudio";
-import { VocabularyType } from "@/shared/type";
-import { useEffect, useRef } from "react";
-import AudioPlayer from "../AudioPlayer";
 
-export default function TranslationCard(
-  props: VocabularyType & { refetch: any }
-) {
-  const audioEle = useRef<HTMLAudioElement | null>(null);
+export default function TranslationCard(props: any) {
+  const audio = new Audio(props.vocabularyVoiceSrc);
   const onRepeat = () => {
-    if (audioEle && audioEle.current) {
-      audioEle.current.play();
-    }
+    audio.play();
   };
-
-  useEffect(() => {
-    return () => {
-      audioEle.current = null;
-    };
-  }, []);
-
   return (
     <Container
       id="translationCard"
@@ -41,23 +27,25 @@ export default function TranslationCard(
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography className="text-small-medium">
-                {props.titleNativeLanguage}
+                {props.vocabularytitleNativeLanguage}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body2" className="text-small-regular">
-                {props.ipaDisplayLanguage}
+                {props.vocabularyIpaDisplayLanguage}
               </Typography>
             </Grid>
             <Grid item xs={12} className="py-4">
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <AudioPlayer
-                voiceSrc={props.voiceRecordSrc}
-                icon={SpeakingIcon}
-                classes="w-10 h-10"
-              />
+              <IconButton onClick={onRepeat}>
+                <Avatar
+                  src={SpeakingIcon}
+                  alt="speaking-icon"
+                  className="w-10 h-10"
+                />
+              </IconButton>
             </Grid>
           </Grid>
         </BoxCard>
@@ -69,14 +57,13 @@ export default function TranslationCard(
             className="w-4 h-4 mt-1"
           />
           <Typography variant="body2" className="text-small-regular">
-            {props.titleDisplayLanguage}
+            {props.vocabularyTitleDisplayLanguage}
           </Typography>
         </Box>
       </Box>
       <RecordingAudio
         vocabularyId={props.vocabularyId}
         topicId={props.topicId}
-        refetch={props.refetch}
       />
     </Container>
   );

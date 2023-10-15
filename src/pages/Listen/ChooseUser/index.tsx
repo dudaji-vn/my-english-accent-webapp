@@ -21,6 +21,7 @@ import persist from "@/shared/utils/persist.util";
 
 export default function ChooseUserPage() {
   const { data: dataUser } = useGetUsersQuery();
+  console.log("userData::",dataUser)
   const [favoriteUsers] = useFavoriteUsersMutation();
 
   const navigate = useNavigate();
@@ -38,16 +39,15 @@ export default function ChooseUserPage() {
   };
 
   const onHandleListUser = (id: string) => {
-    const result: string[] = [];
+    let result: string[] = [...listUser];
     const isFound = listUser.includes(id);
     if (isFound) {
       const removed = listUser.filter((userId) => userId != id);
-      result.concat(removed);
+      result = [...removed];
     } else {
       result.push(id);
     }
     setListUser(() => result);
-    console.log(result);
   };
 
   const renderUsers = () => {
@@ -67,9 +67,12 @@ export default function ChooseUserPage() {
     }
   };
 
-  const onHandleAddFavorite = () => {
-    favoriteUsers(listUser).then((value) => console.log(value));
+  const onHandleFavoriteList = () => {
+    favoriteUsers(listUser).then((value) =>
+      console.log("favoriteUsers", value)
+    );
   };
+
   return (
     <Box className="flex flex-col grow">
       <Box className="p-4 flex items-center gap-2 divider bg-white">
@@ -82,10 +85,10 @@ export default function ChooseUserPage() {
         <Box className="bg-white">
           <Box className="flex flex-col p-4 rounded-t-lg">
             <Typography className="text-small-medium">Browse by</Typography>
-            <TabCustom
+            {/* <TabCustom
               tabsName={["General", "Develop", "Design"]}
               callback={handleChangeTabIndex}
-            />
+            /> */}
           </Box>
           <Container className="flex gap-1 items-center">
             <Avatar src={SearchIcon} alt="search-icon" className="w-4 h-4" />
@@ -107,7 +110,7 @@ export default function ChooseUserPage() {
         <Button
           variant="contained"
           className="rounded-md m-auto grow"
-          onClick={onHandleAddFavorite}
+          onClick={onHandleFavoriteList}
         >
           <Typography className="text-base-medium text-white">Save</Typography>
         </Button>

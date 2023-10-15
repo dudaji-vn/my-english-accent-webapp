@@ -1,6 +1,7 @@
 import { firebaseDB } from "@/config/firebase";
 import { nanoid } from "@reduxjs/toolkit";
 import {
+  and,
   collection,
   deleteDoc,
   doc,
@@ -27,20 +28,53 @@ const VocabularyController = {
   removeVocabulary: async (id: string) => {
     await deleteDoc(doc(vocabularyCollection, id));
   },
-  getVocabularies: (topicId?: string) => {
+  getVocabularies: async (topicId?: string) => {
     if (topicId) {
       const q = query(vocabularyCollection, where("topicId", "==", topicId));
-      return getDocs(q);
+      return (await getDocs(q)).docs.map((doc) => ({
+        vocabularyId: doc.id,
+        vocabularyCreated: doc.data().created,
+        vocabularyIpaDisplayLanguage: doc.data().ipaDisplayLanguage,
+        vocabularyTitleDisplayLanguage: doc.data().titleDisplayLanguage,
+        vocabularytitleNativeLanguage: doc.data().titleNativeLanguage,
+        topicId: doc.data().topicId,
+        vocabularyUpdated: doc.data().updated,
+        vocabularyVoiceSrc: doc.data().voiceSrc,
+      }));
     } else {
-      return getDocs(vocabularyCollection);
+      return (await getDocs(vocabularyCollection)).docs.map((doc) => ({
+        vocabularyId: doc.id,
+        vocabularyCreated: doc.data().created,
+        vocabularyIpaDisplayLanguage: doc.data().ipaDisplayLanguage,
+        vocabularyTitleDisplayLanguage: doc.data().titleDisplayLanguage,
+        vocabularytitleNativeLanguage: doc.data().titleNativeLanguage,
+        topicId: doc.data().topicId,
+        vocabularyUpdated: doc.data().updated,
+        vocabularyVoiceSrc: doc.data().voiceSrc,
+      }));
     }
   },
-  filterVocabularies: (vocabularies: string[]) => {
-    const q = query(
-      vocabularyCollection,
-      where(documentId(), "in", vocabularies)
-    );
-    return getDocs(q);
+  filterVocabularies: async (topicId: string, vocabularies: string[]) => {
+    if (vocabularies.length && topicId) {
+      const q = query(
+        vocabularyCollection,
+        and(
+          where(documentId(), "in", vocabularies),
+          where("topicId", "==", topicId)
+        )
+      );
+      return (await getDocs(q)).docs.map((doc) => ({
+        vocabularyId: doc.id,
+        vocabularyCreated: doc.data().created,
+        vocabularyIpaDisplayLanguage: doc.data().ipaDisplayLanguage,
+        vocabularyTitleDisplayLanguage: doc.data().titleDisplayLanguage,
+        vocabularytitleNativeLanguage: doc.data().titleNativeLanguage,
+        topicId: doc.data().topicId,
+        vocabularyUpdated: doc.data().updated,
+        vocabularyVoiceSrc: doc.data().voiceSrc,
+      }));
+    }
+    return [];
   },
 };
 

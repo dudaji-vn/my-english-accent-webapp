@@ -4,8 +4,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  documentId,
   getDocs,
+  query,
   setDoc,
+  where,
 } from "firebase/firestore";
 import { TopicRequest } from "@/core/request";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
@@ -24,8 +27,25 @@ const TopicController = {
   removeTopic: async (id: string) => {
     await deleteDoc(doc(topicCollection, id));
   },
-  getTopics: () => {
-    return getDocs(topicCollection);
+  getTopics: async () => {
+    return (await getDocs(topicCollection)).docs.map((doc) => ({
+      topicId: doc.id,
+      imgSrc: doc.data().imgSrc,
+      name: doc.data().name,
+      created: doc.data().created,
+      updated: doc.data().updated,
+    }));
+  },
+  getTopicById: async (topicId: string) => {
+    const q = query(topicCollection, where(documentId(), "==", topicId));
+    const response = (await getDocs(q)).docs.map((doc) => ({
+      topicId: doc.id,
+      imgSrc: doc.data().imgSrc,
+      name: doc.data().name,
+      created: doc.data().created,
+      updated: doc.data().updated,
+    }));
+    return response[0];
   },
 };
 

@@ -7,3 +7,13 @@ export interface RecordType {
   created: string;
   updated: string;
 }
+
+export interface RecordTypeResponse {
+  recordId: string;
+  clubStudyId: string;
+  recordCreated: string;
+  recordUpdated: string;
+  userId: string;
+  vocabularyId: string;
+  recordVoiceSrc: string;
+}

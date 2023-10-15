@@ -1,20 +1,17 @@
 import { UserType } from "@/shared/type";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import Query from "@/shared/const/queryApi.const";
 import UserController from "../controllers/user.controller";
 import persist from "@/shared/utils/persist.util";
+import Store from "@/shared/const/store.const";
 
 export const UserApi = createApi({
-  reducerPath: Query.user,
+  reducerPath: Store.userApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     login: builder.mutation<UserType, { userName: string; password: string }>({
       async queryFn(payload) {
         try {
-          let myInfo = {} as UserType;
-          (await UserController.login(payload)).forEach((user) => {
-            myInfo = { userId: user.id, ...user.data() } as UserType;
-          });
+          const myInfo: any = await UserController.login(payload);
           persist.saveMyInfo(myInfo);
           return { data: myInfo };
         } catch (error) {
@@ -22,13 +19,10 @@ export const UserApi = createApi({
         }
       },
     }),
-    getUsers: builder.query<UserType[], void>({
+    getUsers: builder.query<any[], void>({
       async queryFn() {
         try {
-          const users: UserType[] = [];
-          (await UserController.getUsers()).forEach((user) => {
-            users.push({ userId: user.id, ...user.data() } as UserType);
-          });
+          const users = await UserController.getUsers();
           return { data: users };
         } catch (error) {
           return { error };

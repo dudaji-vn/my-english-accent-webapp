@@ -1,28 +1,25 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import Query from "@/shared/const/queryApi.const";
 import RecordController from "@/core/controllers/record.controller";
-import { RecordType, VocabularyType } from "@/shared/type";
+import {
+  RecordTypeResponse,
+  UserType,
+  VocabularyTypeResponse,
+} from "@/shared/type";
+import Store from "@/shared/const/store.const";
+import UserController from "../controllers/user.controller";
+import _ from "lodash";
 import VocabularyController from "../controllers/vocabulary.controller";
 
+export interface RecordByManyUserResponse
+  extends RecordTypeResponse,
+    VocabularyTypeResponse {
+  userInfo: UserType[];
+}
+
 export const RecordApi = createApi({
-  reducerPath: Query.record,
+  reducerPath: Store.recordApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    getRecords: builder.query<RecordType[], void>({
-      async queryFn() {
-        try {
-          let records: RecordType[] = [];
-          const userId = "idUser2JLpns9SQblwSgNigfTwF";
-          const response = await RecordController.getRecords(userId);
-          response.forEach((value) => {
-            records.push({ recordId: value.id, ...value.data() } as RecordType);
-          });
-          return { data: records };
-        } catch (error) {
-          return { error };
-        }
-      },
-    }),
     saveRecord: builder.mutation<any, any>({
       async queryFn(payload) {
         try {
@@ -33,33 +30,113 @@ export const RecordApi = createApi({
         }
       },
     }),
-    getRecordsByManyUser: builder.query<any, string[]>({
-      async queryFn(usersId: string[]) {
+    getRecords: builder.query<any, { usersId: string[]; topicId?: string }>({
+      async queryFn(payload: { usersId: string[]; topicId: string }) {
         try {
-          const records: RecordType[] = [];
-          const vocabulariesId: string[] = [];
-          const vocabularies: VocabularyType[] = [];
+          const userResponse = await UserController.getUsersBy(payload.usersId);
 
           const recordResponse = await RecordController.getRecordsByManyUser(
-            usersId
+            payload.usersId
           );
-          recordResponse.forEach((value) => {
-            vocabulariesId.push(value.data().vocabularyId);
-            records.push({ recordId: value.id, ...value.data() } as RecordType);
-          });
+
+          const vocabulariesId: string[] = _.unionBy(
+            recordResponse,
+            "vocabularyId"
+          ).map((val) => val.vocabularyId);
 
           const vocabularyResponse =
-            await VocabularyController.filterVocabularies(vocabulariesId);
-          vocabularyResponse.forEach((value) => {
-            vocabularies.push({
-              vocabularyId: value.id,
-              ...value.data(),
-            } as VocabularyType);
-          });
+            await VocabularyController.filterVocabularies(
+              payload.topicId,
+              vocabulariesId
+            );
 
-          console.log("getRecordsByManyUser::", records);
-          console.log("vocabularyResponse", vocabularies);
-          return { data: vocabularies };
+          const populatedUser: UserType[] = _.unionBy(
+            recordResponse,
+            "userId"
+          ).reduce((acc: any, currentValue) => {
+            const found = userResponse.find(
+              (user) => user.userId === currentValue.userId
+            );
+            return found ? [...acc, found] : [...acc];
+          }, []);
+
+          const populatedRecord = recordResponse.reduce(
+            (acc: any, currentVal) => {
+              const found = populatedUser.find(
+                (user) => user.userId === currentVal.userId
+              );
+
+              if (found) {
+                const merged = _.merge(currentVal, found);
+                return [...acc, merged];
+              }
+              return [...acc];
+            },
+            []
+          );
+
+          const groupRecordByVocaId = _.chain(populatedRecord)
+            .groupBy("vocabularyId")
+            .map((value, key) => ({ vocabularyId: key, records: value }))
+            .value();
+
+          console.log("groupRecordByVocaId", groupRecordByVocaId);
+          const recordVoiceSrc = [];
+          const result = vocabularyResponse.reduce((acc: any, currentVal) => {
+            const found = groupRecordByVocaId.find(
+              (vocaId) => vocaId.vocabularyId === currentVal.vocabularyId
+            );
+
+            if (found) {
+              const merged = _.merge(currentVal, found);
+              return [...acc, merged];
+            }
+            return [...acc];
+          }, []);
+          return {
+            data: result,
+            meta: {
+              currentIndex: 0,
+              maxIndex: result.length > 0 ? result.length - 1 : result.length,
+            },
+          };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
+
+    getRecord: builder.query<any, { userId: string; topicId?: string }>({
+      async queryFn(payload: { userId: string; topicId?: string }) {
+        try {
+          const recordVoiceSrc: string[] = [];
+          const recordResponse = await RecordController.getRecords(
+            payload.userId
+          );
+
+          const vocabularyReponse = await VocabularyController.getVocabularies(
+            payload.topicId
+          );
+
+          const populatedVoca = recordResponse.reduce(
+            (acc: any, currentVal) => {
+              const found = vocabularyReponse.find(
+                (record) => record.vocabularyId === currentVal.vocabularyId
+              );
+              if (found) {
+                recordVoiceSrc.push(currentVal.recordVoiceSrc);
+                const merged = _.merge(currentVal, found);
+                return [...acc, merged];
+              }
+              return [...acc];
+            },
+            []
+          );
+
+          return {
+            data: populatedVoca,
+            meta: recordVoiceSrc,
+          };
         } catch (error) {
           return { error };
         }
@@ -67,9 +144,6 @@ export const RecordApi = createApi({
     }),
   }),
 });
-export const {
-  useGetRecordsQuery,
-  useSaveRecordMutation,
-  useGetRecordsByManyUserQuery,
-} = RecordApi;
+export const { useSaveRecordMutation, useGetRecordsQuery, useGetRecordQuery } =
+  RecordApi;
 export default RecordApi;

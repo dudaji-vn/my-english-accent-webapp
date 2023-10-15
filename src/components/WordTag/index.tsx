@@ -1,6 +1,5 @@
-import { Grid, Avatar, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import VolumnIcon from "@/assets/icon/volume-icon.svg";
-import { useRef } from "react";
 import AudioPlayer from "../AudioPlayer";
 
 interface WordTagPropType {

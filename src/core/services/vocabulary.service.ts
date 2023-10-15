@@ -1,9 +1,10 @@
-import Query from "@/shared/const/queryApi.const";
 import VocabularyController from "@/core/controllers/vocabulary.controller";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RecordType, StageExercise, VocabularyType } from "@/shared/type";
 import RecordController from "../controllers/record.controller";
-import { useGetRecordsQuery } from "./record.service";
+import Store from "@/shared/const/store.const";
+import TopicController from "../controllers/topic.controller";
+import { RecordRequest } from "../request";
 
 export interface VocabularyResponseType {
   stage: StageExercise;
@@ -38,40 +39,31 @@ const calculateStage = (vocabularies: VocabularyType[]) => {
 };
 
 export const VocabularyApi = createApi({
-  reducerPath: Query.vocabulary,
+  reducerPath: Store.vocabularyApi,
   baseQuery: fakeBaseQuery(),
+  tagTypes: ["RecordPage"],
   endpoints: (builder) => ({
-    getVocabularies: builder.query<VocabularyResponseType, string>({
+    getVocabularies: builder.query<any[], string>({
       async queryFn(topicId: string) {
         try {
           const userId = "idUser2JLpns9SQblwSgNigfTwF";
-          const vocabularies: VocabularyType[] = [];
-          const records: RecordType[] = [];
 
-          (await VocabularyController.getVocabularies(topicId)).forEach(
-            (value) => {
-              vocabularies.push({
-                vocabularyId: value.id,
-                ...value.data(),
-              } as VocabularyType);
-            }
+          const vocabularies = await VocabularyController.getVocabularies(
+            topicId
           );
 
-          (await RecordController.getRecords(userId)).forEach((value) => {
-            records.push({ recordId: value.id, ...value.data() } as RecordType);
-          });
+          const records = await RecordController.getRecords(userId);
 
           const vocaPopulateRecord: VocabularyType[] = vocabularies.map(
-            (vocabulary: VocabularyType) => {
+            (vocabulary: any) => {
               const findRecordMatch = records.find(
-                (record: RecordType) =>
-                  record.vocabularyId === vocabulary.vocabularyId
+                (record: any) => record.vocabularyId === vocabulary.vocabularyId
               );
               return !!findRecordMatch
                 ? {
                     ...vocabulary,
                     isRecord: true,
-                    voiceRecordSrc: findRecordMatch.voiceSrc,
+                    voiceRecordSrc: findRecordMatch.recordVoiceSrc,
                   }
                 : {
                     ...vocabulary,
@@ -81,20 +73,40 @@ export const VocabularyApi = createApi({
             }
           );
 
+          const topic = await TopicController.getTopicById(topicId);
           const progress = calculateStage(vocaPopulateRecord);
-          const result = {
-            ...progress,
-            vocabularies,
-          } as VocabularyResponseType;
-          return { data: result };
+          console.log(
+            "useGetVocabulariesQuery::",
+            vocaPopulateRecord,
+            progress
+          );
+          return {
+            data: vocaPopulateRecord as any,
+            meta: { ...progress, name: topic.name, topicId: topic.topicId },
+          };
         } catch (error) {
           return { error };
         }
       },
+      keepUnusedDataFor: 0,
+      providesTags: ["RecordPage"],
+    }),
+    addRecord: builder.mutation<any, RecordRequest>({
+      async queryFn(payload: RecordRequest) {
+        try {
+          await RecordController.addRecord(payload);
+          return {
+            data: "",
+          };
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: ["RecordPage"],
     }),
   }),
 });
 
-export const { useGetVocabulariesQuery } = VocabularyApi;
+export const { useGetVocabulariesQuery, useAddRecordMutation } = VocabularyApi;
 
 export default VocabularyApi;

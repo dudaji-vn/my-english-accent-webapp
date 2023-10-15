@@ -1,7 +1,8 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
 import userReducer from "@/store/UserStore";
-import exerciseReduer from "@/store/ExerciseStore";
+import recordPageReduer from "@/store/RecordPageStore";
+import listenPageReducer from "@/store/ListenPageStore";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { RecordApi, TopicApi, UserApi, VocabularyApi } from "@/core/services";
 
@@ -15,7 +16,8 @@ const middleware = [
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    exercise: exerciseReduer,
+    recordPage: recordPageReduer,
+    listenPage: listenPageReducer,
     TopicApi: TopicApi.reducer,
     RecordApi: RecordApi.reducer,
     VocabularyApi: VocabularyApi.reducer,

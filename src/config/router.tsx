@@ -12,6 +12,7 @@ import ListenPage from "@/pages/Listen";
 import ChooseUserPage from "@/pages/Listen/ChooseUser";
 import IndividualPage from "@/pages/Listen/Individual";
 import TeamPage from "@/pages/Listen/Team";
+import { useGetRecordsQuery, useGetTopicsQuery } from "@/core/services";
 
 function RequireAuth({
   isLoggedIn,
@@ -30,6 +31,7 @@ function RequireAuth({
     <Navigate to="/login" replace state={{ path: location.pathname }} />
   );
 }
+
 
 const routes = (isLoggedIn: boolean) => [
   {
@@ -81,6 +83,7 @@ const routes = (isLoggedIn: boolean) => [
         <ListenPage />
       </RequireAuth>
     ),
+
     children: [
       {
         path: ROUTER.INDIVIDUAL,

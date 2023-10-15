@@ -1,6 +1,4 @@
 import { Box, Avatar } from "@mui/material";
-import { useRef } from "react";
-
 interface AudioPlayerType {
   voiceSrc: string;
   icon: string;
@@ -12,10 +10,14 @@ export default function AudioPlayer({
   icon,
   classes = "w-5 h-5",
 }: AudioPlayerType) {
-  const audioEle = useRef<HTMLAudioElement | null>(null);
+  const playing = true;
+  const audio = new Audio(voiceSrc);
+
   const onPlay = () => {
-    if (audioEle && audioEle.current) {
-      audioEle.current.play();
+    if (playing) {
+      audio.play();
+    } else {
+      audio.pause();
     }
   };
   return (
@@ -26,7 +28,6 @@ export default function AudioPlayer({
         className={classes}
         onClick={onPlay}
       />
-      <audio src={voiceSrc} ref={audioEle}></audio>
     </Box>
   );
 }

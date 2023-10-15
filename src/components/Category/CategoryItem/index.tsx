@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { useMemo } from "react";
 import { StageExercise, TopicUIType } from "@/shared/type";
-import { useAppDispatch } from "@/store/hook";
-import { saveSelection } from "@/store/ExerciseStore";
 
 export default function CategoryItem({
   topicId,
@@ -14,24 +12,13 @@ export default function CategoryItem({
   totalPhrase,
   currentPhrase,
   stage,
-  vocabularies,
 }: TopicUIType) {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const gotoRecordProgressPage = () => {
     navigate({
       pathname: ROUTER.RECORD + `/${name.toLowerCase()}`,
+      search: topicId,
     });
-    dispatch(
-      saveSelection({
-        topicId,
-        stage,
-        name,
-        currentPhrase,
-        totalPhrase,
-        vocabularies,
-      })
-    );
   };
 
   const currentProgress = useMemo(() => {

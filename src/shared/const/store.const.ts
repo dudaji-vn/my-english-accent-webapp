@@ -1,7 +1,11 @@
 const Store = {
   user: "UserStore",
-  exercise: "ExerciseStore",
-  topic: "TopicStore",
+  recordPage: "RecordPageStore",
+  listenPage: "ListenPageStore",
+  topicApi: "TopicApi",
+  recordApi: "RecordApi",
+  vocabularyApi: "VocabularyApi",
+  userApi: "UserApi",
 };
 
 export default Store;

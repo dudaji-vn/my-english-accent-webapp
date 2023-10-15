@@ -3,6 +3,8 @@ import { TopicUIType, UserType, VocabularyType } from "../type";
 const VOCABULARY = "vocabulary";
 const TOKEN = "token";
 const USER_INFO = "userInfo";
+const TOPIC_ID = "topicId";
+const QUOTE = "quote";
 
 const persist = {
   saveVocabulary: (
@@ -25,6 +27,18 @@ const persist = {
   },
   getToken: () => {
     return localStorage.getItem(TOKEN);
+  },
+  getTopicId: () => {
+    return localStorage.getItem(TOPIC_ID) ?? "";
+  },
+  saveTopicId: (id: string) => {
+    return localStorage.setItem(TOPIC_ID, id);
+  },
+  getQuote: () => {
+    return localStorage.getItem(QUOTE) ?? "";
+  },
+  saveQuote: (text: string) => {
+    return localStorage.setItem(QUOTE, text);
   },
 };
 

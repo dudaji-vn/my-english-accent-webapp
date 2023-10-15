@@ -1,6 +1,5 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import TopicController from "@/core/controllers/topic.controller";
-import Query from "@/shared/const/queryApi.const";
 import VocabularyController from "@/core/controllers/vocabulary.controller";
 import RecordController from "@/core/controllers/record.controller";
 import _, { filter } from "lodash";
@@ -11,6 +10,7 @@ import {
   TopicUIType,
   VocabularyType,
 } from "@/shared/type";
+import Store from "@/shared/const/store.const";
 
 const calculateStageTopic = (vocabularies: VocabularyType[]) => {
   const result = {};
@@ -38,7 +38,7 @@ const calculateStageTopic = (vocabularies: VocabularyType[]) => {
 };
 
 export const TopicApi = createApi({
-  reducerPath: Query.topic,
+  reducerPath: Store.topicApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     getTopics: builder.query<TopicUIType[], void>({
@@ -46,37 +46,23 @@ export const TopicApi = createApi({
         try {
           const userId = "idUser2JLpns9SQblwSgNigfTwF";
 
-          let topics: TopicType[] = [];
-          let vocabularies: VocabularyType[] = [];
-          let records: RecordType[] = [];
-
           //firebase db
-          (await TopicController.getTopics()).forEach((value) => {
-            topics.push({ topicId: value.id, ...value.data() } as TopicType);
-          });
+          const topics = await TopicController.getTopics();
 
-          (await VocabularyController.getVocabularies()).forEach((value) => {
-            vocabularies.push({
-              vocabularyId: value.id,
-              ...value.data(),
-            } as VocabularyType);
-          });
+          const vocabularies = await VocabularyController.getVocabularies();
 
-          (await RecordController.getRecords(userId)).forEach((value) => {
-            records.push({ recordId: value.id, ...value.data() } as RecordType);
-          });
+          const records = await RecordController.getRecords(userId);
 
           const vocaPopulateRecord: VocabularyType[] = vocabularies.map(
-            (vocabulary: VocabularyType) => {
+            (vocabulary: any) => {
               const findRecordMatch = records.find(
-                (record: RecordType) =>
-                  record.vocabularyId === vocabulary.vocabularyId
+                (record: any) => record.vocabularyId === vocabulary.vocabularyId
               );
               return !!findRecordMatch
                 ? {
                     ...vocabulary,
                     isRecord: true,
-                    voiceRecordSrc: findRecordMatch.voiceSrc,
+                    voiceRecordSrc: findRecordMatch.recordVoiceSrc,
                   }
                 : {
                     ...vocabulary,
@@ -112,10 +98,22 @@ export const TopicApi = createApi({
           return { error };
         }
       },
+      keepUnusedDataFor: 0,
+    }),
+    getTopicType: builder.query<TopicType[], void>({
+      async queryFn() {
+        try {
+          const topics: any = await TopicController.getTopics();
+          //default topicId
+          return { data: topics };
+        } catch (error) {
+          return { error };
+        }
+      },
     }),
   }),
 });
 
-export const { useGetTopicsQuery } = TopicApi;
+export const { useGetTopicsQuery, useGetTopicTypeQuery } = TopicApi;
 
 export default TopicApi;

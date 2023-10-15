@@ -1,22 +1,46 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import WordTag from "@/components/WordTag";
-import { nanoid } from "@reduxjs/toolkit";
+import { useGetRecordQuery } from "@/core/services";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import _ from "lodash";
+import { useEffect } from "react";
+import { saveNumberRecords } from "@/store/ListenPageStore";
 
 export default function IndividualPage() {
-  const navigate = useNavigate();
+  const search = useLocation();
+  const userId = search.search.replace("?", "");
+  const topicId = useAppSelector((state) => state.listenPage.topicId);
+  const { data } = useGetRecordQuery(
+    { userId: userId, topicId },
+    {
+      refetchOnFocus: true,
+    }
+  );
 
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (_.isEmpty(data) || _.isEmpty(userId)) {
+      dispatch(saveNumberRecords(0));
+    } else {
+      dispatch(saveNumberRecords(data.length));
+    }
+  }, [data]);
+
+  if (_.isEmpty(data) || _.isEmpty(userId))
+    return <Typography>There's no records</Typography>;
   const renderWords = () => {
-    return ["", "", ""].map((word) => (
+    return data.map((word: any) => (
       <WordTag
-        key={nanoid()}
-        sentence={nanoid()}
-        ipa={nanoid()}
-        voiceSrc={nanoid()}
+        key={word.recordId}
+        sentence={word.vocabularyTitleDisplayLanguage}
+        ipa={word.vocabularyIpaDisplayLanguage}
+        voiceSrc={word.recordVoiceSrc}
         classes="divider last:rounded-b-lg"
       />
     ));
   };
-  return <Box className="">{renderWords()}</Box>;
+  return <Box>{renderWords()}</Box>;
 }

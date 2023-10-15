@@ -1,12 +1,16 @@
 import { firebaseStorage } from "@/config/firebase";
 import { nanoid } from "@reduxjs/toolkit";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import RecordController from "@/core/controllers/record.controller";
 
 const audioPath = "audio";
 
 const UploadFileController = {
-  uploadAudio: (audiofile: any, topicId: string, vocabularyId: string) => {
+  uploadAudio: (
+    audiofile: any,
+    topicId: string,
+    vocabularyId: string,
+    callback: any
+  ) => {
     const storageRef = ref(
       firebaseStorage,
       `${audioPath}/${topicId}/${vocabularyId}/voice_${nanoid()}`
@@ -26,7 +30,7 @@ const UploadFileController = {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          RecordController.addRecord({
+          callback({
             clubStudyId: null,
             userId: "idUser2JLpns9SQblwSgNigfTwF",
             vocabularyId: vocabularyId,

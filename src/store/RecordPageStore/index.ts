@@ -1,3 +1,4 @@
+import { VocabularyApi } from "@/core/services";
 import Store from "@/shared/const/store.const";
 import { IExerciseType, TopicUIType, VocabularyType } from "@/shared/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -15,8 +16,8 @@ const initialState: IExerciseType = {
   vocabularyIndex: 0,
 };
 
-const exerciseStore = createSlice({
-  name: Store.exercise,
+const recordPageStore = createSlice({
+  name: Store.recordPage,
   initialState,
   reducers: {
     saveSelection: (
@@ -44,6 +45,36 @@ const exerciseStore = createSlice({
       state.vocabularies = payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      VocabularyApi.endpoints.getVocabularies.matchFulfilled,
+      (state, { payload, meta }) => {
+        const { currentPhrase, stage, totalPhrase, name, topicId } =
+          meta.baseQueryMeta as {
+            currentPhrase: number;
+            stage: number;
+            totalPhrase: number;
+            name: string;
+            topicId: string;
+          };
+        state.filter = {
+          currentPhrase,
+          stage,
+          totalPhrase,
+          name,
+          topicId,
+        };
+        state.vocabularyIndex = currentPhrase;
+        state.vocabularies = [...payload];
+        console.log(
+          " builder.addMatcher.getVocabularies::",
+          currentPhrase,
+          stage,
+          totalPhrase
+        );
+      }
+    );
+  },
 });
 
 export const {
@@ -51,6 +82,6 @@ export const {
   saveVocabularies,
   nextVocabulary,
   resetVocabularyIndex,
-} = exerciseStore.actions;
+} = recordPageStore.actions;
 
-export default exerciseStore.reducer;
+export default recordPageStore.reducer;

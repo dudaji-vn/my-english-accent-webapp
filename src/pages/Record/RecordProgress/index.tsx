@@ -8,52 +8,46 @@ import {
   LinearProgress,
 } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { StageExercise } from "@/shared/type";
 import { useGetVocabulariesQuery } from "@/core/services";
 import _ from "lodash";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppSelector } from "@/store/hook";
 import ROUTER from "@/shared/const/router.const";
-import { saveVocabularies } from "@/store/ExerciseStore";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function RecordingProgressPage() {
   const navigate = useNavigate();
   const params = useParams();
+  const search = useLocation();
+  const topicId = search.search.replace("?", "");
 
-  const topicFilterStore = useAppSelector((state) => state.exercise.filter);
+  const topicFilterStore = useAppSelector((state) => state.recordPage.filter);
   const currentIndexStore = useAppSelector(
-    (state) => state.exercise.vocabularyIndex
+    (state) => state.recordPage.vocabularyIndex
   );
 
-  const { data, refetch } = useGetVocabulariesQuery(topicFilterStore.topicId);
+  const { data } = useGetVocabulariesQuery(topicId);
 
-  const currentProgress = () => {
-    if (data) {
-      if (data.currentPhrase.toString() && data.totalPhrase) {
-        return (data.currentPhrase * 100) / data.totalPhrase;
-      }
-    }
-    return 0;
-  };
+  console.log("RecordingProgressPage", data);
+  const currentProgress = useMemo(
+    () => (topicFilterStore.currentPhrase * 100) / topicFilterStore.totalPhrase,
+    [data]
+  );
 
   const onHandleClose = () => {
-    refetch();
     navigate(-1);
   };
 
   useEffect(() => {
-    if (data) {
-      if (data.stage === StageExercise.Close) {
-        const path = `/${params.category}`;
-        navigate({
-          pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
-        });
-      }
+    if (topicFilterStore.stage === StageExercise.Close) {
+      const path = `/${params.category}`;
+      navigate({
+        pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
+      });
     }
-  }, [data, data?.stage]);
+  }, [topicFilterStore.stage]);
 
-  console.log("data::", data);
   return (
     <Box className="flex flex-col grow">
       <Container className="py-4 divider bg-white">
@@ -65,16 +59,15 @@ export default function RecordingProgressPage() {
             {topicFilterStore.name}
           </Typography>
         </Box>
-        {data && data.stage != StageExercise.Open && (
-          <LinearProgress value={currentProgress()} variant="determinate" />
+        {topicFilterStore.stage != StageExercise.Open && (
+          <LinearProgress
+            variant="determinate"
+            value={currentProgress}
+            className="mt-3"
+          />
         )}
       </Container>
-      {data && (
-        <TranslationCard
-          {...data.vocabularies[currentIndexStore]}
-          refetch={refetch}
-        />
-      )}
+      {data && <TranslationCard {...data[currentIndexStore]} />}
     </Box>
   );
 }

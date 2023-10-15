@@ -7,9 +7,7 @@ import {
   Tab,
   Button,
   Divider,
-  Chip,
   Container,
-  SvgIcon,
 } from "@mui/material";
 import ArrowLeft from "@/assets/icon/arrow-left-icon.svg";
 import UserAddIcon from "@/assets/icon/user-add-icon.svg";
@@ -19,29 +17,65 @@ import MicrophoneIcon from "@/assets/icon/microphone-icon.svg";
 import QuoteIcon from "@/assets/icon/quote-icon.svg";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
-import { useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import PersonInfo from "@/components/NationalityCard";
 import FooterCard from "@/components/FooterBtn";
 import TabCustom from "@/components/TabCustom";
+import { useGetTopicTypeQuery } from "@/core/services";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { saveIndexNumberUsers, saveTopicId } from "@/store/ListenPageStore";
+import { useMultiAudio } from "@/shared/hook/useMultiAudio";
+
+type PATH = "individual" | "team";
+
+const exampleAudio = [
+  "https://firebasestorage.googleapis.com/v0/b/my-english-accent-239fb.appspot.com/o/audio%2Ftopic_NA5SE36AF0rg8BvnNNiUe%2Fvocabulary_MqPGFlc-a0XnlLtu3kXVC%2Fvoice_DwRjcCyd0HgZAcngdguJp?alt=media&token=fbb79a99-0bf8-440e-88d4-3cfb23011213",
+  "https://firebasestorage.googleapis.com/v0/b/my-english-accent-239fb.appspot.com/o/audio%2Ftopic_NA5SE36AF0rg8BvnNNiUe%2Fvocabulary_MqPGFlc-a0XnlLtu3kXVC%2Fvoice_DwRjcCyd0HgZAcngdguJp?alt=media&token=fbb79a99-0bf8-440e-88d4-3cfb23011213",
+];
 
 export default function ListenPage() {
+  const dispatch = useAppDispatch();
+  const { data } = useGetTopicTypeQuery();
+  const recordsVoiceSrc = useAppSelector(
+    (state) => state.listenPage.recordsVoiceSrc
+  );
+  const quote = useAppSelector((state) => state.listenPage.quote);
+  const userInfo = useAppSelector((state) => state.listenPage.userInfo);
+  const numberRecordsOfUser = useAppSelector(
+    (state) => state.listenPage.numberRecords
+  );
+  const currentIndex = useAppSelector(
+    (state) => state.listenPage.numberUsers.current
+  );
+
+  const { players, indexAudio, playAudio } = useMultiAudio(exampleAudio);
+  console.log("audioIndex", indexAudio);
+  
+  //route
   const navigate = useNavigate();
+  const { pathname, search } = useLocation();
+  const [path, setPath] = useState<PATH>(pathname.split("/")[2] as PATH);
 
-  const [path, setPath] = useState<"individual" | "team">("individual");
-
-  const handleChange = (
-    event: React.SyntheticEvent,
-    newValue: "individual" | "team"
-  ) => {
+  const handleChange = (event: SyntheticEvent, newValue: PATH) => {
     setPath(newValue);
     navigate(ROUTER.LISTENING + "/" + newValue);
   };
 
-  const handleChangeTabIndex = (newValue: number) => {
-    console.log(newValue);
+  const handleChangeTabIndex = (index: number) => {
+    if (data) {
+      dispatch(saveTopicId(data[index].topicId));
+      // dispatch(saveQuote(""));
+    }
   };
 
-  const onHandlePlayAll = () => {};
+  useEffect(() => {
+    setPath(pathname.split("/")[2] as PATH);
+  }, [pathname]);
+
+  const onHandlePlayAll = () => {
+    playAudio(0);
+  };
+
   return (
     <Box className="flex flex-col grow">
       <Box className="px-4 pt-4 pb-2 flex items-center gap-2 bg-white">
@@ -51,7 +85,8 @@ export default function ListenPage() {
         <Typography className="text-large-semibold">Listening</Typography>
         <IconButton
           onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
-          className="grow justify-end"
+          className="grow justify-end hover:bg-white"
+          disableRipple
         >
           <Avatar src={UserAddIcon} className="w-6 h-6" />
         </IconButton>
@@ -82,18 +117,20 @@ export default function ListenPage() {
       <Container className="mt-4 grow">
         <Box className="flex flex-col p-4 rounded-t-lg bg-white">
           <Typography className="text-small-medium">Browse by</Typography>
-          <TabCustom
-            tabsName={["General", "Develop", "Design"]}
-            callback={handleChangeTabIndex}
-          />
+          <TabCustom tab={data ?? []} callback={handleChangeTabIndex} />
         </Box>
         <Outlet />
       </Container>
 
       <FooterCard classes="flex-col">
-        {path === "individual" && (
+        {path === "individual" && search && (
           <Box className="flex gap-2">
-            <PersonInfo isShowAvatar isShowName isShowNationality />
+            <PersonInfo
+              isShowAvatar
+              isShowName
+              isShowNationality
+              userInfo={userInfo}
+            />
             <Typography
               variant={"body2"}
               className="text-extra-small-regular flex grow self-end justify-end"
@@ -104,14 +141,14 @@ export default function ListenPage() {
                 className="w-4 h-4"
                 component={"span"}
               />
-              2 recorded
+              {numberRecordsOfUser} recorded
             </Typography>
           </Box>
         )}
 
         {path === "team" && (
           <Typography className="text-small-medium p-4 border border-solid rounded-lg border-stroke bg-gray-100 relative">
-            Please unshare your screen, I will share my screen.
+            {quote}
             <Avatar
               src={QuoteIcon}
               alt="quote-icon"
@@ -124,7 +161,7 @@ export default function ListenPage() {
         <Divider />
         <Box className="flex gap-4">
           <IconButton
-            onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
+            onClick={() => dispatch(saveIndexNumberUsers(currentIndex - 1))}
             className="border border-stroke border-solid"
           >
             <Avatar src={ArrowLeft} className="w-6 h-6" />
@@ -139,7 +176,7 @@ export default function ListenPage() {
             </Typography>
           </Button>
           <IconButton
-            onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
+            onClick={() => dispatch(saveIndexNumberUsers(currentIndex + 1))}
             className="border border-stroke border-solid"
           >
             <Avatar src={RightIcon} className="w-6 h-6" />

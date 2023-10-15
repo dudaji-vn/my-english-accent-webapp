@@ -13,21 +13,24 @@ import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import ROUTER from "@/shared/const/router.const";
 import { useGetTopicsQuery } from "@/core/services";
-import { resetVocabularyIndex } from "@/store/ExerciseStore";
+import { resetVocabularyIndex } from "@/store/RecordPageStore";
 import FooterBtn from "@/components/FooterBtn";
+import { useEffect } from "react";
+import { StageExercise } from "@/shared/type";
 
 export default function RecordSummaryPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const dataVoca = useAppSelector((state) => state.exercise.vocabularies);
+  const dataVoca = useAppSelector((state) => state.recordPage.vocabularies);
+  const topicFilterStore = useAppSelector((state) => state.recordPage.filter);
   const { refetch } = useGetTopicsQuery();
 
   const renderWordFinished = () => {
-    return dataVoca.map((word) => (
+    return dataVoca.map((word: any) => (
       <WordTag
         key={nanoid()}
-        sentence={word.titleNativeLanguage}
-        ipa={word.ipaDisplayLanguage}
+        sentence={word.vocabularyTitleDisplayLanguage}
+        ipa={word.vocabularyIpaDisplayLanguage}
         voiceSrc={word.voiceRecordSrc}
         classes="divider last:rounded-b-lg"
       />
@@ -39,6 +42,14 @@ export default function RecordSummaryPage() {
     dispatch(resetVocabularyIndex());
     refetch();
   };
+
+  useEffect(() => {
+    if (topicFilterStore.stage !== StageExercise.Close) {
+      navigate({
+        pathname: ROUTER.RECORD,
+      });
+    }
+  }, [topicFilterStore.stage]);
 
   return (
     <Box className="flex flex-col grow">

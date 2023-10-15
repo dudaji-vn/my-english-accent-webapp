@@ -1,8 +1,9 @@
+import { TopicType } from "@/shared/type";
 import { Tabs, Tab } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 
 interface TabsProp {
-  tabsName: string[];
+  tab: TopicType[];
   callback: Function;
 }
 export default function TabCustom(props: TabsProp) {
@@ -12,13 +13,19 @@ export default function TabCustom(props: TabsProp) {
     setTabIndex(newValue);
     props.callback(newValue);
   };
-  
+
   return (
     <Tabs
       sx={{
+        marginTop: "16px",
+        alignItems: "center",
+        ".MuiTabScrollButton": {
+          minHeight: "0",
+          maxHeight: "40px",
+        },
         ".MuiTabs-flexContainer": {
           gap: "8px",
-          marginTop: "16px",
+          // marginTop: "16px",
         },
         ".MuiTabs-indicator": {
           background: "none",
@@ -41,8 +48,8 @@ export default function TabCustom(props: TabsProp) {
       allowScrollButtonsMobile
       aria-label="scrollable tabs add user"
     >
-      {props.tabsName.map((name) => {
-        return <Tab label={name} />;
+      {props.tab.map((topic) => {
+        return <Tab key={topic.topicId} label={topic.name} />;
       })}
     </Tabs>
   );

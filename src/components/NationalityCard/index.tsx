@@ -5,20 +5,19 @@ import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import KoreaFlag from "@/assets/icon/korea-flag-icon.svg";
 import { useAppSelector } from "@/store/hook";
 import { UserType } from "@/shared/type";
+import _ from "lodash";
 
 interface PersonInfoType {
   isShowName?: boolean;
   isShowAvatar?: boolean;
   isShowNationality?: boolean;
-  userInfo?: UserType;
+  userInfo?: Partial<UserType>;
 }
 
 export default function PersonInfo(props: PersonInfoType) {
-  const myInfo = useAppSelector((state) => state.user.userInfo);
+  const myInfo = useAppSelector((state) => state.user.myInfo);
 
-  const [userInfo] = useState(() => {
-    return props.userInfo ? props.userInfo : myInfo;
-  });
+  const userInfo = _.isEmpty(props.userInfo) ? myInfo : props.userInfo;
 
   const getFlag = () => {
     switch (userInfo.nativeLanguage) {
@@ -33,7 +32,9 @@ export default function PersonInfo(props: PersonInfoType) {
       {props.isShowAvatar && <Avatar alt="avatar-icon" />}
       <Box>
         {props.isShowName && (
-          <Typography className="text-small-medium">{userInfo.name}</Typography>
+          <Typography className="text-small-medium">
+            {userInfo.userName}
+          </Typography>
         )}
         {props.isShowNationality && (
           <Box display={"flex"} alignItems={"center"} gap={1}>

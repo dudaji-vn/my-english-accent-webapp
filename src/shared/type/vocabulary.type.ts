@@ -10,13 +10,14 @@ export interface VocabularyType {
   isRecord: boolean;
   voiceRecordSrc: string;
 }
-export interface VocabularyFirebaseType {
-  created: string;
-  ipa_display_language: string;
-  title_display_language: string;
-  title_native_language: string;
-  topic_id: string;
-  updated: string;
-  vocabulary_id: string;
-  voice_src: string;
+
+export interface VocabularyTypeResponse {
+  vocabularyCreated: string;
+  vocabularyIpaDisplayLanguage: string;
+  vocabularyTitleDisplayLanguage: string;
+  vocabularytitleNativeLanguage: string;
+  topicId: string;
+  vocabularyUpdated: string;
+  vocabularyId: string;
+  vocabularyVoiceSrc: string;
 }

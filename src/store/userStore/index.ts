@@ -4,12 +4,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserType {
   token: string;
-  userInfo: any;
+  myInfo: any;
 }
 
 const initialState: UserType = {
   token: "",
-  userInfo: {
+  myInfo: {
     name: "Thien",
     nickName: "Thien dev",
     displayLanguage: "en",

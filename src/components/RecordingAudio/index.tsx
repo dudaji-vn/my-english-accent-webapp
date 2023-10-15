@@ -5,28 +5,23 @@ import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import HearingIcon from "@/assets/icon/hearing-icon.svg";
 import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
-import { StageExercise } from "@/shared/type";
-import { nextVocabulary } from "@/store/ExerciseStore";
+import { nextVocabulary } from "@/store/RecordPageStore";
 import { useAppDispatch } from "@/store/hook";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { useSaveRecordMutation } from "@/core/services";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import AudioPlayer from "../AudioPlayer";
+import { useAddRecordMutation } from "@/core/services";
 
 export interface RecordingAudioProp {
   topicId: string;
   vocabularyId: string;
-  refetch: any;
 }
 
 export default function RecordingAudio({
   vocabularyId,
   topicId,
-  refetch,
 }: RecordingAudioProp) {
   const dispatch = useAppDispatch();
-
   const audioEle = useRef<HTMLAudioElement | null>(null);
+  const [addRecord] = useAddRecordMutation();
   const { status, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({
       audio: true,
@@ -57,15 +52,23 @@ export default function RecordingAudio({
     }
   };
 
+  const callback = (val: any) => {
+    addRecord(val);
+  };
+
   const onHandleNext = async () => {
     const audioBlob = await fetch(mediaBlobUrl as any).then((r) => r.blob());
     const audiofile = new File([audioBlob], "audiofile.mp3", {
       type: "audio/mp3",
     });
 
-    await UploadFileController.uploadAudio(audiofile, topicId, vocabularyId);
+    await UploadFileController.uploadAudio(
+      audiofile,
+      topicId,
+      vocabularyId,
+      callback
+    );
 
-    refetch();
     setToggleSubBtn(false);
     dispatch(nextVocabulary());
   };
