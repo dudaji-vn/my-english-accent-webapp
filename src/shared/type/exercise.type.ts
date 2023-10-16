@@ -10,9 +10,13 @@ export interface UserType {
   favoriteUserIds: string[];
 }
 
+<<<<<<< Updated upstream
 export interface IExerciseFilterType
   extends Omit<VocabularyType, "idVocabulary">,
     TopicUIType {
+=======
+export interface IExerciseFilterType extends Omit<VocabularyType, "idVocabulary">, ExerciseType {
+>>>>>>> Stashed changes
   idVocabulary: string[];
 }
 export interface IExerciseType {
@@ -21,3 +25,20 @@ export interface IExerciseType {
   vocabularies: VocabularyType[];
   vocabularyIndex: number;
 }
+
+const vocabulary = [
+  {
+    vocabulary_id: "voca_id1",
+    title_display_language: "Hello",
+    phonetic_display_language: "Hello",
+    lecture_id: "",
+    level: "Fresher",
+  },
+  {
+    vocabulary_id: "voca_id2",
+    title_display_language: "Hi",
+    phonetic_display_language: "Hi",
+    lecture_id: "",
+    level: "Immediately",
+  },
+];

@@ -11,6 +11,7 @@ export interface VocabularyType {
   voiceRecordSrc: string;
 }
 
+<<<<<<< Updated upstream
 export interface VocabularyTypeResponse {
   vocabularyCreated: string;
   vocabularyIpaDisplayLanguage: string;
@@ -21,3 +22,5 @@ export interface VocabularyTypeResponse {
   vocabularyId: string;
   vocabularyVoiceSrc: string;
 }
+=======
+>>>>>>> Stashed changes

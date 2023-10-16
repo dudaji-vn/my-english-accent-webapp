@@ -12,6 +12,10 @@ export const UserApi = createApi({
       async queryFn(payload) {
         try {
           const myInfo: any = await UserController.login(payload);
+<<<<<<< Updated upstream
+=======
+          console.log(myInfo)
+>>>>>>> Stashed changes
           persist.saveMyInfo(myInfo);
           return { data: myInfo };
         } catch (error) {
@@ -33,10 +37,14 @@ export const UserApi = createApi({
       async queryFn(usersId: string[]) {
         try {
           const myInfo = persist.getMyInfo();
+<<<<<<< Updated upstream
           const res = await UserController.favoriteUsers(
             myInfo.userId,
             usersId
           );
+=======
+          const res = await UserController.favoriteUsers(myInfo.userId, usersId);
+>>>>>>> Stashed changes
           persist.saveMyInfo({
             ...myInfo,
             favoriteUserIds: usersId,
@@ -52,7 +60,11 @@ export const UserApi = createApi({
   }),
 });
 
+<<<<<<< Updated upstream
 export const { useLoginMutation, useGetUsersQuery, useFavoriteUsersMutation } =
   UserApi;
+=======
+export const { useLoginMutation, useGetUsersQuery, useFavoriteUsersMutation } = UserApi;
+>>>>>>> Stashed changes
 
 export default UserApi;

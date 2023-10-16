@@ -8,6 +8,7 @@ export interface RecordType {
   updated: string;
 }
 
+<<<<<<< Updated upstream
 export interface RecordTypeResponse {
   recordId: string;
   clubStudyId: string;
@@ -17,3 +18,5 @@ export interface RecordTypeResponse {
   vocabularyId: string;
   recordVoiceSrc: string;
 }
+=======
+>>>>>>> Stashed changes

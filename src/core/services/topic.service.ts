@@ -3,6 +3,7 @@ import TopicController from "@/core/controllers/topic.controller";
 import VocabularyController from "@/core/controllers/vocabulary.controller";
 import RecordController from "@/core/controllers/record.controller";
 import _, { filter } from "lodash";
+<<<<<<< Updated upstream
 import {
   RecordType,
   StageExercise,
@@ -10,6 +11,9 @@ import {
   TopicUIType,
   VocabularyType,
 } from "@/shared/type";
+=======
+import { RecordType, StageExercise, TopicType, TopicUIType, VocabularyType } from "@/shared/type";
+>>>>>>> Stashed changes
 import Store from "@/shared/const/store.const";
 
 const calculateStageTopic = (vocabularies: VocabularyType[]) => {
@@ -53,6 +57,7 @@ export const TopicApi = createApi({
 
           const records = await RecordController.getRecords(userId);
 
+<<<<<<< Updated upstream
           const vocaPopulateRecord: VocabularyType[] = vocabularies.map(
             (vocabulary: any) => {
               const findRecordMatch = records.find(
@@ -84,6 +89,31 @@ export const TopicApi = createApi({
             TopicType,
             "stage" | "currentStep" | "currentPhrase"
           >[] = _.mergeWith(groupTopicId, topics);
+=======
+          const vocaPopulateRecord: VocabularyType[] = vocabularies.map((vocabulary: any) => {
+            const findRecordMatch = records.find((record: any) => record.vocabularyId === vocabulary.vocabularyId);
+            return !!findRecordMatch
+              ? {
+                  ...vocabulary,
+                  isRecord: true,
+                  voiceRecordSrc: findRecordMatch.recordVoiceSrc,
+                }
+              : {
+                  ...vocabulary,
+                  isRecord: false,
+                  voiceRecordSrc: "",
+                };
+          });
+
+          const groupTopicId: Pick<TopicType, "topicId" | "vocabularies">[] = _.chain(vocaPopulateRecord)
+            .groupBy("topicId")
+            .map((value, key) => {
+              return { topicId: key, vocabularies: value };
+            })
+            .value();
+
+          const merged: Omit<TopicType, "stage" | "currentStep" | "currentPhrase">[] = _.mergeWith(groupTopicId, topics);
+>>>>>>> Stashed changes
 
           const result: TopicUIType[] = merged.map((topic) => {
             const progressObject = calculateStageTopic(topic.vocabularies);

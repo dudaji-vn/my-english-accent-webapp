@@ -1,0 +1,16 @@
+export interface RecordTypeResponse {
+  recordId: string;
+  clubStudyId: string;
+  recordCreated: string;
+  recordUpdated: string;
+  userId: string;
+  vocabularyId: string;
+  recordVoiceSrc: string;
+}
+
+export interface RecordRequest {
+  userId: string;
+  voiceSrc: string;
+  vocabularyId: string;
+  clubStudyId: string | null;
+}

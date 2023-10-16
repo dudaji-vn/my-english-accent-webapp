@@ -4,7 +4,11 @@ import { RecordType, StageExercise, VocabularyType } from "@/shared/type";
 import RecordController from "../controllers/record.controller";
 import Store from "@/shared/const/store.const";
 import TopicController from "../controllers/topic.controller";
+<<<<<<< Updated upstream
 import { RecordRequest } from "../request";
+=======
+import { RecordRequest } from "../type";
+>>>>>>> Stashed changes
 
 export interface VocabularyResponseType {
   stage: StageExercise;
@@ -48,6 +52,7 @@ export const VocabularyApi = createApi({
         try {
           const userId = "idUser2JLpns9SQblwSgNigfTwF";
 
+<<<<<<< Updated upstream
           const vocabularies = await VocabularyController.getVocabularies(
             topicId
           );
@@ -80,6 +85,30 @@ export const VocabularyApi = createApi({
             vocaPopulateRecord,
             progress
           );
+=======
+          const vocabularies = await VocabularyController.getVocabularies(topicId);
+
+          const records = await RecordController.getRecords(userId);
+
+          const vocaPopulateRecord: VocabularyType[] = vocabularies.map((vocabulary: any) => {
+            const findRecordMatch = records.find((record: any) => record.vocabularyId === vocabulary.vocabularyId);
+            return !!findRecordMatch
+              ? {
+                  ...vocabulary,
+                  isRecord: true,
+                  voiceRecordSrc: findRecordMatch.recordVoiceSrc,
+                }
+              : {
+                  ...vocabulary,
+                  isRecord: false,
+                  voiceRecordSrc: "",
+                };
+          });
+
+          const topic = await TopicController.getTopicById(topicId);
+          const progress = calculateStage(vocaPopulateRecord);
+          console.log("useGetVocabulariesQuery::", vocaPopulateRecord, progress);
+>>>>>>> Stashed changes
           return {
             data: vocaPopulateRecord as any,
             meta: { ...progress, name: topic.name, topicId: topic.topicId },
