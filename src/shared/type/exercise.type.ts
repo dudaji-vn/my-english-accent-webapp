@@ -10,13 +10,7 @@ export interface UserType {
   favoriteUserIds: string[];
 }
 
-<<<<<<< Updated upstream
-export interface IExerciseFilterType
-  extends Omit<VocabularyType, "idVocabulary">,
-    TopicUIType {
-=======
-export interface IExerciseFilterType extends Omit<VocabularyType, "idVocabulary">, ExerciseType {
->>>>>>> Stashed changes
+export interface IExerciseFilterType extends Omit<VocabularyType, "idVocabulary">, IExerciseType {
   idVocabulary: string[];
 }
 export interface IExerciseType {

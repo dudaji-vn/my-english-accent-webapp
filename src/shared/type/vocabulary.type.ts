@@ -11,16 +11,3 @@ export interface VocabularyType {
   voiceRecordSrc: string;
 }
 
-<<<<<<< Updated upstream
-export interface VocabularyTypeResponse {
-  vocabularyCreated: string;
-  vocabularyIpaDisplayLanguage: string;
-  vocabularyTitleDisplayLanguage: string;
-  vocabularytitleNativeLanguage: string;
-  topicId: string;
-  vocabularyUpdated: string;
-  vocabularyId: string;
-  vocabularyVoiceSrc: string;
-}
-=======
->>>>>>> Stashed changes
