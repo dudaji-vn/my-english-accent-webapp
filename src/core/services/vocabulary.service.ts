@@ -1,6 +1,6 @@
 import VocabularyController from "@/core/controllers/vocabulary.controller";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RecordType, StageExercise, VocabularyType } from "@/shared/type";
+import { StageExercise, VocabularyType } from "@/shared/type";
 import RecordController from "../controllers/record.controller";
 import Store from "@/shared/const/store.const";
 import TopicController from "../controllers/topic.controller";
@@ -72,7 +72,7 @@ export const VocabularyApi = createApi({
           console.log("useGetVocabulariesQuery::", vocaPopulateRecord, progress);
           return {
             data: vocaPopulateRecord as any,
-            meta: { ...progress, name: topic.name, topicId: topic.topicId },
+            meta: { ...progress, name: topic.lectureName, topicId: topic.lectureId },
           };
         } catch (error) {
           return { error };

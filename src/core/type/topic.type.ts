@@ -11,4 +11,13 @@ export interface TopicResponseType {
 export interface ITopicRequest {
   name: string;
   img_src: string;
+  level: number;
+}
+
+export interface ITopicResponse {
+  created: string;
+  img_src: string;
+  level: number;
+  lecture_name: string;
+  updated: string;
 }

@@ -2,15 +2,19 @@ import { firebaseDB } from "@/config/firebase";
 import { nanoid } from "@reduxjs/toolkit";
 import { and, collection, deleteDoc, doc, documentId, getDocs, query, setDoc, where } from "firebase/firestore";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
-import { IVocabularyRequest } from "../type";
+import { INativeVocabularyRequest, IVocabularyRequest } from "../type";
 
-const vocabularyPath = "vocabulary";
+const vocabularyPath = "nativeVocabulary";
 const vocabularyCollection = collection(firebaseDB, vocabularyPath);
 
 const VocabularyController = {
   addVocabulary: (payload: IVocabularyRequest) => {
     const request = addTimeStamp(payload);
     return setDoc(doc(vocabularyCollection, "vocabularyId_" + nanoid()), request);
+  },
+  addNativeVocabulary: (payload: INativeVocabularyRequest) => {
+    const request = addTimeStamp(payload);
+    return setDoc(doc(vocabularyCollection, "nativeVocabularyId_" + nanoid()), request);
   },
   getVocabularies: async (topicId?: string) => {
     if (topicId) {

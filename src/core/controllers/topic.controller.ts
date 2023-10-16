@@ -4,13 +4,13 @@ import { collection, deleteDoc, doc, documentId, getDocs, query, setDoc, where }
 import { ITopicRequest } from "@/core/type";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 
-const topicPath = "topic";
+const topicPath = "lecture";
 const topicCollection = collection(firebaseDB, topicPath);
 
 const TopicController = {
   addTopic: (payload: ITopicRequest) => {
     const request = addTimeStamp(payload);
-    setDoc(doc(topicCollection, "topicId_" + nanoid()), request);
+    setDoc(doc(topicCollection, "lectureId_" + nanoid()), request);
   },
 
   updateTopic: async (id: string, payload: ITopicRequest) => {
@@ -23,19 +23,19 @@ const TopicController = {
 
   getTopics: async () => {
     return (await getDocs(topicCollection)).docs.map((doc) => ({
-      topicId: doc.id,
-      imgSrc: doc.data().imgSrc,
-      name: doc.data().name,
+      lectureId: doc.id,
+      imgSrc: doc.data().img_src,
+      lectureName: doc.data().lecture_name,
       created: doc.data().created,
       updated: doc.data().updated,
     }));
   },
-  getTopicById: async (topicId: string) => {
-    const q = query(topicCollection, where(documentId(), "==", topicId));
+  getTopicById: async (lectureId: string) => {
+    const q = query(topicCollection, where(documentId(), "==", lectureId));
     const response = (await getDocs(q)).docs.map((doc) => ({
-      topicId: doc.id,
-      imgSrc: doc.data().imgSrc,
-      name: doc.data().name,
+      lectureId: doc.id,
+      imgSrc: doc.data().img_src,
+      lectureName: doc.data().lecture_name,
       created: doc.data().created,
       updated: doc.data().updated,
     }));
