@@ -8,33 +8,30 @@ import { useGetTopicsQuery } from "@/core/services";
 
 import * as _ from "lodash";
 import { nanoid } from "@reduxjs/toolkit";
+import persist from "@/shared/utils/persist.util";
+import { useGetInitialDataQuery } from "@/core/services/initialize.service";
 
 export default function RecordingPage() {
-  const { data } = useGetTopicsQuery();
+  const userId = persist.getMyInfo().userId;
+
+  const { data: dataInit } = useGetInitialDataQuery(userId);
+
+  // const { data } = useGetTopicsQuery(userId);
   const goBack = useNavigate();
 
-  if (_.isNull(data) || _.isUndefined(data)) return <></>;
+  if (_.isNull(dataInit) || _.isUndefined(dataInit)) return <></>;
 
   const renderCategory = () => {
-    const groupStage = _.groupBy(data, "stage");
-    return Object.entries(groupStage).map(([key, value]) => (
-      <Category
-        key={nanoid()}
-        stage={key as unknown as StageExercise}
-        topicItems={value}
-      />
-    ));
+    return Object.entries(dataInit).map(([key, value]) => <Category key={nanoid()} stage={key as unknown as StageExercise} lectureItems={value} />);
   };
 
   return (
     <Box>
-      <Box className="p-4 flex items-center gap-2 divider bg-white">
+      <Box className='p-4 flex items-center gap-2 divider bg-white'>
         <IconButton onClick={() => goBack(ROUTER.ROOT)}>
-          <Avatar src={ChevronIcon} className="w-6 h-6" />
+          <Avatar src={ChevronIcon} className='w-6 h-6' />
         </IconButton>
-        <Typography className="text-large-semibold">
-          Practice pronounciation
-        </Typography>
+        <Typography className='text-large-semibold'>Practice pronounciation</Typography>
       </Box>
       {renderCategory()}
     </Box>

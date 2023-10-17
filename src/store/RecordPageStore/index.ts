@@ -1,13 +1,13 @@
 import { VocabularyApi } from "@/core/services";
 import Store from "@/shared/const/store.const";
-import { IExerciseType, TopicUIType, VocabularyType } from "@/shared/type";
+import { IExerciseType, StageExercise, TopicUIType, VocabularyType } from "@/shared/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: IExerciseType = {
   store: [],
   filter: {
     topicId: "",
-    stage: 0,
+    stage: StageExercise.Close,
     totalPhrase: 0,
     currentPhrase: 0,
     name: "",
@@ -20,10 +20,7 @@ const recordPageStore = createSlice({
   name: Store.recordPage,
   initialState,
   reducers: {
-    saveSelection: (
-      state,
-      { payload }: PayloadAction<Omit<TopicUIType, "imgSrc">>
-    ) => {
+    saveSelection: (state, { payload }: PayloadAction<Omit<TopicUIType, "imgSrc">>) => {
       const { vocabularies, ...restPayload } = payload;
       const result = {
         ...state.filter,
@@ -46,42 +43,28 @@ const recordPageStore = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      VocabularyApi.endpoints.getVocabularies.matchFulfilled,
-      (state, { payload, meta }) => {
-        const { currentPhrase, stage, totalPhrase, name, topicId } =
-          meta.baseQueryMeta as {
-            currentPhrase: number;
-            stage: number;
-            totalPhrase: number;
-            name: string;
-            topicId: string;
-          };
-        state.filter = {
-          currentPhrase,
-          stage,
-          totalPhrase,
-          name,
-          topicId,
-        };
-        state.vocabularyIndex = currentPhrase;
-        state.vocabularies = [...payload];
-        console.log(
-          " builder.addMatcher.getVocabularies::",
-          currentPhrase,
-          stage,
-          totalPhrase
-        );
-      }
-    );
+    builder.addMatcher(VocabularyApi.endpoints.getVocabularies.matchFulfilled, (state, { payload, meta }) => {
+      const { currentPhrase, stage, totalPhrase, name, topicId } = meta.baseQueryMeta as {
+        currentPhrase: number;
+        stage: StageExercise;
+        totalPhrase: number;
+        name: string;
+        topicId: string;
+      };
+      state.filter = {
+        currentPhrase,
+        stage,
+        totalPhrase,
+        name,
+        topicId,
+      };
+      state.vocabularyIndex = currentPhrase;
+      state.vocabularies = [...payload];
+      console.log(" builder.addMatcher.getVocabularies::", currentPhrase, stage, totalPhrase);
+    });
   },
 });
 
-export const {
-  saveSelection,
-  saveVocabularies,
-  nextVocabulary,
-  resetVocabularyIndex,
-} = recordPageStore.actions;
+export const { saveSelection, saveVocabularies, nextVocabulary, resetVocabularyIndex } = recordPageStore.actions;
 
 export default recordPageStore.reducer;

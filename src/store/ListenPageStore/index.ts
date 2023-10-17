@@ -1,5 +1,5 @@
-import { RecordApi, TopicApi } from "@/core/services";
-import Store from "@/shared/const/store.const";
+import { RecordApi, LectureApi } from "@/core/services";
+import Reducer from "@/shared/const/store.const";
 import { UserType } from "@/shared/type";
 import persist from "@/shared/utils/persist.util";
 import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
@@ -31,7 +31,7 @@ const initialState: TopicStoreType = {
 };
 
 const listenPageSlice = createSlice({
-  name: Store.listenPage,
+  name: Reducer.listenPage,
   initialState,
   reducers: {
     saveQuote: (state: TopicStoreType, { payload }: PayloadAction<string>) => {
@@ -73,7 +73,7 @@ const listenPageSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      TopicApi.endpoints.getTopicType.matchFulfilled,
+      LectureApi.endpoints.getTopicType.matchFulfilled,
       (state, { payload }) => {
         state.topicId = payload[0].topicId;
       }

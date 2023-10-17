@@ -5,8 +5,8 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 const audioPath = "audio";
 
 const UploadFileController = {
-  uploadAudio: (audiofile: any, topicId: string, vocabularyId: string, callback: any) => {
-    const storageRef = ref(firebaseStorage, `${audioPath}/${topicId}/${vocabularyId}/voice_${nanoid()}`);
+  uploadAudio: (audiofile: File, vocabularyId: string, callback: Function) => {
+    const storageRef = ref(firebaseStorage, `${audioPath}/${vocabularyId}/voice_${nanoid()}`);
     const uploadTask = uploadBytesResumable(storageRef, audiofile);
 
     uploadTask.on(

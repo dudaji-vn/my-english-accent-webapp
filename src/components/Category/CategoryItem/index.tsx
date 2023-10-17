@@ -4,50 +4,31 @@ import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { useMemo } from "react";
 import { StageExercise, TopicUIType } from "@/shared/type";
+import { LectureResponseType } from "@/core/type";
 
-export default function CategoryItem({
-  topicId,
-  name,
-  imgSrc,
-  totalPhrase,
-  currentPhrase,
-  stage,
-}: TopicUIType) {
+export default function CategoryItem({ lectureName, imgSrc, lectureId, currentStep, stage }: any) {
   const navigate = useNavigate();
   const gotoRecordProgressPage = () => {
     navigate({
-      pathname: ROUTER.RECORD + `/${name.toLowerCase()}`,
-      search: topicId,
+      pathname: ROUTER.RECORD + `/${lectureName.toLowerCase()}`,
+      search: lectureId,
     });
   };
 
   const currentProgress = useMemo(() => {
-    return (currentPhrase * 100) / totalPhrase;
+    return (currentStep * 100) / 2;
   }, []);
 
   return (
-    <BoxCard classes="p-4">
-      <Box
-        className="flex justify-between items-center"
-        onClick={() => gotoRecordProgressPage()}
-      >
+    <BoxCard classes='p-4'>
+      <Box className='flex justify-between items-center' onClick={() => gotoRecordProgressPage()}>
         <Box>
-          <Typography className="text-base-semibold">{name}</Typography>
-          <Typography className="text-extra-small-regular">
-            {stage != StageExercise.Open
-              ? `${currentPhrase}/${totalPhrase} phrases`
-              : `${totalPhrase} phrases`}
-          </Typography>
+          <Typography className='text-base-semibold'>{lectureName}</Typography>
+          <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${2} phrases` : `${2} phrases`}</Typography>
         </Box>
-        <Avatar src={imgSrc} alt="gallery-icon" className="w-6 h-6" />
+        <Avatar src={imgSrc} alt='gallery-icon' className='w-6 h-6' />
       </Box>
-      {stage != StageExercise.Open && (
-        <LinearProgress
-          variant="determinate"
-          value={currentProgress}
-          className="mt-3"
-        />
-      )}
+      {stage != StageExercise.Open && <LinearProgress variant='determinate' value={currentProgress} className='mt-3' />}
     </BoxCard>
   );
 }

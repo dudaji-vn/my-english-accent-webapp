@@ -2,10 +2,10 @@ import { UserType } from "@/shared/type";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import UserController from "../controllers/user.controller";
 import persist from "@/shared/utils/persist.util";
-import Store from "@/shared/const/store.const";
+import Reducer from "@/shared/const/store.const";
 
 export const UserApi = createApi({
-  reducerPath: Store.userApi,
+  reducerPath: Reducer.userApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     login: builder.mutation<UserType, { userName: string; password: string }>({

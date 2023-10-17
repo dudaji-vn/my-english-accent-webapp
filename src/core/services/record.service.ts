@@ -1,7 +1,7 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import RecordController from "@/core/controllers/record.controller";
 import { UserType } from "@/shared/type";
-import Store from "@/shared/const/store.const";
+import Reducer from "@/shared/const/store.const";
 import UserController from "../controllers/user.controller";
 import _ from "lodash";
 import VocabularyController from "../controllers/vocabulary.controller";
@@ -12,7 +12,7 @@ export interface RecordByManyUserResponse extends RecordTypeResponse, Vocabulary
 }
 
 export const RecordApi = createApi({
-  reducerPath: Store.recordApi,
+  reducerPath: Reducer.recordApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     saveRecord: builder.mutation<any, any>({
@@ -91,7 +91,7 @@ export const RecordApi = createApi({
           const populatedVoca = recordResponse.reduce((acc: any, currentVal) => {
             const found = vocabularyReponse.find((record) => record.vocabularyId === currentVal.vocabularyId);
             if (found) {
-              recordVoiceSrc.push(currentVal.recordVoiceSrc);
+              recordVoiceSrc.push(currentVal.rVoiceSrc);
               const merged = _.merge(currentVal, found);
               return [...acc, merged];
             }

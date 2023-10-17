@@ -2,8 +2,8 @@ import VocabularyController from "@/core/controllers/vocabulary.controller";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { StageExercise, VocabularyType } from "@/shared/type";
 import RecordController from "../controllers/record.controller";
-import Store from "@/shared/const/store.const";
-import TopicController from "../controllers/topic.controller";
+import Reducer from "@/shared/const/store.const";
+import LectureController from "../controllers/lecture.controller";
 import { RecordRequest } from "../type";
 
 export interface VocabularyResponseType {
@@ -39,7 +39,7 @@ const calculateStage = (vocabularies: VocabularyType[]) => {
 };
 
 export const VocabularyApi = createApi({
-  reducerPath: Store.vocabularyApi,
+  reducerPath: Reducer.vocabularyApi,
   baseQuery: fakeBaseQuery(),
   tagTypes: ["RecordPage"],
   endpoints: (builder) => ({
@@ -58,7 +58,7 @@ export const VocabularyApi = createApi({
               ? {
                   ...vocabulary,
                   isRecord: true,
-                  voiceRecordSrc: findRecordMatch.recordVoiceSrc,
+                  voiceRecordSrc: findRecordMatch.rVoiceSrc,
                 }
               : {
                   ...vocabulary,
@@ -67,7 +67,7 @@ export const VocabularyApi = createApi({
                 };
           });
 
-          const topic = await TopicController.getTopicById(topicId);
+          const topic = await LectureController.getTopicById(topicId);
           const progress = calculateStage(vocaPopulateRecord);
           console.log("useGetVocabulariesQuery::", vocaPopulateRecord, progress);
           return {

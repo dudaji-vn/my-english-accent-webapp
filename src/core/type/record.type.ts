@@ -1,11 +1,11 @@
 export interface RecordTypeResponse {
   recordId: string;
   clubStudyId: string;
-  recordCreated: string;
-  recordUpdated: string;
+  rCreated: string;
+  rUpdated: string;
   userId: string;
   vocabularyId: string;
-  recordVoiceSrc: string;
+  rVoiceSrc: string;
 }
 
 export interface RecordRequest {
@@ -13,4 +13,13 @@ export interface RecordRequest {
   voiceSrc: string;
   vocabularyId: string;
   clubStudyId: string | null;
+}
+
+export interface RecordModal {
+  club_study_id: string;
+  vocabulary_id: string;
+  user_id: string;
+  voice_src: string;
+  created: string;
+  updated: string;
 }

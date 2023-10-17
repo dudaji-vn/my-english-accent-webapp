@@ -1,62 +1,30 @@
 import { firebaseDB } from "@/config/firebase";
-import { nanoid } from "@reduxjs/toolkit";
-import { and, collection, deleteDoc, doc, documentId, getDocs, query, setDoc, where } from "firebase/firestore";
-import addTimeStamp from "@/shared/utils/addTimeStamp.util";
-import { INativeVocabularyRequest, IVocabularyRequest } from "../type";
+import { DocumentReference, and, collection, documentId, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { vocbularyConvert } from "../coverter/vocabulary.mapping";
+import { VocabularyModal } from "../type";
 
-const vocabularyPath = "nativeVocabulary";
+const vocabularyPath = "vocabulary";
 const vocabularyCollection = collection(firebaseDB, vocabularyPath);
 
 const VocabularyController = {
-  addVocabulary: (payload: IVocabularyRequest) => {
-    const request = addTimeStamp(payload);
-    return setDoc(doc(vocabularyCollection, "vocabularyId_" + nanoid()), request);
-  },
-  addNativeVocabulary: (payload: INativeVocabularyRequest) => {
-    const request = addTimeStamp(payload);
-    return setDoc(doc(vocabularyCollection, "nativeVocabularyId_" + nanoid()), request);
-  },
-  getVocabularies: async (topicId?: string) => {
-    if (topicId) {
-      const q = query(vocabularyCollection, where("topicId", "==", topicId));
-      return (await getDocs(q)).docs.map((doc) => ({
-        vocabularyId: doc.id,
-        vocabularyCreated: doc.data().created,
-        vocabularyIpaDisplayLanguage: doc.data().ipaDisplayLanguage,
-        vocabularyTitleDisplayLanguage: doc.data().titleDisplayLanguage,
-        vocabularytitleNativeLanguage: doc.data().titleNativeLanguage,
-        topicId: doc.data().topicId,
-        vocabularyUpdated: doc.data().updated,
-        vocabularyVoiceSrc: doc.data().voiceSrc,
-      }));
+  getVocabularies: async (lectureId?: string) => {
+    if (lectureId) {
+      const q = query(vocabularyCollection, where("lecture_id", "==", lectureId), orderBy(""));
+      return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
     } else {
-      return (await getDocs(vocabularyCollection)).docs.map((doc) => ({
-        vocabularyId: doc.id,
-        vocabularyCreated: doc.data().created,
-        vocabularyIpaDisplayLanguage: doc.data().ipaDisplayLanguage,
-        vocabularyTitleDisplayLanguage: doc.data().titleDisplayLanguage,
-        vocabularytitleNativeLanguage: doc.data().titleNativeLanguage,
-        topicId: doc.data().topicId,
-        vocabularyUpdated: doc.data().updated,
-        vocabularyVoiceSrc: doc.data().voiceSrc,
-      }));
+      return (await getDocs(vocabularyCollection)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
     }
   },
-  filterVocabularies: async (topicId: string, vocabularies: string[]) => {
-    if (vocabularies.length && topicId) {
-      const q = query(vocabularyCollection, and(where(documentId(), "in", vocabularies), where("topicId", "==", topicId)));
-      return (await getDocs(q)).docs.map((doc) => ({
-        vocabularyId: doc.id,
-        vocabularyCreated: doc.data().created,
-        vocabularyIpaDisplayLanguage: doc.data().ipaDisplayLanguage,
-        vocabularyTitleDisplayLanguage: doc.data().titleDisplayLanguage,
-        vocabularytitleNativeLanguage: doc.data().titleNativeLanguage,
-        topicId: doc.data().topicId,
-        vocabularyUpdated: doc.data().updated,
-        vocabularyVoiceSrc: doc.data().voiceSrc,
-      }));
+  filterVocabularies: async (lectureId: string, vocabularies: string[]) => {
+    if (vocabularies.length && lectureId) {
+      const q = query(vocabularyCollection, and(where(documentId(), "in", vocabularies), where("lecture_id", "==", lectureId)));
+      return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
     }
     return [];
+  },
+
+  findParent: async (reference: DocumentReference) => {
+    return await getDoc(reference as any).then((val) => console.log(val.data()));
   },
 };
 
