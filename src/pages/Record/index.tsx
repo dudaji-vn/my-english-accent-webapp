@@ -14,15 +14,14 @@ import { useGetInitialDataQuery } from "@/core/services/initialize.service";
 export default function RecordingPage() {
   const userId = persist.getMyInfo().userId;
 
-  const { data: dataInit } = useGetInitialDataQuery(userId);
+  const { data } = useGetInitialDataQuery(userId);
 
-  // const { data } = useGetTopicsQuery(userId);
   const goBack = useNavigate();
 
-  if (_.isNull(dataInit) || _.isUndefined(dataInit)) return <></>;
+  if (_.isNull(data) || _.isUndefined(data)) return <></>;
 
   const renderCategory = () => {
-    return Object.entries(dataInit).map(([key, value]) => <Category key={nanoid()} stage={key as unknown as StageExercise} lectureItems={value} />);
+    return Object.entries(data).map(([key, value]) => <Category key={nanoid()} stage={key as unknown as StageExercise} lectureItems={value} />);
   };
 
   return (

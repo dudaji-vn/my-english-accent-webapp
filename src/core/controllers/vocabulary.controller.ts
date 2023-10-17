@@ -9,7 +9,7 @@ const vocabularyCollection = collection(firebaseDB, vocabularyPath);
 const VocabularyController = {
   getVocabularies: async (lectureId?: string) => {
     if (lectureId) {
-      const q = query(vocabularyCollection, where("lecture_id", "==", lectureId), orderBy(""));
+      const q = query(vocabularyCollection, where("lecture_id", "==", lectureId));
       return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
     } else {
       return (await getDocs(vocabularyCollection)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));

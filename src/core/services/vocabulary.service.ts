@@ -1,10 +1,11 @@
 import VocabularyController from "@/core/controllers/vocabulary.controller";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import _ from "lodash";
 import { StageExercise, VocabularyType } from "@/shared/type";
 import RecordController from "../controllers/record.controller";
 import Reducer from "@/shared/const/store.const";
 import LectureController from "../controllers/lecture.controller";
-import { RecordRequest } from "../type";
+import { RecordRequest, VocabularyGroupByLecture } from "../type";
 
 export interface VocabularyResponseType {
   stage: StageExercise;
@@ -94,9 +95,29 @@ export const VocabularyApi = createApi({
       },
       invalidatesTags: ["RecordPage"],
     }),
+
+    getAllVocabulary: builder.query<VocabularyGroupByLecture[], void>({
+      async queryFn() {
+        try {
+          const vocabularyData = await VocabularyController.getVocabularies();
+          const groupVocabularyByLectureId = _(vocabularyData)
+            .groupBy("lectureId.id")
+            .map((val, key) => ({
+              lectureId: key,
+              vocabularies: val,
+            }))
+            .value();
+          return {
+            data: groupVocabularyByLectureId,
+          };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetVocabulariesQuery, useAddRecordMutation } = VocabularyApi;
+export const { useGetVocabulariesQuery, useAddRecordMutation, useGetAllVocabularyQuery } = VocabularyApi;
 
 export default VocabularyApi;

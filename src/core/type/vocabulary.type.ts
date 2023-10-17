@@ -34,3 +34,8 @@ export interface NativeVocabularyModal {
   updated: string;
   created: string;
 }
+
+export interface VocabularyGroupByLecture {
+  lectureId: string;
+  vocabularies: VocabularyTypeResponse[];
+}
