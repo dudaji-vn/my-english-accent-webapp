@@ -35,7 +35,7 @@ export const InitializeApi = createApi({
           });
 
           const groupBy = _.groupBy(merged, "stage");
-          
+
           return { data: groupBy };
         } catch (error) {
           return { error };

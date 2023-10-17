@@ -1,11 +1,12 @@
 import { DocumentReference } from "firebase/firestore";
 import { Language, Level } from "./user.type";
+import { EnrollmentResponseType } from "./enrollment.type";
+import { StageExercise } from "@/shared/type";
 
 export interface VocabularyTypeResponse {
   vCreated: string;
   vphoneticDisplayLanguage: string;
   vtitleDisplayLanguage: string;
-  vtitleNativeLanguage: string;
   lectureId: DocumentReference;
   vUpdated: string;
   vocabularyId: string;
@@ -22,15 +23,16 @@ export interface VocabularyModal {
 
 export interface NativeVocabularyTypeResponse {
   vocabularyId: DocumentReference;
-  titleVativeLanguage: Language;
-  language: Level;
+  titleNativeLanguage: string;
+  language: Language;
   updated: string;
   created: string;
+  nativeVocabulary: string;
 }
 export interface NativeVocabularyModal {
   vocabulary_id: DocumentReference;
   title_native_language: string;
-  language: Level;
+  language: Language;
   updated: string;
   created: string;
 }
@@ -38,4 +40,8 @@ export interface NativeVocabularyModal {
 export interface VocabularyGroupByLecture {
   lectureId: string;
   vocabularies: VocabularyTypeResponse[];
+}
+
+export interface VocabularyMergedEnrollMent extends EnrollmentResponseType {
+  vocabularies: VocabularyTypeResponse[] & NativeVocabularyTypeResponse[] & EnrollmentResponseType[];
 }

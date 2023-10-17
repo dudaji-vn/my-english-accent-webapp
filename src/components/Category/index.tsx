@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import CategoryItem from "@/components/Category/CategoryItem";
-import { nanoid } from "@reduxjs/toolkit";
-import { StageExercise, StageLabel, TopicUIType } from "@/shared/type";
+import { StageExercise, StageLabel } from "@/shared/type";
 import { EnrollmentResponseType, LectureResponseType } from "@/core/type";
 
 export interface CategoryPropType {

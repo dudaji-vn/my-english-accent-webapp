@@ -1,8 +1,9 @@
-import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
-import BoxCard from "@/components/BoxCard";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
+
+import BoxCard from "@/components/BoxCard";
 import ROUTER from "@/shared/const/router.const";
-import { useMemo, useState } from "react";
 import { StageExercise } from "@/shared/type";
 import { EnrollmentResponseType, LectureResponseType } from "@/core/type";
 import { useGetAllVocabularyQuery } from "@/core/services";

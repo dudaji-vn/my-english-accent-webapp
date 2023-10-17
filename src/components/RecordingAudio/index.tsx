@@ -11,11 +11,11 @@ import UploadFileController from "@/core/controllers/uploadFile.controller";
 import { useAddRecordMutation } from "@/core/services";
 
 export interface RecordingAudioProp {
-  topicId: string;
+  lectureId: string;
   vocabularyId: string;
 }
 
-export default function RecordingAudio({ vocabularyId, topicId }: RecordingAudioProp) {
+export default function RecordingAudio({ vocabularyId, lectureId }: RecordingAudioProp) {
   const dispatch = useAppDispatch();
   const audioEle = useRef<HTMLAudioElement | null>(null);
   const [addRecord] = useAddRecordMutation();

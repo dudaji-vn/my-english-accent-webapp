@@ -14,12 +14,17 @@ const EnrollmentController = {
     const q = query(enrollmentCollection, where("user_id", "==", userRef));
     return (await getDocs(q)).docs.map((doc) => enrollmentConvert(doc.id, doc.data() as EnrollmentModal));
   },
-  getEnrollmentByLectures: async (lectureId: DocumentReference[]) => {
-    const promises = lectureId.map(async (lecture) => {
+  getEnrollmentByLectures: async (lecturesId: DocumentReference[]) => {
+    const promises = lecturesId.map(async (lecture) => {
       const q = query(collection(firebaseDB, "lecture"), where(documentId(), "==", lecture));
       return (await getDocs(q)).docs.map((doc) => lectureConvert(doc.id, doc.data() as LectureModal));
     });
     return Promise.all(promises).then();
+  },
+  getEnrollmentByLecture: async (lectureId: string) => {
+    const lectureRef = doc(firebaseDB, "lecture", lectureId);
+    const q = query(enrollmentCollection, where("lecture_id", "==", lectureRef));
+    return (await getDocs(q)).docs.map((doc) => enrollmentConvert(doc.id, doc.data() as EnrollmentModal));
   },
 };
 

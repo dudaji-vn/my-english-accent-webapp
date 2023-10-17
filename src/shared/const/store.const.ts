@@ -7,6 +7,7 @@ const Reducer = {
   vocabularyApi: "VocabularyApi",
   userApi: "UserApi",
   initializeApi: "InitializeApi",
+  recordProgress: "RecordProgress",
 };
 
 export default Reducer;
