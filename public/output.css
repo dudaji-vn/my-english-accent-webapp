@@ -300,12 +300,24 @@ h6 {
   margin-top: 1rem
 }
 
+#root :is(.mt-6) {
+  margin-top: 1.5rem
+}
+
+#root :is(.mt-12) {
+  margin-top: 3rem
+}
+
 #root :is(.flex) {
   display: flex
 }
 
 #root :is(.h-10) {
   height: 2.5rem
+}
+
+#root :is(.h-16) {
+  height: 4rem
 }
 
 #root :is(.h-4) {
@@ -324,12 +336,20 @@ h6 {
   height: 100%
 }
 
+#root :is(.h-8) {
+  height: 2rem
+}
+
 #root :is(.min-h-screen) {
   min-height: 100vh
 }
 
 #root :is(.w-10) {
   width: 2.5rem
+}
+
+#root :is(.w-16) {
+  width: 4rem
 }
 
 #root :is(.w-4) {
@@ -346,6 +366,14 @@ h6 {
 
 #root :is(.w-full) {
   width: 100%
+}
+
+#root :is(.w-\[162px\]) {
+  width: 162px
+}
+
+#root :is(.w-8) {
+  width: 2rem
 }
 
 #root :is(.grow) {
@@ -438,7 +466,7 @@ h6 {
 
 #root :is(.bg-primary) {
   --tw-bg-opacity: 1;
-  background-color: rgb(134 70 244 / var(--tw-bg-opacity))
+  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
 }
 
 #root :is(.bg-white) {
@@ -532,4 +560,8 @@ h6 {
 #root :is(.hover\:bg-white:hover) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+
+#root :is(.hover\:opacity-5:hover) {
+  opacity: 0.05
 }

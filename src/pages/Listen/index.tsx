@@ -58,7 +58,6 @@ export default function ListenPage() {
 
   const handleChange = (event: SyntheticEvent, newValue: PATH) => {
     setPath(newValue);
-    navigate(ROUTER.LISTENING + "/" + newValue);
   };
 
   const handleChangeTabIndex = (index: number) => {
@@ -84,7 +83,6 @@ export default function ListenPage() {
         </IconButton>
         <Typography className="text-large-semibold">Listening</Typography>
         <IconButton
-          onClick={() => navigate(ROUTER.LISTENING + ROUTER.ADDUSER)}
           className="grow justify-end hover:bg-white"
           disableRipple
         >

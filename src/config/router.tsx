@@ -13,6 +13,7 @@ import ChooseUserPage from "@/pages/Listen/ChooseUser";
 import IndividualPage from "@/pages/Listen/Individual";
 import TeamPage from "@/pages/Listen/Team";
 import RerecordingProgressPage from "@/pages/Record/RerecordProgress";
+import ClubPage from "@/pages/Club";
 
 function RequireAuth({ isLoggedIn, children }: { isLoggedIn: boolean; children: ReactElement }) {
   const location = useLocation();
@@ -72,36 +73,14 @@ const routes = (isLoggedIn: boolean) => [
     ),
   },
   {
-    path: ROUTER.LISTENING,
-    element: <Navigate to={ROUTER.LISTENING + "/" + ROUTER.INDIVIDUAL} replace />,
-  },
-  {
-    path: ROUTER.LISTENING,
+    path: ROUTER.CLUB,
     element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
-        <ListenPage />
+        <ClubPage />
       </RequireAuth>
     ),
+  },
 
-    children: [
-      {
-        path: ROUTER.INDIVIDUAL,
-        element: <IndividualPage />,
-      },
-      {
-        path: ROUTER.TEAM,
-        element: <TeamPage />,
-      },
-    ],
-  },
-  {
-    path: ROUTER.LISTENING + ROUTER.ADDUSER,
-    element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
-        <ChooseUserPage />
-      </RequireAuth>
-    ),
-  },
   {
     path: "*",
     element: <NotFoundPage />,

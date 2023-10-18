@@ -1,12 +1,4 @@
-import {
-  Box,
-  Avatar,
-  Typography,
-  IconButton,
-  Container,
-  Button,
-  InputBase,
-} from "@mui/material";
+import { Box, Avatar, Typography, IconButton, Container, Button, InputBase } from "@mui/material";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import SearchIcon from "@/assets/icon/search-icon.svg";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +13,7 @@ import persist from "@/shared/utils/persist.util";
 
 export default function ChooseUserPage() {
   const { data: dataUser } = useGetUsersQuery();
-  console.log("userData::",dataUser)
+  console.log("userData::", dataUser);
   const [favoriteUsers] = useFavoriteUsersMutation();
 
   const navigate = useNavigate();
@@ -56,11 +48,7 @@ export default function ChooseUserPage() {
         const favoritedUser = listUser.includes(user.userId);
         return (
           <Box key={user.userId} onClick={() => onHandleListUser(user.userId)}>
-            <RecordCard
-              className="rounded-b-lg divider"
-              userInfo={user}
-              checked={favoritedUser}
-            />
+            <RecordCard className='rounded-b-lg divider' userInfo={user} checked={favoritedUser} />
           </Box>
         );
       });
@@ -68,51 +56,40 @@ export default function ChooseUserPage() {
   };
 
   const onHandleFavoriteList = () => {
-    favoriteUsers(listUser).then((value) =>
-      console.log("favoriteUsers", value)
-    );
+    favoriteUsers(listUser).then((value) => console.log("favoriteUsers", value));
   };
 
   return (
-    <Box className="flex flex-col grow">
-      <Box className="p-4 flex items-center gap-2 divider bg-white">
-        <IconButton onClick={() => navigate(ROUTER.LISTENING)}>
-          <Avatar src={ChevronIcon} className="w-6 h-6" />
+    <Box className='flex flex-col grow'>
+      <Box className='p-4 flex items-center gap-2 divider bg-white'>
+        <IconButton>
+          <Avatar src={ChevronIcon} className='w-6 h-6' />
         </IconButton>
-        <Typography className="text-large-semibold">Choose members</Typography>
+        <Typography className='text-large-semibold'>Choose members</Typography>
       </Box>
-      <Container className="py-4 flex flex-col grow justify-between">
-        <Box className="bg-white">
-          <Box className="flex flex-col p-4 rounded-t-lg">
-            <Typography className="text-small-medium">Browse by</Typography>
+      <Container className='py-4 flex flex-col grow justify-between'>
+        <Box className='bg-white'>
+          <Box className='flex flex-col p-4 rounded-t-lg'>
+            <Typography className='text-small-medium'>Browse by</Typography>
             {/* <TabCustom
               tabsName={["General", "Develop", "Design"]}
               callback={handleChangeTabIndex}
             /> */}
           </Box>
-          <Container className="flex gap-1 items-center">
-            <Avatar src={SearchIcon} alt="search-icon" className="w-4 h-4" />
-            <InputBase
-              className="text-small-regular text-textSecondary"
-              placeholder="Search by name"
-              value={search}
-              onChange={handleSearch}
-            />
+          <Container className='flex gap-1 items-center'>
+            <Avatar src={SearchIcon} alt='search-icon' className='w-4 h-4' />
+            <InputBase className='text-small-regular text-textSecondary' placeholder='Search by name' value={search} onChange={handleSearch} />
           </Container>
           {renderUsers()}
         </Box>
       </Container>
-      <FooterCard classes="items-center ">
-        <Typography variant="body2" className="text-extra-small-regular">
+      <FooterCard classes='items-center '>
+        <Typography variant='body2' className='text-extra-small-regular'>
           {listUser?.length} {listUser?.length > 0 ? "memebrs " : "member "}
           selected
         </Typography>
-        <Button
-          variant="contained"
-          className="rounded-md m-auto grow"
-          onClick={onHandleFavoriteList}
-        >
-          <Typography className="text-base-medium text-white">Save</Typography>
+        <Button variant='contained' className='rounded-md m-auto grow' onClick={onHandleFavoriteList}>
+          <Typography className='text-base-medium text-white'>Save</Typography>
         </Button>
       </FooterCard>
     </Box>

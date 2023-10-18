@@ -30,7 +30,6 @@ export default function TeamPage() {
       })
     );
     navigate({
-      pathname: ROUTER.LISTENING + "/" + ROUTER.INDIVIDUAL,
       search: user.userId,
     });
   };

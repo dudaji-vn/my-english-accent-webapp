@@ -64,6 +64,7 @@ const theme = extendTheme({
       styleOverrides: {
         root: {
           textTransform: "none",
+          borderRadius: "8px",
         },
       },
     },
