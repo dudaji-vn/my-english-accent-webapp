@@ -4,7 +4,6 @@ import Category from "@/components/Category";
 import { useNavigate } from "react-router-dom";
 import { StageExercise } from "@/shared/type";
 import ROUTER from "@/shared/const/router.const";
-import { useGetTopicsQuery } from "@/core/services";
 
 import * as _ from "lodash";
 import { nanoid } from "@reduxjs/toolkit";

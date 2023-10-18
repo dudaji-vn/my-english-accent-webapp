@@ -84,7 +84,7 @@ export const RecordApi = createApi({
       async queryFn(payload: { userId: string; topicId?: string }) {
         try {
           const recordVoiceSrc: string[] = [];
-          const recordResponse = await RecordController.getRecords(payload.userId);
+          const recordResponse = await RecordController.getUserRecords(payload.userId);
 
           const vocabularyReponse = await VocabularyController.getVocabularies(payload.topicId);
 

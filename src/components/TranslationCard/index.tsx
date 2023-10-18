@@ -5,7 +5,8 @@ import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingAudio from "@/components/RecordingAudio";
 import { VocabularyTypeResponse, EnrollmentResponseType, NativeVocabularyTypeResponse } from "@/core/type";
 
-export default function TranslationCard(props: VocabularyTypeResponse & EnrollmentResponseType & NativeVocabularyTypeResponse) {
+export default function TranslationCard(props: VocabularyTypeResponse & EnrollmentResponseType & NativeVocabularyTypeResponse & { totalStep: number }) {
+  const { enrollmentId, vocabularyId, currentStep, totalStep } = props;
   const audio = new Audio("props");
   const onRepeat = () => {
     audio.play();
@@ -41,7 +42,7 @@ export default function TranslationCard(props: VocabularyTypeResponse & Enrollme
           </Typography>
         </Box>
       </Box>
-      <RecordingAudio vocabularyId={props.vocabularyId} lectureId={props.lectureId.id} />
+      <RecordingAudio {...{ enrollmentId, vocabularyId, currentStep, totalStep }} />
     </Container>
   );
 }

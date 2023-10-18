@@ -5,7 +5,6 @@ import WordTag from "@/components/WordTag";
 import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import ROUTER from "@/shared/const/router.const";
-import { useGetTopicsQuery } from "@/core/services";
 import { resetVocabularyIndex } from "@/store/RecordPageStore";
 import FooterBtn from "@/components/FooterBtn";
 import { useEffect } from "react";
@@ -18,7 +17,6 @@ export default function RecordSummaryPage() {
   const dataVoca = useAppSelector((state) => state.recordPage.vocabularies);
   const topicFilterStore = useAppSelector((state) => state.recordPage.filter);
   const userId = persist.getMyInfo().userId;
-  const { refetch } = useGetTopicsQuery(userId);
 
   const renderWordFinished = () => {
     return dataVoca.map((word: any) => (
@@ -29,7 +27,6 @@ export default function RecordSummaryPage() {
   const onHandleContinue = () => {
     navigate(ROUTER.RECORD);
     dispatch(resetVocabularyIndex());
-    refetch();
   };
 
   useEffect(() => {

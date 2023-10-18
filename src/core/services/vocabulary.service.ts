@@ -51,7 +51,7 @@ export const VocabularyApi = createApi({
 
           const vocabularies = await VocabularyController.getVocabularies(topicId);
 
-          const records = await RecordController.getRecords(userId);
+          const records = await RecordController.getUserRecords(userId);
 
           const vocaPopulateRecord: VocabularyType[] = vocabularies.map((vocabulary: any) => {
             const findRecordMatch = records.find((record: any) => record.vocabularyId === vocabulary.vocabularyId);
@@ -82,19 +82,6 @@ export const VocabularyApi = createApi({
       keepUnusedDataFor: 0,
       providesTags: ["RecordPage"],
     }),
-    addRecord: builder.mutation<any, RecordRequest>({
-      async queryFn(payload: RecordRequest) {
-        try {
-          await RecordController.addRecord(payload);
-          return {
-            data: "",
-          };
-        } catch (error) {
-          return { error };
-        }
-      },
-      invalidatesTags: ["RecordPage"],
-    }),
 
     getAllVocabulary: builder.query<VocabularyGroupByLecture[], void>({
       async queryFn() {
@@ -118,6 +105,6 @@ export const VocabularyApi = createApi({
   }),
 });
 
-export const { useGetVocabulariesQuery, useAddRecordMutation, useGetAllVocabularyQuery } = VocabularyApi;
+export const { useGetVocabulariesQuery, useGetAllVocabularyQuery } = VocabularyApi;
 
 export default VocabularyApi;
