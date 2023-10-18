@@ -1,15 +1,15 @@
 import { VocabularyType } from "./vocabulary.type";
 
 export enum StageExercise {
-  Inprogress = "Inprogress",
-  Open = "Open",
-  Close = "Close",
+  Inprogress = 0,
+  Open = 1,
+  Close = 2,
 }
 
 export const StageLabel: Record<StageExercise, string> = {
-  "Inprogress": "In progress",
-  "Open": "Explore",
-  "Close": "Archived",
+  [StageExercise.Inprogress]: "In progress",
+  [StageExercise.Open]: "Explore",
+  [StageExercise.Close]: "Archived",
 };
 
 export interface TopicType {

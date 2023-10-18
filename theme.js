@@ -75,6 +75,30 @@ const theme = extendTheme({
         },
       },
     },
+
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          padding: "10px, 14px, 10px, 14px",
+          minHeight: "0px",
+          maxHeight: "44px",
+        },
+      },
+    },
+
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: "8px",
+        },
+      },
+    },
+
+    MuiTextField: {
+      defaultProps: {
+        fullWidth: true,
+      },
+    },
   },
 });
 

@@ -6,6 +6,7 @@ const ROUTER = {
   RECORD: "/record",
   RERECORD: "/rerecord",
   CLUB: "/club",
+  ADD_CLUB: "/add-club",
 
   // subpath
   SUMMARY: "/summary",

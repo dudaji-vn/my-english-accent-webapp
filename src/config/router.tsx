@@ -14,6 +14,7 @@ import IndividualPage from "@/pages/Listen/Individual";
 import TeamPage from "@/pages/Listen/Team";
 import RerecordingProgressPage from "@/pages/Record/RerecordProgress";
 import ClubPage from "@/pages/Club";
+import AddNewClubPage from "@/pages/Club/AddNewClub";
 
 function RequireAuth({ isLoggedIn, children }: { isLoggedIn: boolean; children: ReactElement }) {
   const location = useLocation();
@@ -80,7 +81,14 @@ const routes = (isLoggedIn: boolean) => [
       </RequireAuth>
     ),
   },
-
+  {
+    path: ROUTER.ADD_CLUB,
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn}>
+        <AddNewClubPage />
+      </RequireAuth>
+    ),
+  },
   {
     path: "*",
     element: <NotFoundPage />,

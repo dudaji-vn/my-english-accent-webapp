@@ -57,7 +57,7 @@ export const RecordProgress = createApi({
     addRecord: builder.mutation<boolean, RecordRequest>({
       async queryFn(payload: RecordRequest) {
         try {
-          console.log("addrecord",payload)
+          console.log("addrecord", payload);
           await RecordController.addRecord(payload);
           return { data: true };
         } catch (error) {
@@ -85,7 +85,7 @@ export const RecordProgress = createApi({
           const request = {
             enrollmentId,
             current_step: nextStep >= totalStep ? totalStep : nextStep,
-            stage: nextStep >= totalStep ? "Close" : "Inprogress",
+            stage: nextStep >= totalStep ? 2 : 0,
           };
 
           await EnrollmentController.updateEnrollment(request);

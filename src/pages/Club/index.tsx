@@ -5,6 +5,7 @@ import PeopleIcon from "@/assets/icon/people-icon.svg";
 import RightArrowIcon from "@/assets/icon/arrow-right-icon.svg";
 import UserIcon from "@/assets/icon/user-icon.svg";
 import ClockIcon from "@/assets/icon/clock-icon.svg";
+import WebniarIcon from "@/assets/icon/webinar-icon.svg";
 
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
@@ -13,13 +14,9 @@ import BoxCard from "@/components/BoxCard";
 export default function ClubPage() {
   const navigate = useNavigate();
 
-  return (
-    <Box>
-      <Box className='px-4 pt-4 pb-2 flex items-center gap-2 bg-white'>
-        <Avatar src={PeopleIcon} className='w-6 h-6' />
-        <Typography className='text-large-semibold'>Club study</Typography>
-      </Box>
-      {/* <Container className='flex flex-col text-center items-center gap-2 mt-12'>
+  const renderNewClub = () => {
+    return (
+      <Container className='flex flex-col text-center items-center gap-2 mt-12'>
         <Box>
           <img src={WebniarIcon} className='w-16 h-16' />
         </Box>
@@ -30,8 +27,13 @@ export default function ClubPage() {
         <Button className='mt-6 w-[162px]' variant='contained'>
           Create new club
         </Button>
-      </Container> */}
-      <Container>
+      </Container>
+    );
+  };
+
+  const renderClubManage = () => {
+    return (
+      <Box>
         <Box className='flex justify-between items-center mt-4'>
           <Typography className='text-base-semibold'>Clubs you manage</Typography>
           <IconButton>
@@ -61,7 +63,14 @@ export default function ClubPage() {
             Created 2 minuted ago
           </Typography>
         </BoxCard>
+      </Box>
+    );
+  };
 
+  const renderClubJoined = () => {
+    return (
+      <Box>
+        {" "}
         <Box className='flex justify-between items-center mt-4'>
           <Typography className='text-base-semibold'>Club you’ve joined (1)</Typography>
           <IconButton>
@@ -90,6 +99,20 @@ export default function ClubPage() {
             Created 2 minuted ago
           </Typography>
         </BoxCard>
+      </Box>
+    );
+  };
+
+  return (
+    <Box>
+      <Box className='px-4 pt-4 pb-2 flex items-center gap-2 bg-white'>
+        <Avatar src={PeopleIcon} className='w-6 h-6' />
+        <Typography className='text-large-semibold'>Club study</Typography>
+      </Box>
+      {renderNewClub()}
+      <Container>
+        {renderClubManage()}
+        {renderClubJoined()}
       </Container>
     </Box>
   );
