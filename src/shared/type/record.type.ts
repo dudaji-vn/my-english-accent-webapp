@@ -7,3 +7,4 @@ export interface RecordType {
   created: string;
   updated: string;
 }
+

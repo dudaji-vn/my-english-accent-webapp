@@ -8,14 +8,13 @@ import RecordingPage from "@/pages/Record";
 import Navbar from "@/components/Navbar";
 import RecordingProgressPage from "@/pages/Record/RecordProgress";
 import RecordSummaryPage from "@/pages/Record/RecordSummary";
+import ListenPage from "@/pages/Listen";
+import ChooseUserPage from "@/pages/Listen/ChooseUser";
+import IndividualPage from "@/pages/Listen/Individual";
+import TeamPage from "@/pages/Listen/Team";
+import RerecordingProgressPage from "@/pages/Record/RerecordProgress";
 
-function RequireAuth({
-  isLoggedIn,
-  children,
-}: {
-  isLoggedIn: boolean;
-  children: ReactElement;
-}) {
+function RequireAuth({ isLoggedIn, children }: { isLoggedIn: boolean; children: ReactElement }) {
   const location = useLocation();
   return isLoggedIn === true ? (
     <>
@@ -23,7 +22,7 @@ function RequireAuth({
       {children}
     </>
   ) : (
-    <Navigate to="/login" replace state={{ path: location.pathname }} />
+    <Navigate to='/login' replace state={{ path: location.pathname }} />
   );
 }
 
@@ -57,6 +56,14 @@ const routes = (isLoggedIn: boolean) => [
     ),
   },
   {
+    path: ROUTER.RERECORD + "/:category",
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn}>
+        <RerecordingProgressPage />
+      </RequireAuth>
+    ),
+  },
+  {
     path: ROUTER.RECORD + "/:category" + ROUTER.SUMMARY,
     element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
@@ -66,9 +73,32 @@ const routes = (isLoggedIn: boolean) => [
   },
   {
     path: ROUTER.LISTENING,
+    element: <Navigate to={ROUTER.LISTENING + "/" + ROUTER.INDIVIDUAL} replace />,
+  },
+  {
+    path: ROUTER.LISTENING,
     element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
-        <RecordingPage />
+        <ListenPage />
+      </RequireAuth>
+    ),
+
+    children: [
+      {
+        path: ROUTER.INDIVIDUAL,
+        element: <IndividualPage />,
+      },
+      {
+        path: ROUTER.TEAM,
+        element: <TeamPage />,
+      },
+    ],
+  },
+  {
+    path: ROUTER.LISTENING + ROUTER.ADDUSER,
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn}>
+        <ChooseUserPage />
       </RequireAuth>
     ),
   },

@@ -1,12 +1,13 @@
+import { VocabularyApi } from "@/core/services";
 import Store from "@/shared/const/store.const";
-import { IExerciseType, TopicUIType, VocabularyType } from "@/shared/type";
+import { IExerciseType, StageExercise, TopicUIType, VocabularyType } from "@/shared/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: IExerciseType = {
   store: [],
   filter: {
     topicId: "",
-    stage: 0,
+    stage: StageExercise.Close,
     totalPhrase: 0,
     currentPhrase: 0,
     name: "",
@@ -15,14 +16,11 @@ const initialState: IExerciseType = {
   vocabularyIndex: 0,
 };
 
-const exerciseStore = createSlice({
-  name: Store.exercise,
+const recordPageStore = createSlice({
+  name: Store.recordPage,
   initialState,
   reducers: {
-    saveSelection: (
-      state,
-      { payload }: PayloadAction<Omit<TopicUIType, "imgSrc">>
-    ) => {
+    saveSelection: (state, { payload }: PayloadAction<Omit<TopicUIType, "imgSrc">>) => {
       const { vocabularies, ...restPayload } = payload;
       const result = {
         ...state.filter,
@@ -46,11 +44,6 @@ const exerciseStore = createSlice({
   },
 });
 
-export const {
-  saveSelection,
-  saveVocabularies,
-  nextVocabulary,
-  resetVocabularyIndex,
-} = exerciseStore.actions;
+export const { saveSelection, saveVocabularies, nextVocabulary, resetVocabularyIndex } = recordPageStore.actions;
 
-export default exerciseStore.reducer;
+export default recordPageStore.reducer;

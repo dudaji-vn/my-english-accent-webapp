@@ -1,25 +1,28 @@
-import Store from "@/shared/const/store.const";
-import persist from "@/shared/utils/persist.util";
+import Reducer from "@/shared/const/store.const";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserType {
   token: string;
-  national: "kr" | "vi";
+  myInfo: any;
 }
 
 const initialState: UserType = {
   token: "",
-  national: "kr",
+  myInfo: {
+    name: "Thien",
+    nickName: "Thien dev",
+    displayLanguage: "en",
+    nativeLanguage: "vi",
+  },
 };
 
 const userSlice = createSlice({
-  name: Store.user,
+  name: Reducer.user,
   initialState,
   reducers: {
     saveToken: (state: UserType, action: PayloadAction<{ token: string }>) => {
       const { token } = action.payload;
       state.token = token;
-      persist.login(token);
     },
     logout: (state: UserType) => {
       state.token = "";

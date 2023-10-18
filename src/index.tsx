@@ -15,8 +15,10 @@ import App from "@/App";
 import theme from "../theme";
 import { store } from "@/store";
 
-declare global {
-  interface Window { google: any; }
+declare module "@mui/material/Tabs" {
+  interface AdditionalProps {
+    tabchip: true;
+  }
 }
 
 const root = ReactDOM.createRoot(
@@ -24,7 +26,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <StyledEngineProvider injectFirst>
@@ -35,7 +37,7 @@ root.render(
         </StyledEngineProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

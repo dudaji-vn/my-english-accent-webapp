@@ -60,13 +60,20 @@ const theme = extendTheme({
         },
       },
     },
-    MuiButton:{
-      styleOverrides:{
-        root:{
-          textTransform:'none'
-        }
-      }
-    }
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
+      },
+    },
   },
 });
 

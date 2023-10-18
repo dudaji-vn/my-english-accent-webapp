@@ -1,27 +1,15 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import Query from "@/shared/const/queryApi.const";
 import RecordController from "@/core/controllers/record.controller";
-import { RecordType } from "@/shared/type";
+import { UserType } from "@/shared/type";
+import Reducer from "@/shared/const/store.const";
+import UserController from "../controllers/user.controller";
+import _ from "lodash";
+import VocabularyController from "../controllers/vocabulary.controller";
 
 export const RecordApi = createApi({
-  reducerPath: Query.record,
+  reducerPath: Reducer.recordApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    getRecords: builder.query<RecordType[], void>({
-      async queryFn() {
-        try {
-          let records: RecordType[] = [];
-          const userId = "idUser2JLpns9SQblwSgNigfTwF";
-          const response = await RecordController.getRecords(userId);
-          response.forEach((value) => {
-            records.push({ recordId: value.id, ...value.data() } as RecordType);
-          });
-          return { data: records };
-        } catch (error) {
-          return { error };
-        }
-      },
-    }),
     saveRecord: builder.mutation<any, any>({
       async queryFn(payload) {
         try {
@@ -32,7 +20,34 @@ export const RecordApi = createApi({
         }
       },
     }),
+    getRecords: builder.query<any, { usersId: string[]; topicId?: string }>({
+      async queryFn(payload: { usersId: string[]; topicId: string }) {
+        try {
+          const userResponse = await UserController.getUsersBy(payload.usersId);
+
+          return {
+            data: userResponse,
+          };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
+
+    getRecord: builder.query<any, { userId: string; topicId?: string }>({
+      async queryFn(payload: { userId: string; topicId?: string }) {
+        try {
+          const recordVoiceSrc: string[] = [];
+
+          return {
+            data: recordVoiceSrc,
+          };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
   }),
 });
-export const { useGetRecordsQuery, useSaveRecordMutation } = RecordApi;
+export const { useSaveRecordMutation, useGetRecordsQuery, useGetRecordQuery } = RecordApi;
 export default RecordApi;

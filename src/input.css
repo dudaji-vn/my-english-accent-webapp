@@ -45,6 +45,9 @@
   .text-small-medium {
     @apply text-sm font-medium;
   }
+  .text-small-semibold {
+    @apply text-sm font-semibold;
+  }
   .text-extra-small-regular {
     @apply text-xs font-normal;
   }

@@ -1,38 +1,43 @@
 import { firebaseDB } from "@/config/firebase";
-import { nanoid } from "@reduxjs/toolkit";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
-import { VocabularyRequest } from "@/core/request";
-import addTimeStamp from "@/shared/utils/addTimeStamp.util";
+import { DocumentReference, and, collection, doc, documentId, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { nativeVocbularyConvert, vocbularyConvert } from "../coverter/vocabulary.mapping";
+import { NativeVocabularyModal, VocabularyModal } from "../type";
 
 const vocabularyPath = "vocabulary";
 const vocabularyCollection = collection(firebaseDB, vocabularyPath);
 
 const VocabularyController = {
-  addVocabulary: async (payload: VocabularyRequest) => {
-    const request = addTimeStamp(payload);
-    await setDoc(doc(vocabularyCollection, "vocabulary_" + nanoid()), request);
+  getVocabularies: async () => {
+    return (await getDocs(vocabularyCollection)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
   },
-  updateVocabulary: async (id: string, payload: VocabularyRequest) => {
-    await setDoc(doc(vocabularyCollection, id), payload);
+  getVocabulariesById: async (vocabulariesId: DocumentReference[]) => {
+    const promises = vocabulariesId.map(async (vocabularyRef) => {
+      const q = query(vocabularyCollection, where(documentId(), "==", vocabularyRef));
+      return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
+    });
+    return Promise.all(promises).then();
   },
-  removeVocabulary: async (id: string) => {
-    await deleteDoc(doc(vocabularyCollection, id));
-  },
-  getVocabularies: (topicId?: string) => {
-    if (topicId) {
-      const q = query(vocabularyCollection, where("topicId", "==", topicId));
-      return getDocs(q);
-    } else {
-      return getDocs(vocabularyCollection);
+  filterVocabularies: async (lectureId: string, vocabularies: string[]) => {
+    if (vocabularies.length && lectureId) {
+      const q = query(vocabularyCollection, and(where(documentId(), "in", vocabularies), where("lecture_id", "==", lectureId)));
+      return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
     }
+    return [];
+  },
+
+  getVocabularyByLecture: async (lectureId: string) => {
+    const lectureRef = doc(firebaseDB, "lecture", lectureId);
+    const q = query(vocabularyCollection, where("lecture_id", "==", lectureRef));
+    return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
+  },
+
+  getNativeVocabulary: async (vocabulariesId: string[]) => {
+    const promises = vocabulariesId.map(async (vocabulary) => {
+      const vocabularyRef = doc(firebaseDB, "vocabulary", vocabulary);
+      const q = query(collection(firebaseDB, "native_translation"), and(where("vocabulary_id", "==", vocabularyRef), where("native_language", "==", "vi")));
+      return (await getDocs(q)).docs.map((doc) => nativeVocbularyConvert(doc.id, doc.data() as NativeVocabularyModal));
+    });
+    return Promise.all(promises).then();
   },
 };
 
