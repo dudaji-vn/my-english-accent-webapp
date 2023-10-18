@@ -1,5 +1,5 @@
 import { firebaseDB } from "@/config/firebase";
-import { addDoc, collection, doc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, documentId, getDocs, query, setDoc, where } from "firebase/firestore";
 import { RecordModal, RecordRequest } from "@/core/type";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 import { recordConvert } from "../coverter/record.mapping";
@@ -9,7 +9,19 @@ const recordCollection = collection(firebaseDB, recordPath);
 
 const RecordController = {
   addRecord: (payload: RecordRequest) => {
-    const { userId, clubStudyId, vocabularyId, voiceSrc } = payload;
+    const { userId, clubStudyId, vocabularyId, voiceSrc, recordId } = payload;
+
+    if (recordId) {
+      return setDoc(
+        doc(recordCollection, recordId),
+        {
+          voice_src: voiceSrc,
+        },
+        {
+          merge: true,
+        }
+      );
+    }
 
     let clubRef = null;
     const userRef = doc(firebaseDB, "user", userId);

@@ -7,7 +7,7 @@ import { VocabularyTypeResponse, EnrollmentResponseType, NativeVocabularyTypeRes
 
 export default function TranslationCard(props: VocabularyTypeResponse & EnrollmentResponseType & NativeVocabularyTypeResponse & { totalStep: number }) {
   const { enrollmentId, vocabularyId, currentStep, totalStep } = props;
-  const audio = new Audio("props");
+  const audio = new Audio();
   const onRepeat = () => {
     audio.play();
   };

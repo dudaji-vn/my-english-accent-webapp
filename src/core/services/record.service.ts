@@ -5,11 +5,6 @@ import Reducer from "@/shared/const/store.const";
 import UserController from "../controllers/user.controller";
 import _ from "lodash";
 import VocabularyController from "../controllers/vocabulary.controller";
-import { RecordTypeResponse, VocabularyTypeResponse } from "../type";
-
-export interface RecordByManyUserResponse extends RecordTypeResponse, VocabularyTypeResponse {
-  userInfo: UserType[];
-}
 
 export const RecordApi = createApi({
   reducerPath: Reducer.recordApi,
@@ -30,49 +25,8 @@ export const RecordApi = createApi({
         try {
           const userResponse = await UserController.getUsersBy(payload.usersId);
 
-          const recordResponse = await RecordController.getRecordsByManyUser(payload.usersId);
-
-          const vocabulariesId: string[] = _.unionBy(recordResponse, "vocabularyId").map((val) => val.vocabularyId);
-
-          const vocabularyResponse = await VocabularyController.filterVocabularies(payload.topicId, vocabulariesId);
-
-          const populatedUser: UserType[] = _.unionBy(recordResponse, "userId").reduce((acc: any, currentValue) => {
-            const found = userResponse.find((user) => user.userId === currentValue.userId);
-            return found ? [...acc, found] : [...acc];
-          }, []);
-
-          const populatedRecord = recordResponse.reduce((acc: any, currentVal) => {
-            const found = populatedUser.find((user) => user.userId === currentVal.userId);
-
-            if (found) {
-              const merged = _.merge(currentVal, found);
-              return [...acc, merged];
-            }
-            return [...acc];
-          }, []);
-
-          const groupRecordByVocaId = _.chain(populatedRecord)
-            .groupBy("vocabularyId")
-            .map((value, key) => ({ vocabularyId: key, records: value }))
-            .value();
-
-          console.log("groupRecordByVocaId", groupRecordByVocaId);
-          const recordVoiceSrc = [];
-          const result = vocabularyResponse.reduce((acc: any, currentVal) => {
-            const found = groupRecordByVocaId.find((vocaId) => vocaId.vocabularyId === currentVal.vocabularyId);
-
-            if (found) {
-              const merged = _.merge(currentVal, found);
-              return [...acc, merged];
-            }
-            return [...acc];
-          }, []);
           return {
-            data: result,
-            meta: {
-              currentIndex: 0,
-              maxIndex: result.length > 0 ? result.length - 1 : result.length,
-            },
+            data: userResponse,
           };
         } catch (error) {
           return { error };
@@ -84,23 +38,9 @@ export const RecordApi = createApi({
       async queryFn(payload: { userId: string; topicId?: string }) {
         try {
           const recordVoiceSrc: string[] = [];
-          const recordResponse = await RecordController.getUserRecords(payload.userId);
-
-          const vocabularyReponse = await VocabularyController.getVocabularies(payload.topicId);
-
-          const populatedVoca = recordResponse.reduce((acc: any, currentVal) => {
-            const found = vocabularyReponse.find((record) => record.vocabularyId === currentVal.vocabularyId);
-            if (found) {
-              recordVoiceSrc.push(currentVal.rVoiceSrc);
-              const merged = _.merge(currentVal, found);
-              return [...acc, merged];
-            }
-            return [...acc];
-          }, []);
 
           return {
-            data: populatedVoca,
-            meta: recordVoiceSrc,
+            data: recordVoiceSrc,
           };
         } catch (error) {
           return { error };

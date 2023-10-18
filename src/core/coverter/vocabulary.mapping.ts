@@ -1,4 +1,3 @@
-import { VocabularyResponseType } from "../services";
 import { NativeVocabularyModal, NativeVocabularyTypeResponse, VocabularyModal, VocabularyTypeResponse } from "../type";
 
 export const vocbularyConvert = (id: string, vocabulary: VocabularyModal): VocabularyTypeResponse => {

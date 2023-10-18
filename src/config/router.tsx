@@ -12,6 +12,7 @@ import ListenPage from "@/pages/Listen";
 import ChooseUserPage from "@/pages/Listen/ChooseUser";
 import IndividualPage from "@/pages/Listen/Individual";
 import TeamPage from "@/pages/Listen/Team";
+import RerecordingProgressPage from "@/pages/Record/RerecordProgress";
 
 function RequireAuth({ isLoggedIn, children }: { isLoggedIn: boolean; children: ReactElement }) {
   const location = useLocation();
@@ -51,6 +52,14 @@ const routes = (isLoggedIn: boolean) => [
     element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
         <RecordingProgressPage />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: ROUTER.RERECORD + "/:category",
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn}>
+        <RerecordingProgressPage />
       </RequireAuth>
     ),
   },

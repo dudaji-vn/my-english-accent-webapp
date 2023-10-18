@@ -1,11 +1,12 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import _ from "lodash";
 
-import { EnrollmentResponseType, LectureResponseType, NativeVocabularyTypeResponse, RecordRequest, VocabularyMergedEnrollMent, VocabularyTypeResponse } from "@/core/type";
+import { EnrollmentResponseType, LectureResponseType, NativeVocabularyTypeResponse, RecordRequest, RecordTypeResponse, VocabularyMergedEnrollMent, VocabularyTypeResponse } from "@/core/type";
 import Reducer from "@/shared/const/store.const";
 import VocabularyController from "../controllers/vocabulary.controller";
 import EnrollmentController from "../controllers/enrollment.controller";
 import RecordController from "../controllers/record.controller";
+import LectureController from "../controllers/lecture.controller";
 
 export const RecordProgress = createApi({
   reducerPath: Reducer.recordProgress,
@@ -56,6 +57,7 @@ export const RecordProgress = createApi({
     addRecord: builder.mutation<boolean, RecordRequest>({
       async queryFn(payload: RecordRequest) {
         try {
+          console.log("addrecord",payload)
           await RecordController.addRecord(payload);
           return { data: true };
         } catch (error) {
@@ -100,7 +102,30 @@ export const RecordProgress = createApi({
       async queryFn(userId: string) {
         try {
           const records = await RecordController.getUserRecords(userId);
-          return { data: records };
+
+          const vocabulariesId = records.map((record) => record.vocabularyId);
+
+          const vocabulaies: VocabularyTypeResponse[] = [];
+          await VocabularyController.getVocabulariesById(vocabulariesId).then((val) => vocabulaies.push(...val.flat()));
+          const lecture = await LectureController.getLectureById(vocabulaies[0].lectureId.id);
+
+          console.log("lecture", lecture);
+
+          const merged = _.mergeWith(records, vocabulaies, (record: RecordTypeResponse, voca: VocabularyTypeResponse) => {
+            if (voca.vocabularyId === record.vocabularyId.id) {
+              return {
+                rVoiceSrc: record.rVoiceSrc,
+                recordId: record.recordId,
+                vphoneticDisplayLanguage: voca.vphoneticDisplayLanguage,
+                vtitleDisplayLanguage: voca.vtitleDisplayLanguage,
+                vocabularyId: voca.vocabularyId,
+                ...lecture,
+              };
+            }
+          });
+
+          console.log(merged);
+          return { data: merged };
         } catch (error) {
           console.error("RecordProgress::getAllRecordsOfVocabulary::", error);
           return { error };
@@ -110,5 +135,5 @@ export const RecordProgress = createApi({
     }),
   }),
 });
-export const { useGetAllVocabulariesByLectureQuery, useAddRecordMutation, useUpdateEnrollmentStepMutation } = RecordProgress;
+export const { useGetAllVocabulariesByLectureQuery, useAddRecordMutation, useUpdateEnrollmentStepMutation, useGetAllRecordsOfVocabularyQuery } = RecordProgress;
 export default RecordProgress;

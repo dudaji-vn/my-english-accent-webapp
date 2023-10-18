@@ -1,10 +1,12 @@
+import { DocumentReference } from "firebase/firestore";
+
 export interface RecordTypeResponse {
   recordId: string;
-  clubStudyId: string;
+  clubStudyId: DocumentReference | null;
   rCreated: string;
   rUpdated: string;
-  userId: string;
-  vocabularyId: string;
+  userId: DocumentReference;
+  vocabularyId: DocumentReference;
   rVoiceSrc: string;
 }
 
@@ -13,12 +15,13 @@ export interface RecordRequest {
   voiceSrc: string;
   vocabularyId: string;
   clubStudyId: string | null;
+  recordId?: string;
 }
 
 export interface RecordModal {
-  club_study_id: string;
-  vocabulary_id: string;
-  user_id: string;
+  club_study_id: DocumentReference | null;
+  vocabulary_id: DocumentReference;
+  user_id: DocumentReference;
   voice_src: string;
   created: string;
   updated: string;

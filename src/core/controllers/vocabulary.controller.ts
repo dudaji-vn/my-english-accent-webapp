@@ -7,13 +7,15 @@ const vocabularyPath = "vocabulary";
 const vocabularyCollection = collection(firebaseDB, vocabularyPath);
 
 const VocabularyController = {
-  getVocabularies: async (lectureId?: string) => {
-    if (lectureId) {
-      const q = query(vocabularyCollection, where("lecture_id", "==", lectureId));
+  getVocabularies: async () => {
+    return (await getDocs(vocabularyCollection)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
+  },
+  getVocabulariesById: async (vocabulariesId: DocumentReference[]) => {
+    const promises = vocabulariesId.map(async (vocabularyRef) => {
+      const q = query(vocabularyCollection, where(documentId(), "==", vocabularyRef));
       return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
-    } else {
-      return (await getDocs(vocabularyCollection)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
-    }
+    });
+    return Promise.all(promises).then();
   },
   filterVocabularies: async (lectureId: string, vocabularies: string[]) => {
     if (vocabularies.length && lectureId) {

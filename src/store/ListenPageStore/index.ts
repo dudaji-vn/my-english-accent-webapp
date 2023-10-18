@@ -37,28 +37,16 @@ const listenPageSlice = createSlice({
     saveQuote: (state: TopicStoreType, { payload }: PayloadAction<string>) => {
       state.quote = payload;
     },
-    saveTopicId: (
-      state: TopicStoreType,
-      { payload }: PayloadAction<string>
-    ) => {
+    saveTopicId: (state: TopicStoreType, { payload }: PayloadAction<string>) => {
       state.topicId = payload;
     },
-    saveUserInfo: (
-      state: TopicStoreType,
-      { payload }: PayloadAction<Partial<UserType>>
-    ) => {
+    saveUserInfo: (state: TopicStoreType, { payload }: PayloadAction<Partial<UserType>>) => {
       state.userInfo = { ...state.userInfo, ...payload };
     },
-    saveNumberRecords: (
-      state: TopicStoreType,
-      { payload }: PayloadAction<number>
-    ) => {
+    saveNumberRecords: (state: TopicStoreType, { payload }: PayloadAction<number>) => {
       state.numberRecords = payload;
     },
-    saveIndexNumberUsers: (
-      state: TopicStoreType,
-      { payload }: PayloadAction<number>
-    ) => {
+    saveIndexNumberUsers: (state: TopicStoreType, { payload }: PayloadAction<number>) => {
       const { min, max, current } = state.numberUsers;
       if (min < payload && max > payload) {
         state.numberUsers.current = payload;
@@ -71,40 +59,8 @@ const listenPageSlice = createSlice({
       }
     },
   },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      LectureApi.endpoints.getTopicType.matchFulfilled,
-      (state, { payload }) => {
-        state.topicId = payload[0].topicId;
-      }
-    );
-    builder.addMatcher(
-      RecordApi.endpoints.getRecord.matchFulfilled,
-      (state, { payload, meta }) => {
-        state.numberRecords = payload.length;
-        state.recordsVoiceSrc = [...(meta.baseQueryMeta as string[])];
-      }
-    );
-    builder.addMatcher(
-      RecordApi.endpoints.getRecords.matchFulfilled,
-      (state, { payload, meta }) => {
-        const { currentIndex, maxIndex } = meta.baseQueryMeta as {
-          currentIndex: number;
-          maxIndex: number;
-        };
-        state.numberUsers.max = maxIndex;
-        state.numberUsers.current = currentIndex;
-      }
-    );
-  },
 });
 
-export const {
-  saveQuote,
-  saveTopicId,
-  saveNumberRecords,
-  saveIndexNumberUsers,
-  saveUserInfo,
-} = listenPageSlice.actions;
+export const { saveQuote, saveTopicId, saveNumberRecords, saveIndexNumberUsers, saveUserInfo } = listenPageSlice.actions;
 
 export default listenPageSlice.reducer;

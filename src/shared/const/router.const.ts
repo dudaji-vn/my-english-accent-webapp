@@ -4,6 +4,7 @@ const ROUTER = {
   LOGIN: "/login",
 
   RECORD: "/record",
+  RERECORD: "/rerecord",
   LISTENING: "/listening",
 
   // subpath
