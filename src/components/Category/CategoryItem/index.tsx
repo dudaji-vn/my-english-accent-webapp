@@ -1,69 +1,43 @@
-import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
-import BoxCard from "@/components/Card";
-import { useNavigate } from "react-router-dom";
-import ROUTER from "@/shared/const/router.const";
 import { useMemo } from "react";
-import { ExerciseType, StageExercise } from "@/shared/type";
-import { useAppDispatch } from "@/store/hook";
-import { filterExerciseBy } from "@/store/ExerciseStore";
+import { useNavigate } from "react-router-dom";
+import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
 
-export interface CategoryItemPropType {
-  idExercise: string;
-  exerciseName: string;
-  imgSrc: string;
-  totalPhrase: number;
-  currentPhrase: number;
-  stage: StageExercise;
-}
+import BoxCard from "@/components/BoxCard";
+import ROUTER from "@/shared/const/router.const";
+import { StageExercise } from "@/shared/type";
+import { EnrollmentResponseType, LectureResponseType } from "@/core/type";
+import { useGetAllVocabularyQuery } from "@/core/services";
 
-export default function CategoryItem({
-  idExercise,
-  exerciseName,
-  imgSrc,
-  totalPhrase,
-  currentPhrase,
-  stage,
-}: CategoryItemPropType) {
+export default function CategoryItem({ currentStep, lectureId, lectureName, stage, imgSrc }: LectureResponseType & EnrollmentResponseType) {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const gotoRecordProgressPage = () => {
-    navigate({
-      pathname: ROUTER.RECORD + `/${exerciseName.toLowerCase()}`,
-    });
-    dispatch(
-      filterExerciseBy({
-        idExercise,
-      } as Pick<ExerciseType, "idExercise">)
-    );
-  };
+  const { data, isFetching } = useGetAllVocabularyQuery();
+
+  const totalVocabulary = useMemo(() => {
+    const isFound = data?.find((val) => val.lectureId === lectureId);
+    return isFound ? isFound.vocabularies.length : 0;
+  }, [isFetching]);
 
   const currentProgress = useMemo(() => {
-    return (currentPhrase * 100) / totalPhrase;
-  }, []);
+    return (currentStep * 100) / totalVocabulary;
+  }, [currentStep, totalVocabulary]);
+
+  const gotoRecordProgressPage = () => {
+    navigate({
+      pathname: ROUTER.RECORD + `/${lectureName.toLowerCase()}`,
+      search: lectureId,
+    });
+  };
 
   return (
-    <BoxCard classes="p-4">
-      <Box
-        className="flex justify-between items-center"
-        onClick={() => gotoRecordProgressPage()}
-      >
+    <BoxCard classes='p-4'>
+      <Box className='flex justify-between items-center' onClick={() => gotoRecordProgressPage()}>
         <Box>
-          <Typography className="text-base-semibold">{exerciseName}</Typography>
-          <Typography className="text-extra-small-regular">
-            {stage != StageExercise.Open
-              ? `${currentPhrase}/${totalPhrase} phrases`
-              : `${totalPhrase} phrases`}
-          </Typography>
+          <Typography className='text-base-semibold'>{lectureName}</Typography>
+          <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${totalVocabulary} phrases` : `${totalVocabulary} phrases`}</Typography>
         </Box>
-        <Avatar src={imgSrc} alt="gallery-icon" className="w-6 h-6" />
+        <Avatar src={imgSrc} alt='gallery-icon' className='w-6 h-6' />
       </Box>
-      {stage != StageExercise.Open && (
-        <LinearProgress
-          variant="determinate"
-          value={currentProgress}
-          className="mt-3"
-        />
-      )}
+      {stage != StageExercise.Open && <LinearProgress variant='determinate' value={currentProgress} className='mt-3' />}
     </BoxCard>
   );
 }

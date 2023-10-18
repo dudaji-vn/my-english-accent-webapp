@@ -1,52 +1,57 @@
 import TranslationCard from "@/components/TranslationCard";
-import {
-  Container,
-  Box,
-  IconButton,
-  Avatar,
-  Typography,
-  LinearProgress,
-} from "@mui/material";
+import { Container, Box, IconButton, Avatar, Typography, LinearProgress } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
-import { ExerciseType, StageExercise, VocabularyType } from "@/shared/type";
-import { persist } from "@/shared/utils/persist.util";
-import { useAppSelector } from "@/store/hook";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { StageExercise } from "@/shared/type";
+import _ from "lodash";
+import { useGetAllVocabulariesByLectureQuery } from "@/core/services/recordProgress.service";
+import { useEffect, useMemo } from "react";
+import ROUTER from "@/shared/const/router.const";
 
 export default function RecordingProgressPage() {
-  const goBack = useNavigate();
+  const navigate = useNavigate();
+  const params = useParams();
+  const search = useLocation();
+  const lectureName = decodeURI(search.pathname).replace("/record/", "");
+  const topicId = search.search.replace("?", "");
 
-  // const [persistData] = useState<VocabularyType & ExerciseType>(() => {
-  //   const data = persist.getVocabulary();
-  //   if (data) return JSON.parse(data);
-  // });
-
-  const data = useAppSelector((state) => state.exercise.filter);
+  const { data } = useGetAllVocabulariesByLectureQuery(topicId);
 
   const currentProgress = useMemo(() => {
-    if (data.currentPhrase?.toString() && data.totalPhrase) {
-      return (data.currentPhrase * 100) / data.totalPhrase;
+    if (data) {
+      console.log((data.currentStep * 100) / data.vocabularies.length, data.vocabularies.length);
+      return (data.currentStep * 100) / data.vocabularies.length;
     }
     return 0;
-  }, []);
+  }, [data]);
+
+  const onHandleClose = () => {
+    navigate(-1);
+  };
+
+  useEffect(() => {
+    if (data) {
+      if (data.stage === StageExercise.Close && data.currentStep === data.vocabularies.length) {
+        const path = `/${params.category}`;
+        navigate({
+          pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
+        });
+      }
+    }
+  }, [data]);
 
   return (
-    <Box className="flex flex-col grow">
-      <Container className="py-4 divider bg-white">
-        <Box className="flex items-center gap-2">
-          <IconButton onClick={() => goBack(-1)}>
-            <Avatar src={CloseIcon} className="w-6 h-6" />
+    <Box className='flex flex-col grow'>
+      <Container className='py-4 divider bg-white'>
+        <Box className='flex items-center gap-2'>
+          <IconButton onClick={onHandleClose}>
+            <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
-          <Typography className="text-large-semibold">
-            {data.exerciseName}
-          </Typography>
+          <Typography className='text-large-semibold'>{lectureName}</Typography>
         </Box>
-        {data.stage != StageExercise.Open && (
-          <LinearProgress value={currentProgress} variant="determinate" />
-        )}
+        {data && data.stage != StageExercise.Open && <LinearProgress variant='determinate' value={currentProgress} className='mt-3' />}
       </Container>
-      <TranslationCard {...data} />
+      {data && <TranslationCard {...data.vocabularies[data.currentStep]} currentStep={data.currentStep} totalStep={data.vocabularies.length} enrollmentId={data.enrollmentId} />}
     </Box>
   );
 }

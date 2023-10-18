@@ -1,47 +1,38 @@
-export enum StageExercise {
-  Inprogress = 0,
-  Open = 1,
-  Close = 2,
-}
-
-export const StageLabel: Record<StageExercise, string> = {
-  "0": "In progress",
-  "1": "Explore",
-  "2": "Archived",
-};
+import { TopicUIType } from "./topic.type";
+import { VocabularyType } from "./vocabulary.type";
 
 export interface UserType {
-  idUser: string;
+  userId: string;
   userName: string;
   password: string;
   displayLanguage: string;
   nativeLanguage: string;
+  favoriteUserIds: string[];
 }
 
-export interface VocabularyType {
-  idVocabulary: string;
-  titlePrimaryLanguage: string;
-  titleSecondaryLanguage: string;
-  ipa: string;
-  voiceSrc: string;
-}
-
-export interface ExerciseType {
-  idExercise: string;
-  exerciseName: string;
-  imgSrc: string;
-  stage: StageExercise;
-  totalPhrase: number;
-  currentPhrase: number;
-}
-
-export interface IExerciseFilterType
-  extends Omit<VocabularyType, "idVocabulary">,
-    ExerciseType {
+export interface IExerciseFilterType extends Omit<VocabularyType, "idVocabulary">, IExerciseType {
   idVocabulary: string[];
 }
 export interface IExerciseType {
-  store: ExerciseType[];
-  filter: IExerciseFilterType;
-  populatedVocabulary: any[];
+  store: TopicUIType[];
+  filter: Omit<TopicUIType, "imgSrc" | "vocabularies">;
+  vocabularies: VocabularyType[];
+  vocabularyIndex: number;
 }
+
+const vocabulary = [
+  {
+    vocabulary_id: "voca_id1",
+    title_display_language: "Hello",
+    phonetic_display_language: "Hello",
+    lecture_id: "",
+    level: "Fresher",
+  },
+  {
+    vocabulary_id: "voca_id2",
+    title_display_language: "Hi",
+    phonetic_display_language: "Hi",
+    lecture_id: "",
+    level: "Immediately",
+  },
+];

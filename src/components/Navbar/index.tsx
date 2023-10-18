@@ -41,14 +41,7 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar
-      position="static"
-      sx={{
-        background: "white",
-        boxShadow: "none",
-        borderBottom: "1px solid #F3F4F6",
-      }}
-    >
+    <AppBar className="sticky bg-white shadow-none divider">
       <Container>
         <Toolbar disableGutters>
           <IconButton>
@@ -57,12 +50,19 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box>
             <Tooltip title="Open settings">
-              <>
+              <Box className="flex items-center">
                 <IconButton onClick={handleOpenUserMenu} disableRipple>
-                  <Avatar alt="avatar-icon" src={AvatarIcon} />
+                  <Avatar
+                    alt="avatar-icon"
+                    sx={{
+                      width: "24px",
+                      height: "24px",
+                    }}
+                    children={<Typography color={"white"}>H</Typography>}
+                  />
                 </IconButton>
                 <img alt="arrow-down-icon" src={ArrowdownIcon} />
-              </>
+              </Box>
             </Tooltip>
             <Menu
               sx={{ mt: "40px" }}

@@ -1,6 +1,13 @@
-const Store = {
+const Reducer = {
   user: "UserStore",
-  exercise:"ExerciseStore"
+  recordPage: "RecordPageStore",
+  listenPage: "ListenPageStore",
+  lectureApi: "LectureApi",
+  recordApi: "RecordApi",
+  vocabularyApi: "VocabularyApi",
+  userApi: "UserApi",
+  initializeApi: "InitializeApi",
+  recordProgress: "RecordProgress",
 };
 
-export default Store;
+export default Reducer;

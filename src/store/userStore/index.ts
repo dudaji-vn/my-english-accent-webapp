@@ -1,24 +1,28 @@
-import Store from "@/shared/const/store.const";
-import { ILogin } from "@/shared/type";
+import Reducer from "@/shared/const/store.const";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserType {
   token: string;
-  national: "kr" | "vi";
+  myInfo: any;
 }
 
 const initialState: UserType = {
   token: "",
-  national: "kr",
+  myInfo: {
+    name: "Thien",
+    nickName: "Thien dev",
+    displayLanguage: "en",
+    nativeLanguage: "vi",
+  },
 };
 
 const userSlice = createSlice({
-  name: Store.user,
+  name: Reducer.user,
   initialState,
   reducers: {
-    login: (state: UserType, action: PayloadAction<ILogin>) => {
-      const { user, password } = action.payload;
-      state.token = user + password;
+    saveToken: (state: UserType, action: PayloadAction<{ token: string }>) => {
+      const { token } = action.payload;
+      state.token = token;
     },
     logout: (state: UserType) => {
       state.token = "";
@@ -26,6 +30,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { saveToken, logout } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { Avatar, Checkbox, Grid, Typography } from "@mui/material";
-import Nationality from "@/components/NationalityCard";
+import PersonInfo from "@/components/NationalityCard";
 import AvatarIcon from "@/assets/icon/avatar-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import MicrophoneIcon from "@/assets/icon/microphone-icon.svg";
 import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CheckIcon from "@/assets/icon/circle-check-icon.svg";
+import { UserType } from "@/shared/type";
 
-export default function RecordCard() {
+interface RecordType {
+  className?: string;
+  userInfo?: UserType;
+  checked?: boolean;
+}
+export default function RecordCard(props: RecordType) {
+  const [checked, setChecked] = useState(() => {
+    if (typeof props.checked === "undefined") {
+      return false;
+    }
+    return props.checked;
+  });
   return (
-    <Grid container spacing={1} padding={2} maxHeight={"120px"}>
+    <Grid
+      container
+      margin={0}
+      width={"100%"}
+      spacing={1}
+      padding={2}
+      className={props.className}
+      onClick={() => setChecked(() => !checked)}
+    >
       <Grid item xs={2}>
         <Avatar alt="avatar-icon" src={AvatarIcon} />
       </Grid>
       <Grid item xs={8}>
-        <Typography>User name 01</Typography>
-        <Nationality />
+        <PersonInfo userInfo={props.userInfo} isShowName isShowNationality />
       </Grid>
       <Grid item xs={2} textAlign={"end"}>
         <Checkbox
+          checked={checked}
           icon={<img src={UncheckIcon} alt="uncheck-icon" />}
-          checkedIcon={<img src={CheckIcon} alt="uncheck-icon" />}
-        ></Checkbox>
+          checkedIcon={<img src={CheckIcon} alt="check-icon" />}
+        />
       </Grid>
       <Grid item xs={12}>
         <Box
@@ -37,7 +57,9 @@ export default function RecordCard() {
             src={MicrophoneIcon}
             className="w-4 h-4"
           />
-          <Typography component={"span"}>2 recorded</Typography>
+          <Typography variant={"body2"} className="text-extra-small-regular">
+            2 recorded
+          </Typography>
         </Box>
       </Grid>
       <Grid item xs={12}>
@@ -49,7 +71,7 @@ export default function RecordCard() {
           }}
         >
           <Avatar alt="message-icon" src={MessageIcon} className="w-4 h-4" />
-          <Typography component={"span"}>
+          <Typography variant={"body2"} className="text-extra-small-regular">
             Speak Korean (native), English
           </Typography>
         </Box>
