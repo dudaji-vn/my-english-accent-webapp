@@ -10,7 +10,7 @@ const LectureController = {
   getTopics: async () => {
     return (await getDocs(lectureCollection)).docs.map((doc) => lectureConvert(doc.id, doc.data() as LectureModal));
   },
-  getTopicById: async (lectureId: string) => {
+  getLectureById: async (lectureId: string) => {
     const q = query(lectureCollection, where(documentId(), "==", lectureId));
     return (await getDocs(q)).docs.map((doc) => lectureConvert(doc.id, doc.data() as LectureModal))[0];
   },

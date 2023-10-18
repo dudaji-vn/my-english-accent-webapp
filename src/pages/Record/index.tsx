@@ -4,7 +4,6 @@ import Category from "@/components/Category";
 import { useNavigate } from "react-router-dom";
 import { StageExercise } from "@/shared/type";
 import ROUTER from "@/shared/const/router.const";
-import { useGetTopicsQuery } from "@/core/services";
 
 import * as _ from "lodash";
 import { nanoid } from "@reduxjs/toolkit";
@@ -14,15 +13,14 @@ import { useGetInitialDataQuery } from "@/core/services/initialize.service";
 export default function RecordingPage() {
   const userId = persist.getMyInfo().userId;
 
-  const { data: dataInit } = useGetInitialDataQuery(userId);
+  const { data } = useGetInitialDataQuery(userId);
 
-  // const { data } = useGetTopicsQuery(userId);
   const goBack = useNavigate();
 
-  if (_.isNull(dataInit) || _.isUndefined(dataInit)) return <></>;
+  if (_.isNull(data) || _.isUndefined(data)) return <></>;
 
   const renderCategory = () => {
-    return Object.entries(dataInit).map(([key, value]) => <Category key={nanoid()} stage={key as unknown as StageExercise} lectureItems={value} />);
+    return Object.entries(data).map(([key, value]) => <Category key={nanoid()} stage={key as unknown as StageExercise} lectureItems={value} />);
   };
 
   return (

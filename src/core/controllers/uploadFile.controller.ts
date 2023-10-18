@@ -5,15 +5,15 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 const audioPath = "audio";
 
 const UploadFileController = {
-  uploadAudio: (audiofile: File, vocabularyId: string, callback: Function) => {
-    const storageRef = ref(firebaseStorage, `${audioPath}/${vocabularyId}/voice_${nanoid()}`);
+  uploadAudio: (audiofile: File, vocabularyId: string, myId: string, callback: Function) => {
+    const storageRef = ref(firebaseStorage, `${audioPath}/${vocabularyId}/${myId}`);
     const uploadTask = uploadBytesResumable(storageRef, audiofile);
 
     uploadTask.on(
       "state_changed",
       (snapshot) => {
         const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        console.log(progress);
+        console.info("uploading::", progress);
       },
       (error) => {
         alert(error);
@@ -22,7 +22,7 @@ const UploadFileController = {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           callback({
             clubStudyId: null,
-            userId: "idUser2JLpns9SQblwSgNigfTwF",
+            userId: myId,
             vocabularyId: vocabularyId,
             voiceSrc: downloadURL,
           });

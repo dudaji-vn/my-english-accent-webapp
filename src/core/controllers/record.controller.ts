@@ -1,5 +1,5 @@
 import { firebaseDB } from "@/config/firebase";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, documentId, getDocs, query, setDoc, where } from "firebase/firestore";
 import { RecordModal, RecordRequest } from "@/core/type";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 import { recordConvert } from "../coverter/record.mapping";
@@ -9,12 +9,39 @@ const recordCollection = collection(firebaseDB, recordPath);
 
 const RecordController = {
   addRecord: (payload: RecordRequest) => {
-    const request = addTimeStamp(payload);
-    console.log("request::", payload);
+    const { userId, clubStudyId, vocabularyId, voiceSrc, recordId } = payload;
+
+    if (recordId) {
+      return setDoc(
+        doc(recordCollection, recordId),
+        {
+          voice_src: voiceSrc,
+        },
+        {
+          merge: true,
+        }
+      );
+    }
+
+    let clubRef = null;
+    const userRef = doc(firebaseDB, "user", userId);
+    const vocabularyRef = doc(firebaseDB, "vocabulary", vocabularyId);
+    if (clubStudyId) {
+      clubRef = doc(firebaseDB, "club", clubStudyId);
+    }
+
+    const request = addTimeStamp({
+      vocabulary_id: vocabularyRef,
+      user_id: userRef,
+      club_id: clubRef,
+      voice_src: voiceSrc,
+    });
+
     addDoc(recordCollection, request);
   },
-  getRecords: async (userId: string) => {
-    const q = query(recordCollection, where("userId", "==", userId));
+  getUserRecords: async (userId: string) => {
+    const userRef = doc(firebaseDB, "user", userId);
+    const q = query(recordCollection, where("user_id", "==", userRef));
     return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
   },
   getRecordsByManyUser: async (usersId: string[]) => {

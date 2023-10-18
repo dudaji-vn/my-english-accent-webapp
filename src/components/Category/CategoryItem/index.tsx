@@ -1,13 +1,26 @@
-import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
-import BoxCard from "@/components/BoxCard";
-import { useNavigate } from "react-router-dom";
-import ROUTER from "@/shared/const/router.const";
 import { useMemo } from "react";
-import { StageExercise, TopicUIType } from "@/shared/type";
-import { LectureResponseType } from "@/core/type";
+import { useNavigate } from "react-router-dom";
+import { Box, Typography, Avatar, LinearProgress } from "@mui/material";
 
-export default function CategoryItem({ lectureName, imgSrc, lectureId, currentStep, stage }: any) {
+import BoxCard from "@/components/BoxCard";
+import ROUTER from "@/shared/const/router.const";
+import { StageExercise } from "@/shared/type";
+import { EnrollmentResponseType, LectureResponseType } from "@/core/type";
+import { useGetAllVocabularyQuery } from "@/core/services";
+
+export default function CategoryItem({ currentStep, lectureId, lectureName, stage, imgSrc }: LectureResponseType & EnrollmentResponseType) {
   const navigate = useNavigate();
+  const { data, isFetching } = useGetAllVocabularyQuery();
+
+  const totalVocabulary = useMemo(() => {
+    const isFound = data?.find((val) => val.lectureId === lectureId);
+    return isFound ? isFound.vocabularies.length : 0;
+  }, [isFetching]);
+
+  const currentProgress = useMemo(() => {
+    return (currentStep * 100) / totalVocabulary;
+  }, [currentStep, totalVocabulary]);
+
   const gotoRecordProgressPage = () => {
     navigate({
       pathname: ROUTER.RECORD + `/${lectureName.toLowerCase()}`,
@@ -15,16 +28,12 @@ export default function CategoryItem({ lectureName, imgSrc, lectureId, currentSt
     });
   };
 
-  const currentProgress = useMemo(() => {
-    return (currentStep * 100) / 2;
-  }, []);
-
   return (
     <BoxCard classes='p-4'>
       <Box className='flex justify-between items-center' onClick={() => gotoRecordProgressPage()}>
         <Box>
           <Typography className='text-base-semibold'>{lectureName}</Typography>
-          <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${2} phrases` : `${2} phrases`}</Typography>
+          <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${totalVocabulary} phrases` : `${totalVocabulary} phrases`}</Typography>
         </Box>
         <Avatar src={imgSrc} alt='gallery-icon' className='w-6 h-6' />
       </Box>

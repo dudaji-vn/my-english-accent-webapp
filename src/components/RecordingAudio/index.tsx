@@ -5,20 +5,22 @@ import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import HearingIcon from "@/assets/icon/hearing-icon.svg";
 import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
-import { nextVocabulary } from "@/store/RecordPageStore";
-import { useAppDispatch } from "@/store/hook";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { useAddRecordMutation } from "@/core/services";
+import persist from "@/shared/utils/persist.util";
+import { useAddRecordMutation, useUpdateEnrollmentStepMutation } from "@/core/services/recordProgress.service";
 
 export interface RecordingAudioProp {
-  topicId: string;
   vocabularyId: string;
+  enrollmentId: string;
+  currentStep: number;
+  totalStep: number;
 }
 
-export default function RecordingAudio({ vocabularyId, topicId }: RecordingAudioProp) {
-  const dispatch = useAppDispatch();
+export default function RecordingAudio({ vocabularyId, currentStep, enrollmentId, totalStep }: RecordingAudioProp) {
+  const myId = persist.getMyInfo().userId;
   const audioEle = useRef<HTMLAudioElement | null>(null);
   const [addRecord] = useAddRecordMutation();
+  const [updateEnrollmentStep] = useUpdateEnrollmentStepMutation();
   const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
     audio: true,
     blobPropertyBag: {
@@ -48,8 +50,13 @@ export default function RecordingAudio({ vocabularyId, topicId }: RecordingAudio
     }
   };
 
-  const callback = (val: any) => {
-    addRecord(val);
+  const callback = (payload: { clubStudyId: string | null; userId: string; vocabularyId: string; voiceSrc: string }) => {
+    addRecord(payload);
+    updateEnrollmentStep({
+      currentStep,
+      totalStep,
+      enrollmentId,
+    });
   };
 
   const onHandleNext = async () => {
@@ -58,10 +65,9 @@ export default function RecordingAudio({ vocabularyId, topicId }: RecordingAudio
       type: "audio/mp3",
     });
 
-    await UploadFileController.uploadAudio(audiofile, vocabularyId, callback);
+    await UploadFileController.uploadAudio(audiofile, vocabularyId, myId, callback);
 
     setToggleSubBtn(false);
-    dispatch(nextVocabulary());
   };
 
   return (
