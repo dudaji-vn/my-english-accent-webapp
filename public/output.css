@@ -356,6 +356,10 @@ h6 {
   height: 100%
 }
 
+#root :is(.max-h-\[208px\]) {
+  max-height: 208px
+}
+
 #root :is(.min-h-screen) {
   min-height: 100vh
 }

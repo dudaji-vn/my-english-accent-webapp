@@ -16,12 +16,14 @@ import ClubStudyPage from "@/pages/Club/ClubStudy";
 import ClubMemberPage from "@/pages/Club/ClubMember";
 import ClubInfoPage from "@/pages/Club/ClubInfo";
 import ClubAddMemberPage from "@/pages/Club/ClubAddMember";
+import ClubRecordingPage from "@/pages/Club/ClubRecording";
+import ClubListeningPage from "@/pages/Club/ClubListening";
 
-function RequireAuth({ isLoggedIn, children }: { isLoggedIn: boolean; children: ReactElement }) {
+function RequireAuth({ isLoggedIn, isShowNavbar, children }: { isLoggedIn: boolean; isShowNavbar: boolean; children: ReactElement }) {
   const location = useLocation();
   return isLoggedIn === true ? (
     <>
-      <Navbar />
+      {isShowNavbar && <Navbar />}
       {children}
     </>
   ) : (
@@ -33,7 +35,7 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.ROOT,
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <HomePage />
       </RequireAuth>
     ),
@@ -45,7 +47,7 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.RECORD,
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <RecordingPage />
       </RequireAuth>
     ),
@@ -53,7 +55,7 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.RECORD + "/:category",
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <RecordingProgressPage />
       </RequireAuth>
     ),
@@ -61,7 +63,7 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.RERECORD + "/:category",
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <RerecordingProgressPage />
       </RequireAuth>
     ),
@@ -69,7 +71,7 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.RECORD + "/:category" + ROUTER.SUMMARY,
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <RecordSummaryPage />
       </RequireAuth>
     ),
@@ -77,7 +79,7 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.CLUB,
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <ClubPage />
       </RequireAuth>
     ),
@@ -85,7 +87,7 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.ADD_CLUB,
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <AddNewClubPage />
       </RequireAuth>
     ),
@@ -93,8 +95,24 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.CLUB_ADD_MEMBER,
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <ClubAddMemberPage />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: ROUTER.CLUB_RECORDING,
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar={false}>
+        <ClubRecordingPage />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: ROUTER.CLUB_LISTENING,
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar={false}>
+        <ClubListeningPage />
       </RequireAuth>
     ),
   },
@@ -105,7 +123,7 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.CLUB_DETAIL,
     element: (
-      <RequireAuth isLoggedIn={isLoggedIn}>
+      <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
         <ClubDetailPage />
       </RequireAuth>
     ),
@@ -124,7 +142,6 @@ const routes = (isLoggedIn: boolean) => [
       },
     ],
   },
-
   {
     path: "*",
     element: <NotFoundPage />,

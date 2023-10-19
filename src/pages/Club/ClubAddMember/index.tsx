@@ -1,6 +1,6 @@
-import { Box, Avatar, Typography, Container, Button, InputBase, Skeleton } from "@mui/material";
+import { Box, Avatar, Typography, Container, Button, InputBase, Skeleton, IconButton } from "@mui/material";
 import SearchIcon from "@/assets/icon/search-icon.svg";
-import NoUserIcon from "@/assets/icon/no-member-club-icon.svg";
+import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import { useNavigate } from "react-router-dom";
 import FooterCard from "@/components/FooterBtn";
 import { ChangeEvent, SyntheticEvent, useState } from "react";

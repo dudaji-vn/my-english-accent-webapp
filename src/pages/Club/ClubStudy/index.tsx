@@ -4,7 +4,10 @@ import { Container, Typography, Avatar, Box, Button } from "@mui/material";
 import UserIcon from "@/assets/icon/user-icon.svg";
 import ClockIcon from "@/assets/icon/clock-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
+import { Navigate, useNavigate } from "react-router-dom";
+import ROUTER from "@/shared/const/router.const";
 export default function ClubStudyPage() {
+  const navigate = useNavigate();
   return (
     <Container className='mt-6 grow'>
       <BoxCard classes='p-4 flex flex-col gap-2'>
@@ -25,10 +28,10 @@ export default function ClubStudyPage() {
         </Typography>
 
         <Box className='flex justify-between gap-4 mt-4'>
-          <Button className='bg-purple-50' variant='outlined' fullWidth>
+          <Button variant='outlined' fullWidth onClick={() => navigate(ROUTER.CLUB_RECORDING)}>
             Record
           </Button>
-          <Button className='bg-purple-50' variant='outlined' fullWidth>
+          <Button variant='outlined' fullWidth onClick={() => navigate(ROUTER.CLUB_LISTENING)}>
             Listen
           </Button>
         </Box>

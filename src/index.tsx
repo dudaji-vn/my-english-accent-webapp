@@ -3,11 +3,9 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { register } from "swiper/element/bundle";
 
-import {
-  Experimental_CssVarsProvider as CssVarsProvider,
-  StyledEngineProvider,
-} from "@mui/material/styles";
+import { Experimental_CssVarsProvider as CssVarsProvider, StyledEngineProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 
 import "./input.css";
@@ -15,28 +13,31 @@ import App from "@/App";
 import theme from "../theme";
 import { store } from "@/store";
 
-declare module "@mui/material/Tabs" {
-  interface AdditionalProps {
-    tabchip: true;
+// register Swiper custom elements
+register();
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "swiper-container": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      "swiper-slide": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
   }
 }
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
   // <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <StyledEngineProvider injectFirst>
-          <CssVarsProvider theme={theme}>
-            <CssBaseline />
-            <App />
-          </CssVarsProvider>
-        </StyledEngineProvider>
-      </BrowserRouter>
-    </Provider>
+  <Provider store={store}>
+    <BrowserRouter>
+      <StyledEngineProvider injectFirst>
+        <CssVarsProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </CssVarsProvider>
+      </StyledEngineProvider>
+    </BrowserRouter>
+  </Provider>
   // </React.StrictMode>
 );
 

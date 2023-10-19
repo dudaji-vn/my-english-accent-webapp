@@ -9,7 +9,8 @@ const ROUTER = {
   ADD_CLUB: "/add-club",
   CLUB_DETAIL: "/club-detail",
   CLUB_ADD_MEMBER: "/club-add-member",
-
+  CLUB_RECORDING: "/club-recording",
+  CLUB_LISTENING: "/club-listening",
 
   //subpath-club-detail
   CLUB_STUDY: "study",
