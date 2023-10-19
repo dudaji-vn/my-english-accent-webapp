@@ -20,6 +20,7 @@ import path from "path";
 import ClubStudyPage from "@/pages/Club/ClubStudy";
 import ClubMemberPage from "@/pages/Club/ClubMember";
 import ClubInfoPage from "@/pages/Club/ClubInfo";
+import ClubAddMemberPage from "@/pages/Club/ClubAddMember";
 
 function RequireAuth({ isLoggedIn, children }: { isLoggedIn: boolean; children: ReactElement }) {
   const location = useLocation();
@@ -91,6 +92,14 @@ const routes = (isLoggedIn: boolean) => [
     element: (
       <RequireAuth isLoggedIn={isLoggedIn}>
         <AddNewClubPage />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: ROUTER.CLUB_ADD_MEMBER,
+    element: (
+      <RequireAuth isLoggedIn={isLoggedIn}>
+        <ClubAddMemberPage />
       </RequireAuth>
     ),
   },
