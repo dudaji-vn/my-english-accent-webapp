@@ -7,6 +7,7 @@ import { ChangeEvent, SyntheticEvent, useState } from "react";
 import persist from "@/shared/utils/persist.util";
 import RecordCard from "@/components/RecordCard";
 import { nanoid } from "@reduxjs/toolkit";
+import ROUTER from "@/shared/const/router.const";
 
 export default function ClubAddMemberPage() {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ export default function ClubAddMemberPage() {
 
   const onHandleAddMember = () => {
     console.log("add");
+    navigate(ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_MEMBER);
   };
 
   return (
@@ -75,7 +77,9 @@ export default function ClubAddMemberPage() {
           {listUser?.length} {listUser?.length > 0 ? "memebrs " : "member "}
           selected
         </Typography> */}
-        <Button className='grow'>Skip</Button>
+        <Button className='grow' onClick={() => navigate(ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY)}>
+          Skip
+        </Button>
         <Button variant='contained' className='rounded-md m-auto grow' onClick={onHandleAddMember}>
           Add
         </Button>

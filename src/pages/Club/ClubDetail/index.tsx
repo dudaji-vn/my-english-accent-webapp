@@ -38,7 +38,7 @@ export default function ClubDetailPage() {
   return (
     <Box className='flex flex-col grow'>
       <Box className='p-4 flex items-center gap-2 bg-white divider'>
-        <Avatar src={CloseIcon} className='w-6 h-6' />
+        <Avatar src={CloseIcon} className='w-6 h-6' onClick={() => navigate(ROUTER.CLUB)} />
         <Typography className='text-large-semibold'>TechTalk and Design Club</Typography>
       </Box>
       <Box className='bg-white divider'>

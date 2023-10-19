@@ -4,8 +4,11 @@ import MessageIcon from "@/assets/icon/message-icon.svg";
 
 import NationalityCard from "@/components/NationalityCard";
 import BoxCard from "@/components/BoxCard";
+import { useNavigate } from "react-router-dom";
+import ROUTER from "@/shared/const/router.const";
 
 export default function ClubMemberPage() {
+  const navigate = useNavigate();
   const renderNoMember = () => {
     return (
       <Box className='flex flex-col justify-center items-center gap-4'>
@@ -16,7 +19,9 @@ export default function ClubMemberPage() {
             Let's add new members and begin learning together.
           </Typography>
         </Box>
-        <Button variant='contained'>Add</Button>
+        <Button variant='contained' onClick={() => navigate(ROUTER.CLUB_ADD_MEMBER)}>
+          Add
+        </Button>
       </Box>
     );
   };
@@ -25,7 +30,9 @@ export default function ClubMemberPage() {
       <Box>
         <Box className='flex justify-between items-center mb-4'>
           <Typography className='text-base-semibold'>Members (1)</Typography>
-          <Button variant='contained'>Add</Button>
+          <Button variant='contained' onClick={() => navigate(ROUTER.CLUB_ADD_MEMBER)}>
+            Add
+          </Button>
         </Box>
         <BoxCard classes='bg-white p-4'>
           <NationalityCard isShowAvatar isShowName isShowNationality />

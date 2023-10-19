@@ -14,12 +14,12 @@ export default function HomePage() {
       <Typography className='text-sm my-6' component={"h6"}>
         Home
       </Typography>
-      <BoxCard classes='flex flex-col gap-2 p-4 mb-4' onClick={() => navigate(ROUTER.RECORD)}>
+      <BoxCard classes='flex flex-col gap-2 p-4 mb-4' onClick={() => navigate(ROUTER.CLUB)}>
         <Avatar src={MicrophoneIcon}></Avatar>
         <Typography className='text-large-semibold'>Club study</Typography>
         <Typography variant='body2'>Enhance your communication skills by study with your colleagues</Typography>
       </BoxCard>
-      <BoxCard classes='flex flex-col gap-2 p-4 mb-4' onClick={() => navigate(ROUTER.CLUB)}>
+      <BoxCard classes='flex flex-col gap-2 p-4 mb-4' onClick={() => navigate(ROUTER.RECORD)}>
         <Avatar src={PeopleIcon} alt='headphone-icon'></Avatar>
         <Typography className='text-large-semibold'>Practice pronunciation</Typography>
         <Typography variant='body2'>Common phrase practice for work</Typography>

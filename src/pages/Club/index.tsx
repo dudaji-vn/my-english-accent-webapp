@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar, Box, Button, Container, IconButton, Paper, Typography } from "@mui/material";
 import AddIcon from "@/assets/icon/add-btn-icon.svg";
 import PeopleIcon from "@/assets/icon/people-icon.svg";
-import RightArrowIcon from "@/assets/icon/arrow-right-icon.svg";
+import Chervon from "@/assets/icon/chevron-left-icon.svg";
 import UserIcon from "@/assets/icon/user-icon.svg";
 import ClockIcon from "@/assets/icon/clock-icon.svg";
 import WebniarIcon from "@/assets/icon/webinar-icon.svg";
@@ -10,11 +10,12 @@ import WebniarIcon from "@/assets/icon/webinar-icon.svg";
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
 import BoxCard from "@/components/BoxCard";
+import ClubCard from "@/components/ClubCard";
 
 export default function ClubPage() {
   const navigate = useNavigate();
 
-  const renderNewClub = () => {
+  const renderNoClub = () => {
     return (
       <Container className='flex flex-col text-center items-center gap-2 mt-12'>
         <Avatar variant='square' src={WebniarIcon} className='w-16 h-16' />
@@ -22,7 +23,7 @@ export default function ClubPage() {
         <Typography className='text-base-regular' variant='body2'>
           A place to connect with multilingual colleagues to enhance communication skills
         </Typography>
-        <Button className='mt-6 w-[162px]' variant='contained'>
+        <Button className='mt-6 w-[162px]' variant='contained' onClick={() => navigate(ROUTER.CLUB_ADD_MEMBER)}>
           Create new club
         </Button>
       </Container>
@@ -39,28 +40,9 @@ export default function ClubPage() {
           </IconButton>
         </Box>
 
-        <BoxCard classes='p-4'>
-          <Box className='flex justify-between items-center'>
-            <Typography className='text-base-semibold'>TechTalk and Design Club</Typography>
-            <IconButton>
-              <Avatar src={RightArrowIcon} alt='speaking-icon' className='w-6 h-6' />
-            </IconButton>
-          </Box>
-
-          <Typography className='text-extra-small-regular' variant='body2'>
-            <IconButton>
-              <Avatar src={UserIcon} alt='speaking-icon' className='w-4 h-4' />
-            </IconButton>
-            1 members
-          </Typography>
-
-          <Typography className='text-extra-small-regular' variant='body2'>
-            <IconButton>
-              <Avatar src={ClockIcon} alt='speaking-icon' className='w-4 h-4' />
-            </IconButton>
-            Created 2 minuted ago
-          </Typography>
-        </BoxCard>
+        <ClubCard />
+        <ClubCard />
+        <ClubCard />
       </Box>
     );
   };
@@ -74,28 +56,9 @@ export default function ClubPage() {
             <Avatar src={AddIcon} alt='speaking-icon' className='w-8 h-8' />
           </IconButton>
         </Box>
-        <BoxCard classes='p-4'>
-          <Box className='flex justify-between items-center'>
-            <Typography className='text-base-semibold'>Multiverse Design-Dev</Typography>
-            <IconButton>
-              <Avatar src={RightArrowIcon} alt='speaking-icon' className='w-6 h-6' />
-            </IconButton>
-          </Box>
-
-          <Typography className='text-extra-small-regular' variant='body2'>
-            <IconButton>
-              <Avatar src={UserIcon} alt='speaking-icon' className='w-4 h-4' />
-            </IconButton>
-            5 members
-          </Typography>
-
-          <Typography className='text-extra-small-regular' variant='body2'>
-            <IconButton>
-              <Avatar src={ClockIcon} alt='speaking-icon' className='w-4 h-4' />
-            </IconButton>
-            Created 2 minuted ago
-          </Typography>
-        </BoxCard>
+        <ClubCard />
+        <ClubCard />
+        <ClubCard />
       </Box>
     );
   };
@@ -103,10 +66,10 @@ export default function ClubPage() {
   return (
     <Box>
       <Box className='px-4 pt-4 pb-2 flex items-center gap-2 bg-white'>
-        <Avatar src={PeopleIcon} className='w-6 h-6' />
+        <Avatar src={Chervon} className='w-6 h-6' onClick={() => navigate(ROUTER.ROOT)} />
         <Typography className='text-large-semibold'>Club study</Typography>
       </Box>
-      {renderNewClub()}
+      {renderNoClub()}
       <Container>
         {renderClubManage()}
         {renderClubJoined()}
