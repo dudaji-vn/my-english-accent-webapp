@@ -17,9 +17,7 @@ export default function ClubPage() {
   const renderNewClub = () => {
     return (
       <Container className='flex flex-col text-center items-center gap-2 mt-12'>
-        <Box>
-          <img src={WebniarIcon} className='w-16 h-16' />
-        </Box>
+        <Avatar variant='square' src={WebniarIcon} className='w-16 h-16' />
         <Typography className='text-large-semibold'>Club study</Typography>
         <Typography className='text-base-regular' variant='body2'>
           A place to connect with multilingual colleagues to enhance communication skills
@@ -70,7 +68,6 @@ export default function ClubPage() {
   const renderClubJoined = () => {
     return (
       <Box>
-        {" "}
         <Box className='flex justify-between items-center mt-4'>
           <Typography className='text-base-semibold'>Club you’ve joined (1)</Typography>
           <IconButton>

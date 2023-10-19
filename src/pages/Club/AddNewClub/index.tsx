@@ -36,8 +36,14 @@ export default function AddNewClubPage() {
             <Box className='w-10 h-10'>
               <img className='w-full h-full' src={WebniarIcon}></img>
             </Box>
-            <Typography> Terminology</Typography>
-            <Checkbox onClick={() => setChecked(() => !checked)} checked={checked} icon={<img src={UncheckIcon} alt='uncheck-icon' />} checkedIcon={<img src={CheckIcon} alt='check-icon' />} />
+            <Typography className='grow'> Terminology</Typography>
+            <Checkbox
+              onClick={() => setChecked(() => !checked)}
+              checked={checked}
+              icon={<img src={UncheckIcon} alt='uncheck-icon' />}
+              checkedIcon={<img src={CheckIcon} alt='check-icon' />}
+              className=''
+            />
           </BoxCard>
         </Box>
       </Container>

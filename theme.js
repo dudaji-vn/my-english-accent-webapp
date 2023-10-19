@@ -1,6 +1,7 @@
 import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfigModule from "./tailwind.config";
+import { tail } from "lodash";
 
 const tailwindConfig = resolveConfig(tailwindConfigModule);
 const theme = extendTheme({
@@ -61,6 +62,15 @@ const theme = extendTheme({
       },
     },
     MuiButton: {
+      variants: [
+        // {
+        //   props: { variant: "contained" },
+        //   style: ({ ownerState }) => ({
+        //     ...ownerState,
+        //     background: ownerState.className.includes("bg-purple-50") ? tailwindConfig.theme.colors.purple[50] : tail.theme.colors.primary,
+        //   }),
+        // },
+      ],
       styleOverrides: {
         root: {
           textTransform: "none",

@@ -115,7 +115,7 @@ export default function ListenPage() {
       <Container className="mt-4 grow">
         <Box className="flex flex-col p-4 rounded-t-lg bg-white">
           <Typography className="text-small-medium">Browse by</Typography>
-          <TabCustom tab={data ?? []} callback={handleChangeTabIndex} />
+          {/* <TabCustom tab={data ?? []} callback={handleChangeTabIndex} /> */}
         </Box>
         <Outlet />
       </Container>
