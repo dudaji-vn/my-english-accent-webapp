@@ -3,6 +3,7 @@ import LectureController from "@/core/controllers/lecture.controller";
 import Reducer from "@/shared/const/store.const";
 import { TopicType } from "@/shared/type";
 
+// TODO: remove this file
 export const LectureApi = createApi({
   reducerPath: Reducer.lectureApi,
   baseQuery: fakeBaseQuery(),

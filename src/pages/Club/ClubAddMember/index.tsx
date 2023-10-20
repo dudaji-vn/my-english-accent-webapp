@@ -1,12 +1,11 @@
-import { Box, Avatar, Typography, Container, Button, InputBase, Skeleton, IconButton } from "@mui/material";
-import SearchIcon from "@/assets/icon/search-icon.svg";
-import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
-import { useNavigate } from "react-router-dom";
-import FooterCard from "@/components/FooterBtn";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { Box, Avatar, Typography, Container, Button, InputBase } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { nanoid } from "@reduxjs/toolkit";
+import SearchIcon from "@/assets/icon/search-icon.svg";
+import FooterCard from "@/components/FooterBtn";
 import persist from "@/shared/utils/persist.util";
 import RecordCard from "@/components/RecordCard";
-import { nanoid } from "@reduxjs/toolkit";
 import ROUTER from "@/shared/const/router.const";
 
 export default function ClubAddMemberPage() {

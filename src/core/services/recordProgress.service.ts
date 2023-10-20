@@ -9,7 +9,7 @@ import RecordController from "../controllers/record.controller";
 import LectureController from "../controllers/lecture.controller";
 
 export const RecordProgress = createApi({
-  reducerPath: Reducer.recordProgress,
+  reducerPath: Reducer.recordProgressApi,
   baseQuery: fakeBaseQuery(),
   tagTypes: ["RecordProgress"],
   endpoints: (builder) => ({

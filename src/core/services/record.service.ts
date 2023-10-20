@@ -6,6 +6,7 @@ import UserController from "../controllers/user.controller";
 import _ from "lodash";
 import VocabularyController from "../controllers/vocabulary.controller";
 
+//TODO: remove this file
 export const RecordApi = createApi({
   reducerPath: Reducer.recordApi,
   baseQuery: fakeBaseQuery(),

@@ -6,6 +6,7 @@ import NationalityCard from "@/components/NationalityCard";
 import BoxCard from "@/components/BoxCard";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
+import UserClub from "@/components/UserClub";
 
 export default function ClubMemberPage() {
   const navigate = useNavigate();
@@ -34,13 +35,7 @@ export default function ClubMemberPage() {
             Add
           </Button>
         </Box>
-        <BoxCard classes='bg-white p-4'>
-          <NationalityCard isShowAvatar isShowName isShowNationality />
-          <Typography className='text-extra-small-regular flex gap-1 mt-2'>
-            <Avatar src={MessageIcon} component={"span"} className='w-4 h-4' />
-            Speak Vietnamese (native), English
-          </Typography>
-        </BoxCard>
+        <UserClub />
       </Box>
     );
   };

@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("swiper/css/bundle");
+
 @layer base {
   html {
     @apply font-inter !important;
@@ -58,3 +60,20 @@
     @apply border-solid border-stroke border-0 border-b-[1px];
   }
 }
+
+
+/* .swiper-pagination {
+  bottom: 95%;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  text-align: center;
+  opacity: 1;
+  background: #d1d5db;
+}
+
+.swiper-pagination-bullet-active {
+  background: #6b7280;
+} */

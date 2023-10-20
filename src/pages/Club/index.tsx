@@ -1,19 +1,20 @@
 import React from "react";
-import { Avatar, Box, Button, Container, IconButton, Paper, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material";
 import AddIcon from "@/assets/icon/add-btn-icon.svg";
-import PeopleIcon from "@/assets/icon/people-icon.svg";
 import Chervon from "@/assets/icon/chevron-left-icon.svg";
-import UserIcon from "@/assets/icon/user-icon.svg";
-import ClockIcon from "@/assets/icon/clock-icon.svg";
 import WebniarIcon from "@/assets/icon/webinar-icon.svg";
 
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
-import BoxCard from "@/components/BoxCard";
 import ClubCard from "@/components/ClubCard";
+import { useGetClubsOwnerQuery } from "@/core/services/club.service";
+import persist from "@/shared/utils/persist.util";
 
 export default function ClubPage() {
   const navigate = useNavigate();
+
+  const myId = persist.getMyInfo().userId;
+  const { data } = useGetClubsOwnerQuery(myId);
 
   const renderNoClub = () => {
     return (
@@ -23,7 +24,7 @@ export default function ClubPage() {
         <Typography className='text-base-regular' variant='body2'>
           A place to connect with multilingual colleagues to enhance communication skills
         </Typography>
-        <Button className='mt-6 w-[162px]' variant='contained' onClick={() => navigate(ROUTER.CLUB_ADD_MEMBER)}>
+        <Button className='mt-6 w-[162px]' variant='contained' onClick={() => navigate(ROUTER.ADD_CLUB)}>
           Create new club
         </Button>
       </Container>
@@ -32,35 +33,37 @@ export default function ClubPage() {
 
   const renderClubManage = () => {
     return (
-      <Box>
+      <Container>
         <Box className='flex justify-between items-center mt-4'>
-          <Typography className='text-base-semibold'>Clubs you manage</Typography>
+          <Typography className='text-base-semibold'>Clubs you manage ({data && data.clubsOwner.length})</Typography>
           <IconButton>
-            <Avatar src={AddIcon} alt='speaking-icon' className='w-8 h-8' />
+            <Avatar src={AddIcon} alt='speaking-icon' className='w-8 h-8' onClick={() => navigate(ROUTER.ADD_CLUB)} />
           </IconButton>
         </Box>
-
-        <ClubCard />
-        <ClubCard />
-        <ClubCard />
-      </Box>
+        {data &&
+          data.clubsOwner.map((club) => {
+            return <ClubCard {...club} key={club.clubId} />;
+          })}
+      </Container>
     );
   };
 
   const renderClubJoined = () => {
-    return (
-      <Box>
-        <Box className='flex justify-between items-center mt-4'>
-          <Typography className='text-base-semibold'>Club you’ve joined (1)</Typography>
-          <IconButton>
-            <Avatar src={AddIcon} alt='speaking-icon' className='w-8 h-8' />
-          </IconButton>
+    if (data && data.clubsJoined.length > 0) {
+      return (
+        <Box>
+          <Box className='flex justify-between items-center mt-4'>
+            <Typography className='text-base-semibold'>Club you’ve joined ({data && data.clubsJoined.length})</Typography>
+            <IconButton>
+              <Avatar src={AddIcon} alt='speaking-icon' className='w-8 h-8' />
+            </IconButton>
+          </Box>
+          {data.clubsJoined.map((club) => {
+            return <ClubCard {...club} key={club.clubId} />;
+          })}
         </Box>
-        <ClubCard />
-        <ClubCard />
-        <ClubCard />
-      </Box>
-    );
+      );
+    }
   };
 
   return (
@@ -69,11 +72,8 @@ export default function ClubPage() {
         <Avatar src={Chervon} className='w-6 h-6' onClick={() => navigate(ROUTER.ROOT)} />
         <Typography className='text-large-semibold'>Club study</Typography>
       </Box>
-      {renderNoClub()}
-      <Container>
-        {renderClubManage()}
-        {renderClubJoined()}
-      </Container>
+      {data && data.clubsOwner.length > 0 ? renderClubManage() : renderNoClub()}
+      <Container>{renderClubJoined()}</Container>
     </Box>
   );
 }

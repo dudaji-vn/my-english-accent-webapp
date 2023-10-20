@@ -6,9 +6,10 @@ import listenPageReducer from "@/store/ListenPageStore";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { RecordApi, LectureApi, UserApi, VocabularyApi } from "@/core/services";
 import InitializeApi from "@/core/services/initialize.service";
-import RecordProgress from "@/core/services/recordProgress.service";
+import RecordProgressApi from "@/core/services/recordProgress.service";
+import ClubStudyApi from "@/core/services/club.service";
 
-const middleware = [LectureApi.middleware, RecordApi.middleware, VocabularyApi.middleware, UserApi.middleware, InitializeApi.middleware, RecordProgress.middleware] as any;
+const middleware = [LectureApi.middleware, RecordApi.middleware, VocabularyApi.middleware, UserApi.middleware, InitializeApi.middleware, RecordProgressApi.middleware, ClubStudyApi.middleware] as any;
 
 export const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
     VocabularyApi: VocabularyApi.reducer,
     UserApi: UserApi.reducer,
     InitializeApi: InitializeApi.reducer,
-    RecordProgress: RecordProgress.reducer,
+    RecordProgressApi: RecordProgressApi.reducer,
+    ClubStudyApi: ClubStudyApi.reducer,
     user: userReducer,
     recordPage: recordPageReduer,
     listenPage: listenPageReducer,

@@ -15,15 +15,6 @@ import { store } from "@/store";
 
 // register Swiper custom elements
 register();
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "swiper-container": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      "swiper-slide": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    }
-  }
-}
-
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
