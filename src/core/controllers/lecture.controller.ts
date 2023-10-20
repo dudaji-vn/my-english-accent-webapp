@@ -7,7 +7,7 @@ const lecturePath = "lecture";
 const lectureCollection = collection(firebaseDB, lecturePath);
 
 const LectureController = {
-  getTopics: async () => {
+  getLectures: async () => {
     return (await getDocs(lectureCollection)).docs.map((doc) => lectureConvert(doc.id, doc.data() as LectureModal));
   },
   getLectureById: async (lectureId: string) => {

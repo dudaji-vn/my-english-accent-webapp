@@ -1,19 +1,18 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import LectureController from "@/core/controllers/lecture.controller";
 import Reducer from "@/shared/const/store.const";
-import { TopicType } from "@/shared/type";
+import { LectureResponseType } from "../type";
 
-// TODO: remove this file
 export const LectureApi = createApi({
   reducerPath: Reducer.lectureApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    getTopicType: builder.query<TopicType[], void>({
+    getLectures: builder.query<LectureResponseType[], void>({
       async queryFn() {
         try {
-          const topics: any = await LectureController.getTopics();
-          //default topicId
-          return { data: topics };
+          const lectures = await LectureController.getLectures();
+          console.log(lectures);
+          return { data: lectures };
         } catch (error) {
           return { error };
         }
@@ -22,6 +21,6 @@ export const LectureApi = createApi({
   }),
 });
 
-export const { useGetTopicTypeQuery } = LectureApi;
+export const { useGetLecturesQuery } = LectureApi;
 
 export default LectureApi;
