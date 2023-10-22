@@ -10,33 +10,70 @@ import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CheckIcon from "@/assets/icon/circle-check-icon.svg";
 import FooterCard from "@/components/FooterBtn";
 import { useGetLecturesQuery } from "@/core/services";
+import { useSetClubMutation } from "@/core/services/club.service";
+import persist from "@/shared/utils/persist.util";
+import { nanoid } from "@reduxjs/toolkit";
 
-function LectureCard({ lectureName, lectureId, imgSrc, classes }: { lectureName: string; lectureId: string; imgSrc: string; classes: string }) {
+function LectureCard({ lectureName, lectureId, imgSrc, callback }: { lectureName: string; lectureId: string; imgSrc: string; callback: Function }) {
   const [checked, setChecked] = useState(false);
 
+  const onSelectLecture = () => {
+    setChecked(() => !checked);
+    callback(lectureId);
+  };
+
   return (
-    <BoxCard classes={classes}>
+    <Box className='flex items-center gap-2 p-4 bg-white divider' onClick={onSelectLecture}>
       <Box className='w-10 h-10'>
         <Avatar variant='square' className='w-full h-full' src={imgSrc}></Avatar>
       </Box>
       <Typography className='grow'> {lectureName}</Typography>
-      <Checkbox onClick={() => setChecked(() => !checked)} checked={checked} icon={<img src={UncheckIcon} alt='uncheck-icon' />} checkedIcon={<img src={CheckIcon} alt='check-icon' />} className='' />
-    </BoxCard>
+      <Checkbox
+        checked={checked}
+        icon={<Avatar variant='square' src={UncheckIcon} alt='uncheck-icon' className='w-4 h-4' />}
+        checkedIcon={<Avatar variant='square' src={CheckIcon} alt='check-icon' className='w-4 h-4' />}
+      />
+    </Box>
   );
 }
 
 export default function AddNewClubPage() {
   const navigate = useNavigate();
 
+  const myId = persist.getMyInfo().userId;
   const { data } = useGetLecturesQuery();
+  const [addClub] = useSetClubMutation();
 
   console.log(data);
 
   const [clubName, setClubName] = useState("");
-  const [lectureId, setLectureId] = useState("");
+  const [lecturesId, setLecturesId] = useState<string[]>([]);
+
+  const onSaveLectureId = (param: string) => {
+    const isExist = lecturesId.find((id) => id === param);
+    if (isExist) {
+      const removed = lecturesId.filter((id) => id != param);
+      setLecturesId(() => [...removed]);
+    } else {
+      setLecturesId(() => [...lecturesId, param]);
+    }
+  };
 
   const onCreateNewClub = () => {
-    console.log(clubName, lectureId);
+    const clubId = `clubId_${nanoid()}`;
+    addClub({
+      clubId,
+      clubName,
+      lectures: lecturesId,
+      ownerUserId: myId,
+    });
+
+    navigate(
+      {
+        pathname: ROUTER.CLUB_ADD_MEMBER,
+      },
+      { state: { clubId } }
+    );
   };
 
   return (
@@ -64,20 +101,11 @@ export default function AddNewClubPage() {
           <Typography className='text-small-medium mb-4' variant='body2'>
             Lecture (topic)
           </Typography>
-          {data &&
-            data.map((lectue) => (
-              <LectureCard
-                key={lectue.lectureId}
-                lectureName={lectue.lectureName}
-                lectureId={lectue.lectureId}
-                imgSrc={lectue.imgSrc}
-                classes='flex items-center gap-2 p-4 rounded-none divider first:rounded-t-lg last:rounded-b-lg'
-              />
-            ))}
+          {data && data.map((lectue) => <LectureCard key={lectue.lectureId} lectureName={lectue.lectureName} imgSrc={lectue.imgSrc} lectureId={lectue.lectureId} callback={onSaveLectureId} />)}
         </Box>
       </Container>
       <FooterCard classes='items-center'>
-        <Button variant='contained' className='rounded-md m-auto' onClick={onCreateNewClub}>
+        <Button variant='contained' className='rounded-md m-auto' onClick={onCreateNewClub} disabled={!clubName || lecturesId.length === 0}>
           <Typography className='text-base-medium text-white'>Create new</Typography>
         </Button>
       </FooterCard>

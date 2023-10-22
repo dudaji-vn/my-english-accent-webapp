@@ -24,10 +24,10 @@ export const RecordApi = createApi({
     getRecords: builder.query<any, { usersId: string[]; topicId?: string }>({
       async queryFn(payload: { usersId: string[]; topicId: string }) {
         try {
-          const userResponse = await UserController.getUsersBy(payload.usersId);
+          // const userResponse = await UserController.getUsersBy(payload.usersId);
 
           return {
-            data: userResponse,
+            data: [],
           };
         } catch (error) {
           return { error };

@@ -1,4 +1,4 @@
-import { NativeVocabularyModal, NativeVocabularyTypeResponse, VocabularyModal, VocabularyTypeResponse } from "../type";
+import { ClubVocabularyModal, ClubVocabularyTypeResponse, NativeVocabularyModal, NativeVocabularyTypeResponse, VocabularyModal, VocabularyTypeResponse } from "../type";
 
 export const vocbularyConvert = (id: string, vocabulary: VocabularyModal): VocabularyTypeResponse => {
   return {
@@ -19,5 +19,16 @@ export const nativeVocbularyConvert = (id: string, vocabulary: NativeVocabularyM
     language: vocabulary.language,
     updated: vocabulary.updated,
     created: vocabulary.created,
+  };
+};
+
+export const clubVocbularyConvert = (id: string, vocabulary: ClubVocabularyModal): ClubVocabularyTypeResponse => {
+  return {
+    challengeId: vocabulary.challenge_id,
+    vocabularyId: vocabulary.vocabulary_id,
+    updated: vocabulary.updated,
+    created: vocabulary.created,
+    number: vocabulary.number,
+    clubVocabularyId: id,
   };
 };

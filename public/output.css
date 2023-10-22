@@ -408,6 +408,10 @@ h6 {
   flex-grow: 1
 }
 
+#root :is(.list-disc) {
+  list-style-type: disc
+}
+
 #root :is(.flex-col) {
   flex-direction: column
 }
@@ -458,10 +462,6 @@ h6 {
 
 #root :is(.rounded-md) {
   border-radius: 0.375rem
-}
-
-#root :is(.rounded-none) {
-  border-radius: 0px
 }
 
 #root :is(.rounded-b-lg) {
@@ -604,9 +604,41 @@ h6 {
   background: #6b7280;
 } */
 
+#root :is(.first\:rounded-none:first-child) {
+  border-radius: 0px
+}
+
+#root :is(.first\:rounded-lg:first-child) {
+  border-radius: 0.5rem
+}
+
 #root :is(.first\:rounded-t-lg:first-child) {
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem
+}
+
+#root :is(.first\:rounded-e-3xl:first-child) {
+  border-start-end-radius: 1.5rem;
+  border-end-end-radius: 1.5rem
+}
+
+#root :is(.first\:bg-primary:first-child) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
+}
+
+#root :is(.first\:bg-secondary:first-child) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(19 194 150 / var(--tw-bg-opacity))
+}
+
+#root :is(.first\:bg-white:first-child) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+
+#root :is(.first\:font-bold:first-child) {
+  font-weight: 700
 }
 
 #root :is(.last\:mb-0:last-child) {
@@ -618,7 +650,32 @@ h6 {
   border-bottom-left-radius: 0.5rem
 }
 
+#root :is(.last\:bg-secondary:last-child) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(19 194 150 / var(--tw-bg-opacity))
+}
+
+#root :is(.odd\:bg-primary:nth-child(odd)) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
+}
+
+#root :is(.even\:rounded-t-lg:nth-child(even)) {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem
+}
+
+#root :is(.even\:bg-primary:nth-child(even)) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
+}
+
 #root :is(.hover\:bg-white:hover) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+
+#root :is(.\[\&\>\*\:first-child\]\:rounded-t-lg>*:first-child) {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem
 }

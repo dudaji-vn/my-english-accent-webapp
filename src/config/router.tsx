@@ -129,15 +129,15 @@ const routes = (isLoggedIn: boolean) => [
     ),
     children: [
       {
-        path: ROUTER.CLUB_STUDY,
+        path: ROUTER.CLUB_STUDY + "/:clubId",
         element: <ClubStudyPage />,
       },
       {
-        path: ROUTER.CLUB_MEMBER,
+        path: ROUTER.CLUB_MEMBER + "/:clubId",
         element: <ClubMemberPage />,
       },
       {
-        path: ROUTER.CLUB_INFO,
+        path: ROUTER.CLUB_INFO + "/:clubId",
         element: <ClubInfoPage />,
       },
     ],

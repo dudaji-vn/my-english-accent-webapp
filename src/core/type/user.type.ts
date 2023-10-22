@@ -10,6 +10,7 @@ export interface UserResponseType {
   level: Level;
   favoriteUserIds: string[];
   googleId: string;
+  displayLanguage:Language
 }
 
 export interface IUserAuth {

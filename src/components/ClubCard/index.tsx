@@ -6,15 +6,17 @@ import ClockIcon from "@/assets/icon/clock-icon.svg";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { ClubResponseType } from "@/core/type";
+import { timeSince } from "@/shared/utils/timeSince.util";
 export default function ClubCard(props: ClubResponseType) {
   const navigate = useNavigate();
+  console.log(props)
   const onRedirectToClub = () => {
     navigate({
-      pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY,
+      pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + props.clubId,
     });
   };
   return (
-    <BoxCard classes='p-4' onClick={onRedirectToClub}>
+    <BoxCard classes='p-4 mt-4' onClick={onRedirectToClub}>
       <Box className='flex justify-between items-center'>
         <Typography className='text-base-semibold'>{props.clubName}</Typography>
         <IconButton>
@@ -33,7 +35,7 @@ export default function ClubCard(props: ClubResponseType) {
         <IconButton>
           <Avatar src={ClockIcon} alt='speaking-icon' className='w-4 h-4' />
         </IconButton>
-        {"Created" + props.created}
+        {"Created " + timeSince(new Date(props.created.seconds * 1000).getTime()) + " ago"}
       </Typography>
     </BoxCard>
   );

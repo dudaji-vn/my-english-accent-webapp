@@ -36,8 +36,8 @@ export default function ClubPage() {
       <Container>
         <Box className='flex justify-between items-center mt-4'>
           <Typography className='text-base-semibold'>Clubs you manage ({data && data.clubsOwner.length})</Typography>
-          <IconButton>
-            <Avatar src={AddIcon} alt='speaking-icon' className='w-8 h-8' onClick={() => navigate(ROUTER.ADD_CLUB)} />
+          <IconButton onClick={() => navigate(ROUTER.ADD_CLUB)}>
+            <Avatar src={AddIcon} alt='speaking-icon' className='w-8 h-8' />
           </IconButton>
         </Box>
         {data &&

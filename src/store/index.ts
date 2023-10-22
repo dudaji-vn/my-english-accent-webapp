@@ -8,8 +8,18 @@ import { RecordApi, LectureApi, UserApi, VocabularyApi } from "@/core/services";
 import InitializeApi from "@/core/services/initialize.service";
 import RecordProgressApi from "@/core/services/recordProgress.service";
 import ClubStudyApi from "@/core/services/club.service";
+import ChallengeApi from "@/core/services/challenge.service";
 
-const middleware = [LectureApi.middleware, RecordApi.middleware, VocabularyApi.middleware, UserApi.middleware, InitializeApi.middleware, RecordProgressApi.middleware, ClubStudyApi.middleware] as any;
+const middleware = [
+  LectureApi.middleware,
+  RecordApi.middleware,
+  VocabularyApi.middleware,
+  UserApi.middleware,
+  InitializeApi.middleware,
+  RecordProgressApi.middleware,
+  ClubStudyApi.middleware,
+  ChallengeApi.middleware,
+] as any;
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +30,7 @@ export const store = configureStore({
     InitializeApi: InitializeApi.reducer,
     RecordProgressApi: RecordProgressApi.reducer,
     ClubStudyApi: ClubStudyApi.reducer,
+    ChallengeApi: ChallengeApi.reducer,
     user: userReducer,
     recordPage: recordPageReduer,
     listenPage: listenPageReducer,

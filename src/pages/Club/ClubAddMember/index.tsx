@@ -1,19 +1,26 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
-import { Box, Avatar, Typography, Container, Button, InputBase } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, Avatar, Typography, Container, Button, InputBase, IconButton } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 import { nanoid } from "@reduxjs/toolkit";
 import SearchIcon from "@/assets/icon/search-icon.svg";
+import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import FooterCard from "@/components/FooterBtn";
 import persist from "@/shared/utils/persist.util";
 import RecordCard from "@/components/RecordCard";
 import ROUTER from "@/shared/const/router.const";
+import { useSetClubMutation } from "@/core/services/club.service";
+import { useGetUsersQuery } from "@/core/services";
 
 export default function ClubAddMemberPage() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+
+  const { data: userList } = useGetUsersQuery();
+
+  const [updateClub] = useSetClubMutation();
   const [search, setSearch] = useState("");
-  const [listUser, setListUser] = useState(() => {
-    return persist.getMyInfo().favoriteUserIds ?? [];
-  });
+  const [members, setMembers] = useState<string[]>([]);
+
   const handleChangeTabIndex = (newValue: number) => {
     console.log(newValue);
   };
@@ -24,35 +31,42 @@ export default function ClubAddMemberPage() {
   };
 
   const onHandleListUser = (id: string) => {
-    let result: string[] = [...listUser];
-    const isFound = listUser.includes(id);
+    let result: string[] = [...members];
+    const isFound = members.includes(id);
     if (isFound) {
-      const removed = listUser.filter((userId) => userId != id);
+      const removed = members.filter((userId) => userId != id);
       result = [...removed];
     } else {
       result.push(id);
     }
-    setListUser(() => result);
+    setMembers(() => result);
   };
 
   const renderUsersList = () => {
-    return [1, 2, 3].map(() => {
-      return <RecordCard key={nanoid()} className='last:rounded-b-lg divider' />;
-    });
+    if (userList && userList.length > 0)
+      return userList.map((user) => {
+        return <RecordCard key={user.userId} userInfo={user} className='last:rounded-b-lg divider' callback={onHandleListUser} />;
+      });
   };
 
   const onHandleAddMember = () => {
-    console.log("add");
-    navigate(ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_MEMBER);
+    console.log("add", members);
+    updateClub({
+      clubId: state.clubId,
+      members,
+    });
+    navigate({
+      pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_MEMBER + "/" + state.clubId,
+    });
   };
 
   return (
     <Box className='flex flex-col grow'>
       <Box className='p-4 flex items-center gap-2 divider bg-white'>
         {/* hidden in add member page */}
-        {/* <IconButton>
+        <IconButton>
           <Avatar src={ChevronIcon} className='w-6 h-6' />
-        </IconButton> */}
+        </IconButton>
 
         <Box>
           <Typography className='text-large-semibold'>Add member</Typography>
@@ -76,7 +90,7 @@ export default function ClubAddMemberPage() {
           {listUser?.length} {listUser?.length > 0 ? "memebrs " : "member "}
           selected
         </Typography> */}
-        <Button className='grow' onClick={() => navigate(ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY)}>
+        <Button className='grow' onClick={() => navigate(ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + state.clubId)}>
           Skip
         </Button>
         <Button variant='contained' className='rounded-md m-auto grow' onClick={onHandleAddMember}>

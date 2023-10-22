@@ -1,43 +1,48 @@
 import { firebaseDB } from "@/config/firebase";
-import { DocumentReference, collection, doc, documentId, getDocs, query, updateDoc, where } from "firebase/firestore";
-import { ClubModal, LectureModal } from "../type";
+import { DocumentReference, addDoc, collection, doc, documentId, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { ClubModal, ClubRequest, LectureModal } from "../type";
 import { clubConvert } from "../coverter/club.mapping";
+import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 
-const club = "club";
-const clubCollection = collection(firebaseDB, club);
+const clubPath = "club";
+const clubCollection = collection(firebaseDB, clubPath);
 
 const ClubController = {
   getClubByUserId: async (userId: string, key: "owner_user_id" | "members") => {
-    // const promises = usersId.map(async (userId) => {
-    //   const userRef = doc(firebaseDB, "user", userId);
-    //   const q = query(clubCollection, where(key, "==", userRef));
-    //   console.log(key, userRef);
-    //   return (await getDocs(q)).docs.map((doc) => clubConvert(doc.id, doc.data() as ClubModal));
-    // });
-    // return Promise.all(promises).then();
     const userRef = doc(firebaseDB, "user", userId);
     const q = query(clubCollection, where(key, "==", userRef));
-    console.log(key, userRef);
     return (await getDocs(q)).docs.map((doc) => clubConvert(doc.id, doc.data() as ClubModal));
   },
-  // getEnrollmentByLectures: async (lecturesId: DocumentReference[]) => {
-  //   const promises = lecturesId.map(async (lecture) => {
-  //     const q = query(collection(firebaseDB, "lecture"), where(documentId(), "==", lecture));
-  //     return (await getDocs(q)).docs.map((doc) => lectureConvert(doc.id, doc.data() as LectureModal));
-  //   });
-  //   return Promise.all(promises).then();
-  // },
-  // getEnrollmentByLecture: async (lectureId: string) => {
-  //   const lectureRef = doc(firebaseDB, "lecture", lectureId);
-  //   const q = query(clubCollection, where("lecture_id", "==", lectureRef));
-  //   return (await getDocs(q)).docs.map((doc) => enrollmentConvert(doc.id, doc.data() as EnrollmentModal));
-  // },
-  // updateEnrollment: async (payload: { enrollmentId: string; current_step: number; stage: number }) => {
-  //   const { enrollmentId, ...restPayload } = payload;
-  //   console.log(payload);
-  //   const enrollRef = doc(firebaseDB, club, enrollmentId);
-  //   await updateDoc(enrollRef, restPayload);
-  // },
+  updateClub: async (payload: ClubRequest) => {
+    const { clubName, lectures, ownerUserId, members, clubId } = payload;
+    if (clubName && lectures && ownerUserId && clubId) {
+      const userRef = doc(firebaseDB, "user", ownerUserId);
+      const lecturesRef = lectures.map((id) => doc(firebaseDB, "lecture", id));
+      const request = addTimeStamp({
+        owner_user_id: userRef,
+        lectures: lecturesRef,
+        club_name: clubName,
+        description: "",
+        members: [],
+      });
+      return await setDoc(doc(clubCollection, clubId), request);
+    } else if (members && clubId) {
+      const usersRef = members.map((id) => doc(firebaseDB, "user", id));
+      return await setDoc(
+        doc(clubCollection, clubId),
+        {
+          members: usersRef,
+        },
+        {
+          merge: true,
+        }
+      );
+    }
+  },
+  getMembers: async (clubId: string) => {
+    const q = query(clubCollection, where(documentId(), "==", clubId));
+    return (await getDocs(q)).docs.map((doc) => clubConvert(doc.id, doc.data() as ClubModal));
+  },
 };
 
 export default ClubController;

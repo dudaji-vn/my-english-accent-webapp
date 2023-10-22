@@ -10,5 +10,6 @@ export const userConvert = (id: string, user: UserModal): UserResponseType => {
     nickName: user.nick_name,
     userName: user.user_name,
     userId: id,
+    displayLanguage: user.display_language,
   };
 };

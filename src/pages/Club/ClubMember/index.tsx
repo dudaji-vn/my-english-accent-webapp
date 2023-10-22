@@ -4,12 +4,25 @@ import MessageIcon from "@/assets/icon/message-icon.svg";
 
 import NationalityCard from "@/components/NationalityCard";
 import BoxCard from "@/components/BoxCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import UserClub from "@/components/UserClub";
+import { useGetMemenbersInfoQuery } from "@/core/services/club.service";
+import { useMemo } from "react";
 
 export default function ClubMemberPage() {
   const navigate = useNavigate();
+  const { clubId } = useParams();
+  const { data } = useGetMemenbersInfoQuery(clubId ?? "");
+  const language = useMemo(() => {
+    if (data?.ownerInfo.nativeLanguage === "vi") {
+      return "Vietnamese";
+    } else if (data?.ownerInfo.nativeLanguage === "en") {
+      return "English";
+    } else if (data?.ownerInfo.nativeLanguage === "kr") {
+      return "Korea";
+    }
+  }, [data?.ownerInfo]);
   const renderNoMember = () => {
     return (
       <Box className='flex flex-col justify-center items-center gap-4'>
@@ -27,30 +40,27 @@ export default function ClubMemberPage() {
     );
   };
   const renderMembers = () => {
-    return (
-      <Box>
-        <Box className='flex justify-between items-center mb-4'>
-          <Typography className='text-base-semibold'>Members (1)</Typography>
-          <Button variant='contained' onClick={() => navigate(ROUTER.CLUB_ADD_MEMBER)}>
-            Add
-          </Button>
-        </Box>
-        <UserClub />
-      </Box>
-    );
+    if (data && data.membersInfo)
+      return (
+        <>
+          <Box className='flex justify-between items-center mb-4'>
+            <Typography className='text-base-semibold'>
+              {data?.membersInfo.length > 1 ? "Members" : " Member"} ({data?.membersInfo.length})
+            </Typography>
+            <Button variant='contained' onClick={() => navigate(ROUTER.CLUB_ADD_MEMBER)}>
+              Add
+            </Button>
+          </Box>
+          {data.membersInfo.map((member) => (
+            <UserClub {...member} key={member.userId} />
+          ))}
+        </>
+      );
   };
   return (
     <Container className='mt-6'>
-      <Box>
-        <Typography className='text-base-semibold'>Admin</Typography>
-        <BoxCard classes='bg-white p-4 mt-4 mb-6'>
-          <NationalityCard isShowAvatar isShowName isShowNationality />
-          <Typography className='text-extra-small-regular flex gap-1 mt-2'>
-            <Avatar src={MessageIcon} component={"span"} className='w-4 h-4' />
-            Speak Vietnamese (native), English
-          </Typography>
-        </BoxCard>
-      </Box>
+      <Typography className='text-base-semibold mb-4'>Admin</Typography>
+      {data && <UserClub {...data.ownerInfo} />}
       {renderMembers()}
     </Container>
   );

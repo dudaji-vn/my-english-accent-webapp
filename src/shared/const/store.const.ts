@@ -9,6 +9,7 @@ const Reducer = {
   initializeApi: "InitializeApi",
   recordProgressApi: "RecordProgressApi",
   clubStudyApi: "ClubStudyApi",
+  challengeApi: "ChallengeApi",
 };
 
 export default Reducer;

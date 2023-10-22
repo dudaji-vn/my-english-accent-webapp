@@ -45,3 +45,19 @@ export interface VocabularyGroupByLecture {
 export interface VocabularyMergedEnrollMent extends EnrollmentResponseType {
   vocabularies: VocabularyTypeResponse[] & NativeVocabularyTypeResponse[] & EnrollmentResponseType[];
 }
+
+export interface ClubVocabularyTypeResponse {
+  challengeId: DocumentReference;
+  vocabularyId: DocumentReference;
+  updated: string;
+  created: string;
+  number: number;
+  clubVocabularyId:string
+}
+export interface ClubVocabularyModal {
+  challenge_id: DocumentReference;
+  vocabulary_id: DocumentReference;
+  updated: string;
+  created: string;
+  number: number;
+}

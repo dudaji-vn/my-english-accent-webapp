@@ -3,6 +3,7 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import UserController from "../controllers/user.controller";
 import persist from "@/shared/utils/persist.util";
 import Reducer from "@/shared/const/store.const";
+import { UserResponseType } from "../type";
 
 export const UserApi = createApi({
   reducerPath: Reducer.userApi,
@@ -12,7 +13,7 @@ export const UserApi = createApi({
       async queryFn(payload) {
         try {
           const myInfo: any = await UserController.login(payload);
-          console.log(myInfo)
+          console.log(myInfo);
           persist.saveMyInfo(myInfo);
           return { data: myInfo };
         } catch (error) {
@@ -20,7 +21,7 @@ export const UserApi = createApi({
         }
       },
     }),
-    getUsers: builder.query<any[], void>({
+    getUsers: builder.query<UserResponseType[], void>({
       async queryFn() {
         try {
           const users = await UserController.getUsers();

@@ -10,6 +10,7 @@ import TabCustom from "@/components/TabCustom";
 import { useFavoriteUsersMutation, useGetUsersQuery } from "@/core/services";
 import { UserType } from "@/shared/type";
 import persist from "@/shared/utils/persist.util";
+import { UserResponseType } from "@/core/type";
 
 export default function ChooseUserPage() {
   const { data: dataUser } = useGetUsersQuery();
@@ -44,11 +45,11 @@ export default function ChooseUserPage() {
 
   const renderUsers = () => {
     if (dataUser) {
-      return dataUser.map((user: UserType) => {
+      return dataUser.map((user: UserResponseType) => {
         const favoritedUser = listUser.includes(user.userId);
         return (
           <Box key={user.userId} onClick={() => onHandleListUser(user.userId)}>
-            <RecordCard className='rounded-b-lg divider' userInfo={user} checked={favoritedUser} />
+            <RecordCard className='rounded-b-lg divider' userInfo={user} checked={favoritedUser} callback={onHandleListUser} />
           </Box>
         );
       });

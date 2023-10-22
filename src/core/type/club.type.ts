@@ -1,12 +1,13 @@
-import { DocumentReference } from "firebase/firestore";
+import { DocumentReference, Timestamp } from "firebase/firestore";
 
 export interface ClubResponseType {
   clubName: string;
   description: string;
   members: DocumentReference[];
   ownerUserId: DocumentReference;
-  updated: string;
-  created: string;
+  lectures: DocumentReference[];
+  updated: Timestamp;
+  created: Timestamp;
   clubId: string;
 }
 
@@ -15,8 +16,17 @@ export interface ClubModal {
   description: string;
   members: DocumentReference[];
   owner_user_id: DocumentReference;
-  updated: string;
-  created: string;
+  lectures: DocumentReference[];
+  updated: Timestamp;
+  created: Timestamp;
+}
+
+export interface ClubRequest {
+  clubId?: string;
+  clubName?: string;
+  ownerUserId?: string;
+  lectures?: string[];
+  members?: string[];
 }
 
 export interface IClubDisplay {

@@ -1,7 +1,7 @@
 import { firebaseDB } from "@/config/firebase";
 import { DocumentReference, and, collection, doc, documentId, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
-import { nativeVocbularyConvert, vocbularyConvert } from "../coverter/vocabulary.mapping";
-import { NativeVocabularyModal, VocabularyModal } from "../type";
+import { clubVocbularyConvert, nativeVocbularyConvert, vocbularyConvert } from "../coverter/vocabulary.mapping";
+import { ClubVocabularyModal, NativeVocabularyModal, VocabularyModal } from "../type";
 
 const vocabularyPath = "vocabulary";
 const vocabularyCollection = collection(firebaseDB, vocabularyPath);
@@ -36,6 +36,15 @@ const VocabularyController = {
       const vocabularyRef = doc(firebaseDB, "vocabulary", vocabulary);
       const q = query(collection(firebaseDB, "native_translation"), and(where("vocabulary_id", "==", vocabularyRef), where("native_language", "==", "vi")));
       return (await getDocs(q)).docs.map((doc) => nativeVocbularyConvert(doc.id, doc.data() as NativeVocabularyModal));
+    });
+    return Promise.all(promises).then();
+  },
+
+  getVocabularyOfClub: async (challengesId: string[]) => {
+    const promises = challengesId.map(async (challengeId) => {
+      const challengeRef = doc(firebaseDB, "challenge", challengeId);
+      const q = query(collection(firebaseDB, "club_vocabulary"), where("challenge_id", "==", challengeRef));
+      return (await getDocs(q)).docs.map((doc) => clubVocbularyConvert(doc.id, doc.data() as ClubVocabularyModal));
     });
     return Promise.all(promises).then();
   },

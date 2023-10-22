@@ -11,7 +11,6 @@ export const LectureApi = createApi({
       async queryFn() {
         try {
           const lectures = await LectureController.getLectures();
-          console.log(lectures);
           return { data: lectures };
         } catch (error) {
           return { error };

@@ -104,12 +104,11 @@ export const RecordProgress = createApi({
           const records = await RecordController.getUserRecords(userId);
 
           const vocabulariesId = records.map((record) => record.vocabularyId);
+          console.log("vocabulaies", records);
 
           const vocabulaies: VocabularyTypeResponse[] = [];
           await VocabularyController.getVocabulariesById(vocabulariesId).then((val) => vocabulaies.push(...val.flat()));
           const lecture = await LectureController.getLectureById(vocabulaies[0].lectureId.id);
-
-          console.log("lecture", lecture);
 
           const merged = _.mergeWith(records, vocabulaies, (record: RecordTypeResponse, voca: VocabularyTypeResponse) => {
             if (voca.vocabularyId === record.vocabularyId.id) {

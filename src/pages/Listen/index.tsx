@@ -86,7 +86,6 @@ export default function ListenPage() {
       <FooterCard classes='flex-col'>
         {path === "individual" && search && (
           <Box className='flex gap-2'>
-            <PersonInfo isShowAvatar isShowName isShowNationality userInfo={userInfo} />
             <Typography variant={"body2"} className='text-extra-small-regular flex grow self-end justify-end'>
               <Avatar alt='microphone-icon' src={MicrophoneIcon} className='w-4 h-4' component={"span"} />
               {numberRecordsOfUser} recorded

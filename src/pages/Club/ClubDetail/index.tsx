@@ -5,7 +5,7 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import RightArrowIcon from "@/assets/icon/arrow-right-icon.svg";
 
 import ROUTER from "@/shared/const/router.const";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import BoxCard from "@/components/BoxCard";
 import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CheckIcon from "@/assets/icon/circle-check-icon.svg";
@@ -18,16 +18,17 @@ export default function ClubDetailPage() {
   const tabItems = ["Lectures", "Members", "Club info"];
   // router
   const navigate = useNavigate();
-  const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
+  const { clubId } = useParams();
   const [path, setPath] = useState<PATH>(pathname.split("/")[2] as PATH);
 
   const [value, setValue] = React.useState(0);
   const [checked, setChecked] = useState(false);
 
-  const handleChange = (event: SyntheticEvent, newValue: PATH) => {
-    setPath(newValue);
+  const handleChange = (event: SyntheticEvent, path: PATH) => {
+    setPath(path);
     navigate({
-      pathname: ROUTER.CLUB_DETAIL + "/" + newValue,
+      pathname: ROUTER.CLUB_DETAIL + "/" + path + "/" + clubId,
     });
   };
 
