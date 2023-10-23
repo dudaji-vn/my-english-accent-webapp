@@ -9,7 +9,6 @@ import { ClubResponseType } from "@/core/type";
 import { timeSince } from "@/shared/utils/timeSince.util";
 export default function ClubCard(props: ClubResponseType) {
   const navigate = useNavigate();
-  console.log(props)
   const onRedirectToClub = () => {
     navigate({
       pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + props.clubId,

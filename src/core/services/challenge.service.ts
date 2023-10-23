@@ -1,8 +1,6 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import ClubController from "../controllers/club.controller";
-import { ClubRequest, ClubResponseType, ClubVocabularyTypeResponse, IClubDisplay, UserResponseType } from "../type";
-import UserController from "../controllers/user.controller";
+import { ClubVocabularyTypeResponse } from "../type";
 import ChallengeController from "../controllers/challenge.controller";
 import VocabularyController from "../controllers/vocabulary.controller";
 import _ from "lodash";
@@ -18,10 +16,12 @@ export const ChallengeApi = createApi({
         try {
           const challenges = await ChallengeController.getChallengesInClub(clubId);
 
+          console.log(challenges, "getChallengesInClub", clubId);
           const challengesId = challenges.map((challenge) => challenge.challengeId);
 
           const vocabularies: ClubVocabularyTypeResponse[] = [];
           await VocabularyController.getVocabularyOfClub(challengesId).then((val) => vocabularies.push(...val.flat()));
+          console.log(vocabularies, "vocabularies");
 
           const groupVocabularyByChallengeId = _(vocabularies)
             .groupBy("challengeId.id")

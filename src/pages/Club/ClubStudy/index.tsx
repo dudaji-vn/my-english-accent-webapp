@@ -20,9 +20,10 @@ function ChallengeCard(props: IChallengeDisplay) {
   const onHandleListening = () => {
     navigate(ROUTER.CLUB_LISTENING);
   };
+  if (!props) return <>There's no challenge</>;
   return (
     <BoxCard classes='p-4 flex flex-col gap-2'>
-      <Typography className='text-base-semibold mb-8'>{props?.challengeMame ?? ""}</Typography>
+      <Typography className='text-base-semibold mb-8'>{props.challengeMame ?? ""}</Typography>
 
       <Typography className='text-extra-small-regular flex gap-1' variant='body2'>
         <Avatar component={"span"} src={MessageIcon} alt='speaking-icon' className='w-4 h-4' />
@@ -54,7 +55,7 @@ function ChallengeCard(props: IChallengeDisplay) {
 export default function ClubStudyPage() {
   const { clubId } = useParams();
 
-  const { data } = useGetChallengesInClubQuery(clubId ?? "");
+  const { data } = useGetChallengesInClubQuery(clubId!);
 
   return <Container className='mt-6 grow'>{data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}</Container>;
 }

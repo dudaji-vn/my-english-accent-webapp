@@ -1,7 +1,8 @@
 import { firebaseDB } from "@/config/firebase";
-import { DocumentReference, and, collection, doc, documentId, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { DocumentReference, and, collection, doc, documentId, getDoc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore";
 import { clubVocbularyConvert, nativeVocbularyConvert, vocbularyConvert } from "../coverter/vocabulary.mapping";
 import { ClubVocabularyModal, NativeVocabularyModal, VocabularyModal } from "../type";
+import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 
 const vocabularyPath = "vocabulary";
 const vocabularyCollection = collection(firebaseDB, vocabularyPath);
@@ -47,6 +48,23 @@ const VocabularyController = {
       return (await getDocs(q)).docs.map((doc) => clubVocbularyConvert(doc.id, doc.data() as ClubVocabularyModal));
     });
     return Promise.all(promises).then();
+  },
+  updateVocabularyOfClub: async (challengeId: string) => {
+    const challengeRef = doc(firebaseDB, "challenge", challengeId);
+    const vocabularyList = ["FFqPhagP8GPWmIt9m3dB", "JZmtmDXf1Rw0xblPIvm6", "UMFnWgQxndtMpyRFhA7C", "Y40l1XAI1rsGqo2fpaRU", "fyDni6fCZykKjDFjt5XZ"];
+    const vocabularyListRef = vocabularyList.map((voca) => doc(firebaseDB, "vocabulary", voca));
+
+    const request = vocabularyListRef.map((voca) =>
+      addTimeStamp({
+        challenge_id: challengeRef,
+        number: 2,
+        vocabulary_id: voca,
+      })
+    );
+
+    return request.forEach((val) => {
+      return setDoc(doc(collection(firebaseDB, "club_vocabulary")), val, { merge: true });
+    });
   },
 };
 

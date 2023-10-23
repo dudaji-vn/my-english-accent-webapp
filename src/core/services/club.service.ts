@@ -3,6 +3,8 @@ import Reducer from "@/shared/const/store.const";
 import ClubController from "../controllers/club.controller";
 import { ClubRequest, ClubResponseType, IClubDisplay, UserResponseType } from "../type";
 import UserController from "../controllers/user.controller";
+import ChallengeController from "../controllers/challenge.controller";
+import VocabularyController from "../controllers/vocabulary.controller";
 
 export const ClubStudyApi = createApi({
   reducerPath: Reducer.clubStudyApi,
@@ -40,6 +42,12 @@ export const ClubStudyApi = createApi({
       async queryFn(payload: ClubRequest) {
         try {
           await ClubController.updateClub(payload);
+
+          //add new challenge default data
+          if (!payload.members) {
+            const challenge_id = await ChallengeController.addChallenge(payload.clubId!);
+            await VocabularyController.updateVocabularyOfClub(challenge_id);
+          }
           return {
             data: true,
           };
@@ -73,6 +81,7 @@ export const ClubStudyApi = createApi({
           return { error };
         }
       },
+      providesTags: ["Club"],
     }),
   }),
 });
