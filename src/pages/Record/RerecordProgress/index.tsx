@@ -48,9 +48,6 @@ export default function RerecordingProgressPage() {
     return status === "recording";
   });
 
-  console.log(lectureName, lectureId, index);
-  console.log(data);
-
   const onRepeat = () => {
     console.log("onRepeat");
   };
@@ -68,7 +65,7 @@ export default function RerecordingProgressPage() {
     navigate(-1);
   };
 
-  const callback = (payload: { clubStudyId: string | null; userId: string; vocabularyId: string; voiceSrc: string }) => {
+  const callback = (payload: { challengeId: string | null; userId: string; vocabularyId: string; voiceSrc: string }) => {
     const request = {
       ...payload,
       recordId,

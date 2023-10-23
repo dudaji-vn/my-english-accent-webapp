@@ -10,6 +10,7 @@ const ROUTER = {
   CLUB_DETAIL: "/club-detail",
   CLUB_ADD_MEMBER: "/club-add-member",
   CLUB_RECORDING: "/club-recording",
+  CLUB_RECORDING_SUMMARY: "/club-recording-summary",
   CLUB_LISTENING: "/club-listening",
 
   //subpath-club-detail

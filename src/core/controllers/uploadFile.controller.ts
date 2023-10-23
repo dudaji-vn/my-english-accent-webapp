@@ -5,8 +5,8 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 const audioPath = "audio";
 
 const UploadFileController = {
-  uploadAudio: (audiofile: File, vocabularyId: string, myId: string, callback: Function) => {
-    const storageRef = ref(firebaseStorage, `${audioPath}/${vocabularyId}/${myId}`);
+  uploadAudio: (audiofile: File, vocabularyId: string, myId: string, callback: Function, isClub?: boolean) => {
+    const storageRef = ref(firebaseStorage, `${audioPath}/${isClub ? "club" : "nonclub"}/${vocabularyId}/${myId}`);
     const uploadTask = uploadBytesResumable(storageRef, audiofile);
 
     uploadTask.on(
@@ -21,7 +21,7 @@ const UploadFileController = {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           callback({
-            clubStudyId: null,
+            challengeId: null,
             userId: myId,
             vocabularyId: vocabularyId,
             voiceSrc: downloadURL,

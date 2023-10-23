@@ -15,6 +15,10 @@ const ChallengeController = {
     const q = query(challengeCollection, where("club_id", "==", clubRef));
     return (await getDocs(q)).docs.map((doc) => challengeConvert(doc.id, doc.data() as ChallengeModal));
   },
+  getChallengeDetail: async (challengeId: string) => {
+    const q = query(challengeCollection, where(documentId(), "==", challengeId));
+    return (await getDocs(q)).docs.map((doc) => challengeConvert(doc.id, doc.data() as ChallengeModal))[0];
+  },
   addChallenge: async (clubId: string) => {
     const clubRef = doc(firebaseDB, "club", clubId);
 

@@ -12,9 +12,20 @@ import { timeSince } from "@/shared/utils/timeSince.util";
 
 function ChallengeCard(props: IChallengeDisplay) {
   const navigate = useNavigate();
-
+console.log(props)
   const onHandleRecording = () => {
-    navigate(ROUTER.CLUB_RECORDING);
+    navigate(
+      {
+        pathname: ROUTER.CLUB_RECORDING,
+        hash: "0",
+      },
+      {
+        state: {
+          challengeId: props.challengeId,
+          clubId: props.clubId.id,
+        },
+      }
+    );
   };
 
   const onHandleListening = () => {
@@ -23,7 +34,7 @@ function ChallengeCard(props: IChallengeDisplay) {
   if (!props) return <>There's no challenge</>;
   return (
     <BoxCard classes='p-4 flex flex-col gap-2'>
-      <Typography className='text-base-semibold mb-8'>{props.challengeMame ?? ""}</Typography>
+      <Typography className='text-base-semibold mb-8'>{props.challengeName ?? ""}</Typography>
 
       <Typography className='text-extra-small-regular flex gap-1' variant='body2'>
         <Avatar component={"span"} src={MessageIcon} alt='speaking-icon' className='w-4 h-4' />

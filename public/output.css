@@ -292,10 +292,6 @@ h6 {
   margin-bottom: 1rem
 }
 
-#root :is(.mb-6) {
-  margin-bottom: 1.5rem
-}
-
 #root :is(.mb-8) {
   margin-bottom: 2rem
 }
@@ -360,6 +356,12 @@ h6 {
   height: 208px
 }
 
+#root :is(.h-fit) {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content
+}
+
 #root :is(.h-full) {
   height: 100%
 }
@@ -408,8 +410,14 @@ h6 {
   flex-grow: 1
 }
 
-#root :is(.list-disc) {
-  list-style-type: disc
+#root :is(.origin-center) {
+  -webkit-transform-origin: center;
+          transform-origin: center
+}
+
+#root :is(.transform) {
+  -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
 #root :is(.flex-col) {
@@ -434,6 +442,10 @@ h6 {
 
 #root :is(.justify-between) {
   justify-content: space-between
+}
+
+#root :is(.justify-around) {
+  justify-content: space-around
 }
 
 #root :is(.gap-1) {
@@ -604,43 +616,6 @@ h6 {
   background: #6b7280;
 } */
 
-#root :is(.first\:rounded-none:first-child) {
-  border-radius: 0px
-}
-
-#root :is(.first\:rounded-lg:first-child) {
-  border-radius: 0.5rem
-}
-
-#root :is(.first\:rounded-t-lg:first-child) {
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem
-}
-
-#root :is(.first\:rounded-e-3xl:first-child) {
-  border-start-end-radius: 1.5rem;
-  border-end-end-radius: 1.5rem
-}
-
-#root :is(.first\:bg-primary:first-child) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
-}
-
-#root :is(.first\:bg-secondary:first-child) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(19 194 150 / var(--tw-bg-opacity))
-}
-
-#root :is(.first\:bg-white:first-child) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity))
-}
-
-#root :is(.first\:font-bold:first-child) {
-  font-weight: 700
-}
-
 #root :is(.last\:mb-0:last-child) {
   margin-bottom: 0px
 }
@@ -650,32 +625,7 @@ h6 {
   border-bottom-left-radius: 0.5rem
 }
 
-#root :is(.last\:bg-secondary:last-child) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(19 194 150 / var(--tw-bg-opacity))
-}
-
-#root :is(.odd\:bg-primary:nth-child(odd)) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
-}
-
-#root :is(.even\:rounded-t-lg:nth-child(even)) {
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem
-}
-
-#root :is(.even\:bg-primary:nth-child(even)) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
-}
-
 #root :is(.hover\:bg-white:hover) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
-}
-
-#root :is(.\[\&\>\*\:first-child\]\:rounded-t-lg>*:first-child) {
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem
 }

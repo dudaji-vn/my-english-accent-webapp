@@ -1,4 +1,4 @@
-import { DocumentReference } from "firebase/firestore";
+import { DocumentReference, Timestamp } from "firebase/firestore";
 import { Language, Level } from "./user.type";
 import { EnrollmentResponseType } from "./enrollment.type";
 import { StageExercise } from "@/shared/type";
@@ -49,15 +49,15 @@ export interface VocabularyMergedEnrollMent extends EnrollmentResponseType {
 export interface ClubVocabularyTypeResponse {
   challengeId: DocumentReference;
   vocabularyId: DocumentReference;
-  updated: string;
-  created: string;
+  updated: Timestamp;
+  created: Timestamp;
   number: number;
-  clubVocabularyId:string
+  clubVocabularyId: string;
 }
 export interface ClubVocabularyModal {
   challenge_id: DocumentReference;
   vocabulary_id: DocumentReference;
-  updated: string;
-  created: string;
+  updated: Timestamp;
+  created: Timestamp;
   number: number;
 }

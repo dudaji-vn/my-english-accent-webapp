@@ -1,26 +1,28 @@
+import UploadFileController from "@/core/controllers/uploadFile.controller";
+import { useAddRecordMutation, useUpdateEnrollmentStepMutation } from "@/core/services/recordProgress.service";
+import persist from "@/shared/utils/persist.util";
+import { Box, IconButton, Avatar, Typography } from "@mui/material";
 import { useRef, useState } from "react";
-import { Box, Avatar, IconButton, Typography } from "@mui/material";
 import { useReactMediaRecorder } from "react-media-recorder-2";
 import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import HearingIcon from "@/assets/icon/hearing-icon.svg";
 import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
-import UploadFileController from "@/core/controllers/uploadFile.controller";
-import persist from "@/shared/utils/persist.util";
-import { useAddRecordMutation, useUpdateEnrollmentStepMutation } from "@/core/services/recordProgress.service";
+import { useLocation, useNavigate } from "react-router-dom";
+import ROUTER from "@/shared/const/router.const";
+import { IChallengeDetailDisplay } from "@/core/type/challenge.type";
+import { RecordRequest } from "@/core/type";
 
-export interface RecordingAudioProp {
-  vocabularyId: string;
-  enrollmentId: string;
-  currentStep: number;
-  totalStep: number;
-}
-
-export default function RecordingAudio({ vocabularyId, currentStep, enrollmentId, totalStep }: RecordingAudioProp) {
+export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
+  const { state, hash } = useLocation();
+  const navigate = useNavigate();
+  const currentStep = parseInt(hash.replace("#", ""));
   const myId = persist.getMyInfo().userId;
+  const { vocabularies, ...restProps } = props;
   const audioEle = useRef<HTMLAudioElement | null>(null);
   const [addRecord] = useAddRecordMutation();
-  const [updateEnrollmentStep] = useUpdateEnrollmentStepMutation();
+  const [listRequest, setListRequest] = useState<RecordRequest[]>([]);
+
   const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
     audio: true,
     blobPropertyBag: {
@@ -34,6 +36,12 @@ export default function RecordingAudio({ vocabularyId, currentStep, enrollmentId
 
   const [toggleSubBtn, setToggleSubBtn] = useState(() => status === "stopped");
 
+  const onRepeat = () => {
+    if (audioEle && audioEle.current) {
+      audioEle.current.play();
+    }
+  };
+
   const onHandlePlay = () => {
     if (isRecord) {
       stopRecording();
@@ -44,28 +52,52 @@ export default function RecordingAudio({ vocabularyId, currentStep, enrollmentId
     setIsRecord(() => !isRecord);
   };
 
-  const onRepeat = () => {
-    if (audioEle && audioEle.current) {
-      audioEle.current.play();
-    }
-  };
-
   const callback = (payload: { challengeId: string | null; userId: string; vocabularyId: string; voiceSrc: string }) => {
-    addRecord(payload);
-    updateEnrollmentStep({
-      currentStep,
-      totalStep,
-      enrollmentId,
-    });
+    const request = {
+      ...payload,
+      challengeId: state.challengeId,
+    };
+    setListRequest([...listRequest, request]);
   };
 
   const onHandleNext = async () => {
-    const audioBlob = await fetch(mediaBlobUrl as any).then((r) => r.blob());
-    const audiofile = new File([audioBlob], "audiofile.mp3", {
-      type: "audio/mp3",
-    });
+    if (currentStep + 1 >= vocabularies.length) {
+      await listRequest.map(async (request) => {
+        await addRecord(request);
+      });
 
-    await UploadFileController.uploadAudio(audiofile, vocabularyId, myId, callback);
+      navigate(
+        {
+          pathname: ROUTER.CLUB_RECORDING_SUMMARY,
+        },
+        {
+          state: {
+            clubId: restProps!.clubId.id,
+            challengeId: state.challengeId,
+          },
+        }
+      );
+    } else {
+      const audioBlob = await fetch(mediaBlobUrl as any).then((r) => r.blob());
+      const audiofile = new File([audioBlob], "audiofile.mp3", {
+        type: "audio/mp3",
+      });
+      if (restProps && mediaBlobUrl) {
+        await UploadFileController.uploadAudio(audiofile, vocabularies[currentStep].vocabularyId, myId, callback);
+      }
+      navigate(
+        {
+          pathname: ROUTER.CLUB_RECORDING,
+          hash: `${currentStep + 1}`,
+        },
+        {
+          state: {
+            challengeId: state.challengeId,
+            clubId: restProps && restProps.clubId.id,
+          },
+        }
+      );
+    }
 
     setToggleSubBtn(false);
   };

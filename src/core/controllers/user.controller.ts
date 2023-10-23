@@ -13,9 +13,8 @@ const UserController = {
     return (await getDocs(q)).docs.map((doc) => userConvert(doc.id, doc.data() as UserModal))[0];
   },
 
-  getUsers: async () => {
-    const myId = persist.getMyInfo().userId;
-    const q = query(userCollection, where(documentId(), "!=", myId));
+  getUsers: async (userId: string) => {
+    const q = query(userCollection, where(documentId(), "!=", userId));
     return (await getDocs(q)).docs.map((doc) => userConvert(doc.id, doc.data() as UserModal));
   },
   getUsersBy: async (users: DocumentReference[]) => {

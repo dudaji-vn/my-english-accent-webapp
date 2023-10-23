@@ -1,8 +1,8 @@
 import { DocumentReference, Timestamp } from "firebase/firestore";
-import { ClubVocabularyTypeResponse } from "./vocabulary.type";
+import { ClubVocabularyTypeResponse, VocabularyTypeResponse } from "./vocabulary.type";
 
 export interface ChallengeResponseType {
-  challengeMame: string;
+  challengeName: string;
   clubId: DocumentReference;
   participants: DocumentReference[];
   updated: Timestamp;
@@ -19,11 +19,21 @@ export interface ChallengeModal {
 }
 
 export interface IChallengeDisplay {
-  challengeMame: string;
+  challengeName: string;
   clubId: DocumentReference;
   participants: DocumentReference[];
   updated: Timestamp;
   created: Timestamp;
   challengeId: string;
   vocabularies: ClubVocabularyTypeResponse[];
+}
+
+export interface IChallengeDetailDisplay {
+  challengeName: string;
+  clubId: DocumentReference;
+  participants: DocumentReference[];
+  updated: Timestamp;
+  created: Timestamp;
+  challengeId: string;
+  vocabularies: VocabularyTypeResponse[] & ClubVocabularyTypeResponse[];
 }

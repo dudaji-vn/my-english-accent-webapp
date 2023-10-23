@@ -24,7 +24,8 @@ export const UserApi = createApi({
     getUsers: builder.query<UserResponseType[], void>({
       async queryFn() {
         try {
-          const users = await UserController.getUsers();
+          const myId = persist.getMyInfo().userId;
+          const users = await UserController.getUsers(myId);
           return { data: users };
         } catch (error) {
           return { error };

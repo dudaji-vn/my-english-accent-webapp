@@ -14,7 +14,6 @@ export default function ClubMemberPage() {
   const navigate = useNavigate();
   const { clubId } = useParams();
   const { data } = useGetMemenbersInfoQuery(clubId ?? "");
-  console.log("ClubMemberPage::", data);
   const language = useMemo(() => {
     if (data?.ownerInfo.nativeLanguage === "vi") {
       return "Vietnamese";
