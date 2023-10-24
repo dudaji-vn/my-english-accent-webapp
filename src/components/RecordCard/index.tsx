@@ -4,10 +4,8 @@ import { Avatar, Checkbox, Grid, Typography } from "@mui/material";
 import PersonInfo from "@/components/NationalityCard";
 import AvatarIcon from "@/assets/icon/avatar-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
-import MicrophoneIcon from "@/assets/icon/microphone-icon.svg";
 import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CheckIcon from "@/assets/icon/circle-check-icon.svg";
-import { UserType } from "@/shared/type";
 import { UserResponseType } from "@/core/type";
 
 interface RecordType {
@@ -34,20 +32,6 @@ export default function RecordCard(props: RecordType) {
       </Grid>
       <Grid item xs={2} textAlign={"end"}>
         <Checkbox checked={checked} icon={<Avatar src={UncheckIcon} alt='uncheck-icon' className='w-4 h-4' />} checkedIcon={<Avatar src={CheckIcon} alt='check-icon' className='w-4 h-4' />} />
-      </Grid>
-      <Grid item xs={12}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: ".5rem",
-          }}
-        >
-          <Avatar alt='microphone-icon' src={MicrophoneIcon} className='w-4 h-4' />
-          <Typography variant={"body2"} className='text-extra-small-regular'>
-            2 recorded
-          </Typography>
-        </Box>
       </Grid>
       <Grid item xs={12}>
         <Box

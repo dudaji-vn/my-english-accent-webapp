@@ -10,10 +10,9 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-import AvatarIcon from "@/assets/icon/avatar-icon.svg";
 import AccountIcon from "@/assets/icon/settings-icon.svg";
 import LogoutIcon from "@/assets/icon/log-out-icon.svg";
-import LogoApp from "@/assets/icon/MEA-logo-icon.svg";
+import LogoApp from "@/assets/icon/logo-icon.svg";
 import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
 
 const settings = [
@@ -28,9 +27,7 @@ const settings = [
 ];
 
 export default function Navbar() {
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -41,19 +38,19 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar className="sticky bg-white shadow-none divider">
+    <AppBar className='sticky bg-white shadow-none divider'>
       <Container>
         <Toolbar disableGutters>
           <IconButton>
-            <img alt="logo-app" src={LogoApp} />
+            <img alt='logo-app' src={LogoApp} />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
           <Box>
-            <Tooltip title="Open settings">
-              <Box className="flex items-center">
+            <Tooltip title='Open settings'>
+              <Box className='flex items-center'>
                 <IconButton onClick={handleOpenUserMenu} disableRipple>
                   <Avatar
-                    alt="avatar-icon"
+                    alt='avatar-icon'
                     sx={{
                       width: "24px",
                       height: "24px",
@@ -61,7 +58,7 @@ export default function Navbar() {
                     children={<Typography color={"white"}>H</Typography>}
                   />
                 </IconButton>
-                <img alt="arrow-down-icon" src={ArrowdownIcon} />
+                <img alt='arrow-down-icon' src={ArrowdownIcon} />
               </Box>
             </Tooltip>
             <Menu
@@ -80,11 +77,7 @@ export default function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem
-                  key={setting.title}
-                  onClick={handleCloseUserMenu}
-                  sx={{ paddingY: "0.5rem" }}
-                >
+                <MenuItem key={setting.title} onClick={handleCloseUserMenu} sx={{ paddingY: "0.5rem" }}>
                   <Avatar
                     alt={setting.title + "icon"}
                     src={setting.icon}
@@ -93,7 +86,7 @@ export default function Navbar() {
                       height: "16px",
                     }}
                   />
-                  <Typography textAlign="center" paddingLeft={"12px"}>
+                  <Typography textAlign='center' paddingLeft={"12px"}>
                     {setting.title}
                   </Typography>
                 </MenuItem>

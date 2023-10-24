@@ -7,13 +7,13 @@ import BoxCard from "@/components/BoxCard";
 import { useNavigate, useParams } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import UserClub from "@/components/UserClub";
-import { useGetMemenbersInfoQuery } from "@/core/services/club.service";
+import { useGetMembersInfoQuery } from "@/core/services/club.service";
 import { useMemo } from "react";
 
 export default function ClubMemberPage() {
   const navigate = useNavigate();
   const { clubId } = useParams();
-  const { data } = useGetMemenbersInfoQuery(clubId ?? "");
+  const { data } = useGetMembersInfoQuery(clubId ?? "");
   const language = useMemo(() => {
     if (data?.ownerInfo.nativeLanguage === "vi") {
       return "Vietnamese";

@@ -38,7 +38,7 @@ export const ClubStudyApi = createApi({
       providesTags: ["Club"],
     }),
 
-    setClub: builder.mutation<boolean, ClubRequest>({
+    setClub: builder.mutation<string, ClubRequest>({
       async queryFn(payload: ClubRequest) {
         try {
           await ClubController.updateClub(payload);
@@ -49,20 +49,21 @@ export const ClubStudyApi = createApi({
             await VocabularyController.updateVocabularyOfClub(challenge_id);
           }
           return {
-            data: true,
+            data: payload.clubId,
           };
         } catch (error) {
           return { error };
         }
       },
-      invalidatesTags: ["Club"],
+      invalidatesTags: (result) => (result ? [{ type: "Club" as const, id: result }, "Club"] : ["Club"]),
     }),
 
-    getMemenbersInfo: builder.query<{ ownerInfo: UserResponseType; membersInfo: UserResponseType[] }, string>({
+    getMembersInfo: builder.query<{ ownerInfo: UserResponseType; membersInfo: UserResponseType[] }, string>({
       async queryFn(clubId: string) {
         try {
+          console.log("getMembersInfo::clubId::", clubId);
           const res: ClubResponseType[] = await ClubController.getMembers(clubId);
-
+          console.log("getMembersInfo::res::", res);
           const ownerInfo: UserResponseType[] = [];
           const membersInfo: UserResponseType[] = [];
           if (res && res.length > 0) {
@@ -81,11 +82,11 @@ export const ClubStudyApi = createApi({
           return { error };
         }
       },
-      providesTags: ["Club"],
+      providesTags: (result, error, arg) => (arg ? [{ type: "Club" as const, id: arg }, "Club"] : ["Club"]),
     }),
   }),
 });
 
-export const { useGetClubsOwnerQuery, useSetClubMutation, useGetMemenbersInfoQuery } = ClubStudyApi;
+export const { useGetClubsOwnerQuery, useSetClubMutation, useGetMembersInfoQuery } = ClubStudyApi;
 
 export default ClubStudyApi;

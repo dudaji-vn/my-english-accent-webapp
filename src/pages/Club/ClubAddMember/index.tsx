@@ -49,7 +49,7 @@ export default function ClubAddMemberPage() {
       });
   };
 
-  const onHandleAddMember = () => {
+  const onHandleAddMember = async () => {
     console.log("add", members);
     updateClub({
       clubId: state.clubId,

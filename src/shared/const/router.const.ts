@@ -1,6 +1,6 @@
 const ROUTER = {
   ROOT: "/",
-  MEA: "/my-english-accent",
+  TECHTALK: "/tech-talk",
   LOGIN: "/login",
 
   RECORD: "/record",
