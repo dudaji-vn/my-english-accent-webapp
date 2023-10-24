@@ -1,8 +1,8 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Container, Box, Avatar, Typography, Divider, Grid, IconButton } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import _ from "lodash";
-import { useAddRecordMutation, useGetAllVocabulariesByLectureQuery } from "@/core/services/recordProgress.service";
+import { useAddRecordMutation, useGetAllVocabulariesByLectureQuery, useGetVocabularyByRecordQuery } from "@/core/services/recordProgress.service";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
 import BoxCard from "@/components/BoxCard";
 import persist from "@/shared/utils/persist.util";
@@ -16,6 +16,7 @@ import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
 import { useReactMediaRecorder } from "react-media-recorder-2";
 import ROUTER from "@/shared/const/router.const";
 import { VocabularyTypeResponse } from "@/core/type";
+import TextToSpeech from "@/shared/hook/useTextToSpeech";
 
 export default function RerecordingProgressPage() {
   //TODO speaking audio
@@ -23,21 +24,17 @@ export default function RerecordingProgressPage() {
   const myId = persist.getMyInfo().userId;
 
   const audioEle = useRef<HTMLAudioElement | null>(null);
-  const audio = new Audio("props");
+  const audio = new Audio("");
 
   const navigate = useNavigate();
   const search = useLocation();
   const lectureName = decodeURI(search.pathname).replace("/rerecord/", "");
-  const { lectureId } = search.state;
   const { vocabularyId } = search.state;
   const { recordId } = search.state;
-
-  const { data } = useGetAllVocabulariesByLectureQuery(lectureId);
-
-  const index = useMemo(() => {
-    return data?.vocabularies.findIndex((voca: VocabularyTypeResponse) => voca.vocabularyId === vocabularyId) || 0;
-  }, [search, data?.vocabularies]);
-
+  const { voiceRecord } = search.state;
+  const [playing, setPlaying] = useState(false);
+  const { data } = useGetVocabularyByRecordQuery(vocabularyId);
+  console.log(data);
   const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
     audio: true,
     blobPropertyBag: {
@@ -49,7 +46,18 @@ export default function RerecordingProgressPage() {
   });
 
   const onRepeat = () => {
-    console.log("onRepeat");
+    if (!mediaBlobUrl) {
+      audio.src = voiceRecord;
+    } else {
+      audio.src = mediaBlobUrl;
+    }
+    if (playing) {
+      audio.pause();
+      setPlaying(() => false);
+    } else {
+      audio.play();
+      setPlaying(() => true);
+    }
   };
 
   const onHandlePlay = () => {
@@ -79,12 +87,21 @@ export default function RerecordingProgressPage() {
       type: "audio/mp3",
     });
     if (data && mediaBlobUrl) {
-      await UploadFileController.uploadAudio(audiofile, data.vocabularies[index].vocabularyId, myId, callback);
+      await UploadFileController.uploadAudio(audiofile, data.vocabularyId.id, myId, callback);
     }
     navigate({
       pathname: ROUTER.RECORD + "/" + lectureName + ROUTER.SUMMARY,
     });
   };
+
+  // useEffect(() => {
+  //   audio.onended = function () {
+  //     setPlaying(() => false);
+  //   };
+  //   return () => {
+  //     audio = null;
+  //   };
+  // }, [audio]);
 
   return (
     <Box className='flex flex-col grow'>
@@ -102,20 +119,18 @@ export default function RerecordingProgressPage() {
             <BoxCard classes='p-4'>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
-                  <Typography className='text-small-medium'>{data.vocabularies[index].vtitleDisplayLanguage}</Typography>
+                  <Typography className='text-small-medium'>{data.vtitleDisplayLanguage}</Typography>
                 </Grid>
                 <Grid item xs={12}>
                   <Typography variant='body2' className='text-small-regular'>
-                    {data.vocabularies[index].vphoneticDisplayLanguage}
+                    {data.vphoneticDisplayLanguage}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} className='py-4'>
                   <Divider />
                 </Grid>
                 <Grid item xs={12}>
-                  <IconButton onClick={onRepeat}>
-                    <Avatar src={SpeakingIcon} alt='speaking-icon' className='w-10 h-10' />
-                  </IconButton>
+                  <TextToSpeech text={data.vtitleDisplayLanguage} />
                 </Grid>
               </Grid>
             </BoxCard>
@@ -123,7 +138,7 @@ export default function RerecordingProgressPage() {
             <Box className='flex gap-1 mt-4'>
               <Avatar alt='national-flag-icon' src={Vietnamflag} className='w-4 h-4 mt-1' />
               <Typography variant='body2' className='text-small-regular'>
-                {data.vocabularies[index].titleNativeLanguage}
+                {data.titleNativeLanguage}
               </Typography>
             </Box>
           </Box>

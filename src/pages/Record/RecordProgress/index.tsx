@@ -13,9 +13,9 @@ export default function RecordingProgressPage() {
   const params = useParams();
   const search = useLocation();
   const lectureName = decodeURI(search.pathname).replace("/record/", "");
-  const topicId = search.search.replace("?", "");
+  const lectureId = search.search.replace("?", "");
 
-  const { data } = useGetAllVocabulariesByLectureQuery(topicId);
+  const { data } = useGetAllVocabulariesByLectureQuery(lectureId);
 
   const currentProgress = useMemo(() => {
     if (data) {
@@ -33,12 +33,21 @@ export default function RecordingProgressPage() {
     if (data) {
       if (data.stage === StageExercise.Close && data.currentStep === data.vocabularies.length) {
         const path = `/${params.category}`;
-        navigate({
-          pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
-        });
+        navigate(
+          {
+            pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
+          },
+          {
+            state: {
+              lectureId: data.lectureId.id,
+            },
+          }
+        );
       }
     }
   }, [data]);
+
+  console.log("RecordingProgressPage::", data?.vocabularies);
 
   return (
     <Box className='flex flex-col grow'>

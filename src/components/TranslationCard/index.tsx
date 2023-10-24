@@ -1,16 +1,13 @@
 import BoxCard from "@/components/BoxCard";
-import { Avatar, Box, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
-import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
+import { Avatar, Box, Container, Divider, Grid, Typography } from "@mui/material";
 import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import RecordingAudio from "@/components/RecordingAudio";
 import { VocabularyTypeResponse, EnrollmentResponseType, NativeVocabularyTypeResponse } from "@/core/type";
+import TextToSpeech from "@/shared/hook/useTextToSpeech";
 
 export default function TranslationCard(props: VocabularyTypeResponse & EnrollmentResponseType & NativeVocabularyTypeResponse & { totalStep: number }) {
   const { enrollmentId, vocabularyId, currentStep, totalStep } = props;
-  const audio = new Audio();
-  const onRepeat = () => {
-    audio.play();
-  };
+  console.log("TranslationCard::", props);
   return (
     <Container id='translationCard' className='py-4 bg-gray-100 flex flex-col grow justify-between'>
       <Box>
@@ -28,9 +25,7 @@ export default function TranslationCard(props: VocabularyTypeResponse & Enrollme
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <IconButton onClick={onRepeat}>
-                <Avatar src={SpeakingIcon} alt='speaking-icon' className='w-10 h-10' />
-              </IconButton>
+              <TextToSpeech text={props.vtitleDisplayLanguage} />
             </Grid>
           </Grid>
         </BoxCard>

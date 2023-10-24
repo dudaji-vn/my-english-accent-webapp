@@ -1,4 +1,6 @@
+import { RecordTypeResponse } from "./record.type";
 import { Level } from "./user.type";
+import { VocabularyTypeResponse } from "./vocabulary.type";
 
 export interface LectureResponseType {
   lectureId: string;
@@ -14,4 +16,8 @@ export interface LectureModal {
   level: Level;
   updated: string;
   created: string;
+}
+
+export interface ILectureDisplay extends LectureResponseType {
+  vocabularies: VocabularyTypeResponse[] & RecordTypeResponse[];
 }

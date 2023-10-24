@@ -8,9 +8,10 @@ import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
 import persist from "@/shared/utils/persist.util";
 import { useAddRecordMutation, useUpdateEnrollmentStepMutation } from "@/core/services/recordProgress.service";
+import { DocumentReference } from "firebase/firestore";
 
 export interface RecordingAudioProp {
-  vocabularyId: string;
+  vocabularyId: DocumentReference;
   enrollmentId: string;
   currentStep: number;
   totalStep: number;
@@ -65,7 +66,7 @@ export default function RecordingAudio({ vocabularyId, currentStep, enrollmentId
       type: "audio/mp3",
     });
 
-    await UploadFileController.uploadAudio(audiofile, vocabularyId, myId, callback);
+    await UploadFileController.uploadAudio(audiofile, vocabularyId.id, myId, callback);
 
     setToggleSubBtn(false);
   };

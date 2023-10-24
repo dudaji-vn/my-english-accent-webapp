@@ -1,15 +1,32 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, IconButton } from "@mui/material";
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 
 const TextToSpeech = ({ text }: { text: string }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
+  const synth = window.speechSynthesis;
+
+  const onHandlePlay = async () => {
+    if (isPaused) {
+      synth.cancel();
+    }
+    if (utterance) {
+      synth.speak(utterance);
+      utterance.onend = function () {
+        setIsPaused(() => !isPaused);
+        synth.cancel();
+      };
+    }
+    setIsPaused(() => !isPaused);
+  };
 
   useEffect(() => {
-    const synth = window.speechSynthesis;
     const u = new SpeechSynthesisUtterance(text);
+    const voices = synth.getVoices();
 
+    u.voice = voices[1];
+    u.lang = "en-US";
     if (u) {
       setUtterance(u);
     }
@@ -19,37 +36,8 @@ const TextToSpeech = ({ text }: { text: string }) => {
     };
   }, [text]);
 
-  const handlePlay = () => {
-    const synth = window.speechSynthesis;
-
-    if (isPaused) {
-      synth.resume();
-    }
-    if (utterance) {
-      synth.speak(utterance);
-    }
-
-    setIsPaused(false);
-  };
-
-  const handlePause = () => {
-    const synth = window.speechSynthesis;
-
-    synth.pause();
-
-    setIsPaused(true);
-  };
-
-  const handleStop = () => {
-    const synth = window.speechSynthesis;
-
-    synth.cancel();
-
-    setIsPaused(false);
-  };
-
   return (
-    <IconButton onClick={handlePlay}>
+    <IconButton onClick={onHandlePlay}>
       <Avatar src={SpeakingIcon} alt='speaking-icon' className='w-10 h-10' />
     </IconButton>
   );

@@ -19,11 +19,8 @@ const VocabularyController = {
     return Promise.all(promises).then();
   },
   filterVocabularies: async (lectureId: string, vocabularies: string[]) => {
-    if (vocabularies.length && lectureId) {
-      const q = query(vocabularyCollection, and(where(documentId(), "in", vocabularies), where("lecture_id", "==", lectureId)));
-      return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
-    }
-    return [];
+    const q = query(vocabularyCollection, and(where(documentId(), "in", vocabularies), where("lecture_id", "==", lectureId)));
+    return (await getDocs(q)).docs.map((doc) => vocbularyConvert(doc.id, doc.data() as VocabularyModal));
   },
 
   getVocabularyByLecture: async (lectureId: string) => {
