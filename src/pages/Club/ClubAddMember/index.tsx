@@ -1,11 +1,9 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { Box, Avatar, Typography, Container, Button, InputBase, IconButton } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { nanoid } from "@reduxjs/toolkit";
 import SearchIcon from "@/assets/icon/search-icon.svg";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import FooterCard from "@/components/FooterBtn";
-import persist from "@/shared/utils/persist.util";
 import RecordCard from "@/components/RecordCard";
 import ROUTER from "@/shared/const/router.const";
 import { useSetClubMutation } from "@/core/services/club.service";
@@ -51,7 +49,7 @@ export default function ClubAddMemberPage() {
 
   const onHandleAddMember = async () => {
     console.log("add", members);
-    updateClub({
+    await updateClub({
       clubId: state.clubId,
       members,
     });

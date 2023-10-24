@@ -2,7 +2,7 @@ import UploadFileController from "@/core/controllers/uploadFile.controller";
 import { useAddRecordMutation, useUpdateEnrollmentStepMutation } from "@/core/services/recordProgress.service";
 import persist from "@/shared/utils/persist.util";
 import { Box, IconButton, Avatar, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder-2";
 import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import HearingIcon from "@/assets/icon/hearing-icon.svg";
@@ -101,6 +101,12 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
 
     setToggleSubBtn(false);
   };
+
+  useEffect(() => {
+    return () => {
+      audioEle.current = null;
+    };
+  }, []);
 
   return (
     <Box className='text-center'>

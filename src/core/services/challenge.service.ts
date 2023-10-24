@@ -4,7 +4,7 @@ import { ClubVocabularyTypeResponse, RecordRequest, RecordTypeResponse, Vocabula
 import ChallengeController from "../controllers/challenge.controller";
 import VocabularyController from "../controllers/vocabulary.controller";
 import _ from "lodash";
-import { IChallengeDetailDisplay, IChallengeDisplay } from "../type/challenge.type";
+import { IChallengeDetailDisplay, IChallengeDisplay, IChallengeSummaryDisplay } from "../type/challenge.type";
 import RecordController from "../controllers/record.controller";
 import persist from "@/shared/utils/persist.util";
 
@@ -80,16 +80,26 @@ export const ChallengeApi = createApi({
       invalidatesTags: ["Challenge"],
     }),
 
-    getAllRecordInChallenge: builder.query<any, string>({
+    getAllRecordInChallenge: builder.query<IChallengeSummaryDisplay, string>({
       async queryFn(challengeId: string) {
         try {
           const myId = persist.getMyInfo().userId;
+          const challenge = await ChallengeController.getChallengeDetail(challengeId);
           const records = await RecordController.getRecordsByChallengeId(myId, challengeId);
+
           const vocabulariesId = records.map((record) => record.vocabularyId);
           const vocabulariesRecord: VocabularyTypeResponse[] = [];
           await VocabularyController.getVocabulariesById(vocabulariesId).then((val) => vocabulariesRecord.push(...val.flat()));
+
           const mergeVocabulary: RecordTypeResponse[] & VocabularyTypeResponse[] = _.merge({}, records, vocabulariesRecord);
-          return { data: _.values(mergeVocabulary) };
+
+
+          const result = {
+            ...challenge,
+            vocabularies: _.values(mergeVocabulary),
+          };
+
+          return { data: result };
         } catch (error) {
           console.error("Challenge::getAllRecordInChallenge::", error);
           return { error };

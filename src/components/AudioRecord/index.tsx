@@ -1,15 +1,12 @@
-import { Container, Box, Avatar, Typography, Button, Grid, Radio } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { ILectureDisplay, RecordTypeResponse } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
-import FooterBtn from "@/components/FooterBtn";
-import { RecordTypeResponse } from "@/core/type";
-import { useGetAllRecordInChallengeQuery } from "@/core/services/challenge.service";
+import { Grid, Radio, Avatar, Typography } from "@mui/material";
 import { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
-import { IChallengeSummaryDisplay } from "@/core/type/challenge.type";
-
-export function ClubAudioRecord({ vocabularies, challengeName }: IChallengeSummaryDisplay) {
+export function AudioRecord({ vocabularies, lectureName }: ILectureDisplay) {
   const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -17,12 +14,10 @@ export function ClubAudioRecord({ vocabularies, challengeName }: IChallengeSumma
   const [selectionRecordId, setSelectionRecordId] = useState("");
 
   const onHandleRerecordPage = ({ vocabularyId, recordId, voiceRecord }: { vocabularyId: string; recordId: string; voiceRecord: string }) => {
-    console.log(vocabularyId, recordId, voiceRecord);
     navigate(
       {
-        pathname: ROUTER.RERECORD + `/${challengeName.toLowerCase()}`,
+        pathname: ROUTER.RERECORD + `/${lectureName.toLowerCase()}`,
       },
-
       {
         state: {
           vocabularyId,
@@ -58,6 +53,18 @@ export function ClubAudioRecord({ vocabularies, challengeName }: IChallengeSumma
       };
     }
   })();
+  // useEffect(() => {
+  //   if (audioRef.current) {
+  //     audioRef.current.onended = function () {
+  //       setSelectionRecordId(() => "");
+  //       setIsPlaying(() => false);
+  //       console.log("eneded");
+  //     };
+  //   }
+  //   return () => {
+  //     audioRef.current = null;
+  //   };
+  // }, [audioRef, audioRef.current]);
 
   const renderAudioList = () => {
     return vocabularies.map((record: any) => {
@@ -110,42 +117,4 @@ export function ClubAudioRecord({ vocabularies, challengeName }: IChallengeSumma
   };
 
   return <>{renderAudioList()}</>;
-}
-
-export default function ClubRecordingSummaryPage() {
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const { data } = useGetAllRecordInChallengeQuery(state.challengeId);
-
-  const onHandleContinue = () => {
-    navigate({
-      pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + state.clubId,
-    });
-  };
-
-  return (
-    <Box className='flex flex-col grow'>
-      <Container className='py-4 divider bg-white'>
-        <Typography className='text-large-semibold'>Finished</Typography>
-      </Container>
-
-      <Container className='py-4 bg-gray-100 flex flex-col grow '>
-        <Box className='flex flex-col justify-center items-center p-4 bg-white border rounded-t-lg'>
-          <Typography component={"h6"}>{data && data.vocabularies.length}</Typography>
-          <Typography variant='body2' className='text-base-regular'>
-            Sentences practiced
-          </Typography>
-        </Box>
-        {data && <ClubAudioRecord {...data} />}
-      </Container>
-
-      <FooterBtn>
-        <Button variant='contained' className='rounded-md m-auto' onClick={onHandleContinue}>
-          <Typography className='text-base-medium' color={"white"}>
-            Continue practice
-          </Typography>
-        </Button>
-      </FooterBtn>
-    </Box>
-  );
 }

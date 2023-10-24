@@ -12,7 +12,7 @@ import { timeSince } from "@/shared/utils/timeSince.util";
 
 function ChallengeCard(props: IChallengeDisplay) {
   const navigate = useNavigate();
-console.log(props)
+  console.log(props);
   const onHandleRecording = () => {
     navigate(
       {
@@ -29,7 +29,17 @@ console.log(props)
   };
 
   const onHandleListening = () => {
-    navigate(ROUTER.CLUB_LISTENING);
+    navigate(
+      {
+        pathname: ROUTER.CLUB_LISTENING,
+      },
+      {
+        state: {
+          challengeId: props.challengeId,
+          clubId: props.clubId.id,
+        },
+      }
+    );
   };
   if (!props) return <>There's no challenge</>;
   return (

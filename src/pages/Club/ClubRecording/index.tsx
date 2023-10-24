@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import { useGetChallengeDetailInClubQuery } from "@/core/services/challenge.service";
-import ClubRecordingAudio from "@/components/ClubRecordingAudio";
+import ClubRecordingAudio from "@/components/ClubRecording";
 import useTextToSpeech from "@/shared/hook/useTextToSpeech";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 

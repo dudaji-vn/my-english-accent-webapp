@@ -3,8 +3,9 @@ import MessageIcon from "@/assets/icon/message-icon.svg";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import NationalityCard from "@/components/NationalityCard";
+import { UserResponseType } from "@/core/type";
 
-export default function UserPlayRecord() {
+export default function UserPlayRecord(userInfo: UserResponseType) {
   return (
     <Box className='flex justify-between items-start py-4'>
       <Box>

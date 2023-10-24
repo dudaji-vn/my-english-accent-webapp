@@ -44,7 +44,7 @@ export default function AddNewClubPage() {
   const { data } = useGetLecturesQuery();
   const [addClub] = useSetClubMutation();
 
-  console.log(data);
+  console.log("AddNewClubPage", data);
 
   const [clubName, setClubName] = useState("");
   const [lecturesId, setLecturesId] = useState<string[]>([]);
