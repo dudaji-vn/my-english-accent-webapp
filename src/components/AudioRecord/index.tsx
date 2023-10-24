@@ -8,63 +8,47 @@ import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 export function AudioRecord({ vocabularies, lectureName }: ILectureDisplay) {
   const navigate = useNavigate();
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [selectionRecordId, setSelectionRecordId] = useState("");
+  const [selectionAudio, setSelectionAudio] = useState("");
 
   const onHandleRerecordPage = ({ vocabularyId, recordId, voiceRecord }: { vocabularyId: string; recordId: string; voiceRecord: string }) => {
-    navigate(
-      {
-        pathname: ROUTER.RERECORD + `/${lectureName.toLowerCase()}`,
-      },
-      {
-        state: {
-          vocabularyId,
-          recordId,
-          voiceRecord,
+    if (!isPlaying) {
+      navigate(
+        {
+          pathname: ROUTER.RERECORD + `/${lectureName.toLowerCase()}`,
         },
-      }
-    );
+        {
+          state: {
+            vocabularyId,
+            recordId,
+            voiceRecord,
+          },
+        }
+      );
+    }
   };
 
-  const onHanlePlayAudio = (value: string) => {
-    setSelectionRecordId(() => value);
+  const onHanlePlayAudio = async (value: string) => {
+    setSelectionAudio(() => value);
     const index = vocabularies.findIndex((record: RecordTypeResponse) => record.recordId === value);
-    if (audioRef.current) {
-      (audioRef.current as HTMLAudioElement).src = vocabularies[index].rVoiceSrc;
-      setIsPlaying(() => true);
-    }
+    const newAudio = new Audio(vocabularies[index].rVoiceSrc);
+    setAudio(() => newAudio);
+    setIsPlaying(() => true);
   };
 
   useEffect(() => {
-    if (audioRef.current) {
-      console.log("isPlaying", isPlaying);
-      isPlaying ? audioRef.current.play() : audioRef.current.pause();
-    }
+    if (audio) isPlaying ? audio.play() : audio.pause();
   }, [isPlaying]);
 
-  (function () {
-    if (audioRef.current) {
-      audioRef.current.onended = function () {
-        setSelectionRecordId(() => "");
+  useEffect(() => {
+    if (audio) {
+      audio.onended = function () {
         setIsPlaying(() => false);
-        console.log("eneded");
       };
     }
-  })();
-  // useEffect(() => {
-  //   if (audioRef.current) {
-  //     audioRef.current.onended = function () {
-  //       setSelectionRecordId(() => "");
-  //       setIsPlaying(() => false);
-  //       console.log("eneded");
-  //     };
-  //   }
-  //   return () => {
-  //     audioRef.current = null;
-  //   };
-  // }, [audioRef, audioRef.current]);
+  });
 
   const renderAudioList = () => {
     return vocabularies.map((record: any) => {
@@ -73,12 +57,12 @@ export function AudioRecord({ vocabularies, lectureName }: ILectureDisplay) {
           <Grid item xs={1}>
             <Radio
               onChange={() => onHanlePlayAudio(record.recordId)}
-              checked={selectionRecordId === record.recordId}
+              checked={selectionAudio === record.recordId}
               value={record.recordId}
               icon={<Avatar src={SpeakerIcon} className='w-5 h-5' />}
               checkedIcon={<Avatar src={SpeakerFillIcon} className='w-5 h-5' />}
+              disabled={isPlaying}
             />
-            <audio ref={audioRef} />
           </Grid>
           <Grid
             item

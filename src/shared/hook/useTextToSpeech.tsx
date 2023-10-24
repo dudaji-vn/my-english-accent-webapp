@@ -3,22 +3,16 @@ import { Avatar, IconButton } from "@mui/material";
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 
 const TextToSpeech = ({ text }: { text: string }) => {
-  const [isPaused, setIsPaused] = useState(false);
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
   const synth = window.speechSynthesis;
 
   const onHandlePlay = async () => {
-    if (isPaused) {
-      synth.cancel();
-    }
     if (utterance) {
       synth.speak(utterance);
       utterance.onend = function () {
-        setIsPaused(() => !isPaused);
         synth.cancel();
       };
     }
-    setIsPaused(() => !isPaused);
   };
 
   useEffect(() => {

@@ -18,7 +18,7 @@ export const ClubStudyApi = createApi({
           await ClubController.getClubByUserId(userId, "members").then((val) => clubsJoined.push(...val.flat()));
           const clubsOwner: ClubResponseType[] = [];
           await ClubController.getClubByUserId(userId, "owner_user_id").then((val) => clubsOwner.push(...val.flat()));
-
+          console.log("getClubsOwner", clubsJoined, clubsOwner);
           const response: IClubDisplay = {
             clubsJoined: clubsJoined.sort(function (x, y) {
               return y.created.seconds - x.created.seconds;

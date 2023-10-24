@@ -12,6 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { IChallengeDetailDisplay } from "@/core/type/challenge.type";
 import { RecordRequest } from "@/core/type";
+import { useUpdateChallengeMemberMutation } from "@/core/services/challenge.service";
 
 export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
   const { state, hash } = useLocation();
@@ -21,6 +22,8 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
   const { vocabularies, ...restProps } = props;
   const audioEle = useRef<HTMLAudioElement | null>(null);
   const [addRecord] = useAddRecordMutation();
+  const [updateChallenge] = useUpdateChallengeMemberMutation();
+
   const [listRequest, setListRequest] = useState<RecordRequest[]>([]);
 
   const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
@@ -66,7 +69,10 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
         await addRecord(request);
       });
 
-      navigate(
+      //TODO: if myId != owner
+      // await updateChallenge(state.challengeId);
+
+      await navigate(
         {
           pathname: ROUTER.CLUB_RECORDING_SUMMARY,
         },

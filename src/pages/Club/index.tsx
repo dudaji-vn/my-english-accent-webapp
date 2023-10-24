@@ -15,7 +15,6 @@ export default function ClubPage() {
 
   const myId = persist.getMyInfo().userId;
   const { data } = useGetClubsOwnerQuery(myId);
-
   const renderNoClub = () => {
     return (
       <Container className='flex flex-col text-center items-center gap-2 mt-12'>
@@ -54,9 +53,6 @@ export default function ClubPage() {
         <Box>
           <Box className='flex justify-between items-center mt-4'>
             <Typography className='text-base-semibold'>Club you’ve joined ({data && data.clubsJoined.length})</Typography>
-            <IconButton>
-              <Avatar src={AddIcon} alt='speaking-icon' className='w-8 h-8' />
-            </IconButton>
           </Box>
           {data.clubsJoined.map((club) => {
             return <ClubCard {...club} key={club.clubId} />;

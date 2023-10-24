@@ -6,13 +6,24 @@ import NationalityCard from "@/components/NationalityCard";
 import { UserResponseType } from "@/core/type";
 
 export default function UserPlayRecord(userInfo: UserResponseType) {
+  const language = (language: string) => {
+    if (language === "vi") {
+      return "Vietnamese";
+    } else if (language === "en") {
+      return "English";
+    } else if (language === "kr") {
+      return "Korea";
+    } else {
+      return "";
+    }
+  };
   return (
     <Box className='flex justify-between items-start py-4'>
       <Box>
-        <NationalityCard isShowAvatar isShowName isShowNationality />
+        <NationalityCard isShowAvatar isShowName isShowNationality userInfo={userInfo} />
         <Typography className='text-extra-small-regular flex gap-1 mt-2'>
           <Avatar src={MessageIcon} component={"span"} className='w-4 h-4' />
-          Speak Vietnamese (native), English
+          Speak {language(userInfo.nativeLanguage)} (native), {language(userInfo.displayLanguage)}
         </Typography>
       </Box>
       <Checkbox icon={<Avatar src={SpeakerIcon} className='w-6 h-6' />} checkedIcon={<Avatar src={SpeakerFillIcon} className='w-6 h-6' />} />

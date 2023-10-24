@@ -32,6 +32,18 @@ const ChallengeController = {
     const challengeRef = await addDoc(challengeCollection, request);
     return challengeRef.id;
   },
+  updateChallenge: async (challengeId: string, userId: string) => {
+    const userRef = doc(firebaseDB, "user", userId);
+    return await setDoc(
+      doc(challengeCollection, challengeId),
+      {
+        participants: [userRef],
+      },
+      {
+        merge: true,
+      }
+    );
+  },
 };
 
 export default ChallengeController;

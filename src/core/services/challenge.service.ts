@@ -1,12 +1,13 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { ClubVocabularyTypeResponse, RecordRequest, RecordTypeResponse, VocabularyTypeResponse } from "../type";
+import { ClubVocabularyTypeResponse, RecordRequest, RecordTypeResponse, UserResponseType, VocabularyTypeResponse } from "../type";
 import ChallengeController from "../controllers/challenge.controller";
 import VocabularyController from "../controllers/vocabulary.controller";
 import _ from "lodash";
 import { IChallengeDetailDisplay, IChallengeDisplay, IChallengeSummaryDisplay } from "../type/challenge.type";
 import RecordController from "../controllers/record.controller";
 import persist from "@/shared/utils/persist.util";
+import UserController from "../controllers/user.controller";
 
 export const ChallengeApi = createApi({
   reducerPath: Reducer.challengeApi,
@@ -88,14 +89,18 @@ export const ChallengeApi = createApi({
           const records = await RecordController.getRecordsByChallengeId(myId, challengeId);
 
           const vocabulariesId = records.map((record) => record.vocabularyId);
+
           const vocabulariesRecord: VocabularyTypeResponse[] = [];
           await VocabularyController.getVocabulariesById(vocabulariesId).then((val) => vocabulariesRecord.push(...val.flat()));
 
-          const mergeVocabulary: RecordTypeResponse[] & VocabularyTypeResponse[] = _.merge({}, records, vocabulariesRecord);
+          const users: UserResponseType[] = [];
+          await UserController.getUsersBy(challenge.participants).then((val) => users.push(...val.flat()));
 
+          const mergeVocabulary: RecordTypeResponse[] & VocabularyTypeResponse[] = _.merge({}, records, vocabulariesRecord);
 
           const result = {
             ...challenge,
+            participants: users,
             vocabularies: _.values(mergeVocabulary),
           };
 
@@ -106,9 +111,22 @@ export const ChallengeApi = createApi({
         }
       },
     }),
+
+    updateChallengeMember: builder.mutation<boolean, string>({
+      async queryFn(challengeId: string) {
+        try {
+          const myId = persist.getMyInfo().userId;
+          await ChallengeController.updateChallenge(challengeId, myId);
+          return { data: true };
+        } catch (error) {
+          console.error("Challenge::getAllRecordInChallenge::", error);
+          return { error };
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetChallengesInClubQuery, useGetChallengeDetailInClubQuery, useAddRecordChallengeMutation, useGetAllRecordInChallengeQuery } = ChallengeApi;
+export const { useGetChallengesInClubQuery, useGetChallengeDetailInClubQuery, useAddRecordChallengeMutation, useGetAllRecordInChallengeQuery, useUpdateChallengeMemberMutation } = ChallengeApi;
 
 export default ChallengeApi;

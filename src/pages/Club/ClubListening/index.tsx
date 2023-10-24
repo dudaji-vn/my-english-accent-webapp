@@ -56,11 +56,19 @@ export default function ClubListeningPage() {
     );
   };
 
+  const onSlideChange = (val: any) => {
+    console.log(val.activeIndex);
+    if (data) {
+      console.log("vocabularyId::", data.vocabularies[val.activeIndex].vocabularyId);
+      console.log("challengeId::", data.vocabularies[val.activeIndex].challengeId?.id);
+    }
+  };
+
   const renderSlide = () => {
     if (data && data.vocabularies) {
       return data.vocabularies.map((voca) => {
         return (
-          <SwiperSlide key={(voca as unknown as RecordTypeResponse).recordId}>
+          <SwiperSlide key={voca.vocabularyId}>
             <Box className='bg-white rounded-lg p-4 h-full flex flex-col items-center'>
               <Typography className='text-small-medium'>{voca.vtitleDisplayLanguage}</Typography>
               <Typography className='text-small-regular'>{voca.vphoneticDisplayLanguage}</Typography>
@@ -88,18 +96,18 @@ export default function ClubListeningPage() {
         </Box>
       </Container>
       <Box className='p-4 max-h-[208px] h-[208px]'>
-        <Swiper pagination={true} modules={[Pagination]} className='h-full'>
+        <Swiper pagination={true} modules={[Pagination]} className='h-full' onSlideChange={onSlideChange}>
           {renderSlide()}
         </Swiper>
       </Box>
       <Box className='p-4 bg-white grow'>
-        <Typography className='text-base-semibold pb-4'>Participant {data?.participants.length}</Typography>
+        <Typography className='text-base-semibold pb-4'>Participant ({data?.participants.length})</Typography>
         {renderParticipant()}
       </Box>
       <FooterCard classes='items-center'>
         <Button variant='contained' className='rounded-md m-auto grow' onClick={onHandlePlayAll}>
           <Typography className='text-base-medium ' color={"white"}>
-            LIsten all
+            Listen all
           </Typography>
         </Button>
       </FooterCard>

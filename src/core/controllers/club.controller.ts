@@ -10,7 +10,10 @@ const clubCollection = collection(firebaseDB, clubPath);
 const ClubController = {
   getClubByUserId: async (userId: string, key: "owner_user_id" | "members") => {
     const userRef = doc(firebaseDB, "user", userId);
-    const q = query(clubCollection, where(key, "==", userRef));
+    let q = query(clubCollection, where(key, "==", userRef));
+    if (key === "members") {
+      q = query(clubCollection, where(key, "array-contains", userRef));
+    }
     return (await getDocs(q)).docs.map((doc) => clubConvert(doc.id, doc.data() as ClubModal));
   },
   updateClub: async (payload: ClubRequest) => {

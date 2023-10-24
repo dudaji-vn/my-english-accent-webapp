@@ -20,11 +20,7 @@ import TextToSpeech from "@/shared/hook/useTextToSpeech";
 
 export default function RerecordingProgressPage() {
   //TODO speaking audio
-  const [addRecord] = useAddRecordMutation();
   const myId = persist.getMyInfo().userId;
-
-  const audioEle = useRef<HTMLAudioElement | null>(null);
-  const audio = new Audio("");
 
   const navigate = useNavigate();
   const search = useLocation();
@@ -32,8 +28,12 @@ export default function RerecordingProgressPage() {
   const { vocabularyId } = search.state;
   const { recordId } = search.state;
   const { voiceRecord } = search.state;
+
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
-  const { data } = useGetVocabularyByRecordQuery(vocabularyId);
+
+  const [addRecord] = useAddRecordMutation();
+  const { data, isFetching } = useGetVocabularyByRecordQuery(vocabularyId);
   console.log(data);
   const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
     audio: true,
@@ -46,18 +46,14 @@ export default function RerecordingProgressPage() {
   });
 
   const onRepeat = () => {
+    let newAudio;
     if (!mediaBlobUrl) {
-      audio.src = voiceRecord;
+      newAudio = new Audio(voiceRecord);
     } else {
-      audio.src = mediaBlobUrl;
+      newAudio = new Audio(voiceRecord);
     }
-    if (playing) {
-      audio.pause();
-      setPlaying(() => false);
-    } else {
-      audio.play();
-      setPlaying(() => true);
-    }
+    setAudio(newAudio);
+    setPlaying(() => true);
   };
 
   const onHandlePlay = () => {
@@ -89,19 +85,33 @@ export default function RerecordingProgressPage() {
     if (data && mediaBlobUrl) {
       await UploadFileController.uploadAudio(audiofile, data.vocabularyId.id, myId, callback);
     }
-    navigate({
-      pathname: ROUTER.RECORD + "/" + lectureName + ROUTER.SUMMARY,
-    });
+    navigate(
+      {
+        pathname: ROUTER.RECORD + "/" + lectureName + ROUTER.SUMMARY,
+      },
+      {
+        state: {
+          lectureId: data?.lectureId.id,
+        },
+      }
+    );
   };
 
-  // useEffect(() => {
-  //   audio.onended = function () {
-  //     setPlaying(() => false);
-  //   };
-  //   return () => {
-  //     audio = null;
-  //   };
-  // }, [audio]);
+  useEffect(() => {
+    if (audio) {
+      playing ? audio.play() : audio.pause();
+    }
+  }, [playing]);
+
+  useEffect(() => {
+    if (audio) {
+      audio.onended = function () {
+        setPlaying(() => false);
+      };
+    }
+  });
+
+  console.log("isFetching::", isFetching);
 
   return (
     <Box className='flex flex-col grow'>
@@ -144,7 +154,7 @@ export default function RerecordingProgressPage() {
           </Box>
           <Box className='text-center'>
             <Box className='flex items-center p-7 justify-between'>
-              <IconButton onClick={onRepeat} className='border border-stroke border-solid'>
+              <IconButton onClick={onRepeat} className='border border-stroke border-solid' disabled={playing}>
                 <Avatar src={HearingIcon} className='w-6 h-6' />
               </IconButton>
 
@@ -152,7 +162,6 @@ export default function RerecordingProgressPage() {
                 <IconButton className='bg-primary p-5' onClick={onHandlePlay}>
                   <Avatar src={isRecord ? SoundIcon : MicrophoneIcon} />
                 </IconButton>
-                <audio src={mediaBlobUrl} ref={audioEle}></audio>
               </Box>
               <IconButton onClick={() => onHandleNext()} className='border border-stroke border-solid'>
                 <Avatar src={ArrowRight} className='w-6 h-6' />
