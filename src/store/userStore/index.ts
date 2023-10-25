@@ -1,3 +1,4 @@
+import { UserApi } from "@/core/services";
 import Reducer from "@/shared/const/store.const";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -27,6 +28,11 @@ const userSlice = createSlice({
     logout: (state: UserType) => {
       state.token = "";
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(UserApi.endpoints.login.matchFulfilled, (state, action) => {
+      state.token = action.payload.userId;
+    });
   },
 });
 

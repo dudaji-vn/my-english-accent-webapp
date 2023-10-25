@@ -3,13 +3,13 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import FooterCard from "@/components/FooterBtn";
 import { useMultiAudio } from "@/shared/hook/useMultiAudio";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import NoPeople from "@/assets/icon/no-member-club-icon.svg";
 import UserPlayRecord from "@/components/UserPlayRecord";
-import { useGetAllRecordInChallengeQuery } from "@/core/services/challenge.service";
-import { VocabularyTypeResponse, RecordTypeResponse } from "@/core/type";
+import { useGetAllRecordInChallengeQuery, useGetRecordToListenQuery } from "@/core/services/challenge.service";
+import { VocabularyTypeResponse, RecordTypeResponse, UserResponseType } from "@/core/type";
 
 const exampleAudio = [
   "",
@@ -25,20 +25,10 @@ export default function ClubListeningPage() {
   const { challengeId } = state;
   const { clubId } = state;
 
-  const { data } = useGetAllRecordInChallengeQuery(challengeId);
-
+  const { data } = useGetRecordToListenQuery(challengeId);
   console.log("ClubListeningPage::", data);
+  const [currentVocabulary, setCurrentVocabulary] = useState(0);
   // const { players, indexAudio, playAudio } = useMultiAudio(exampleAudio);
-
-  // const swiperElRef = useRef(null);
-
-  // // const pagination = {
-  // //   clickable: true,
-  // //   renderBullet: function (index: number, className: string) {
-  // //     console.log(className);
-  // //     return '<span class="' + className + '">' + "</span>";
-  // //   },
-  // // };
 
   const onHandlePlayAll = () => {
     // playAudio(0);
@@ -57,21 +47,22 @@ export default function ClubListeningPage() {
   };
 
   const onSlideChange = (val: any) => {
-    console.log(val.activeIndex);
-    if (data) {
-      console.log("vocabularyId::", data.vocabularies[val.activeIndex].vocabularyId);
-      console.log("challengeId::", data.vocabularies[val.activeIndex].challengeId?.id);
-    }
+    setCurrentVocabulary(() => val.activeIndex);
+    // if (data) {
+    //   console.log("vocabularyId::", data[val.activeIndex].vocabularyId);
+    // }
   };
 
   const renderSlide = () => {
-    if (data && data.vocabularies) {
-      return data.vocabularies.map((voca) => {
+    if (data) {
+      return data.map((voca: any) => {
         return (
           <SwiperSlide key={voca.vocabularyId}>
             <Box className='bg-white rounded-lg p-4 h-full flex flex-col items-center'>
               <Typography className='text-small-medium'>{voca.vtitleDisplayLanguage}</Typography>
-              <Typography className='text-small-regular'>{voca.vphoneticDisplayLanguage}</Typography>
+              <Typography className='text-small-regular' variant='body2'>
+                {voca.vphoneticDisplayLanguage}
+              </Typography>
             </Box>
           </SwiperSlide>
         );
@@ -81,7 +72,7 @@ export default function ClubListeningPage() {
 
   const renderParticipant = () => {
     if (data) {
-      return data.participants.map((user) => <UserPlayRecord key={user.userId} {...user} />);
+      return data[currentVocabulary].recordUser.map((recordUser: UserResponseType & RecordTypeResponse) => <UserPlayRecord key={recordUser.userId} {...recordUser} />);
     }
   };
 
@@ -101,7 +92,7 @@ export default function ClubListeningPage() {
         </Swiper>
       </Box>
       <Box className='p-4 bg-white grow'>
-        <Typography className='text-base-semibold pb-4'>Participant ({data?.participants.length})</Typography>
+        <Typography className='text-base-semibold pb-4'>Participant ({data?.length})</Typography>
         {renderParticipant()}
       </Box>
       <FooterCard classes='items-center'>

@@ -14,19 +14,28 @@ import AccountIcon from "@/assets/icon/settings-icon.svg";
 import LogoutIcon from "@/assets/icon/log-out-icon.svg";
 import LogoApp from "@/assets/icon/logo-icon.svg";
 import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
+import persist from "@/shared/utils/persist.util";
+import { useAppDispatch } from "@/store/hook";
+import { logout } from "@/store/UserStore";
 
 const settings = [
   {
     title: "Account",
     icon: AccountIcon,
+    action: () => {},
   },
   {
     title: "Log out",
     icon: LogoutIcon,
+    action: (dispatch: any) => {
+      dispatch(logout());
+    },
   },
 ];
 
 export default function Navbar() {
+  const dispatch = useAppDispatch();
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -77,7 +86,7 @@ export default function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.title} onClick={handleCloseUserMenu} sx={{ paddingY: "0.5rem" }}>
+                <MenuItem key={setting.title} onClick={handleCloseUserMenu} sx={{ paddingY: "0.5rem" }} onClickCapture={() => setting.action(dispatch)}>
                   <Avatar
                     alt={setting.title + "icon"}
                     src={setting.icon}

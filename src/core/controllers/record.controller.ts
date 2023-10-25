@@ -53,6 +53,7 @@ const RecordController = {
     }
     return [];
   },
+
   getRecordsByChallengeId: async (userId: string, challengeId: string) => {
     const userRef = doc(firebaseDB, "user", userId);
     const challengeRef = doc(firebaseDB, "challenge", challengeId);
@@ -60,9 +61,20 @@ const RecordController = {
     const q = query(recordCollection, and(where("challenge_id", "==", challengeRef), where("user_id", "==", userRef)));
     return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
   },
+
   getRecord: async (recordId: string) => {
     const q = query(recordCollection, where(documentId(), "==", recordId));
     return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
+  },
+
+  getRecordOfUsersByChallengeId: async (usersId: string[], challengeId: string) => {
+    const challengeRef = doc(firebaseDB, "challenge", challengeId);
+    const promises = usersId.map(async (userId) => {
+      const userRef = doc(firebaseDB, "user", userId);
+      const q = query(recordCollection, and(where("challenge_id", "==", challengeRef), where("user_id", "==", userRef)));
+      return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
+    });
+    return Promise.all(promises).then();
   },
 };
 

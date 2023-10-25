@@ -7,10 +7,7 @@ const TOPIC_ID = "topicId";
 const QUOTE = "quote";
 
 const persist = {
-  saveVocabulary: (
-    value: Omit<TopicUIType, "imgSrc" | "vocabularies"> &
-      Partial<VocabularyType>
-  ) => {
+  saveVocabulary: (value: Omit<TopicUIType, "imgSrc" | "vocabularies"> & Partial<VocabularyType>) => {
     localStorage.setItem(VOCABULARY, JSON.stringify(value));
   },
   getVocabulary: () => {
@@ -24,6 +21,10 @@ const persist = {
   getMyInfo: (): UserType => {
     const myInfo = localStorage.getItem(USER_INFO);
     return myInfo ? JSON.parse(myInfo) : null;
+  },
+  logout: () => {
+    localStorage.removeItem(USER_INFO);
+    localStorage.removeItem(TOKEN);
   },
   getToken: () => {
     return localStorage.getItem(TOKEN);

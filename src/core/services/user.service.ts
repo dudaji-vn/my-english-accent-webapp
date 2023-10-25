@@ -13,7 +13,6 @@ export const UserApi = createApi({
       async queryFn(payload) {
         try {
           const myInfo: any = await UserController.login(payload);
-          console.log(myInfo);
           persist.saveMyInfo(myInfo);
           return { data: myInfo };
         } catch (error) {

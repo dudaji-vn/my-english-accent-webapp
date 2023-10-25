@@ -1,11 +1,16 @@
-import { Box, Typography, Avatar, Checkbox } from "@mui/material";
+import { Box, Typography, Avatar, Radio } from "@mui/material";
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import NationalityCard from "@/components/NationalityCard";
-import { UserResponseType } from "@/core/type";
+import { RecordTypeResponse, UserResponseType } from "@/core/type";
+import { useEffect, useState } from "react";
 
-export default function UserPlayRecord(userInfo: UserResponseType) {
+export default function UserPlayRecord(props: UserResponseType & RecordTypeResponse) {
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioSelected, setAudioSelected] = useState("");
+
   const language = (language: string) => {
     if (language === "vi") {
       return "Vietnamese";
@@ -17,16 +22,50 @@ export default function UserPlayRecord(userInfo: UserResponseType) {
       return "";
     }
   };
+
+  const onHanlePlayAudio = async (value: string) => {
+    setAudioSelected(() => value);
+    const newAudio = new Audio(value);
+    setAudio(() => newAudio);
+    setIsPlaying(() => true);
+  };
+
+  useEffect(() => {
+    if (audio) isPlaying ? audio.play() : audio.pause();
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (audio) {
+      setIsPlaying(() => false);
+    }
+  }, [props]);
+
+  useEffect(() => {
+    if (audio) {
+      audio.onended = function () {
+        setIsPlaying(() => false);
+      };
+    }
+  });
+
   return (
     <Box className='flex justify-between items-start py-4'>
       <Box>
-        <NationalityCard isShowAvatar isShowName isShowNationality userInfo={userInfo} />
+        <NationalityCard isShowAvatar isShowName isShowNationality userInfo={props} />
         <Typography className='text-extra-small-regular flex gap-1 mt-2'>
           <Avatar src={MessageIcon} component={"span"} className='w-4 h-4' />
-          Speak {language(userInfo.nativeLanguage)} (native), {language(userInfo.displayLanguage)}
+          Speak {language(props.nativeLanguage)} (native), {language(props.displayLanguage)}
         </Typography>
       </Box>
-      <Checkbox icon={<Avatar src={SpeakerIcon} className='w-6 h-6' />} checkedIcon={<Avatar src={SpeakerFillIcon} className='w-6 h-6' />} />
+
+      <Radio
+        onChange={() => onHanlePlayAudio(props.rVoiceSrc)}
+        checked={audioSelected === props.rVoiceSrc}
+        value={props.rVoiceSrc}
+        icon={<Avatar src={SpeakerIcon} className='w-6 h-6' />}
+        checkedIcon={<Avatar src={SpeakerFillIcon} className='w-6 h-6' />}
+        disabled={isPlaying}
+      />
     </Box>
   );
 }
