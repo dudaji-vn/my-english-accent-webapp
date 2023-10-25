@@ -17,7 +17,6 @@ export default function UserPlayRecord({ props, audioSelected, setAudioSelected,
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  console.log("UserPlayRecord::", props, audioSelected);
   const language = (language: string) => {
     if (language === "vi") {
       return "Vietnamese";

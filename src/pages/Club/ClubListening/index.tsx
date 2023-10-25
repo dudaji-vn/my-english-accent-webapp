@@ -29,10 +29,13 @@ export default function ClubListeningPage() {
   console.log("ClubListeningPage::", data);
   const [currentVocabulary, setCurrentVocabulary] = useState(0);
   const [audioSelected, setAudioSelected] = useState("");
-  // const { players, indexAudio, playAudio } = useMultiAudio(exampleAudio);
+  const { indexAudio, playAudio } = useMultiAudio([]);
 
   const onHandlePlayAll = () => {
-    // playAudio(0);
+    if (data) {
+      const voiceRecords: any = data[currentVocabulary].recordUser.map((user) => ({ url: user.rVoiceSrc, playing: false, played: false }));
+      playAudio(1, voiceRecords);
+    }
   };
 
   const renderNoUser = () => {
@@ -75,7 +78,6 @@ export default function ClubListeningPage() {
 
   const renderParticipant = () => {
     if (data) {
-      console.log("data in club listen::", data[currentVocabulary]);
       return data[currentVocabulary].recordUser.map((recordUser: UserResponseType & RecordTypeResponse) => (
         <UserPlayRecord key={recordUser.userId} props={{ ...recordUser }} audioSelected={audioSelected} setAudioSelected={onAudioSelected} currentVocabulary={currentVocabulary} />
       ));

@@ -19,7 +19,7 @@ export interface MultiAudioPlayer {
 }
 
 export const useMultiAudio = (urls: string[]) => {
-  const [sources] = useState<MultiAudioSourceType[]>(
+  const [sources, setSources] = useState<MultiAudioSourceType[]>(
     urls.map((url) => {
       return {
         url,
@@ -41,9 +41,12 @@ export const useMultiAudio = (urls: string[]) => {
   const [indexAudio, setIndexAudio] = useState<number>(-1);
   const [lengthAudio] = useState<number>(urls.length - 1);
 
-  const playAudio = (index: number): void => {
-    const newPlayers = [...players];
-    const currentIndex = players.findIndex((p) => p.playing === true);
+  const playAudio = (index: number, data: MultiAudioPlayerType[]): void => {
+    const newSources = data.map((v) => ({ url: v.url, audio: new Audio(v.url) }));
+    setSources(() => newSources);
+
+    const newPlayers = [...data];
+    const currentIndex = data.findIndex((p) => p.playing === true);
     if (currentIndex !== -1) {
       newPlayers[index].playing = true;
     } else {
@@ -57,8 +60,10 @@ export const useMultiAudio = (urls: string[]) => {
     if (indexAudio != -1) {
       console.log("chay trong nay");
       if (players[indexAudio].playing) {
+        console.log("chay trong nay1");
         sources[indexAudio].audio.play();
       } else {
+        console.log("chay trong nay2");
         sources[indexAudio].audio.pause();
       }
     }
@@ -73,7 +78,7 @@ export const useMultiAudio = (urls: string[]) => {
         newPlayers[indexAudio].played = true;
         setPlayers(newPlayers);
         if (lengthAudio > 0 && lengthAudio > indexAudio) {
-          playAudio(indexAudio + 1);
+          playAudio(indexAudio + 1, newPlayers);
         }
       });
     }
