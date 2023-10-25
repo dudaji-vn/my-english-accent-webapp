@@ -18,7 +18,7 @@ interface WordTagPropType {
 export default function WordTag({ sentence, phonetic, classes, voiceSrc, lectureName, lectureId, vocabularyId, recordId }: WordTagPropType) {
   const navigate = useNavigate();
 
-  const [playing, toggle] = useAudio(voiceSrc);
+  const [playing, toggle] = useAudio();
 
   console.log("WordTag::useAudio", playing);
 

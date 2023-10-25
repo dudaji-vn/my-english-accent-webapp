@@ -3,21 +3,13 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import FooterCard from "@/components/FooterBtn";
 import { useMultiAudio } from "@/shared/hook/useMultiAudio";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import NoPeople from "@/assets/icon/no-member-club-icon.svg";
 import UserPlayRecord from "@/components/UserPlayRecord";
-import { useGetAllRecordInChallengeQuery, useGetRecordToListenQuery } from "@/core/services/challenge.service";
+import { useGetRecordToListenQuery } from "@/core/services/challenge.service";
 import { VocabularyTypeResponse, RecordTypeResponse, UserResponseType } from "@/core/type";
-
-const exampleAudio = [
-  "",
-  //   "https://firebasestorage.googleapis.com/v0/b/my-english-accent-239fb.appspot.com/o/audio%2Ftopic_NA5SE36AF0rg8BvnNNiUe%2Fvocabulary_MqPGFlc-a0XnlLtu3kXVC%2Fvoice_DwRjcCyd0HgZAcngdguJp?alt=media&token=fbb79a99-0bf8-440e-88d4-3cfb23011213",
-  //   "https://firebasestorage.googleapis.com/v0/b/my-english-accent-239fb.appspot.com/o/audio%2Ftopic_NA5SE36AF0rg8BvnNNiUe%2Fvocabulary_MqPGFlc-a0XnlLtu3kXVC%2Fvoice_DwRjcCyd0HgZAcngdguJp?alt=media&token=fbb79a99-0bf8-440e-88d4-3cfb23011213",
-];
-
-type VocabularyClubType = RecordTypeResponse & VocabularyTypeResponse;
 
 export default function ClubListeningPage() {
   const navigate = useNavigate();
@@ -29,12 +21,12 @@ export default function ClubListeningPage() {
   console.log("ClubListeningPage::", data);
   const [currentVocabulary, setCurrentVocabulary] = useState(0);
   const [audioSelected, setAudioSelected] = useState("");
-  const { indexAudio, playAudio } = useMultiAudio([]);
-
+  const { status, players, indexAudio, playAudio } = useMultiAudio();
+  console.log(status, indexAudio, players, "indexAudio");
   const onHandlePlayAll = () => {
     if (data) {
       const voiceRecords: any = data[currentVocabulary].recordUser.map((user) => ({ url: user.rVoiceSrc, playing: false, played: false }));
-      playAudio(1, voiceRecords);
+      playAudio(0, voiceRecords);
     }
   };
 
@@ -58,6 +50,14 @@ export default function ClubListeningPage() {
   const onAudioSelected = (urlSrc: string) => {
     setAudioSelected(() => urlSrc);
   };
+
+  useEffect(() => {
+    if (status === "stop") {
+      setAudioSelected(() => "");
+    } else if (indexAudio != -1 && players.length > 0) {
+      setAudioSelected(() => players[indexAudio].url);
+    }
+  }, [indexAudio, status]);
 
   const renderSlide = () => {
     if (data) {
@@ -100,7 +100,7 @@ export default function ClubListeningPage() {
         </Swiper>
       </Box>
       <Box className='p-4 bg-white grow'>
-        <Typography className='text-base-semibold pb-4'>Participant ({data?.length})</Typography>
+        <Typography className='text-base-semibold pb-4'>Participants ({data && data[currentVocabulary].recordUser.length})</Typography>
         {renderParticipant()}
       </Box>
       <FooterCard classes='items-center'>

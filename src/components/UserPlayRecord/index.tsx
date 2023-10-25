@@ -38,7 +38,7 @@ export default function UserPlayRecord({ props, audioSelected, setAudioSelected,
 
   useEffect(() => {
     if (audio) {
-      console.log("audio::", audio.src, isPlaying);
+      console.log("audio::", audio.src);
       isPlaying ? audio.play() : audio.pause();
     }
   }, [isPlaying]);

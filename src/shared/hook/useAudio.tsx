@@ -2,24 +2,33 @@ import { useMemo, useEffect, useState } from "react";
 
 type tuplesAudio = [boolean, Function];
 
-const useAudio = (url: string) => {
-  const audio = useMemo(() => new Audio(url), []);
+const useAudio = () => {
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
-  const toggle = () => setPlaying(!playing);
+  const playAudio = ({ audio, url }: { url: string; audio: HTMLAudioElement }): void => {
+    setAudio(() => audio);
+    setPlaying(() => true);
+  };
 
   useEffect(() => {
-    playing ? audio.play() : audio.pause();
+    if (audio) {
+      playing ? audio.play() : audio.pause();
+    }
   }, [playing]);
 
   useEffect(() => {
-    audio.addEventListener("ended", () => setPlaying(false));
+    if (audio) {
+      audio.addEventListener("ended", () => setPlaying(false));
+    }
     return () => {
-      audio.removeEventListener("ended", () => setPlaying(false));
+      if (audio) {
+        audio.removeEventListener("ended", () => setPlaying(false));
+      }
     };
   }, []);
 
-  return [playing, toggle] as tuplesAudio;
+  return [playing, playAudio] as tuplesAudio;
 };
 
 export default useAudio;
