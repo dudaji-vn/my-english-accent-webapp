@@ -1,15 +1,16 @@
 import BoxCard from "@/components/BoxCard";
 import ROUTER from "@/shared/const/router.const";
 import { Box, Container, IconButton, Avatar, Typography, Grid, Divider, Modal, Button } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 import { useGetChallengeDetailInClubQuery } from "@/core/services/challenge.service";
-import ClubRecordingAudio from "@/components/ClubRecording";
+import ClubRecordingAudio from "@/components/ClubRecordPlayer";
 import useTextToSpeech from "@/shared/hook/useTextToSpeech";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
+import persist from "@/shared/utils/persist.util";
 
 export default function ClubRecordingPage() {
   const navigate = useNavigate();
@@ -19,13 +20,20 @@ export default function ClubRecordingPage() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const myId = persist.getMyInfo().userId;
   const { data } = useGetChallengeDetailInClubQuery(state.challengeId);
+  console.log("ClubRecordingPage::", data);
   const vocabuaries = useMemo(() => {
     if (data && data.vocabularies) {
       return data.vocabularies;
     }
     return [];
   }, [data?.vocabularies]);
+  const isRerecord = useMemo(() => {
+    if (data && data.participants) {
+      return !!data.participants.find((user) => user.id === myId);
+    }
+  }, [data?.participants]);
 
   const onHandleClose = () => {
     if (currentStep < vocabuaries.length) {
@@ -71,6 +79,23 @@ export default function ClubRecordingPage() {
       </Modal>
     );
   };
+
+  //re-recording
+  useEffect(() => {
+    if (isRerecord) {
+      navigate(
+        {
+          pathname: ROUTER.CLUB_RECORDING_SUMMARY,
+        },
+        {
+          state: {
+            clubId: data!.clubId.id,
+            challengeId: data!.challengeId,
+          },
+        }
+      );
+    }
+  }, [isRerecord]);
 
   return (
     <Box className='flex flex-col grow'>

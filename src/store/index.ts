@@ -3,7 +3,7 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import userReducer from "@/store/UserStore";
 import recordPageReduer from "@/store/RecordPageStore";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { RecordApi, LectureApi, UserApi, VocabularyApi } from "@/core/services";
+import { LectureApi, UserApi, VocabularyApi } from "@/core/services";
 import InitializeApi from "@/core/services/initialize.service";
 import RecordProgressApi from "@/core/services/recordProgress.service";
 import ClubStudyApi from "@/core/services/club.service";
@@ -11,7 +11,6 @@ import ChallengeApi from "@/core/services/challenge.service";
 
 const middleware = [
   LectureApi.middleware,
-  RecordApi.middleware,
   VocabularyApi.middleware,
   UserApi.middleware,
   InitializeApi.middleware,
@@ -23,7 +22,6 @@ const middleware = [
 export const store = configureStore({
   reducer: {
     LectureApi: LectureApi.reducer,
-    RecordApi: RecordApi.reducer,
     VocabularyApi: VocabularyApi.reducer,
     UserApi: UserApi.reducer,
     InitializeApi: InitializeApi.reducer,

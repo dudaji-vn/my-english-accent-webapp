@@ -126,7 +126,7 @@ export const ChallengeApi = createApi({
     }),
   }),
 });
-
+  
 export const { useGetChallengesInClubQuery, useGetChallengeDetailInClubQuery, useAddRecordChallengeMutation, useGetAllRecordInChallengeQuery, useUpdateChallengeMemberMutation } = ChallengeApi;
 
 export default ChallengeApi;

@@ -9,10 +9,18 @@ import ROUTER from "@/shared/const/router.const";
 import { IChallengeDisplay } from "@/core/type/challenge.type";
 import { useGetChallengesInClubQuery } from "@/core/services/challenge.service";
 import { timeSince } from "@/shared/utils/timeSince.util";
+import { useEffect, useMemo } from "react";
+import persist from "@/shared/utils/persist.util";
 
 function ChallengeCard(props: IChallengeDisplay) {
   const navigate = useNavigate();
-  console.log(props);
+  const myId = persist.getMyInfo().userId;
+  console.log("ChallengeCard", props);
+
+  const isRerecord = useMemo(() => {
+    return !!props.participants.find((user) => user.id === myId);
+  }, [props]);
+
   const onHandleRecording = () => {
     navigate(
       {
@@ -41,6 +49,7 @@ function ChallengeCard(props: IChallengeDisplay) {
       }
     );
   };
+
   if (!props) return <>There's no challenge</>;
   return (
     <BoxCard classes='p-4 flex flex-col gap-2'>
@@ -63,7 +72,7 @@ function ChallengeCard(props: IChallengeDisplay) {
 
       <Box className='flex justify-between gap-4 mt-4'>
         <Button variant='outlined' fullWidth onClick={onHandleRecording}>
-          Record
+          {isRerecord ? "Re-record" : "Record"}
         </Button>
         <Button variant='outlined' fullWidth onClick={onHandleListening}>
           Listen
