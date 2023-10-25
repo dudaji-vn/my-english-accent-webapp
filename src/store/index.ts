@@ -2,7 +2,6 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
 import userReducer from "@/store/UserStore";
 import recordPageReduer from "@/store/RecordPageStore";
-import listenPageReducer from "@/store/ListenPageStore";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { RecordApi, LectureApi, UserApi, VocabularyApi } from "@/core/services";
 import InitializeApi from "@/core/services/initialize.service";
@@ -33,7 +32,6 @@ export const store = configureStore({
     ChallengeApi: ChallengeApi.reducer,
     user: userReducer,
     recordPage: recordPageReduer,
-    listenPage: listenPageReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

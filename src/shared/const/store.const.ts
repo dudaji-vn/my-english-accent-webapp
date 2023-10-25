@@ -1,7 +1,6 @@
 const Reducer = {
   user: "UserStore",
   recordPage: "RecordPageStore",
-  listenPage: "ListenPageStore",
   lectureApi: "LectureApi",
   recordApi: "RecordApi",
   vocabularyApi: "VocabularyApi",
