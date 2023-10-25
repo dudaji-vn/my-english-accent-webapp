@@ -28,6 +28,7 @@ export default function ClubListeningPage() {
   const { data } = useGetRecordToListenQuery(challengeId);
   console.log("ClubListeningPage::", data);
   const [currentVocabulary, setCurrentVocabulary] = useState(0);
+  const [audioSelected, setAudioSelected] = useState("");
   // const { players, indexAudio, playAudio } = useMultiAudio(exampleAudio);
 
   const onHandlePlayAll = () => {
@@ -47,10 +48,12 @@ export default function ClubListeningPage() {
   };
 
   const onSlideChange = (val: any) => {
+    setAudioSelected(() => "");
     setCurrentVocabulary(() => val.activeIndex);
-    // if (data) {
-    //   console.log("vocabularyId::", data[val.activeIndex].vocabularyId);
-    // }
+  };
+
+  const onAudioSelected = (urlSrc: string) => {
+    setAudioSelected(() => urlSrc);
   };
 
   const renderSlide = () => {
@@ -72,7 +75,10 @@ export default function ClubListeningPage() {
 
   const renderParticipant = () => {
     if (data) {
-      return data[currentVocabulary].recordUser.map((recordUser: UserResponseType & RecordTypeResponse) => <UserPlayRecord key={recordUser.userId} {...recordUser} />);
+      console.log("data in club listen::", data[currentVocabulary]);
+      return data[currentVocabulary].recordUser.map((recordUser: UserResponseType & RecordTypeResponse) => (
+        <UserPlayRecord key={recordUser.userId} props={{ ...recordUser }} audioSelected={audioSelected} setAudioSelected={onAudioSelected} currentVocabulary={currentVocabulary} />
+      ));
     }
   };
 

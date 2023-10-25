@@ -27,15 +27,13 @@ const settings = [
   {
     title: "Log out",
     icon: LogoutIcon,
-    action: (dispatch: any) => {
-      dispatch(logout());
+    action: () => {
+      persist.logout();
     },
   },
 ];
 
 export default function Navbar() {
-  const dispatch = useAppDispatch();
-
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -86,7 +84,7 @@ export default function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.title} onClick={handleCloseUserMenu} sx={{ paddingY: "0.5rem" }} onClickCapture={() => setting.action(dispatch)}>
+                <MenuItem key={setting.title} onClick={handleCloseUserMenu} sx={{ paddingY: "0.5rem" }} onClickCapture={setting.action}>
                   <Avatar
                     alt={setting.title + "icon"}
                     src={setting.icon}

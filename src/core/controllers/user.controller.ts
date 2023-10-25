@@ -1,5 +1,4 @@
 import { firebaseDB } from "@/config/firebase";
-import persist from "@/shared/utils/persist.util";
 import { DocumentReference, and, collection, doc, documentId, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { IUserAuth, UserModal } from "@/core/type";
 import { userConvert } from "../coverter/user.mapping";

@@ -6,11 +6,18 @@ import NationalityCard from "@/components/NationalityCard";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
 import { useEffect, useState } from "react";
 
-export default function UserPlayRecord(props: UserResponseType & RecordTypeResponse) {
+interface UserPlayRecordProps {
+  props: UserResponseType & RecordTypeResponse;
+  audioSelected: string;
+  setAudioSelected: Function;
+  currentVocabulary: number;
+}
+
+export default function UserPlayRecord({ props, audioSelected, setAudioSelected, currentVocabulary }: UserPlayRecordProps) {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audioSelected, setAudioSelected] = useState("");
 
+  console.log("UserPlayRecord::", props, audioSelected);
   const language = (language: string) => {
     if (language === "vi") {
       return "Vietnamese";
@@ -24,21 +31,25 @@ export default function UserPlayRecord(props: UserResponseType & RecordTypeRespo
   };
 
   const onHanlePlayAudio = async (value: string) => {
-    setAudioSelected(() => value);
+    setAudioSelected(value);
     const newAudio = new Audio(value);
     setAudio(() => newAudio);
     setIsPlaying(() => true);
   };
 
   useEffect(() => {
-    if (audio) isPlaying ? audio.play() : audio.pause();
+    if (audio) {
+      console.log("audio::", audio.src, isPlaying);
+      isPlaying ? audio.play() : audio.pause();
+    }
   }, [isPlaying]);
 
   useEffect(() => {
-    if (audio) {
+    if (audio && isPlaying) {
+      console.log("STOP:::");
       setIsPlaying(() => false);
     }
-  }, [props]);
+  }, [currentVocabulary]);
 
   useEffect(() => {
     if (audio) {
@@ -57,7 +68,6 @@ export default function UserPlayRecord(props: UserResponseType & RecordTypeRespo
           Speak {language(props.nativeLanguage)} (native), {language(props.displayLanguage)}
         </Typography>
       </Box>
-
       <Radio
         onChange={() => onHanlePlayAudio(props.rVoiceSrc)}
         checked={audioSelected === props.rVoiceSrc}

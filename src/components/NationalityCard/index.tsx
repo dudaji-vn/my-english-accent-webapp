@@ -42,7 +42,7 @@ export default function PersonInfo(props: PersonInfoType) {
         {props.isShowName && <Typography className='text-small-medium'>{userInfo.userName}</Typography>}
         {props.isShowNationality && (
           <Box display={"flex"} alignItems={"center"} gap={1}>
-            <Avatar alt='national-flag-icon' src={getFlag()} className='w-4 h-4' />
+            {/* <Avatar alt='national-flag-icon' src={getFlag()} className='w-4 h-4' /> */}
             <Typography variant='body2' className='text-extra-small-regular'>
               {getNational()}
             </Typography>
