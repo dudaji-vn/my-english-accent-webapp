@@ -7,7 +7,6 @@ import TextToSpeech from "@/shared/hook/useTextToSpeech";
 
 export default function TranslationCard(props: VocabularyTypeResponse & EnrollmentResponseType & NativeVocabularyTypeResponse & { totalStep: number }) {
   const { enrollmentId, vocabularyId, currentStep, totalStep } = props;
-  console.log("TranslationCard::", props);
   return (
     <Container id='translationCard' className='py-4 bg-gray-100 flex flex-col grow justify-between'>
       <Box>

@@ -19,7 +19,6 @@ export default function RecordingProgressPage() {
 
   const currentProgress = useMemo(() => {
     if (data) {
-      console.log((data.currentStep * 100) / data.vocabularies.length, data.vocabularies.length);
       return (data.currentStep * 100) / data.vocabularies.length;
     }
     return 0;
@@ -46,8 +45,6 @@ export default function RecordingProgressPage() {
       }
     }
   }, [data]);
-
-  console.log("RecordingProgressPage::", data?.vocabularies);
 
   return (
     <Box className='flex flex-col grow'>

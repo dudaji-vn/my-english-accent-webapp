@@ -12,7 +12,7 @@ export default function RecordSummaryPage() {
   const { state } = useLocation();
   const myId = persist.getMyInfo().userId;
   const { data } = useGetAllRecordsOfVocabularyQuery({ myId, lectureId: state.lectureId });
-
+  console.log("data::",data)
   const onHandleContinue = () => {
     navigate(ROUTER.RECORD);
   };

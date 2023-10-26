@@ -133,8 +133,8 @@ export const RecordProgress = createApi({
           const vocabulaies = await VocabularyController.getVocabularyByLecture(payload.lectureId);
 
           const removeRedundantVocabulary = records.filter((record) => !!vocabulaies.find((voca) => voca.vocabularyId === record.vocabularyId.id));
+          const merged = _(removeRedundantVocabulary).keyBy("vocabularyId.id").merge(_.keyBy(vocabulaies, "vocabularyId")).values().value();
 
-          const merged = _.merge({}, removeRedundantVocabulary, vocabulaies);
           const result = {
             ...lecture,
             vocabularies: _.values(merged),

@@ -15,7 +15,6 @@ import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
 import { useReactMediaRecorder } from "react-media-recorder-2";
 import ROUTER from "@/shared/const/router.const";
-import { VocabularyTypeResponse } from "@/core/type";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 
 export default function RerecordingProgressPage() {
@@ -24,23 +23,26 @@ export default function RerecordingProgressPage() {
 
   const navigate = useNavigate();
   const search = useLocation();
-  const lectureName = decodeURI(search.pathname).replace("/rerecord/", "");
+  const titleName = decodeURI(search.pathname).replace("/rerecord/", "");
   const { vocabularyId } = search.state;
   const { recordId } = search.state;
   const { voiceRecord } = search.state;
+  const { challengeId } = search.state;
+  const { clubId } = search.state;
 
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
-  const [addRecord] = useAddRecordMutation();
+  const [updateRecord] = useAddRecordMutation();
   const { data, isFetching } = useGetVocabularyByRecordQuery(vocabularyId);
-  console.log(data);
+
   const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
     audio: true,
     blobPropertyBag: {
       type: "audio/mp3",
     },
   });
+
   const [isRecord, setIsRecord] = useState(() => {
     return status === "recording";
   });
@@ -50,7 +52,7 @@ export default function RerecordingProgressPage() {
     if (!mediaBlobUrl) {
       newAudio = new Audio(voiceRecord);
     } else {
-      newAudio = new Audio(voiceRecord);
+      newAudio = new Audio(mediaBlobUrl);
     }
     setAudio(newAudio);
     setPlaying(() => true);
@@ -74,7 +76,13 @@ export default function RerecordingProgressPage() {
       ...payload,
       recordId,
     };
-    addRecord(request);
+
+    if (challengeId && clubId) {
+      Object.assign(request, {
+        challengeId,
+      });
+    }
+    updateRecord(request);
   };
 
   const onHandleNext = async () => {
@@ -82,19 +90,34 @@ export default function RerecordingProgressPage() {
     const audiofile = new File([audioBlob], "audiofile.mp3", {
       type: "audio/mp3",
     });
+
     if (data && mediaBlobUrl) {
-      await UploadFileController.uploadAudio(audiofile, data.vocabularyId.id, myId, callback);
+      await UploadFileController.uploadAudio(audiofile, data.vocabularyId.id, myId, callback, challengeId && clubId);
     }
-    navigate(
-      {
-        pathname: ROUTER.RECORD + "/" + lectureName + ROUTER.SUMMARY,
-      },
-      {
-        state: {
-          lectureId: data?.lectureId.id,
+    if (challengeId && clubId) {
+      navigate(
+        {
+          pathname: ROUTER.CLUB_RECORDING_SUMMARY,
         },
-      }
-    );
+        {
+          state: {
+            clubId: clubId,
+            challengeId: challengeId,
+          },
+        }
+      );
+    } else {
+      navigate(
+        {
+          pathname: ROUTER.RECORD + "/" + titleName + ROUTER.SUMMARY,
+        },
+        {
+          state: {
+            lectureId: data?.lectureId.id,
+          },
+        }
+      );
+    }
   };
 
   useEffect(() => {
@@ -120,7 +143,7 @@ export default function RerecordingProgressPage() {
           <IconButton onClick={onHandleClose}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
-          <Typography className='text-large-semibold'>{lectureName}</Typography>
+          <Typography className='text-large-semibold'>{titleName}</Typography>
         </Box>
       </Container>
       {data && (
