@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import FooterBtn from "@/components/FooterBtn";
 import { RecordTypeResponse } from "@/core/type";
-import { useGetAllRecordInChallengeQuery } from "@/core/services/challenge.service";
+import { useGetAllRecordInChallengeQuery, useGetChallengesInClubQuery, usePrefetch } from "@/core/services/challenge.service";
 import { useRef, useState, useEffect } from "react";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
@@ -97,11 +97,15 @@ export default function ClubRecordingSummaryPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { data } = useGetAllRecordInChallengeQuery(state.challengeId);
+  const prefetChallengesInCLub = usePrefetch("getChallengesInClub", {
+    force: true,
+  });
 
   const onHandleContinue = () => {
     navigate({
       pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + state.clubId,
     });
+    prefetChallengesInCLub(state.clubId);
   };
 
   return (

@@ -29,6 +29,7 @@ const settings = [
     icon: LogoutIcon,
     action: () => {
       persist.logout();
+      window.location.reload();
     },
   },
 ];

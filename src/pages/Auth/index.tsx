@@ -90,7 +90,7 @@ export default function Login() {
           // dispatch(login({ user: userName, password: password } as ILogin));
           // UserController.login({ userName, password });
           loginApp();
-          navigate(ROUTER.ROOT);
+          window.location.reload();
         }}
       >
         Login
