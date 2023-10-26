@@ -1,36 +1,17 @@
-import { Container, Box, IconButton, Avatar, Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Container, Box, IconButton, Avatar, Typography, Button, Grid } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import WordTag from "@/components/WordTag";
 import ROUTER from "@/shared/const/router.const";
 import FooterBtn from "@/components/FooterBtn";
 import persist from "@/shared/utils/persist.util";
 import { useGetAllRecordsOfVocabularyQuery } from "@/core/services/recordProgress.service";
-import { RecordTypeResponse, VocabularyTypeResponse } from "@/core/type";
+import { AudioRecord } from "@/components/AudioRecord";
 
 export default function RecordSummaryPage() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const myId = persist.getMyInfo().userId;
-  const { data } = useGetAllRecordsOfVocabularyQuery(myId);
-
-  const renderWordFinished = () => {
-    if (data) {
-      return data.map((word: RecordTypeResponse & VocabularyTypeResponse) => (
-        <WordTag
-          key={word.recordId}
-          sentence={word.vtitleDisplayLanguage}
-          phonetic={word.vphoneticDisplayLanguage}
-          voiceSrc={word.rVoiceSrc}
-          lectureId={(word as any).lectureId}
-          lectureName={(word as any).lectureName}
-          vocabularyId={word.vocabularyId}
-          recordId={word.recordId}
-          classes='divider last:rounded-b-lg'
-        />
-      ));
-    }
-    return <></>;
-  };
+  const { data } = useGetAllRecordsOfVocabularyQuery({ myId, lectureId: state.lectureId });
 
   const onHandleContinue = () => {
     navigate(ROUTER.RECORD);
@@ -49,12 +30,12 @@ export default function RecordSummaryPage() {
 
       <Container className='py-4 bg-gray-100 flex flex-col grow '>
         <Box className='flex flex-col justify-center items-center p-4 bg-white border rounded-t-lg'>
-          <Typography component={"h6"}>{data && data.length}</Typography>
+          <Typography component={"h6"}>{data && data.vocabularies.length}</Typography>
           <Typography variant='body2' className='text-base-regular'>
             Sentences practiced
           </Typography>
         </Box>
-        {renderWordFinished()}
+        {data && <AudioRecord {...data} />}
       </Container>
 
       <FooterBtn>

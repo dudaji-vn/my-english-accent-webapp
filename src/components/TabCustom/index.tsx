@@ -1,9 +1,9 @@
-import { TopicType } from "@/shared/type";
 import { Tabs, Tab } from "@mui/material";
+import { nanoid } from "@reduxjs/toolkit";
 import { SyntheticEvent, useState } from "react";
 
 interface TabsProp {
-  tab: TopicType[];
+  tab: string[];
   callback: Function;
 }
 export default function TabCustom(props: TabsProp) {
@@ -44,12 +44,12 @@ export default function TabCustom(props: TabsProp) {
       }}
       value={tabIndex}
       onChange={handleChangeTabIndex}
-      variant="scrollable"
+      variant='scrollable'
       allowScrollButtonsMobile
-      aria-label="scrollable tabs add user"
+      aria-label='scrollable tabs add user'
     >
-      {props.tab.map((topic) => {
-        return <Tab key={topic.topicId} label={topic.name} />;
+      {props.tab.map((item) => {
+        return <Tab key={nanoid()} label={item} />;
       })}
     </Tabs>
   );

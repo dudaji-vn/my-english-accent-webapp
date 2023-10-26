@@ -2,25 +2,34 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
 import userReducer from "@/store/UserStore";
 import recordPageReduer from "@/store/RecordPageStore";
-import listenPageReducer from "@/store/ListenPageStore";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { RecordApi, LectureApi, UserApi, VocabularyApi } from "@/core/services";
+import { LectureApi, UserApi, VocabularyApi } from "@/core/services";
 import InitializeApi from "@/core/services/initialize.service";
-import RecordProgress from "@/core/services/recordProgress.service";
+import RecordProgressApi from "@/core/services/recordProgress.service";
+import ClubStudyApi from "@/core/services/club.service";
+import ChallengeApi from "@/core/services/challenge.service";
 
-const middleware = [LectureApi.middleware, RecordApi.middleware, VocabularyApi.middleware, UserApi.middleware, InitializeApi.middleware, RecordProgress.middleware] as any;
+const middleware = [
+  LectureApi.middleware,
+  VocabularyApi.middleware,
+  UserApi.middleware,
+  InitializeApi.middleware,
+  RecordProgressApi.middleware,
+  ClubStudyApi.middleware,
+  ChallengeApi.middleware,
+] as any;
 
 export const store = configureStore({
   reducer: {
     LectureApi: LectureApi.reducer,
-    RecordApi: RecordApi.reducer,
     VocabularyApi: VocabularyApi.reducer,
     UserApi: UserApi.reducer,
     InitializeApi: InitializeApi.reducer,
-    RecordProgress: RecordProgress.reducer,
+    RecordProgressApi: RecordProgressApi.reducer,
+    ClubStudyApi: ClubStudyApi.reducer,
+    ChallengeApi: ChallengeApi.reducer,
     user: userReducer,
     recordPage: recordPageReduer,
-    listenPage: listenPageReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

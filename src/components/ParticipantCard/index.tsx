@@ -18,14 +18,14 @@ export default function ParticipantCard({
   };
   return (
     <Box className="flex items-center gap-1 p-4 bg-white divider">
-      <AudioPlayer voiceSrc={voiceSrc} icon={VolumnIcon} />
+      <AudioPlayer voiceSrc={voiceSrc}/>
       <Box onClick={onRedirectUser}>
-        <PersonInfo
+        {/* <PersonInfo
           isShowAvatar
           isShowName
           isShowNationality
           userInfo={userInfo}
-        />
+        /> */}
       </Box>
     </Box>
   );

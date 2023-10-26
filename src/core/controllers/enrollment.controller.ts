@@ -5,8 +5,8 @@ import { EnrollmentModal } from "../type/enrollment.type";
 import { lectureConvert } from "../coverter/lecture.mapping";
 import { LectureModal } from "../type";
 
-const enrollment = "enrollment";
-const enrollmentCollection = collection(firebaseDB, enrollment);
+const enrollmentPath = "enrollment";
+const enrollmentCollection = collection(firebaseDB, enrollmentPath);
 
 const EnrollmentController = {
   getEnrollmentByUser: async (userId: string) => {
@@ -26,10 +26,10 @@ const EnrollmentController = {
     const q = query(enrollmentCollection, where("lecture_id", "==", lectureRef));
     return (await getDocs(q)).docs.map((doc) => enrollmentConvert(doc.id, doc.data() as EnrollmentModal));
   },
-  updateEnrollment: async (payload: { enrollmentId: string; current_step: number; stage: string }) => {
+  updateEnrollment: async (payload: { enrollmentId: string; current_step: number; stage: number }) => {
     const { enrollmentId, ...restPayload } = payload;
     console.log(payload);
-    const enrollRef = doc(firebaseDB, enrollment, enrollmentId);
+    const enrollRef = doc(firebaseDB, enrollmentPath, enrollmentId);
     await updateDoc(enrollRef, restPayload);
   },
 };

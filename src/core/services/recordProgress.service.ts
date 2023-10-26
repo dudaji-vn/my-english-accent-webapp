@@ -1,15 +1,25 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import _ from "lodash";
 
-import { EnrollmentResponseType, LectureResponseType, NativeVocabularyTypeResponse, RecordRequest, RecordTypeResponse, VocabularyMergedEnrollMent, VocabularyTypeResponse } from "@/core/type";
+import {
+  EnrollmentResponseType,
+  ILectureDisplay,
+  LectureResponseType,
+  NativeVocabularyTypeResponse,
+  RecordRequest,
+  RecordTypeResponse,
+  VocabularyMergedEnrollMent,
+  VocabularyTypeResponse,
+} from "@/core/type";
 import Reducer from "@/shared/const/store.const";
 import VocabularyController from "../controllers/vocabulary.controller";
 import EnrollmentController from "../controllers/enrollment.controller";
 import RecordController from "../controllers/record.controller";
 import LectureController from "../controllers/lecture.controller";
+import { DocumentReference } from "firebase/firestore";
 
 export const RecordProgress = createApi({
-  reducerPath: Reducer.recordProgress,
+  reducerPath: Reducer.recordProgressApi,
   baseQuery: fakeBaseQuery(),
   tagTypes: ["RecordProgress"],
   endpoints: (builder) => ({
@@ -21,6 +31,7 @@ export const RecordProgress = createApi({
           const nativeVocabulaies: NativeVocabularyTypeResponse[] = [];
           await VocabularyController.getNativeVocabulary(vocabulariesId).then((val) => nativeVocabulaies.push(...val.flat()));
           const mergeVocabulary = _.merge({}, vocabularies, nativeVocabulaies);
+          console.log("getAllVocabulariesByLecture::vocabularies::", vocabulariesId, nativeVocabulaies);
 
           const enrollData = await EnrollmentController.getEnrollmentByLecture(lectureId);
 
@@ -54,10 +65,25 @@ export const RecordProgress = createApi({
       providesTags: ["RecordProgress"],
     }),
 
+    getVocabularyByRecord: builder.query<VocabularyTypeResponse & NativeVocabularyTypeResponse, DocumentReference>({
+      async queryFn(vocabularyId: DocumentReference) {
+        try {
+          const vocabularies = (await VocabularyController.getVocabulariesById([vocabularyId])).flat();
+          const nativeVocabulaies: NativeVocabularyTypeResponse[] = [];
+          await VocabularyController.getNativeVocabulary([vocabularies[0].vocabularyId]).then((val) => nativeVocabulaies.push(...val.flat()));
+          const mergeVocabulary = _.merge({}, vocabularies, nativeVocabulaies);
+          return { data: mergeVocabulary[0] };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: ["RecordProgress"],
+    }),
+
     addRecord: builder.mutation<boolean, RecordRequest>({
       async queryFn(payload: RecordRequest) {
         try {
-          console.log("addrecord",payload)
+          console.log("addrecord", payload);
           await RecordController.addRecord(payload);
           return { data: true };
         } catch (error) {
@@ -85,7 +111,7 @@ export const RecordProgress = createApi({
           const request = {
             enrollmentId,
             current_step: nextStep >= totalStep ? totalStep : nextStep,
-            stage: nextStep >= totalStep ? "Close" : "Inprogress",
+            stage: nextStep >= totalStep ? 2 : 0,
           };
 
           await EnrollmentController.updateEnrollment(request);
@@ -98,34 +124,22 @@ export const RecordProgress = createApi({
       invalidatesTags: ["RecordProgress"],
     }),
 
-    getAllRecordsOfVocabulary: builder.query<any, string>({
-      async queryFn(userId: string) {
+    getAllRecordsOfVocabulary: builder.query<ILectureDisplay, { myId: string; lectureId: string }>({
+      async queryFn(payload: { myId: string; lectureId: string }) {
         try {
-          const records = await RecordController.getUserRecords(userId);
+          const records = await RecordController.getUserRecords(payload.myId);
+          const lecture = await LectureController.getLectureById(payload.lectureId);
 
-          const vocabulariesId = records.map((record) => record.vocabularyId);
+          const vocabulaies = await VocabularyController.getVocabularyByLecture(payload.lectureId);
 
-          const vocabulaies: VocabularyTypeResponse[] = [];
-          await VocabularyController.getVocabulariesById(vocabulariesId).then((val) => vocabulaies.push(...val.flat()));
-          const lecture = await LectureController.getLectureById(vocabulaies[0].lectureId.id);
+          const removeRedundantVocabulary = records.filter((record) => !!vocabulaies.find((voca) => voca.vocabularyId === record.vocabularyId.id));
 
-          console.log("lecture", lecture);
-
-          const merged = _.mergeWith(records, vocabulaies, (record: RecordTypeResponse, voca: VocabularyTypeResponse) => {
-            if (voca.vocabularyId === record.vocabularyId.id) {
-              return {
-                rVoiceSrc: record.rVoiceSrc,
-                recordId: record.recordId,
-                vphoneticDisplayLanguage: voca.vphoneticDisplayLanguage,
-                vtitleDisplayLanguage: voca.vtitleDisplayLanguage,
-                vocabularyId: voca.vocabularyId,
-                ...lecture,
-              };
-            }
-          });
-
-          console.log(merged);
-          return { data: merged };
+          const merged = _.merge({}, removeRedundantVocabulary, vocabulaies);
+          const result = {
+            ...lecture,
+            vocabularies: _.values(merged),
+          } as ILectureDisplay;
+          return { data: result };
         } catch (error) {
           console.error("RecordProgress::getAllRecordsOfVocabulary::", error);
           return { error };
@@ -135,5 +149,5 @@ export const RecordProgress = createApi({
     }),
   }),
 });
-export const { useGetAllVocabulariesByLectureQuery, useAddRecordMutation, useUpdateEnrollmentStepMutation, useGetAllRecordsOfVocabularyQuery } = RecordProgress;
+export const { useGetAllVocabulariesByLectureQuery, useAddRecordMutation, useUpdateEnrollmentStepMutation, useGetAllRecordsOfVocabularyQuery, useGetVocabularyByRecordQuery } = RecordProgress;
 export default RecordProgress;

@@ -1,5 +1,5 @@
 import { firebaseDB } from "@/config/firebase";
-import { addDoc, collection, doc, documentId, getDocs, query, setDoc, where } from "firebase/firestore";
+import { addDoc, and, collection, doc, documentId, getDocs, query, setDoc, where } from "firebase/firestore";
 import { RecordModal, RecordRequest } from "@/core/type";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 import { recordConvert } from "../coverter/record.mapping";
@@ -9,8 +9,8 @@ const recordCollection = collection(firebaseDB, recordPath);
 
 const RecordController = {
   addRecord: (payload: RecordRequest) => {
-    const { userId, clubStudyId, vocabularyId, voiceSrc, recordId } = payload;
-
+    const { userId, challengeId, vocabularyId, voiceSrc, recordId } = payload;
+    // will update if have recordId
     if (recordId) {
       return setDoc(
         doc(recordCollection, recordId),
@@ -23,17 +23,19 @@ const RecordController = {
       );
     }
 
-    let clubRef = null;
+    // will add if no have recordId
+    let challengeRef = null;
     const userRef = doc(firebaseDB, "user", userId);
     const vocabularyRef = doc(firebaseDB, "vocabulary", vocabularyId);
-    if (clubStudyId) {
-      clubRef = doc(firebaseDB, "club", clubStudyId);
+    if (challengeId) {
+      challengeRef = doc(firebaseDB, "challenge", challengeId);
     }
+    console.log("challengeRef", challengeRef);
 
     const request = addTimeStamp({
       vocabulary_id: vocabularyRef,
       user_id: userRef,
-      club_id: clubRef,
+      challenge_id: challengeRef,
       voice_src: voiceSrc,
     });
 
@@ -41,7 +43,7 @@ const RecordController = {
   },
   getUserRecords: async (userId: string) => {
     const userRef = doc(firebaseDB, "user", userId);
-    const q = query(recordCollection, where("user_id", "==", userRef));
+    const q = query(recordCollection, and(where("user_id", "==", userRef), where("challenge_id", "==", null)));
     return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
   },
   getRecordsByManyUser: async (usersId: string[]) => {
@@ -50,6 +52,29 @@ const RecordController = {
       return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
     }
     return [];
+  },
+
+  getRecordsByChallengeId: async (userId: string, challengeId: string) => {
+    const userRef = doc(firebaseDB, "user", userId);
+    const challengeRef = doc(firebaseDB, "challenge", challengeId);
+    console.log(userId, challengeId);
+    const q = query(recordCollection, and(where("challenge_id", "==", challengeRef), where("user_id", "==", userRef)));
+    return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
+  },
+
+  getRecord: async (recordId: string) => {
+    const q = query(recordCollection, where(documentId(), "==", recordId));
+    return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
+  },
+
+  getRecordOfUsersByChallengeId: async (usersId: string[], challengeId: string) => {
+    const challengeRef = doc(firebaseDB, "challenge", challengeId);
+    const promises = usersId.map(async (userId) => {
+      const userRef = doc(firebaseDB, "user", userId);
+      const q = query(recordCollection, and(where("challenge_id", "==", challengeRef), where("user_id", "==", userRef)));
+      return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
+    });
+    return Promise.all(promises).then();
   },
 };
 

@@ -1,11 +1,22 @@
 const ROUTER = {
   ROOT: "/",
-  MEA: "/my-english-accent",
+  TECHTALK: "/tech-talk",
   LOGIN: "/login",
 
   RECORD: "/record",
   RERECORD: "/rerecord",
-  LISTENING: "/listening",
+  CLUB: "/club",
+  ADD_CLUB: "/add-club",
+  CLUB_DETAIL: "/club-detail",
+  CLUB_ADD_MEMBER: "/club-add-member",
+  CLUB_RECORDING: "/club-recording",
+  CLUB_RECORDING_SUMMARY: "/club-recording-summary",
+  CLUB_LISTENING: "/club-listening",
+
+  //subpath-club-detail
+  CLUB_STUDY: "study",
+  CLUB_MEMBER: "member",
+  CLUB_INFO: "info",
 
   // subpath
   SUMMARY: "/summary",

@@ -284,12 +284,28 @@ h6 {
   margin-bottom: 1.5rem
 }
 
+#root :is(.mb-2) {
+  margin-bottom: 0.5rem
+}
+
 #root :is(.mb-4) {
   margin-bottom: 1rem
 }
 
+#root :is(.mb-8) {
+  margin-bottom: 2rem
+}
+
 #root :is(.mt-1) {
   margin-top: 0.25rem
+}
+
+#root :is(.mt-12) {
+  margin-top: 3rem
+}
+
+#root :is(.mt-2) {
+  margin-top: 0.5rem
 }
 
 #root :is(.mt-3) {
@@ -300,12 +316,24 @@ h6 {
   margin-top: 1rem
 }
 
+#root :is(.mt-6) {
+  margin-top: 1.5rem
+}
+
 #root :is(.flex) {
   display: flex
 }
 
+#root :is(.hidden) {
+  display: none
+}
+
 #root :is(.h-10) {
   height: 2.5rem
+}
+
+#root :is(.h-16) {
+  height: 4rem
 }
 
 #root :is(.h-4) {
@@ -320,8 +348,26 @@ h6 {
   height: 1.5rem
 }
 
+#root :is(.h-8) {
+  height: 2rem
+}
+
+#root :is(.h-\[208px\]) {
+  height: 208px
+}
+
+#root :is(.h-fit) {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content
+}
+
 #root :is(.h-full) {
   height: 100%
+}
+
+#root :is(.max-h-\[208px\]) {
+  max-height: 208px
 }
 
 #root :is(.min-h-screen) {
@@ -330,6 +376,10 @@ h6 {
 
 #root :is(.w-10) {
   width: 2.5rem
+}
+
+#root :is(.w-16) {
+  width: 4rem
 }
 
 #root :is(.w-4) {
@@ -344,6 +394,14 @@ h6 {
   width: 1.5rem
 }
 
+#root :is(.w-8) {
+  width: 2rem
+}
+
+#root :is(.w-\[162px\]) {
+  width: 162px
+}
+
 #root :is(.w-full) {
   width: 100%
 }
@@ -352,8 +410,22 @@ h6 {
   flex-grow: 1
 }
 
+#root :is(.origin-center) {
+  -webkit-transform-origin: center;
+          transform-origin: center
+}
+
+#root :is(.transform) {
+  -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+
 #root :is(.flex-col) {
   flex-direction: column
+}
+
+#root :is(.items-start) {
+  align-items: flex-start
 }
 
 #root :is(.items-center) {
@@ -370,6 +442,10 @@ h6 {
 
 #root :is(.justify-between) {
   justify-content: space-between
+}
+
+#root :is(.justify-around) {
+  justify-content: space-around
 }
 
 #root :is(.gap-1) {
@@ -438,12 +514,16 @@ h6 {
 
 #root :is(.bg-primary) {
   --tw-bg-opacity: 1;
-  background-color: rgb(134 70 244 / var(--tw-bg-opacity))
+  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
 }
 
 #root :is(.bg-white) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+
+#root :is(.p-3) {
+  padding: 0.75rem
 }
 
 #root :is(.p-4) {
@@ -519,6 +599,22 @@ h6 {
   -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
           filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
 }
+
+/* .swiper-pagination {
+  bottom: 95%;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  text-align: center;
+  opacity: 1;
+  background: #d1d5db;
+}
+
+.swiper-pagination-bullet-active {
+  background: #6b7280;
+} */
 
 #root :is(.last\:mb-0:last-child) {
   margin-bottom: 0px
