@@ -1,4 +1,4 @@
-import { Box, Container, IconButton, Avatar, Typography, Button, Checkbox } from "@mui/material";
+import { Box, Container, IconButton, Avatar, Typography, Button } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import FooterCard from "@/components/FooterBtn";
@@ -9,13 +9,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import NoPeople from "@/assets/icon/no-member-club-icon.svg";
 import UserPlayRecord from "@/components/UserPlayRecord";
 import { useGetRecordToListenQuery } from "@/core/services/challenge.service";
-import { VocabularyTypeResponse, RecordTypeResponse, UserResponseType } from "@/core/type";
+import { RecordTypeResponse, UserResponseType } from "@/core/type";
 
 export default function ClubListeningPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { challengeId } = state;
-  const { clubId } = state;
 
   const { data } = useGetRecordToListenQuery(challengeId);
   console.log("ClubListeningPage::", data);

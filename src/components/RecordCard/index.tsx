@@ -24,11 +24,8 @@ export default function RecordCard(props: RecordType) {
 
   return (
     <Grid container margin={0} width={"100%"} spacing={1} padding={2} className={props.className} onClick={onSelectLecture}>
-      <Grid item xs={2}>
-        <Avatar alt='avatar-icon' src={AvatarIcon} />
-      </Grid>
-      <Grid item xs={8}>
-        <PersonInfo userInfo={props.userInfo} isShowName isShowNationality />
+      <Grid item xs={10}>
+        <PersonInfo userInfo={props.userInfo} isShowName isShowAvatar />
       </Grid>
       <Grid item xs={2} textAlign={"end"}>
         <Checkbox checked={checked} icon={<Avatar src={UncheckIcon} alt='uncheck-icon' className='w-4 h-4' />} checkedIcon={<Avatar src={CheckIcon} alt='check-icon' className='w-4 h-4' />} />

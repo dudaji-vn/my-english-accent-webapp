@@ -62,7 +62,7 @@ export const ClubStudyApi = createApi({
       async queryFn(clubId: string) {
         try {
           console.log("getMembersInfo::clubId::", clubId);
-          const res: ClubResponseType[] = await ClubController.getMembers(clubId);
+          const res: ClubResponseType[] = await ClubController.getClubById(clubId);
           console.log("getMembersInfo::res::", res);
           const ownerInfo: UserResponseType[] = [];
           const membersInfo: UserResponseType[] = [];
@@ -84,9 +84,26 @@ export const ClubStudyApi = createApi({
       },
       providesTags: (result, error, arg) => (arg ? [{ type: "Club" as const, id: arg }, "Club"] : ["Club"]),
     }),
+
+    getClubDetail: builder.query<ClubResponseType | null, string>({
+      async queryFn(clubId: string) {
+        try {
+          let firstResponse = null;
+          const response = await ClubController.getClubById(clubId);
+          if (response && response.length > 0) {
+            firstResponse = response[0];
+          }
+          return {
+            data: firstResponse,
+          };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetClubsOwnerQuery, useSetClubMutation, useGetMembersInfoQuery } = ClubStudyApi;
+export const { useGetClubsOwnerQuery, useSetClubMutation, useGetMembersInfoQuery, useGetClubDetailQuery } = ClubStudyApi;
 
 export default ClubStudyApi;

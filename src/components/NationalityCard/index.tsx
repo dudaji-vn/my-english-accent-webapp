@@ -38,8 +38,8 @@ export default function PersonInfo(props: PersonInfoType) {
   return (
     <Box className='flex gap-2'>
       {props.isShowAvatar && <Avatar alt='avatar-icon' />}
-      <Box>
-        {props.isShowName && <Typography className='text-small-medium'>{userInfo.userName}</Typography>}
+      <Box className='flex flex-col justify-center'>
+        {props.isShowName && <Typography className='text-base-medium'>{userInfo.userName}</Typography>}
         {props.isShowNationality && (
           <Box display={"flex"} alignItems={"center"} gap={1}>
             {/* <Avatar alt='national-flag-icon' src={getFlag()} className='w-4 h-4' /> */}
