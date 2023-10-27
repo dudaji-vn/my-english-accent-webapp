@@ -106,6 +106,11 @@ export default function Login() {
             value={password}
             placeholder='Your password'
             onChange={(e) => setPassword(() => e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                loginApp();
+              }
+            }}
           />
         </Box>
         {/* <TextField label='Password' variant='outlined' onChange={(e) => setPassword(() => e.target.value)} /> */}
