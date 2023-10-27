@@ -9,7 +9,7 @@ export enum StageExercise {
 export const StageLabel: Record<StageExercise, string> = {
   [StageExercise.Inprogress]: "In progress",
   [StageExercise.Open]: "Explore",
-  [StageExercise.Close]: "Archived",
+  [StageExercise.Close]: "Finish",
 };
 
 export interface TopicType {

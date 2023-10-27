@@ -32,12 +32,12 @@ const ChallengeController = {
     const challengeRef = await addDoc(challengeCollection, request);
     return challengeRef.id;
   },
-  updateChallenge: async (challengeId: string, userId: string) => {
+  updateChallenge: async (challengeId: string, userId: string, participants: DocumentReference[]) => {
     const userRef = doc(firebaseDB, "user", userId);
     return await setDoc(
       doc(challengeCollection, challengeId),
       {
-        participants: [userRef],
+        participants: participants.concat(userRef),
       },
       {
         merge: true,

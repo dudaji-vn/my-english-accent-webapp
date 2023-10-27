@@ -33,9 +33,9 @@ export default function CategoryItem({ currentStep, lectureId, lectureName, stag
       <Box className='flex justify-between items-center' onClick={() => gotoRecordProgressPage()}>
         <Box>
           <Typography className='text-base-semibold'>{lectureName}</Typography>
-          <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${totalVocabulary} phrases` : `${totalVocabulary} phrases`}</Typography>
+          <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${totalVocabulary} words and sentences` : `${totalVocabulary} words and sentences`}</Typography>
         </Box>
-        <Avatar src={imgSrc} alt='gallery-icon' className='w-6 h-6' />
+        <Avatar src={imgSrc} variant="square" alt='gallery-icon' className='w-9 h-9' />
       </Box>
       {stage != StageExercise.Open && <LinearProgress variant='determinate' value={currentProgress} className='mt-3' />}
     </BoxCard>

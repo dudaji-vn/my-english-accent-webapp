@@ -42,7 +42,7 @@ const ClubController = {
       );
     }
   },
-  getMembers: async (clubId: string) => {
+  getClubById: async (clubId: string) => {
     const q = query(clubCollection, where(documentId(), "==", clubId));
     return (await getDocs(q)).docs.map((doc) => clubConvert(doc.id, doc.data() as ClubModal));
   },

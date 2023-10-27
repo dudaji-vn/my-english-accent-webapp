@@ -1,6 +1,6 @@
 import { ILectureDisplay, RecordTypeResponse } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
-import { Grid, Radio, Avatar, Typography } from "@mui/material";
+import { Grid, Radio, Avatar, Typography, Container } from "@mui/material";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +8,6 @@ import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 export function AudioRecord({ vocabularies, lectureName }: ILectureDisplay) {
   const navigate = useNavigate();
-
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectionAudio, setSelectionAudio] = useState("");
@@ -53,20 +52,17 @@ export function AudioRecord({ vocabularies, lectureName }: ILectureDisplay) {
   const renderAudioList = () => {
     return vocabularies.map((record: any) => {
       return (
-        <Grid container gap={1} className={`p-4 bg-white divider last:rounded-b-lg`} key={record.recordId}>
-          <Grid item xs={1}>
-            <Radio
-              onChange={() => onHanlePlayAudio(record.recordId)}
-              checked={selectionAudio === record.recordId}
-              value={record.recordId}
-              icon={<Avatar src={SpeakerIcon} className='w-5 h-5' />}
-              checkedIcon={<Avatar src={SpeakerFillIcon} className='w-5 h-5' />}
-              disabled={isPlaying}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={10}
+        <Container className={`p-4 bg-white divider last:rounded-b-lg flex items-center`} key={record.recordId}>
+          <Radio
+            onChange={() => onHanlePlayAudio(record.recordId)}
+            checked={selectionAudio === record.recordId}
+            value={record.recordId}
+            icon={<Avatar src={SpeakerIcon} className='w-5 h-5' />}
+            checkedIcon={<Avatar src={SpeakerFillIcon} className='w-5 h-5' />}
+            disabled={isPlaying}
+          />
+
+          <Typography
             onClick={() =>
               onHandleRerecordPage({
                 recordId: record.recordId,
@@ -74,28 +70,11 @@ export function AudioRecord({ vocabularies, lectureName }: ILectureDisplay) {
                 voiceRecord: record.rVoiceSrc,
               })
             }
+            className='text-base-medium grow'
           >
-            <Typography className='text-small-medium'>{record.vtitleDisplayLanguage}</Typography>
-          </Grid>
-          <Grid item xs={1} className='invisible'>
-            {/* pesudo tag */}
-          </Grid>
-          <Grid
-            item
-            xs={10}
-            onClick={() =>
-              onHandleRerecordPage({
-                recordId: record.recordId,
-                voiceRecord: record.rVoiceSrc,
-                vocabularyId: record.vocabularyId,
-              })
-            }
-          >
-            <Typography variant='body2' className='text-small-regular'>
-              {record.vphoneticDisplayLanguage}
-            </Typography>
-          </Grid>
-        </Grid>
+            {record.vtitleDisplayLanguage}
+          </Typography>
+        </Container>
       );
     });
   };

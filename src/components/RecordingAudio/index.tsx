@@ -52,21 +52,21 @@ export default function RecordingAudio({ vocabularyId, currentStep, enrollmentId
   };
 
   const callback = (payload: { challengeId: string | null; userId: string; vocabularyId: string; voiceSrc: string }) => {
-    addRecord(payload);
     updateEnrollmentStep({
       currentStep,
       totalStep,
       enrollmentId,
     });
+    addRecord(payload);
   };
 
   const onHandleNext = async () => {
-    const audioBlob = await fetch(mediaBlobUrl as any).then((r) => r.blob());
+    const audioBlob = await fetch(mediaBlobUrl as unknown as URL).then((r) => r.blob());
     const audiofile = new File([audioBlob], "audiofile.mp3", {
       type: "audio/mp3",
     });
 
-    await UploadFileController.uploadAudio(audiofile, vocabularyId.id, myId, callback);
+    await UploadFileController.uploadAudio(audiofile, vocabularyId.id, myId, callback, false);
 
     setToggleSubBtn(false);
   };

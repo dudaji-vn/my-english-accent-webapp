@@ -1,5 +1,5 @@
 import TranslationCard from "@/components/TranslationCard";
-import { Container, Box, IconButton, Avatar, Typography, LinearProgress } from "@mui/material";
+import { Container, Box, IconButton, Avatar, Typography, LinearProgress, CircularProgress } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { StageExercise } from "@/shared/type";
@@ -15,11 +15,9 @@ export default function RecordingProgressPage() {
   const lectureName = decodeURI(search.pathname).replace("/record/", "");
   const lectureId = search.search.replace("?", "");
 
-  const { data } = useGetAllVocabulariesByLectureQuery(lectureId);
-
+  const { data, isFetching } = useGetAllVocabulariesByLectureQuery(lectureId);
   const currentProgress = useMemo(() => {
     if (data) {
-      console.log((data.currentStep * 100) / data.vocabularies.length, data.vocabularies.length);
       return (data.currentStep * 100) / data.vocabularies.length;
     }
     return 0;
@@ -47,7 +45,12 @@ export default function RecordingProgressPage() {
     }
   }, [data]);
 
-  console.log("RecordingProgressPage::", data?.vocabularies);
+  if (isFetching)
+    return (
+      <Box className='m-auto'>
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box className='flex flex-col grow'>

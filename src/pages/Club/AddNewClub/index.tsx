@@ -44,8 +44,6 @@ export default function AddNewClubPage() {
   const { data } = useGetLecturesQuery();
   const [addClub] = useSetClubMutation();
 
-  console.log("AddNewClubPage", data);
-
   const [clubName, setClubName] = useState("");
   const [lecturesId, setLecturesId] = useState<string[]>([]);
 
@@ -88,6 +86,7 @@ export default function AddNewClubPage() {
             What's your club name
           </Typography>
           <TextField
+            className='bg-white'
             placeholder='TechTalk and Design Club'
             variant='outlined'
             value={clubName}

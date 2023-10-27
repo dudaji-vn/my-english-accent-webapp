@@ -1,5 +1,5 @@
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { useAddRecordMutation, useUpdateEnrollmentStepMutation } from "@/core/services/recordProgress.service";
+import { useAddRecordMutation } from "@/core/services/recordProgress.service";
 import persist from "@/shared/utils/persist.util";
 import { Box, IconButton, Avatar, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";

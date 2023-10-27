@@ -15,7 +15,6 @@ import persist from "@/shared/utils/persist.util";
 function ChallengeCard(props: IChallengeDisplay) {
   const navigate = useNavigate();
   const myId = persist.getMyInfo().userId;
-  console.log("ChallengeCard", props);
 
   const isRerecord = useMemo(() => {
     return !!props.participants.find((user) => user.id === myId);
@@ -86,6 +85,5 @@ export default function ClubStudyPage() {
   const { clubId } = useParams();
 
   const { data } = useGetChallengesInClubQuery(clubId!);
-
   return <Container className='mt-6 grow'>{data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}</Container>;
 }

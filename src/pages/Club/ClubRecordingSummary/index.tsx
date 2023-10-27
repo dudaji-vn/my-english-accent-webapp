@@ -3,21 +3,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import FooterBtn from "@/components/FooterBtn";
 import { RecordTypeResponse } from "@/core/type";
-import { useGetAllRecordInChallengeQuery } from "@/core/services/challenge.service";
+import { useGetAllRecordInChallengeQuery, useGetChallengesInClubQuery, usePrefetch } from "@/core/services/challenge.service";
 import { useRef, useState, useEffect } from "react";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import { IChallengeSummaryDisplay } from "@/core/type/challenge.type";
 
-export function ClubAudioRecord({ vocabularies, challengeName }: IChallengeSummaryDisplay) {
+export function ClubAudioRecord({ vocabularies, challengeName, clubId, challengeId }: IChallengeSummaryDisplay) {
   const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectionRecordId, setSelectionRecordId] = useState("");
 
-  const onHandleRerecordPage = ({ vocabularyId, recordId, voiceRecord }: { vocabularyId: string; recordId: string; voiceRecord: string }) => {
-    console.log(vocabularyId, recordId, voiceRecord);
+  const onRedirectRerecordPage = ({ vocabularyId, recordId, voiceRecord }: { vocabularyId: string; recordId: string; voiceRecord: string }) => {
     navigate(
       {
         pathname: ROUTER.RERECORD + `/${challengeName.toLowerCase()}`,
@@ -28,6 +27,8 @@ export function ClubAudioRecord({ vocabularies, challengeName }: IChallengeSumma
           vocabularyId,
           recordId,
           voiceRecord,
+          challengeId,
+          clubId: clubId.id,
         },
       }
     );
@@ -49,62 +50,41 @@ export function ClubAudioRecord({ vocabularies, challengeName }: IChallengeSumma
     }
   }, [isPlaying]);
 
-  (function () {
+  useEffect(() => {
     if (audioRef.current) {
       audioRef.current.onended = function () {
         setSelectionRecordId(() => "");
         setIsPlaying(() => false);
-        console.log("eneded");
       };
     }
-  })();
+  }, []);
 
   const renderAudioList = () => {
     return vocabularies.map((record: any) => {
       return (
-        <Grid container gap={1} className={`p-4 bg-white divider last:rounded-b-lg`} key={record.recordId}>
-          <Grid item xs={1}>
-            <Radio
-              onChange={() => onHanlePlayAudio(record.recordId)}
-              checked={selectionRecordId === record.recordId}
-              value={record.recordId}
-              icon={<Avatar src={SpeakerIcon} className='w-5 h-5' />}
-              checkedIcon={<Avatar src={SpeakerFillIcon} className='w-5 h-5' />}
-            />
-            <audio ref={audioRef} />
-          </Grid>
-          <Grid
-            item
-            xs={10}
+        <Container className={`p-4 bg-white divider last:rounded-b-lg flex items-center`} key={record.recordId}>
+          <Radio
+            onChange={() => onHanlePlayAudio(record.recordId)}
+            checked={selectionRecordId === record.recordId}
+            value={record.recordId}
+            icon={<Avatar src={SpeakerIcon} className='w-5 h-5' />}
+            checkedIcon={<Avatar src={SpeakerFillIcon} className='w-5 h-5' />}
+            disabled={isPlaying}
+          />
+          <audio ref={audioRef} />
+          <Typography
+            className='text-base-medium grow'
             onClick={() =>
-              onHandleRerecordPage({
+              onRedirectRerecordPage({
                 recordId: record.recordId,
                 vocabularyId: record.vocabularyId,
                 voiceRecord: record.rVoiceSrc,
               })
             }
           >
-            <Typography className='text-small-medium'>{record.vtitleDisplayLanguage}</Typography>
-          </Grid>
-          <Grid item xs={1} className='invisible'>
-            {/* pesudo tag */}
-          </Grid>
-          <Grid
-            item
-            xs={10}
-            onClick={() =>
-              onHandleRerecordPage({
-                recordId: record.recordId,
-                voiceRecord: record.rVoiceSrc,
-                vocabularyId: record.vocabularyId,
-              })
-            }
-          >
-            <Typography variant='body2' className='text-small-regular'>
-              {record.vphoneticDisplayLanguage}
-            </Typography>
-          </Grid>
-        </Grid>
+            {record.vtitleDisplayLanguage}
+          </Typography>
+        </Container>
       );
     });
   };
@@ -116,11 +96,15 @@ export default function ClubRecordingSummaryPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { data } = useGetAllRecordInChallengeQuery(state.challengeId);
+  const prefetChallengesInCLub = usePrefetch("getChallengesInClub", {
+    force: true,
+  });
 
   const onHandleContinue = () => {
     navigate({
       pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + state.clubId,
     });
+    prefetChallengesInCLub(state.clubId);
   };
 
   return (

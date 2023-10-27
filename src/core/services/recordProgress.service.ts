@@ -1,22 +1,14 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import _ from "lodash";
 
-import {
-  EnrollmentResponseType,
-  ILectureDisplay,
-  LectureResponseType,
-  NativeVocabularyTypeResponse,
-  RecordRequest,
-  RecordTypeResponse,
-  VocabularyMergedEnrollMent,
-  VocabularyTypeResponse,
-} from "@/core/type";
+import { ILectureDisplay, NativeVocabularyTypeResponse, RecordRequest, VocabularyMergedEnrollMent, VocabularyTypeResponse } from "@/core/type";
 import Reducer from "@/shared/const/store.const";
 import VocabularyController from "../controllers/vocabulary.controller";
 import EnrollmentController from "../controllers/enrollment.controller";
 import RecordController from "../controllers/record.controller";
 import LectureController from "../controllers/lecture.controller";
 import { DocumentReference } from "firebase/firestore";
+import persist from "@/shared/utils/persist.util";
 
 export const RecordProgress = createApi({
   reducerPath: Reducer.recordProgressApi,
@@ -26,37 +18,20 @@ export const RecordProgress = createApi({
     getAllVocabulariesByLecture: builder.query<VocabularyMergedEnrollMent, string>({
       async queryFn(lectureId: string) {
         try {
+          const myId = persist.getMyInfo().userId;
           const vocabularies = await VocabularyController.getVocabularyByLecture(lectureId);
           const vocabulariesId = vocabularies.map((voca) => voca.vocabularyId);
           const nativeVocabulaies: NativeVocabularyTypeResponse[] = [];
           await VocabularyController.getNativeVocabulary(vocabulariesId).then((val) => nativeVocabulaies.push(...val.flat()));
           const mergeVocabulary = _.merge({}, vocabularies, nativeVocabulaies);
-          console.log("getAllVocabulariesByLecture::vocabularies::", vocabulariesId, nativeVocabulaies);
 
           const enrollData = await EnrollmentController.getEnrollmentByLecture(lectureId);
-
-          const merged = _.mergeWith(mergeVocabulary, enrollData, (voca: VocabularyTypeResponse & NativeVocabularyTypeResponse, enroll: EnrollmentResponseType) => {
-            if (voca.lectureId.id === enroll.lectureId.id) {
-              return {
-                lectureId: enroll.lectureId,
-                vocabularyId: voca.vocabularyId,
-                vphoneticDisplayLanguage: voca.vphoneticDisplayLanguage,
-                vtitleDisplayLanguage: voca.vtitleDisplayLanguage,
-                titleNativeLanguage: voca.titleNativeLanguage,
-                language: voca.language,
-              };
-            }
-          });
+          const filterUserEnrollment = enrollData.filter((enroll) => enroll.userId.id === myId);
 
           const result = {
-            stage: enrollData[0].stage,
-            currentStep: enrollData[0].currentStep,
-            enrollmentId: enrollData[0].enrollmentId,
-            lectureId: enrollData[0].lectureId,
-            userId: enrollData[0].userId,
-            vocabularies: _.values(merged),
+            ...filterUserEnrollment[0],
+            vocabularies: _.values(mergeVocabulary),
           } as any;
-          console.info("getAllVocabulariesByLecture", result);
           return { data: result };
         } catch (error) {
           return { error };
@@ -83,7 +58,6 @@ export const RecordProgress = createApi({
     addRecord: builder.mutation<boolean, RecordRequest>({
       async queryFn(payload: RecordRequest) {
         try {
-          console.log("addrecord", payload);
           await RecordController.addRecord(payload);
           return { data: true };
         } catch (error) {
@@ -133,8 +107,8 @@ export const RecordProgress = createApi({
           const vocabulaies = await VocabularyController.getVocabularyByLecture(payload.lectureId);
 
           const removeRedundantVocabulary = records.filter((record) => !!vocabulaies.find((voca) => voca.vocabularyId === record.vocabularyId.id));
+          const merged = _(removeRedundantVocabulary).keyBy("vocabularyId.id").merge(_.keyBy(vocabulaies, "vocabularyId")).values().value();
 
-          const merged = _.merge({}, removeRedundantVocabulary, vocabulaies);
           const result = {
             ...lecture,
             vocabularies: _.values(merged),

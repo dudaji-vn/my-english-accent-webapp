@@ -63,7 +63,7 @@ export default function ClubPage() {
   };
 
   return (
-    <Box>
+    <Box className="pb-4">
       <Box className='px-4 pt-4 pb-2 flex items-center gap-2 bg-white'>
         <Avatar src={Chervon} className='w-6 h-6' onClick={() => navigate(ROUTER.ROOT)} />
         <Typography className='text-large-semibold'>Club study</Typography>

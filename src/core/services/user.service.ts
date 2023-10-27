@@ -9,11 +9,10 @@ export const UserApi = createApi({
   reducerPath: Reducer.userApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    login: builder.mutation<UserType, { userName: string; password: string }>({
+    login: builder.mutation<UserResponseType, { userName: string; password: string }>({
       async queryFn(payload) {
         try {
-          const myInfo: any = await UserController.login(payload);
-          persist.saveMyInfo(myInfo);
+          const myInfo: UserResponseType = await UserController.login(payload);
           return { data: myInfo };
         } catch (error) {
           return { error };

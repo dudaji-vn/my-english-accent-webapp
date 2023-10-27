@@ -4,7 +4,7 @@ import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import NationalityCard from "@/components/NationalityCard";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UserPlayRecordProps {
   props: UserResponseType & RecordTypeResponse;
@@ -14,7 +14,7 @@ interface UserPlayRecordProps {
 }
 
 export default function UserPlayRecord({ props, audioSelected, setAudioSelected, currentVocabulary }: UserPlayRecordProps) {
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const audioRef = useRef(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
   const language = (language: string) => {
@@ -31,37 +31,46 @@ export default function UserPlayRecord({ props, audioSelected, setAudioSelected,
 
   const onHanlePlayAudio = async (value: string) => {
     setAudioSelected(value);
-    const newAudio = new Audio(value);
-    setAudio(() => newAudio);
+    audioRef.current.src = value;
     setIsPlaying(() => true);
   };
 
   useEffect(() => {
-    if (audio) {
-      console.log("audio::", audio.src);
-      isPlaying ? audio.play() : audio.pause();
+    if (audioRef.current) {
+      console.log("UserPlayRecord::useEffect::playing", isPlaying);
+      isPlaying ? audioRef.current.play() : audioRef.current.pause();
     }
   }, [isPlaying]);
 
   useEffect(() => {
-    if (audio && isPlaying) {
-      console.log("STOP:::");
+    if (audioRef.current && isPlaying) {
+      console.log("UserPlayRecord::useEffect::currentVocabulary", currentVocabulary);
       setIsPlaying(() => false);
     }
   }, [currentVocabulary]);
 
   useEffect(() => {
-    if (audio) {
-      audio.onended = function () {
+    if (audioRef.current) {
+      audioRef.current.addEventListener("ended", () => {
+        console.log("UserPlayRecord::useEffect::addEventListener");
         setIsPlaying(() => false);
-      };
+      });
     }
-  });
+    return () => {
+      console.log("UserPlayRecord::useEffect::removeEventListener");
+      if (audioRef.current) {
+        audioRef.current.removeEventListener("ended", () => {
+          setIsPlaying(() => false);
+        });
+      }
+    };
+  }, []);
 
+  console.log("UserPlayRecord::audioSelected::", audioSelected);
   return (
     <Box className='flex justify-between items-start py-4'>
       <Box>
-        <NationalityCard isShowAvatar isShowName isShowNationality userInfo={props} />
+        <NationalityCard isShowAvatar isShowName userInfo={props} />
         <Typography className='text-extra-small-regular flex gap-1 mt-2'>
           <Avatar src={MessageIcon} component={"span"} className='w-4 h-4' />
           Speak {language(props.nativeLanguage)} (native), {language(props.displayLanguage)}

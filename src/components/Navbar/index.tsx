@@ -17,6 +17,8 @@ import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
 import persist from "@/shared/utils/persist.util";
 import { useAppDispatch } from "@/store/hook";
 import { logout } from "@/store/UserStore";
+import ROUTER from "@/shared/const/router.const";
+import { useNavigate } from "react-router-dom";
 
 const settings = [
   {
@@ -29,11 +31,13 @@ const settings = [
     icon: LogoutIcon,
     action: () => {
       persist.logout();
+      window.location.reload();
     },
   },
 ];
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -84,7 +88,15 @@ export default function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.title} onClick={handleCloseUserMenu} sx={{ paddingY: "0.5rem" }} onClickCapture={setting.action}>
+                <MenuItem
+                  key={setting.title}
+                  onClick={handleCloseUserMenu}
+                  sx={{ paddingY: "0.5rem" }}
+                  onClickCapture={() => {
+                    setting.action();
+                    navigate(ROUTER.LOGIN);
+                  }}
+                >
                   <Avatar
                     alt={setting.title + "icon"}
                     src={setting.icon}

@@ -19,7 +19,7 @@ export default function UserClub(props: UserResponseType) {
 
   return (
     <BoxCard classes='bg-white p-4 mb-4'>
-      <NationalityCard isShowAvatar isShowName isShowNationality userInfo={props} />
+      <NationalityCard isShowAvatar isShowName  userInfo={props} />
       <Typography className='text-extra-small-regular flex gap-1 mt-2'>
         <Avatar src={MessageIcon} component={"span"} className='w-4 h-4' />
         Speak {language(props.nativeLanguage)} (native), {language(props.displayLanguage)}
