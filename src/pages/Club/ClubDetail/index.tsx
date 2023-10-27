@@ -18,7 +18,6 @@ export default function ClubDetailPage() {
 
   const { data } = useGetClubDetailQuery(clubId!);
 
-  console.log("Dadada", data);
   const handleChange = (event: SyntheticEvent, path: PATH) => {
     setPath(path);
     navigate({

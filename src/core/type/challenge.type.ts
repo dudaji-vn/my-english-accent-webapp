@@ -39,6 +39,10 @@ export interface IChallengeSummaryDisplay extends Omit<ChallengeResponseType, "p
   vocabularies: VocabularyTypeResponse[] & RecordTypeResponse[];
 }
 
-export interface IClubListenType extends VocabularyTypeResponse {
+export interface IRecordOfUser extends VocabularyTypeResponse {
   recordUser: (UserResponseType & RecordTypeResponse)[];
+}
+export interface IListenTypePage {
+  participants: IRecordOfUser[];
+  vocabularies: VocabularyTypeResponse[];
 }

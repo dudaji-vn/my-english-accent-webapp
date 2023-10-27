@@ -303,6 +303,18 @@ h6 {
   margin-top: 1.5rem
 }
 
+#root :is(.mb-10) {
+  margin-bottom: 2.5rem
+}
+
+#root :is(.mb-9) {
+  margin-bottom: 2.25rem
+}
+
+#root :is(.mt-20) {
+  margin-top: 5rem
+}
+
 #root :is(.flex) {
   display: flex
 }
@@ -335,12 +347,20 @@ h6 {
   height: 2rem
 }
 
+#root :is(.h-9) {
+  height: 2.25rem
+}
+
 #root :is(.h-\[208px\]) {
   height: 208px
 }
 
 #root :is(.h-full) {
   height: 100%
+}
+
+#root :is(.h-11) {
+  height: 2.75rem
 }
 
 #root :is(.max-h-\[208px\]) {
@@ -373,6 +393,10 @@ h6 {
 
 #root :is(.w-8) {
   width: 2rem
+}
+
+#root :is(.w-9) {
+  width: 2.25rem
 }
 
 #root :is(.w-\[162px\]) {
@@ -477,6 +501,26 @@ h6 {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
 }
 
+#root :is(.bg-\[url\(\'\@\\assets\\icon\\background\.svg\'\)\]) {
+  background-image: url('@\assets\icon\background.svg')
+}
+
+#root :is(.bg-\[url\(\'\@\\\\assets\\\\icon\\\\background\.svg\'\)\]) {
+  background-image: url('@\\assets\\icon\\background.svg')
+}
+
+#root :is(.bg-\[url\(\'src\\\\assets\\\\icon\\\\background\.svg\'\)\]) {
+  background-image: url('src\\assets\\icon\\background.svg')
+}
+
+#root :is(.bg-\[url\(\$\{Image\}\)\]) {
+  background-image: url(${Image})
+}
+
+#root :is(.bg-\[url\(\$\{background\}\)\]) {
+  background-image: url(${background})
+}
+
 #root :is(.p-3) {
   padding: 0.75rem
 }
@@ -500,6 +544,16 @@ h6 {
 #root :is(.px-4) {
   padding-left: 1rem;
   padding-right: 1rem
+}
+
+#root :is(.px-5) {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem
+}
+
+#root :is(.py-3) {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem
 }
 
 #root :is(.py-4) {
@@ -543,6 +597,10 @@ h6 {
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+
+#root :is(.outline) {
+  outline-style: solid
 }
 
 #root :is(.filter) {

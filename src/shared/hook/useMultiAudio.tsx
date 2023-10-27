@@ -48,13 +48,13 @@ export const useMultiAudio = () => {
 
   useEffect(() => {
     if (indexAudio != -1) {
-      console.log("chay trong nay", indexAudio);
+      console.log("useMultiAudio::useEffect::", indexAudio);
       if (players[indexAudio].playing) {
-        console.log("chay trong nay1");
+        console.log("useMultiAudio::useEffect::playing");
         sources[indexAudio].audio.play();
         setStatus("play");
       } else {
-        console.log("chay trong nay2");
+        console.log("useMultiAudio::useEffect::played");
         sources[indexAudio].audio.pause();
         setStatus("stop");
       }
@@ -72,7 +72,10 @@ export const useMultiAudio = () => {
 
         if (lengthAudio > 0 && lengthAudio > indexAudio) {
           playAudio(indexAudio + 1, newPlayers);
+          console.log("useMultiAudio::useEffect::addEventListener::countinue");
         }
+        setStatus("stop");
+        console.log("useMultiAudio::useEffect::addEventListener::stop");
       });
     }
 

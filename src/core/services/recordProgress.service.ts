@@ -31,7 +31,6 @@ export const RecordProgress = createApi({
           const nativeVocabulaies: NativeVocabularyTypeResponse[] = [];
           await VocabularyController.getNativeVocabulary(vocabulariesId).then((val) => nativeVocabulaies.push(...val.flat()));
           const mergeVocabulary = _.merge({}, vocabularies, nativeVocabulaies);
-          console.log("getAllVocabulariesByLecture::vocabularies::", vocabulariesId, nativeVocabulaies);
 
           const enrollData = await EnrollmentController.getEnrollmentByLecture(lectureId);
 
@@ -83,7 +82,6 @@ export const RecordProgress = createApi({
     addRecord: builder.mutation<boolean, RecordRequest>({
       async queryFn(payload: RecordRequest) {
         try {
-          console.log("addrecord", payload);
           await RecordController.addRecord(payload);
           return { data: true };
         } catch (error) {

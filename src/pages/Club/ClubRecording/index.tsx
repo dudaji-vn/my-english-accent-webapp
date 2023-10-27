@@ -22,7 +22,7 @@ export default function ClubRecordingPage() {
 
   const myId = persist.getMyInfo().userId;
   const { data } = useGetChallengeDetailInClubQuery(state.challengeId);
-  console.log("ClubRecordingPage::", data);
+
   const vocabuaries = useMemo(() => {
     if (data && data.vocabularies) {
       return data.vocabularies;

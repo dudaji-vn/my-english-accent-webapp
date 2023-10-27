@@ -4,7 +4,7 @@ import { ClubVocabularyTypeResponse, RecordRequest, RecordTypeResponse, UserResp
 import ChallengeController from "../controllers/challenge.controller";
 import VocabularyController from "../controllers/vocabulary.controller";
 import _ from "lodash";
-import { IChallengeDetailDisplay, IChallengeDisplay, IChallengeSummaryDisplay, IClubListenType } from "../type/challenge.type";
+import { IChallengeDetailDisplay, IChallengeDisplay, IChallengeSummaryDisplay, IListenTypePage } from "../type/challenge.type";
 import RecordController from "../controllers/record.controller";
 import persist from "@/shared/utils/persist.util";
 import UserController from "../controllers/user.controller";
@@ -103,8 +103,6 @@ export const ChallengeApi = createApi({
             participants: users,
             vocabularies: _.values(mergeVocabulary),
           };
-
-          // console.log("getAllRecordInChallenge", result);
           return { data: result };
         } catch (error) {
           console.error("Challenge::getAllRecordInChallenge::", error);
@@ -117,7 +115,8 @@ export const ChallengeApi = createApi({
       async queryFn(challengeId: string) {
         try {
           const myId = persist.getMyInfo().userId;
-          await ChallengeController.updateChallenge(challengeId, myId);
+          const challenge = await ChallengeController.getChallengeDetail(challengeId);
+          await ChallengeController.updateChallenge(challengeId, myId, challenge.participants);
           return { data: true };
         } catch (error) {
           console.error("Challenge::getAllRecordInChallenge::", error);
@@ -125,7 +124,7 @@ export const ChallengeApi = createApi({
         }
       },
     }),
-    getRecordToListen: builder.query<IClubListenType[], string>({
+    getRecordToListen: builder.query<IListenTypePage, string>({
       async queryFn(challengeId: string) {
         try {
           const challenge = await ChallengeController.getChallengeDetail(challengeId);
@@ -135,7 +134,10 @@ export const ChallengeApi = createApi({
           const records: RecordTypeResponse[] = [];
           await RecordController.getRecordOfUsersByChallengeId(usersId, challengeId).then((val) => records.push(...val.flat()));
 
-          const vocabulariesId = records.map((record) => record.vocabularyId);
+          const clubVocabularies: ClubVocabularyTypeResponse[] = [];
+          await VocabularyController.getVocabularyOfClub([challengeId]).then((val) => clubVocabularies.push(...val.flat()));
+          const vocabulariesId = clubVocabularies.map((voca) => voca.vocabularyId);
+
           const vocabulariesRecord: VocabularyTypeResponse[] = [];
           await VocabularyController.getVocabulariesById(vocabulariesId).then((val) => vocabulariesRecord.push(...val.flat()));
 
@@ -156,10 +158,23 @@ export const ChallengeApi = createApi({
                 recordUser: value,
               };
             })
-            .value() as IClubListenType[];
+            .value();
 
-          console.log("getRecordToListen", populatedVocabulary);
-          return { data: populatedVocabulary };
+          const sorted = (array: any[]) => {
+            return array.sort((a: any, b: any) => {
+              const newA = a.vocabularyId as string;
+              const newB = b.vocabularyId as string;
+              if (newA < newB) return -1;
+              if (newA > newB) return 1;
+              return 0;
+            });
+          };
+          return {
+            data: {
+              vocabularies: sorted(vocabulariesRecord),
+              participants: sorted(populatedVocabulary),
+            },
+          };
         } catch (error) {
           console.error("Challenge::getRecordToListen::", error);
           return { error };

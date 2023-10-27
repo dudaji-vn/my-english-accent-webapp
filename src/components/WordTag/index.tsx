@@ -20,8 +20,6 @@ export default function WordTag({ sentence, phonetic, classes, voiceSrc, lecture
 
   const [playing, toggle] = useAudio();
 
-  console.log("WordTag::useAudio", playing);
-
   const onHandleRerecod = () => {
     navigate(
       {

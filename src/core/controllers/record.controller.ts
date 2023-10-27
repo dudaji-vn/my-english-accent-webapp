@@ -30,7 +30,6 @@ const RecordController = {
     if (challengeId) {
       challengeRef = doc(firebaseDB, "challenge", challengeId);
     }
-    console.log("challengeRef", challengeRef);
 
     const request = addTimeStamp({
       vocabulary_id: vocabularyRef,
@@ -57,7 +56,6 @@ const RecordController = {
   getRecordsByChallengeId: async (userId: string, challengeId: string) => {
     const userRef = doc(firebaseDB, "user", userId);
     const challengeRef = doc(firebaseDB, "challenge", challengeId);
-    console.log(userId, challengeId);
     const q = query(recordCollection, and(where("challenge_id", "==", challengeRef), where("user_id", "==", userRef)));
     return (await getDocs(q)).docs.map((doc) => recordConvert(doc.id, doc.data() as RecordModal));
   },

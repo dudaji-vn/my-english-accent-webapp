@@ -14,7 +14,7 @@ export const InitializeApi = createApi({
     getInitialData: builder.query<_.Dictionary<(LectureResponseType & EnrollmentResponseType)[]>, string>({
       async queryFn(userId: string) {
         try {
-          const enrollData = await EnrollmentController.getEnrollmentByUser("DRzkoxv6bLW6FP7aVrZh");
+          const enrollData = await EnrollmentController.getEnrollmentByUser(userId);
           const lecturesId = enrollData.map((enroll) => enroll.lectureId);
 
           const lectureData: LectureResponseType[] = [];

@@ -1,3 +1,4 @@
+import { UserResponseType } from "@/core/type";
 import { TopicUIType, UserType, VocabularyType } from "../type";
 
 const VOCABULARY = "vocabulary";
@@ -14,11 +15,11 @@ const persist = {
     const vocabu = localStorage.getItem(VOCABULARY);
     return vocabu ? JSON.parse(vocabu) : null;
   },
-  saveMyInfo: (myInfo: UserType) => {
+  saveMyInfo: (myInfo: UserResponseType) => {
     localStorage.setItem(TOKEN, myInfo.userId);
     localStorage.setItem(USER_INFO, JSON.stringify(myInfo));
   },
-  getMyInfo: (): UserType => {
+  getMyInfo: (): UserResponseType => {
     const myInfo = localStorage.getItem(USER_INFO);
     return myInfo ? JSON.parse(myInfo) : null;
   },
@@ -27,7 +28,10 @@ const persist = {
     localStorage.removeItem(TOKEN);
   },
   getToken: () => {
-    return localStorage.getItem(TOKEN);
+    return localStorage.getItem(TOKEN) ?? "";
+  },
+  setToken: (token: string) => {
+    localStorage.setItem(TOKEN, token);
   },
   getTopicId: () => {
     return localStorage.getItem(TOPIC_ID) ?? "";

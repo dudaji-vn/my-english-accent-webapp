@@ -47,9 +47,9 @@ export default function ClubMemberPage() {
             <Typography className='text-base-semibold'>
               {data?.membersInfo.length > 1 ? "Members" : " Member"} ({data?.membersInfo.length})
             </Typography>
-            <Button variant='contained' onClick={() => navigate(ROUTER.CLUB_ADD_MEMBER)}>
+            {/* <Button variant='contained' onClick={() => navigate(ROUTER.CLUB_ADD_MEMBER)}>
               Add
-            </Button>
+            </Button> */}
           </Box>
           {data.membersInfo.map((member) => (
             <UserClub {...member} key={member.userId} />

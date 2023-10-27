@@ -48,7 +48,6 @@ export default function ClubAddMemberPage() {
   };
 
   const onHandleAddMember = async () => {
-    console.log("add", members);
     await updateClub({
       clubId: state.clubId,
       members,

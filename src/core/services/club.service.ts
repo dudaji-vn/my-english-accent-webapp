@@ -18,7 +18,6 @@ export const ClubStudyApi = createApi({
           await ClubController.getClubByUserId(userId, "members").then((val) => clubsJoined.push(...val.flat()));
           const clubsOwner: ClubResponseType[] = [];
           await ClubController.getClubByUserId(userId, "owner_user_id").then((val) => clubsOwner.push(...val.flat()));
-          console.log("getClubsOwner", clubsJoined, clubsOwner);
           const response: IClubDisplay = {
             clubsJoined: clubsJoined.sort(function (x, y) {
               return y.created.seconds - x.created.seconds;
@@ -61,15 +60,12 @@ export const ClubStudyApi = createApi({
     getMembersInfo: builder.query<{ ownerInfo: UserResponseType; membersInfo: UserResponseType[] }, string>({
       async queryFn(clubId: string) {
         try {
-          console.log("getMembersInfo::clubId::", clubId);
           const res: ClubResponseType[] = await ClubController.getClubById(clubId);
-          console.log("getMembersInfo::res::", res);
           const ownerInfo: UserResponseType[] = [];
           const membersInfo: UserResponseType[] = [];
           if (res && res.length > 0) {
             const firstClub = res[0];
             const ownerId = firstClub.ownerUserId;
-            console.log(ownerId.id);
             const memembersId = firstClub.members.map((userId) => userId);
             await UserController.getUsersBy([ownerId]).then((val) => ownerInfo.push(...val.flat()));
             await UserController.getUsersBy(memembersId).then((val) => membersInfo.push(...val.flat()));

@@ -17,7 +17,6 @@ export function ClubAudioRecord({ vocabularies, challengeName, clubId, challenge
   const [selectionRecordId, setSelectionRecordId] = useState("");
 
   const onRedirectRerecordPage = ({ vocabularyId, recordId, voiceRecord }: { vocabularyId: string; recordId: string; voiceRecord: string }) => {
-    console.log(vocabularyId, recordId, voiceRecord);
     navigate(
       {
         pathname: ROUTER.RERECORD + `/${challengeName.toLowerCase()}`,

@@ -28,7 +28,6 @@ const EnrollmentController = {
   },
   updateEnrollment: async (payload: { enrollmentId: string; current_step: number; stage: number }) => {
     const { enrollmentId, ...restPayload } = payload;
-    console.log(payload);
     const enrollRef = doc(firebaseDB, enrollmentPath, enrollmentId);
     await updateDoc(enrollRef, restPayload);
   },
