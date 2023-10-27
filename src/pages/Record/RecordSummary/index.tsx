@@ -1,4 +1,4 @@
-import { Container, Box, IconButton, Avatar, Typography, Button, Grid } from "@mui/material";
+import { Container, Box, IconButton, Avatar, Typography, Button, CircularProgress } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import ROUTER from "@/shared/const/router.const";
@@ -11,11 +11,18 @@ export default function RecordSummaryPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const myId = persist.getMyInfo().userId;
-  const { data } = useGetAllRecordsOfVocabularyQuery({ myId, lectureId: state.lectureId });
+  const { data, isFetching } = useGetAllRecordsOfVocabularyQuery({ myId, lectureId: state.lectureId });
 
   const onHandleContinue = () => {
     navigate(ROUTER.RECORD);
   };
+
+  if (isFetching)
+    return (
+      <Box className='m-auto'>
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box className='flex flex-col grow'>
