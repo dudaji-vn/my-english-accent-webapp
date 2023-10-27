@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Avatar, IconButton } from "@mui/material";
 import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
 
-const TextToSpeech = ({ text }: { text: string }) => {
+const TextToSpeech = ({ text = "" }: { text: string }) => {
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
   const synth = window.speechSynthesis;
 
@@ -17,9 +17,10 @@ const TextToSpeech = ({ text }: { text: string }) => {
 
   useEffect(() => {
     const u = new SpeechSynthesisUtterance(text);
-    const voices = synth.getVoices();
+    const voices: SpeechSynthesisVoice[] = synth.getVoices();
 
-    u.voice = voices[1];
+    const index = voices.findIndex((voice) => voice.lang === "Samantha");
+    u.voice = voices[index];
     u.lang = "en-US";
     if (u) {
       setUtterance(u);

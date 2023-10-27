@@ -1,16 +1,7 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import _ from "lodash";
 
-import {
-  EnrollmentResponseType,
-  ILectureDisplay,
-  LectureResponseType,
-  NativeVocabularyTypeResponse,
-  RecordRequest,
-  RecordTypeResponse,
-  VocabularyMergedEnrollMent,
-  VocabularyTypeResponse,
-} from "@/core/type";
+import { ILectureDisplay, NativeVocabularyTypeResponse, RecordRequest, VocabularyMergedEnrollMent, VocabularyTypeResponse } from "@/core/type";
 import Reducer from "@/shared/const/store.const";
 import VocabularyController from "../controllers/vocabulary.controller";
 import EnrollmentController from "../controllers/enrollment.controller";
@@ -104,7 +95,14 @@ export const RecordProgress = createApi({
           return { error };
         }
       },
-      invalidatesTags: ["RecordProgress"],
+      invalidatesTags: (result, error, arg) => {
+        console.log("result", result);
+        console.log("error", error);
+        console.log("arg", arg);
+
+        // (result) => (result ? [{ type: "RecordProgress" as const, id: result }, "RecordProgress"] : ["RecordProgress"])
+        return ["RecordProgress"];
+      },
     }),
 
     getAllRecordsOfVocabulary: builder.query<ILectureDisplay, { myId: string; lectureId: string }>({

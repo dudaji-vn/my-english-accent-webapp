@@ -86,6 +86,7 @@ export default function AddNewClubPage() {
             What's your club name
           </Typography>
           <TextField
+            className='bg-white'
             placeholder='TechTalk and Design Club'
             variant='outlined'
             value={clubName}
