@@ -17,6 +17,7 @@ import EnrollmentController from "../controllers/enrollment.controller";
 import RecordController from "../controllers/record.controller";
 import LectureController from "../controllers/lecture.controller";
 import { DocumentReference } from "firebase/firestore";
+import persist from "@/shared/utils/persist.util";
 
 export const RecordProgress = createApi({
   reducerPath: Reducer.recordProgressApi,
@@ -26,6 +27,7 @@ export const RecordProgress = createApi({
     getAllVocabulariesByLecture: builder.query<VocabularyMergedEnrollMent, string>({
       async queryFn(lectureId: string) {
         try {
+          const myId = persist.getMyInfo().userId;
           const vocabularies = await VocabularyController.getVocabularyByLecture(lectureId);
           const vocabulariesId = vocabularies.map((voca) => voca.vocabularyId);
           const nativeVocabulaies: NativeVocabularyTypeResponse[] = [];
@@ -33,29 +35,12 @@ export const RecordProgress = createApi({
           const mergeVocabulary = _.merge({}, vocabularies, nativeVocabulaies);
 
           const enrollData = await EnrollmentController.getEnrollmentByLecture(lectureId);
-
-          const merged = _.mergeWith(mergeVocabulary, enrollData, (voca: VocabularyTypeResponse & NativeVocabularyTypeResponse, enroll: EnrollmentResponseType) => {
-            if (voca.lectureId.id === enroll.lectureId.id) {
-              return {
-                lectureId: enroll.lectureId,
-                vocabularyId: voca.vocabularyId,
-                vphoneticDisplayLanguage: voca.vphoneticDisplayLanguage,
-                vtitleDisplayLanguage: voca.vtitleDisplayLanguage,
-                titleNativeLanguage: voca.titleNativeLanguage,
-                language: voca.language,
-              };
-            }
-          });
+          const filterUserEnrollment = enrollData.filter((enroll) => enroll.userId.id === myId);
 
           const result = {
-            stage: enrollData[0].stage,
-            currentStep: enrollData[0].currentStep,
-            enrollmentId: enrollData[0].enrollmentId,
-            lectureId: enrollData[0].lectureId,
-            userId: enrollData[0].userId,
-            vocabularies: _.values(merged),
+            ...filterUserEnrollment[0],
+            vocabularies: _.values(mergeVocabulary),
           } as any;
-          console.info("getAllVocabulariesByLecture", result);
           return { data: result };
         } catch (error) {
           return { error };

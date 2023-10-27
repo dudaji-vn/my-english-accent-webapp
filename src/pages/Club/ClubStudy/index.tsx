@@ -85,6 +85,5 @@ export default function ClubStudyPage() {
   const { clubId } = useParams();
 
   const { data } = useGetChallengesInClubQuery(clubId!);
-  console.log("ClubStudyPage:: refetch");
   return <Container className='mt-6 grow'>{data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}</Container>;
 }

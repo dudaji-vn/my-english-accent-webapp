@@ -16,7 +16,7 @@ export default function RecordingProgressPage() {
   const lectureId = search.search.replace("?", "");
 
   const { data } = useGetAllVocabulariesByLectureQuery(lectureId);
-
+  console.log("data::", data,lectureId);
   const currentProgress = useMemo(() => {
     if (data) {
       return (data.currentStep * 100) / data.vocabularies.length;
