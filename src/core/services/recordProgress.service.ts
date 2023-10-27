@@ -95,14 +95,7 @@ export const RecordProgress = createApi({
           return { error };
         }
       },
-      invalidatesTags: (result, error, arg) => {
-        console.log("result", result);
-        console.log("error", error);
-        console.log("arg", arg);
-
-        // (result) => (result ? [{ type: "RecordProgress" as const, id: result }, "RecordProgress"] : ["RecordProgress"])
-        return ["RecordProgress"];
-      },
+      invalidatesTags: ["RecordProgress"],
     }),
 
     getAllRecordsOfVocabulary: builder.query<ILectureDisplay, { myId: string; lectureId: string }>({
