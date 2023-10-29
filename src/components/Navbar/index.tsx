@@ -15,8 +15,6 @@ import LogoutIcon from "@/assets/icon/log-out-icon.svg";
 import LogoApp from "@/assets/icon/logo-icon.svg";
 import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
 import persist from "@/shared/utils/persist.util";
-import { useAppDispatch } from "@/store/hook";
-import { logout } from "@/store/UserStore";
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
 
