@@ -7,9 +7,13 @@ const userPath = "user";
 const userCollection = collection(firebaseDB, userPath);
 
 const UserController = {
-  login: async (payload: IUserAuth) => {
-    const q = query(userCollection, and(where("user_name", "==", payload.userName), where("password", "==", payload.password)), limit(1));
-    return (await getDocs(q)).docs.map((doc) => userConvert(doc.id, doc.data() as UserModal))[0];
+  // login: async (payload: IUserAuth) => {
+  //   const q = query(userCollection, and(where("user_name", "==", payload.userName), where("password", "==", payload.password)), limit(1));
+  //   return (await getDocs(q)).docs.map((doc) => userConvert(doc.id, doc.data() as UserModal))[0];
+  // },
+
+  login: (userId: string): boolean => {
+    return true;
   },
 
   getUsers: async (userId: string) => {

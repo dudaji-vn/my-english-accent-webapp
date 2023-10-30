@@ -13,44 +13,25 @@ import { UserResponseType } from "@/core/type";
 export default function Login() {
   const elementDiv = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  // const [userName, setUserName] = useState("");
+  // const [password, setPassword] = useState("");
   const [login, { data }] = useLoginMutation();
-  const provider = new GoogleAuthProvider();
-  provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 
   const loginApp = async () => {
-    await login({
-      userName,
-      password,
-    });
+    // await login({
+    //   userName,
+    //   password,
+    // });
 
-    window.location.reload();
-
-    //TODO: NEED REWORK
-    // signInWithPopup(auth, provider)
-    //   .then((result) => {
-    //     const credential = GoogleAuthProvider.credentialFromResult(result);
-    //     const token = credential?.accessToken;
-    //     console.log(credential, result);
-    //     // // The signed-in user info.
-    //     const user = result.user;
-    //     const { displayName, email } = user;
-    //     // dispatch(saveToken({ token: token! }));
-    //     navigate("/login");
-    //     // // IdP data available using getAdditionalUserInfo(result)
-    //   })
-    //   .catch((error) => {
-    //     // Handle Errors here.
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     // The email of the user's account used.
-    //     const email = error.customData.email;
-    //     // The AuthCredential type that was used.
-    //     const credential = GoogleAuthProvider.credentialFromError(error);
-    //     // ...
-    //     console.log(error);
-    //   });
+    try {
+      const res = await login();
+      // res = true => redirect => home
+      // window.location.reload();
+      
+      // res = false =>redirect => register
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const register = async () => {
@@ -70,11 +51,11 @@ export default function Login() {
       });
   };
 
-  useEffect(() => {
-    if (data) {
-      persist.saveMyInfo(data);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     persist.saveMyInfo(data);
+  //   }
+  // }, [data]);
 
   return (
     <Box className={`flex flex-col items-center gap-3 grow`} sx={{ backgroundImage: `url(${background})` }}>
@@ -88,19 +69,19 @@ export default function Login() {
             Account
           </Typography>
 
-          <InputBase
+          {/* <InputBase
             id='email'
             className='px-5 py-3 border border-stroke border-solid rounded-md bg-white text-base-regular'
             value={userName}
             placeholder='Your account'
             onChange={(e) => setUserName(() => e.target.value)}
-          />
+          /> */}
         </Box>
         <Box className='flex flex-col gap-2'>
           <Typography htmlFor='password' component={"label"} className='text-base-medium'>
             Password
           </Typography>
-          <InputBase
+          {/* <InputBase
             id='password'
             className='px-5 py-3 border border-stroke border-solid rounded-md bg-white text-base-regular'
             value={password}
@@ -111,7 +92,7 @@ export default function Login() {
                 loginApp();
               }
             }}
-          />
+          /> */}
         </Box>
         {/* <TextField label='Password' variant='outlined' onChange={(e) => setPassword(() => e.target.value)} /> */}
         <Button
@@ -122,7 +103,6 @@ export default function Login() {
             // UserController.login({ userName, password });
             loginApp();
           }}
-          disabled={!userName || !password}
         >
           Sign In
         </Button>

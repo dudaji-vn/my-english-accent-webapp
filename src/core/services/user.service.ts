@@ -4,16 +4,29 @@ import UserController from "../controllers/user.controller";
 import persist from "@/shared/utils/persist.util";
 import Reducer from "@/shared/const/store.const";
 import { UserResponseType } from "../type";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "@/config/firebase";
+import { FirebaseError } from "firebase/app";
 
 export const UserApi = createApi({
   reducerPath: Reducer.userApi,
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    login: builder.mutation<UserResponseType, { userName: string; password: string }>({
-      async queryFn(payload) {
+    login: builder.mutation<boolean, void>({
+      async queryFn() {
         try {
-          const myInfo: UserResponseType = await UserController.login(payload);
-          return { data: myInfo };
+          const provider = new GoogleAuthProvider();
+          provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
+
+          let isLogin = false;
+          const response = await signInWithPopup(auth, provider);
+          if (response) {
+            const userId = response.user.uid;
+            if (userId) {
+              isLogin = await UserController.login(userId);
+            }
+          }
+          return { data: isLogin };
         } catch (error) {
           return { error };
         }
