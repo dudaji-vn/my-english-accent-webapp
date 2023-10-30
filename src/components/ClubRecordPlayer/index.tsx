@@ -72,7 +72,7 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
   };
 
   const onHandleNext = async () => {
-    const audioBlob = await fetch(mediaBlobUrl as any).then((r) => r.blob());
+    const audioBlob = await fetch(mediaBlobUrl as string).then((r) => r.blob());
     const audiofile = new File([audioBlob], "audiofile.mp3", {
       type: "audio/mp3",
     });

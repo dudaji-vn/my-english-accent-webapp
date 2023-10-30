@@ -19,6 +19,7 @@ import ClubAddMemberPage from "@/pages/Club/ClubAddMember";
 import ClubRecordingPage from "@/pages/Club/ClubRecording";
 import ClubListeningPage from "@/pages/Club/ClubListening";
 import ClubRecordingSummaryPage from "@/pages/Club/ClubRecordingSummary";
+import { Child } from "@/pages/HocTest";
 
 function RequireAuth({ isLoggedIn, isShowNavbar, children }: { isLoggedIn: boolean; isShowNavbar: boolean; children: ReactElement }) {
   const location = useLocation();
@@ -57,7 +58,7 @@ const routes = (isLoggedIn: boolean) => [
     path: ROUTER.RECORD + "/:category",
     element: (
       <RequireAuth isLoggedIn={isLoggedIn} isShowNavbar>
-        <RecordingProgressPage />
+        <Child thingy={908987}/>
       </RequireAuth>
     ),
   },

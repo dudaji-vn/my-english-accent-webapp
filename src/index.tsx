@@ -11,7 +11,7 @@ import { CssBaseline } from "@mui/material";
 import "./input.css";
 import App from "@/App";
 import theme from "../theme";
-import { store } from "@/store";
+import { store } from "@/core";
 
 // register Swiper custom elements
 register();
