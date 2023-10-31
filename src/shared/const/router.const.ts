@@ -2,6 +2,7 @@ const ROUTER = {
   ROOT: "/",
   TECHTALK: "/tech-talk",
   LOGIN: "/login",
+  REGISTER: "/register",
 
   RECORD: "/record",
   RERECORD: "/rerecord",

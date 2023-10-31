@@ -10,28 +10,17 @@ import background from "@/assets/icon/background.svg";
 import persist from "@/shared/utils/persist.util";
 import { UserResponseType } from "@/core/type";
 
-export default function Login() {
+export default function Register() {
   const elementDiv = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-  // const [userName, setUserName] = useState("");
-  // const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const [login, { data }] = useLoginMutation();
-
   const loginApp = async () => {
     // await login({
     //   userName,
     //   password,
     // });
-
-    try {
-      const res = await login();
-      // res = true => redirect => home
-      // window.location.reload();
-      
-      // res = false =>redirect => register
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const register = async () => {
@@ -59,54 +48,43 @@ export default function Login() {
 
   return (
     <Box className={`flex flex-col items-center gap-3 grow`} sx={{ backgroundImage: `url(${background})` }}>
-      <div id='loginDiv' ref={elementDiv}></div>
-      <Box className='mb-9 mt-20'>
-        <img src={logo} />
-      </Box>
-      <Container className='flex flex-col gap-4'>
-        <Box className='flex flex-col gap-2'>
-          <Typography htmlFor='email' component={"label"} className='text-base-medium'>
-            Account
+      <Container className='flex flex-col gap-4 items-center justify-center'>
+        {/* step 1 */}
+        {/* <Box className='flex flex-col gap-8  w-full'>
+          <Typography component={"h6"} className='text-center'>
+            What’s your nick name?
           </Typography>
 
-          {/* <InputBase
-            id='email'
+          <InputBase
             className='px-5 py-3 border border-stroke border-solid rounded-md bg-white text-base-regular'
             value={userName}
-            placeholder='Your account'
+            placeholder='Your nick name'
             onChange={(e) => setUserName(() => e.target.value)}
-          /> */}
-        </Box>
-        <Box className='flex flex-col gap-2'>
-          <Typography htmlFor='password' component={"label"} className='text-base-medium'>
-            Password
+          />
+        </Box> */}
+        {/* step 2 */}
+        <Box className='flex flex-col gap-8  w-full'>
+          <Typography component={"h6"} className='text-center'>
+            What’s your native language?
           </Typography>
-          {/* <InputBase
-            id='password'
+
+          <InputBase
             className='px-5 py-3 border border-stroke border-solid rounded-md bg-white text-base-regular'
-            value={password}
-            placeholder='Your password'
-            onChange={(e) => setPassword(() => e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                loginApp();
-              }
-            }}
-          /> */}
+            value={userName}
+            placeholder='Your nick name'
+            onChange={(e) => setUserName(() => e.target.value)}
+          />
         </Box>
-        {/* <TextField label='Password' variant='outlined' onChange={(e) => setPassword(() => e.target.value)} /> */}
-        <Button
+      </Container>
+      {/* <Button
           className='p-3 text-base-medium'
           variant='contained'
           onClick={() => {
-            // dispatch(login({ user: userName, password: password } as ILogin));
-            // UserController.login({ userName, password });
             loginApp();
           }}
         >
-          Sign In
-        </Button>
-      </Container>
+          Signup
+        </Button> */}
     </Box>
   );
 }

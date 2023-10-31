@@ -279,6 +279,10 @@ h6 {
   margin-bottom: 2rem
 }
 
+#root :is(.mb-9) {
+  margin-bottom: 2.25rem
+}
+
 #root :is(.mt-1) {
   margin-top: 0.25rem
 }
@@ -291,6 +295,10 @@ h6 {
   margin-top: 0.5rem
 }
 
+#root :is(.mt-20) {
+  margin-top: 5rem
+}
+
 #root :is(.mt-3) {
   margin-top: 0.75rem
 }
@@ -301,18 +309,6 @@ h6 {
 
 #root :is(.mt-6) {
   margin-top: 1.5rem
-}
-
-#root :is(.mb-10) {
-  margin-bottom: 2.5rem
-}
-
-#root :is(.mb-9) {
-  margin-bottom: 2.25rem
-}
-
-#root :is(.mt-20) {
-  margin-top: 5rem
 }
 
 #root :is(.flex) {
@@ -357,10 +353,6 @@ h6 {
 
 #root :is(.h-full) {
   height: 100%
-}
-
-#root :is(.h-11) {
-  height: 2.75rem
 }
 
 #root :is(.max-h-\[208px\]) {
@@ -452,6 +444,10 @@ h6 {
   gap: 1rem
 }
 
+#root :is(.gap-8) {
+  gap: 2rem
+}
+
 #root :is(.rounded-lg) {
   border-radius: 0.5rem
 }
@@ -501,24 +497,8 @@ h6 {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
 }
 
-#root :is(.bg-\[url\(\'\@\\assets\\icon\\background\.svg\'\)\]) {
-  background-image: url('@\assets\icon\background.svg')
-}
-
-#root :is(.bg-\[url\(\'\@\\\\assets\\\\icon\\\\background\.svg\'\)\]) {
-  background-image: url('@\\assets\\icon\\background.svg')
-}
-
-#root :is(.bg-\[url\(\'src\\\\assets\\\\icon\\\\background\.svg\'\)\]) {
-  background-image: url('src\\assets\\icon\\background.svg')
-}
-
-#root :is(.bg-\[url\(\$\{Image\}\)\]) {
-  background-image: url(${Image})
-}
-
-#root :is(.bg-\[url\(\$\{background\}\)\]) {
-  background-image: url(${background})
+#root :is(.bg-center) {
+  background-position: center
 }
 
 #root :is(.p-3) {
@@ -597,10 +577,6 @@ h6 {
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
-}
-
-#root :is(.outline) {
-  outline-style: solid
 }
 
 #root :is(.filter) {

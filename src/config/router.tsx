@@ -2,7 +2,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { ReactElement } from "react";
 import ROUTER from "@/shared/const/router.const";
 import HomePage from "@/pages/Home";
-import Login from "@/pages/Auth";
+import Login from "@/pages/Auth/Login";
 import NotFoundPage from "@/pages/NotFound";
 import RecordingPage from "@/pages/Record";
 import Navbar from "@/components/Navbar";
@@ -19,6 +19,7 @@ import ClubAddMemberPage from "@/pages/Club/ClubAddMember";
 import ClubRecordingPage from "@/pages/Club/ClubRecording";
 import ClubListeningPage from "@/pages/Club/ClubListening";
 import ClubRecordingSummaryPage from "@/pages/Club/ClubRecordingSummary";
+import Register from "@/pages/Auth/Register";
 
 function RequireAuth({ isLoggedIn, isShowNavbar, children }: { isLoggedIn: boolean; isShowNavbar: boolean; children: ReactElement }) {
   const location = useLocation();
@@ -28,7 +29,7 @@ function RequireAuth({ isLoggedIn, isShowNavbar, children }: { isLoggedIn: boole
       {children}
     </>
   ) : (
-    <Navigate to='/login' replace state={{ path: location.pathname }} />
+    <Navigate to='/register' replace state={{ path: location.pathname }} />
   );
 }
 
@@ -44,6 +45,10 @@ const routes = (isLoggedIn: boolean) => [
   {
     path: ROUTER.LOGIN,
     element: !isLoggedIn ? <Login /> : <Navigate to={ROUTER.ROOT} />,
+  },
+  {
+    path: ROUTER.REGISTER,
+    element: !isLoggedIn ? <Register /> : <Navigate to={ROUTER.ROOT} />,
   },
   {
     path: ROUTER.RECORD,

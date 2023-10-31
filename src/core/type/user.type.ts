@@ -1,32 +1,52 @@
 export type Language = "vi" | "en" | "kr";
-export type Level = "Beginer" | "Intermediate" | "Advanced";
+export enum ELanguage {
+  Vietnamese = "vi",
+  English = "en",
+  Korea = "kr",
+}
+export enum EClass {
+  Developer,
+  Designer,
+  Other,
+}
 
 export interface UserResponseType {
   userId: string;
-  nativeLanguage: Language;
+  nativeLanguage: ELanguage;
   userName: string;
   nickName: string;
   avatarUrl: string;
-  level: Level;
+  class: EClass;
   favoriteUserIds: string[];
   googleId: string;
-  displayLanguage:Language
+  displayLanguage: ELanguage;
+  email: string;
+  created: Date;
+  updated: Date;
 }
 
-export interface IUserAuth {
-  userName: string;
-  password: string;
+export interface IUSerRegister {
+  nickName: string;
+  nativeLanguage: ELanguage;
+  displayLanguage: ELanguage;
+  googleId: string;
+  class: EClass[];
+}
+
+export interface IUserLogin {
+  email: string;
+  googleId: string;
 }
 
 export interface UserModal {
   user_name: string;
   nick_name: string;
-  display_language: Language;
-  native_language: Language;
+  display_language: ELanguage;
+  native_language: ELanguage;
   avatar_url: string;
   google_id: string;
   favorite_user_ids: string[];
-  level: Level;
+  class: EClass;
   updated: string;
   created: string;
 }

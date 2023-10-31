@@ -1,5 +1,5 @@
 import { DocumentReference, Timestamp } from "firebase/firestore";
-import { Language, Level } from "./user.type";
+import { EClass, Language } from "./user.type";
 import { EnrollmentResponseType } from "./enrollment.type";
 import { StageExercise } from "@/shared/type";
 
@@ -16,7 +16,7 @@ export interface VocabularyModal {
   title_display_language: string;
   phonetic_display_language: string;
   lecture_id: DocumentReference;
-  level: Level;
+  class: EClass;
   updated: string;
   created: string;
 }

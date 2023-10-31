@@ -3,6 +3,7 @@ import { Avatar, Typography } from "@mui/material";
 import { useAppSelector } from "@/store/hook";
 import _ from "lodash";
 import { UserResponseType } from "@/core/type";
+import persist from "@/shared/utils/persist.util";
 
 interface PersonInfoType {
   isShowName?: boolean;
@@ -11,7 +12,7 @@ interface PersonInfoType {
 }
 
 export default function PersonInfo(props: PersonInfoType) {
-  const myInfo = useAppSelector((state) => state.user.myInfo);
+  const myInfo = persist.getMyInfo();
 
   const userInfo = _.isEmpty(props.userInfo) ? myInfo : props.userInfo;
   return (
