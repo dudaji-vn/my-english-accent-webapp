@@ -1,5 +1,14 @@
-export type Language = "vi" | "en" | "kr";
-export type Level = "Beginer" | "Intermediate" | "Advanced";
+export type Language = "vn" | "us" | "kr";
+
+type NationalType = {
+  [T in Language]: string;
+};
+
+export const NATIONAL: NationalType = {
+  vn: "Việt Nam",
+  kr: "한국인",
+  us: "English (US)",
+};
 
 export interface UserResponseType {
   userId: string;
@@ -7,15 +16,25 @@ export interface UserResponseType {
   userName: string;
   nickName: string;
   avatarUrl: string;
-  level: Level;
   favoriteUserIds: string[];
   googleId: string;
-  displayLanguage:Language
+  displayLanguage: Language;
+  email: string;
+  created: Date;
+  updated: Date;
 }
 
-export interface IUserAuth {
-  userName: string;
-  password: string;
+export interface IUSerRegister {
+  nickName: string;
+  nativeLanguage: Language;
+  displayLanguage: Language;
+  googleId: string;
+  email: string;
+}
+
+export interface IUserLogin {
+  email: string;
+  googleId: string;
 }
 
 export interface UserModal {
@@ -26,7 +45,6 @@ export interface UserModal {
   avatar_url: string;
   google_id: string;
   favorite_user_ids: string[];
-  level: Level;
   updated: string;
   created: string;
 }

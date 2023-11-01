@@ -1,49 +1,34 @@
-import { UserResponseType } from "@/core/type";
-import { TopicUIType, UserType, VocabularyType } from "../type";
+import { IUserLogin, UserResponseType } from "@/core/type";
 
-const VOCABULARY = "vocabulary";
 const TOKEN = "token";
 const USER_INFO = "userInfo";
-const TOPIC_ID = "topicId";
-const QUOTE = "quote";
+const GOOGLE_ID = "googleId";
 
 const persist = {
-  saveVocabulary: (value: Omit<TopicUIType, "imgSrc" | "vocabularies"> & Partial<VocabularyType>) => {
-    localStorage.setItem(VOCABULARY, JSON.stringify(value));
-  },
-  getVocabulary: () => {
-    const vocabu = localStorage.getItem(VOCABULARY);
-    return vocabu ? JSON.parse(vocabu) : null;
-  },
   saveMyInfo: (myInfo: UserResponseType) => {
-    localStorage.setItem(TOKEN, myInfo.userId);
     localStorage.setItem(USER_INFO, JSON.stringify(myInfo));
   },
   getMyInfo: (): UserResponseType => {
     const myInfo = localStorage.getItem(USER_INFO);
     return myInfo ? JSON.parse(myInfo) : null;
   },
-  logout: () => {
-    localStorage.removeItem(USER_INFO);
-    localStorage.removeItem(TOKEN);
-  },
   getToken: () => {
     return localStorage.getItem(TOKEN) ?? "";
   },
-  setToken: (token: string) => {
+  saveToken: (token: string) => {
     localStorage.setItem(TOKEN, token);
   },
-  getTopicId: () => {
-    return localStorage.getItem(TOPIC_ID) ?? "";
+  getProviderInfo: () => {
+    const provider = localStorage.getItem(GOOGLE_ID);
+    return provider ? JSON.parse(provider) : null;
   },
-  saveTopicId: (id: string) => {
-    return localStorage.setItem(TOPIC_ID, id);
+  saveProviderInfo: (payload: IUserLogin) => {
+    localStorage.setItem(GOOGLE_ID, JSON.stringify(payload));
   },
-  getQuote: () => {
-    return localStorage.getItem(QUOTE) ?? "";
-  },
-  saveQuote: (text: string) => {
-    return localStorage.setItem(QUOTE, text);
+  logout: () => {
+    localStorage.removeItem(USER_INFO);
+    localStorage.removeItem(GOOGLE_ID);
+    localStorage.removeItem(TOKEN);
   },
 };
 

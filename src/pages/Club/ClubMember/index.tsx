@@ -15,9 +15,9 @@ export default function ClubMemberPage() {
   const { clubId } = useParams();
   const { data } = useGetMembersInfoQuery(clubId ?? "");
   const language = useMemo(() => {
-    if (data?.ownerInfo.nativeLanguage === "vi") {
+    if (data?.ownerInfo.nativeLanguage === "vn") {
       return "Vietnamese";
-    } else if (data?.ownerInfo.nativeLanguage === "en") {
+    } else if (data?.ownerInfo.nativeLanguage === "us") {
       return "English";
     } else if (data?.ownerInfo.nativeLanguage === "kr") {
       return "Korea";

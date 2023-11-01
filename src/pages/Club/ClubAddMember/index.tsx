@@ -7,13 +7,12 @@ import FooterCard from "@/components/FooterBtn";
 import RecordCard from "@/components/RecordCard";
 import ROUTER from "@/shared/const/router.const";
 import { useSetClubMutation } from "@/core/services/club.service";
-import { useGetUsersQuery } from "@/core/services";
 
 export default function ClubAddMemberPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const { data: userList } = useGetUsersQuery();
+  const userList: any[] = [];
 
   const [updateClub] = useSetClubMutation();
   const [search, setSearch] = useState("");
