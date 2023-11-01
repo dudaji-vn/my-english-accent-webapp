@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import { Avatar, Typography } from "@mui/material";
-import { useAppSelector } from "@/store/hook";
 import _ from "lodash";
 import { UserResponseType } from "@/core/type";
 import persist from "@/shared/utils/persist.util";
