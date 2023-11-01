@@ -387,6 +387,10 @@ h6 {
   width: 2rem
 }
 
+#root :is(.w-80) {
+  width: 20rem
+}
+
 #root :is(.w-9) {
   width: 2.25rem
 }
@@ -432,6 +436,10 @@ h6 {
   gap: 0.25rem
 }
 
+#root :is(.gap-16) {
+  gap: 4rem
+}
+
 #root :is(.gap-2) {
   gap: 0.5rem
 }
@@ -446,6 +454,10 @@ h6 {
 
 #root :is(.gap-8) {
   gap: 2rem
+}
+
+#root :is(.self-center) {
+  align-self: center
 }
 
 #root :is(.rounded-lg) {
@@ -495,10 +507,6 @@ h6 {
 #root :is(.bg-white) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
-}
-
-#root :is(.bg-center) {
-  background-position: center
 }
 
 #root :is(.p-3) {

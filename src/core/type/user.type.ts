@@ -1,25 +1,24 @@
-export type Language = "vi" | "en" | "kr";
-export enum ELanguage {
-  Vietnamese = "vi",
-  English = "en",
-  Korea = "kr",
-}
-export enum EClass {
-  Developer,
-  Designer,
-  Other,
-}
+export type Language = "vn" | "us" | "kr";
+
+type NationalType = {
+  [T in Language]: string;
+};
+
+export const NATIONAL: NationalType = {
+  vn: "Việt Nam",
+  kr: "한국인",
+  us: "English (US)",
+};
 
 export interface UserResponseType {
   userId: string;
-  nativeLanguage: ELanguage;
+  nativeLanguage: Language;
   userName: string;
   nickName: string;
   avatarUrl: string;
-  class: EClass;
   favoriteUserIds: string[];
   googleId: string;
-  displayLanguage: ELanguage;
+  displayLanguage: Language;
   email: string;
   created: Date;
   updated: Date;
@@ -27,10 +26,10 @@ export interface UserResponseType {
 
 export interface IUSerRegister {
   nickName: string;
-  nativeLanguage: ELanguage;
-  displayLanguage: ELanguage;
+  nativeLanguage: Language;
+  displayLanguage: Language;
   googleId: string;
-  class: EClass[];
+  email: string;
 }
 
 export interface IUserLogin {
@@ -41,12 +40,11 @@ export interface IUserLogin {
 export interface UserModal {
   user_name: string;
   nick_name: string;
-  display_language: ELanguage;
-  native_language: ELanguage;
+  display_language: Language;
+  native_language: Language;
   avatar_url: string;
   google_id: string;
   favorite_user_ids: string[];
-  class: EClass;
   updated: string;
   created: string;
 }

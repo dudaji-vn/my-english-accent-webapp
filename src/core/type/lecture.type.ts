@@ -1,5 +1,4 @@
 import { RecordTypeResponse } from "./record.type";
-import { EClass } from "./user.type";
 import { VocabularyTypeResponse } from "./vocabulary.type";
 
 export interface LectureResponseType {
@@ -13,7 +12,6 @@ export interface LectureResponseType {
 export interface LectureModal {
   lecture_name: string;
   img_src: string;
-  class: EClass;
   updated: string;
   created: string;
 }

@@ -29,7 +29,7 @@ function RequireAuth({ isLoggedIn, isShowNavbar, children }: { isLoggedIn: boole
       {children}
     </>
   ) : (
-    <Navigate to='/register' replace state={{ path: location.pathname }} />
+    <Navigate to='/login' replace state={{ path: location.pathname }} />
   );
 }
 

@@ -5,7 +5,6 @@ export const userConvert = (id: string, user: UserModal): UserResponseType => {
     avatarUrl: user.avatar_url,
     favoriteUserIds: user.favorite_user_ids,
     googleId: user.google_id,
-    class: user.class,
     nativeLanguage: user.native_language,
     nickName: user.nick_name,
     userName: user.user_name,

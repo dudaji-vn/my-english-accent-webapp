@@ -1,34 +1,23 @@
-import { createApi, fakeBaseQuery, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import persist from "@/shared/utils/persist.util";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { IUSerRegister, IUserLogin, UserResponseType } from "../type";
+import { IUSerRegister, UserResponseType } from "../type";
 import baseQuery from "..";
+import UserController from "../controllers/user.controller";
 
 export const UserApi = createApi({
   reducerPath: Reducer.userApi,
   baseQuery: baseQuery,
   endpoints: (builder) => ({
-    login: builder.mutation<UserResponseType, IUserLogin>({
-      query: (payload) => {
-        return {
-          url: `/auth/login`,
-          method: "POST",
-          body: payload,
-        };
-      },
-    }),
-    register: builder.mutation<UserResponseType, IUSerRegister>({
-      query: (payload) => {
-        return {
-          url: `/auth/register`,
-          method: "POST",
-          body: payload,
-        };
+    register: builder.mutation<{ token: string; user: UserResponseType }, IUSerRegister>({
+      query: UserController.register,
+      transformResponse: (baseReturn) => {
+        const { data } = baseReturn as { data: any; status: string };
+        return data;
       },
     }),
   }),
 });
 
-export const { useLoginMutation } = UserApi;
+export const { useRegisterMutation } = UserApi;
 
 export default UserApi;
