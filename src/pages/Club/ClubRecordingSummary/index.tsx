@@ -102,7 +102,7 @@ export default function ClubRecordingSummaryPage() {
 
   const onHandleContinue = () => {
     navigate({
-      pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + state.clubId,
+      pathname: ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + state.clubId,
     });
     prefetChallengesInCLub(state.clubId);
   };

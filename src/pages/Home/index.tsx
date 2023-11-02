@@ -10,7 +10,7 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <Container className="py-4">
+    <Container className='py-4'>
       <BoxCard classes='flex flex-col gap-2 p-4 mb-4' onClick={() => navigate(ROUTER.CLUB)}>
         <Avatar src={PeopleIcon}></Avatar>
         <Typography className='text-large-semibold'>Club study</Typography>

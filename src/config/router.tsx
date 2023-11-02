@@ -132,7 +132,7 @@ const routes = (isLoggedIn: boolean) => [
   },
   {
     path: ROUTER.CLUB_DETAIL,
-    element: <Navigate to={ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY} replace />,
+    element: <Navigate to={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY} replace />,
   },
   {
     path: ROUTER.CLUB_DETAIL,

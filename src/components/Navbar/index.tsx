@@ -36,6 +36,7 @@ const settings = [
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const nickName = persist.getMyInfo().nickName;
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -64,7 +65,7 @@ export default function Navbar() {
                       width: "24px",
                       height: "24px",
                     }}
-                    children={<Typography color={"white"}>H</Typography>}
+                    children={<Typography color={"white"}>{nickName.slice(0, 1)}</Typography>}
                   />
                 </IconButton>
                 <img alt='arrow-down-icon' src={ArrowdownIcon} />
@@ -92,7 +93,7 @@ export default function Navbar() {
                   sx={{ paddingY: "0.5rem" }}
                   onClickCapture={() => {
                     setting.action();
-                    navigate(ROUTER.LOGIN);
+                    navigate(ROUTER.AUTH + ROUTER.LOGIN);
                   }}
                 >
                   <Avatar
