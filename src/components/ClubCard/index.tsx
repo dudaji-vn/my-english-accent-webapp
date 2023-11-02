@@ -11,7 +11,7 @@ export default function ClubCard(props: ClubResponseType) {
   const navigate = useNavigate();
   const onRedirectToClub = () => {
     navigate({
-      pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + props.clubId,
+      pathname: ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + props.clubId,
     });
   };
   return (

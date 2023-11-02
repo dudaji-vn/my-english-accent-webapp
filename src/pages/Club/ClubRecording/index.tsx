@@ -71,7 +71,7 @@ export default function ClubRecordingPage() {
             <Button sx={{ flexGrow: 1 }} onClick={handleClose}>
               Stay
             </Button>
-            <Button sx={{ flexGrow: 1 }} variant='contained' color='error' onClick={() => navigate(ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + state.clubId)}>
+            <Button sx={{ flexGrow: 1 }} variant='contained' color='error' onClick={() => navigate(ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + state.clubId)}>
               Quit
             </Button>
           </Box>

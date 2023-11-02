@@ -311,6 +311,10 @@ h6 {
   margin-top: 1.5rem
 }
 
+#root :is(.block) {
+  display: block
+}
+
 #root :is(.flex) {
   display: flex
 }
@@ -353,6 +357,10 @@ h6 {
 
 #root :is(.h-full) {
   height: 100%
+}
+
+#root :is(.h-screen) {
+  height: 100vh
 }
 
 #root :is(.max-h-\[208px\]) {

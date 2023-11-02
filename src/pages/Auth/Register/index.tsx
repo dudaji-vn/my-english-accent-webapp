@@ -52,6 +52,7 @@ export default function Register() {
   const [nickName, setNickName] = useState("");
   const [nativeLanguage, setNativeLanguage] = useState<Language | null>(null);
   const [displayLanguage, setDisplayLanguage] = useState<Language | null>(null);
+  const provider = persist.getProviderInfo();
 
   const [registerAccount] = useRegisterMutation();
 
@@ -134,15 +135,14 @@ export default function Register() {
 
   const onHandleBack = () => {
     if (step === 0) {
-      navigate(ROUTER.LOGIN);
+      navigate(ROUTER.AUTH + ROUTER.LOGIN);
     } else {
       setStep((pre) => pre - 1);
     }
   };
 
   const onHandleNext = () => {
-    if (step === MAX_STEP) {
-      const provider = persist.getProviderInfo();
+    if (step === MAX_STEP && provider) {
       if (displayLanguage && nativeLanguage) {
         const payload = {
           ...provider,
@@ -165,14 +165,14 @@ export default function Register() {
   };
 
   return (
-    <Box className={`flex flex-col gap-16 grow`}>
+    <Box className={`flex flex-col gap-16 h-screen`}>
       <Box className='flex items-center divider p-4' onClick={onHandleBack}>
         <Avatar src={step === 0 ? CloseIcon : ChervonIcon} className='w-6 h-6' />
         <Typography className='text-large-semibold'>Setup your account</Typography>
       </Box>
       <Container className='flex flex-col gap-4 items-center grow'>{displayLayoutRegister()}</Container>
       <FooterCard classes='justify-center'>
-        <Button className='p-3 text-base-medium' variant='contained' fullWidth onClick={onHandleNext}>
+        <Button className='p-3 text-base-medium' variant='contained' fullWidth onClick={onHandleNext} disabled={!provider}>
           Continue
         </Button>
       </FooterCard>

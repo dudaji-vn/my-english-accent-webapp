@@ -52,7 +52,7 @@ export default function ClubAddMemberPage() {
       members,
     });
     navigate({
-      pathname: ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_MEMBER + "/" + state.clubId,
+      pathname: ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/" + state.clubId,
     });
   };
 
@@ -86,7 +86,7 @@ export default function ClubAddMemberPage() {
           {listUser?.length} {listUser?.length > 0 ? "memebrs " : "member "}
           selected
         </Typography> */}
-        <Button className='grow' onClick={() => navigate(ROUTER.CLUB_DETAIL + "/" + ROUTER.CLUB_STUDY + "/" + state.clubId)}>
+        <Button className='grow' onClick={() => navigate(ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + state.clubId)}>
           Skip
         </Button>
         <Button variant='contained' className='rounded-md m-auto grow' onClick={onHandleAddMember}>

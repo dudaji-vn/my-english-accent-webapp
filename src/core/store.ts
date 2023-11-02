@@ -2,7 +2,7 @@ import { configureStore, ThunkAction, Action, ConfigureStoreOptions } from "@red
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { LectureApi, UserApi, VocabularyApi } from "@/core/services";
+import { FakeUserApi, LectureApi, UserApi, VocabularyApi } from "@/core/services";
 import InitializeApi from "@/core/services/initialize.service";
 import RecordProgressApi from "@/core/services/recordProgress.service";
 import ClubStudyApi from "@/core/services/club.service";
@@ -16,6 +16,7 @@ const middleware = [
   RecordProgressApi.middleware,
   ClubStudyApi.middleware,
   ChallengeApi.middleware,
+  FakeUserApi.middleware
 ] as any;
 
 export const store = configureStore({
@@ -27,6 +28,7 @@ export const store = configureStore({
     RecordProgressApi: RecordProgressApi.reducer,
     ClubStudyApi: ClubStudyApi.reducer,
     ChallengeApi: ChallengeApi.reducer,
+    FakeUserApi: FakeUserApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
