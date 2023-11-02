@@ -17,6 +17,7 @@ import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
 import persist from "@/shared/utils/persist.util";
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
+import CustomAppbar from "../CustomAppbar";
 
 const settings = [
   {
@@ -47,8 +48,9 @@ export default function Navbar() {
     setAnchorElUser(null);
   };
 
+  //className='sticky bg-white shadow-none divider'
   return (
-    <AppBar className='sticky bg-white shadow-none divider'>
+    <CustomAppbar open={true}>
       <Container>
         <Toolbar disableGutters>
           <IconButton>
@@ -113,6 +115,6 @@ export default function Navbar() {
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </CustomAppbar>
   );
 }
