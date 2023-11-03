@@ -17,7 +17,7 @@ import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
 import persist from "@/shared/utils/persist.util";
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
-import CustomAppbar from "../CustomAppbar";
+import CustomAppbar from "../CustomMui/Appbar";
 
 const settings = [
   {

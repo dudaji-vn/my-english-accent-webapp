@@ -34,20 +34,7 @@ export const ProtectedRoute = () => {
     }
   }, [token]);
 
-  return (
-    <Grid container direction='column' width='100%' flexWrap='nowrap'>
-      {/* <Navbar /> */}
-      <Grid container direction='row' flexWrap='nowrap'>
-        <Grid item xs={3}>
-          {/* <SideBar /> */}
-          <DrawerNavigate variant='permanent' />
-        </Grid>
-        <Grid item xs={9}>
-          <Outlet />
-        </Grid>
-      </Grid>
-    </Grid>
-  );
+  return <DrawerNavigate variant='permanent' />;
 };
 
 export const PublishRoute = () => {
@@ -61,10 +48,6 @@ export const PublishRoute = () => {
   }, [token]);
 
   return <Outlet />;
-};
-
-const SuspenseTrigger = () => {
-  throw new Promise(() => {});
 };
 
 function App() {

@@ -1,34 +1,93 @@
-import { useState } from "react";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@/assets/icon/people-icon.svg";
-import ChevronLeftIcon from "@/assets/icon/people-icon.svg";
-import ChevronRightIcon from "@/assets/icon/people-icon.svg";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@/assets/icon/people-icon.svg";
-import MailIcon from "@/assets/icon/people-icon.svg";
+import { NavigateFunction, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useState, MouseEvent } from "react";
 
-import AppBar from "@mui/material/AppBar";
-import { Avatar, Container } from "@mui/material";
-import Drawer from "@mui/material/Drawer";
-import CustomDrawerHeader from "../CustomDrawerHeader";
-import CustomDrawer from "../CustomDrawer";
-import CustomAppbar from "../CustomAppbar";
+import {
+  Avatar,
+  Menu,
+  MenuItem,
+  Tooltip,
+  ListItemText,
+  ListItemIcon,
+  Box,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  Toolbar,
+  Typography,
+  Checkbox,
+} from "@mui/material";
+
+import CustomDrawerHeader from "../CustomMui/DrawerHeader";
+import CustomDrawer from "../CustomMui/Drawer";
+import CustomAppbar from "../CustomMui/Appbar";
+import LogoApp from "@/assets/icon/logo-icon.svg";
+import Chervon from "@/assets/icon/chevron-left-icon.svg";
+import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
+import AccountIcon from "@/assets/icon/settings-icon.svg";
+import LogoutIcon from "@/assets/icon/log-out-icon.svg";
+import MenuIcon from "@/assets/icon/menu-icon.svg";
+import MusicIcon from "@/assets/icon/music-play-icon.svg";
+import MusicCheckedIcon from "@/assets/icon/music-play-color-icon.svg";
+import RecordIcon from "@/assets/icon/microphone-2-icon.svg";
+import RecordCheckedIcon from "@/assets/icon/microphone-2-color-icon.svg";
+import ClubIcon from "@/assets/icon/people-icon.svg";
+import ClubCheckedIcon from "@/assets/icon/people-color-icon.svg";
+
+import ROUTER from "@/shared/const/router.const";
+import persist from "@/shared/utils/persist.util";
+
+const settings = [
+  {
+    title: "Account",
+    icon: AccountIcon,
+    action: () => {},
+  },
+  {
+    title: "Log out",
+    icon: LogoutIcon,
+    action: () => {
+      persist.logout();
+      window.location.reload();
+    },
+  },
+];
+
+const menu = [
+  {
+    name: "Record",
+    icon: RecordIcon,
+    iconChecked: RecordCheckedIcon,
+    action: (navigate: NavigateFunction) => {
+      navigate(ROUTER.RECORD);
+    },
+  },
+  {
+    name: "Listening",
+    icon: MusicIcon,
+    iconChecked: MusicCheckedIcon,
+    action: (navigate: NavigateFunction) => {
+      navigate(ROUTER.LISTENING);
+    },
+  },
+  {
+    name: "Club",
+    icon: ClubIcon,
+    iconChecked: ClubCheckedIcon,
+    action: (navigate: NavigateFunction) => {
+      navigate(ROUTER.CLUB);
+    },
+  },
+];
 
 const DrawerNavigate = ({ variant, ...props }: any) => {
-  const theme = useTheme();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const path = pathname.replace("/", "");
   const [open, setOpen] = useState(false);
+  const nickName = persist.getMyInfo().nickName;
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -37,8 +96,93 @@ const DrawerNavigate = ({ variant, ...props }: any) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const getMenu = () => {
+    return (
+      <Menu
+        sx={{ mt: "40px" }}
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+      >
+        {settings.map((setting) => (
+          <MenuItem
+            key={setting.title}
+            onClick={handleCloseUserMenu}
+            sx={{ paddingY: "0.5rem" }}
+            onClickCapture={() => {
+              setting.action();
+              navigate(ROUTER.AUTH + ROUTER.LOGIN);
+            }}
+          >
+            <Avatar
+              alt={setting.title + "icon"}
+              src={setting.icon}
+              sx={{
+                width: "16px",
+                height: "16px",
+              }}
+            />
+            <Typography textAlign='center' paddingLeft={"12px"}>
+              {setting.title}
+            </Typography>
+          </MenuItem>
+        ))}
+      </Menu>
+    );
+  };
+
+  const getList = () => (
+    <List>
+      {menu.map((item, index) => (
+        <ListItem key={item.name} disablePadding sx={{ display: "block" }}>
+          <ListItemButton
+            selected={path === item.name.toLowerCase()}
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+            onClick={() => item.action(navigate)}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+              <Checkbox
+                checked={path === item.name.toLowerCase()}
+                icon={<Avatar src={item.icon} alt='uncheck-icon' className='w-6 h-6' />}
+                checkedIcon={<Avatar src={item.iconChecked} alt='check-icon' className='w-6 h-6' />}
+              />
+            </ListItemIcon>
+            <ListItemText primary={item.name} sx={{ opacity: open ? 1 : 0 }} primaryTypographyProps={{ fontWeight: path === item.name.toLowerCase() ? 500 : 400 }} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
+  );
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box display={"flex"}>
       <CustomAppbar open={open}>
         <Toolbar>
           <IconButton
@@ -48,87 +192,50 @@ const DrawerNavigate = ({ variant, ...props }: any) => {
             edge='start'
             sx={{
               marginRight: 5,
+              display: "flex",
+              gap: 5,
               ...(open && { display: "none" }),
             }}
+            disableRipple
           >
-            <Avatar src={MenuIcon} />
+            <Avatar src={MenuIcon} className='w-6 h-6' />
+            <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600 }}>{path}</Typography>
           </IconButton>
-          <Typography variant='h6' noWrap component='div'>
-            Mini variant drawer
-          </Typography>
+          <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600, ...(!open && { display: "none" }) }}>{path}</Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box>
+            <Tooltip title='Open settings'>
+              <Box className='flex items-center'>
+                <IconButton onClick={handleOpenUserMenu} disableRipple>
+                  <Avatar
+                    alt='avatar-icon'
+                    sx={{
+                      width: "24px",
+                      height: "24px",
+                    }}
+                    children={<Typography color={"white"}>{nickName.slice(0, 1)}</Typography>}
+                  />
+                </IconButton>
+                <img alt='arrow-down-icon' src={ArrowdownIcon} />
+              </Box>
+            </Tooltip>
+            {getMenu()}
+          </Box>
         </Toolbar>
       </CustomAppbar>
-      <CustomDrawer open={open}>
+      <CustomDrawer open={open} variant='permanent'>
         <CustomDrawerHeader>
-          <IconButton onClick={handleDrawerClose}>{theme.direction === "rtl" ? <Avatar src={MenuIcon} /> : <Avatar src={MenuIcon} />}</IconButton>
+          <img alt='logo-app' src={LogoApp} />
+          <IconButton disableRipple onClick={handleDrawerClose}>
+            <Avatar src={Chervon} className='w-6 h-6' />
+          </IconButton>
         </CustomDrawerHeader>
         <Divider />
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <Avatar src={MenuIcon} /> : <Avatar src={MenuIcon} />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <Avatar src={MenuIcon} /> : <Avatar src={MenuIcon} />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {getList()}
       </CustomDrawer>
-      <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
+      <Box component='main' sx={{ flexGrow: 1 }}>
         <CustomDrawerHeader />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-          elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-          velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod
-          quis viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec
-          nam aliquam sem et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend.
-          Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <Outlet />
       </Box>
     </Box>
   );

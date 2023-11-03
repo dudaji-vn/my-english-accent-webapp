@@ -1,4 +1,4 @@
-import { AppBar, Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { ReactNode } from "react";
 
 type CustomAppBarProps = {
@@ -6,16 +6,16 @@ type CustomAppBarProps = {
 };
 
 export default function CustomDrawerHeader({ children }: CustomAppBarProps) {
+  const theme = useTheme();
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-end",
-        padding: (theme) => theme.spacing(0, 1),
+        justifyContent: "space-between",
+        padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
-        // ...theme.mixins.toolbar,
-        height: (theme) => ({ ...theme.mixins.toolbar }),
+        ...theme.mixins.toolbar,
       }}
     >
       {children}
