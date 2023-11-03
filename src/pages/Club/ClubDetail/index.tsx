@@ -4,7 +4,6 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 
 import ROUTER from "@/shared/const/router.const";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import { useGetClubDetailQuery } from "@/core/services/club.service";
 
 type PATH = "study" | "member" | "info";
 
@@ -16,7 +15,7 @@ export default function ClubDetailPage() {
   const { clubId } = useParams();
   const [path, setPath] = useState<PATH>(pathname.split("/")[2] as PATH);
 
-  const { data } = useGetClubDetailQuery(clubId!);
+  // const { data } = useGetClubDetailQuery(clubId!);
 
   const handleChange = (event: SyntheticEvent, path: PATH) => {
     setPath(path);
@@ -34,7 +33,7 @@ export default function ClubDetailPage() {
       <Box className='p-4 flex items-center gap-2 bg-white divider'>
         <Avatar src={CloseIcon} className='w-6 h-6' onClick={() => navigate(ROUTER.CLUB)} />
         {/* TODO: adjust club name */}
-        <Typography className='text-large-semibold'>{data?.clubName}</Typography>
+        <Typography className='text-large-semibold'>{"data?.clubName"}</Typography>
       </Box>
       <Box className='bg-white divider'>
         <Tabs value={path} onChange={handleChange} aria-label='tabs' variant='fullWidth'>

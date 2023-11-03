@@ -1,20 +1,18 @@
 import React from "react";
 import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material";
 import AddIcon from "@/assets/icon/add-btn-icon.svg";
-import Chervon from "@/assets/icon/chevron-left-icon.svg";
 import WebniarIcon from "@/assets/icon/webinar-icon.svg";
 
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
 import ClubCard from "@/components/ClubCard";
-import { useGetClubsOwnerQuery } from "@/core/services/club.service";
-import persist from "@/shared/utils/persist.util";
+import { useGetClubsQuery } from "@/core/services/club.service";
 
 export default function ClubPage() {
   const navigate = useNavigate();
 
-  const myId = persist.getMyInfo().userId;
-  const { data } = useGetClubsOwnerQuery(myId);
+  const { data } = useGetClubsQuery();
+  console.log(data)
   const renderNoClub = () => {
     return (
       <Container className='flex flex-col text-center items-center gap-2 mt-12'>
@@ -63,11 +61,7 @@ export default function ClubPage() {
   };
 
   return (
-    <Box className="pb-4">
-      <Box className='px-4 pt-4 pb-2 flex items-center gap-2 bg-white'>
-        <Avatar src={Chervon} className='w-6 h-6' onClick={() => navigate(ROUTER.ROOT)} />
-        <Typography className='text-large-semibold'>Club study</Typography>
-      </Box>
+    <Box className='pb-4'>
       {data && data.clubsOwner.length > 0 ? renderClubManage() : renderNoClub()}
       <Container>{renderClubJoined()}</Container>
     </Box>

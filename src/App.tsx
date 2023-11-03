@@ -1,9 +1,7 @@
 import { Suspense, lazy, useCallback, useEffect } from "react";
-import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import persist from "./shared/utils/persist.util";
 import ROUTER from "./shared/const/router.const";
-import { Grid } from "@mui/material";
-import Navbar from "./components/Navbar";
 import DrawerNavigate from "./components/Drawer";
 import Loading from "./components/Loading";
 
@@ -24,17 +22,9 @@ const ClubMemberPage = lazy(() => import("@/pages/Club/ClubMember"));
 const ClubInfoPage = lazy(() => import("@/pages/Club/ClubInfo"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 
-export const ProtectedRoute = () => {
-  const navigate = useNavigate();
+export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => {
   const token = persist.getToken();
-
-  useEffect(() => {
-    if (!token) {
-      navigate(ROUTER.AUTH + ROUTER.LOGIN);
-    }
-  }, [token]);
-
-  return <DrawerNavigate />;
+  return !token ? <Navigate to={ROUTER.AUTH + ROUTER.LOGIN} /> : isShowDrawer ? <DrawerNavigate /> : <Outlet />;
 };
 
 export const PublishRoute = () => {
@@ -64,8 +54,14 @@ function App() {
           <Route path={removeSlash(ROUTER.REGISTER)} element={<Register />} />
         </Route>
         <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
-          <Route index path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
-          <Route index path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
+          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />
+          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/:clubId"} element={<ClubMemberPage />} />
+          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_INFO + "/:clubId"} element={<ClubInfoPage />} />
+        </Route>
+        <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
+          <Route index element={<RecordingPage />} />
+          <Route path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
+          <Route path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
           <Route path={removeSlash(ROUTER.RECORD) + "/:category" + ROUTER.SUMMARY} element={<RecordSummaryPage />} />
           <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
           {/* TODO: create LISTENING PAGE */}
@@ -78,9 +74,6 @@ function App() {
           <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
           <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
           {/* CLUB DETAIL */}
-          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />
-          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/:clubId"} element={<ClubMemberPage />} />
-          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_INFO + "/:clubId"} element={<ClubInfoPage />} />
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>
