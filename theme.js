@@ -1,7 +1,6 @@
 import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfigModule from "./tailwind.config";
-import { tail } from "lodash";
 
 const tailwindConfig = resolveConfig(tailwindConfigModule);
 const theme = extendTheme({

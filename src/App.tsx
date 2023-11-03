@@ -34,18 +34,7 @@ export const ProtectedRoute = () => {
     }
   }, [token]);
 
-  return (
-    <Grid container direction='column' width='100%' flexWrap='nowrap'>
-      <Navbar />
-      <Grid container direction='row' flexWrap='nowrap'>
-        <Grid item>
-          {/* <SideBar /> */}
-          <DrawerNavigate />
-        </Grid>
-        <Outlet />
-      </Grid>
-    </Grid>
-  );
+  return <DrawerNavigate />;
 };
 
 export const PublishRoute = () => {
@@ -68,47 +57,34 @@ function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route path={ROUTER.AUTH} element={<PublishRoute />}>
-        <Route
-          index
-          path={removeSlash(ROUTER.LOGIN)}
-          element={
-            <Suspense fallback={<Loading />}>
-              <Login />
-            </Suspense>
-          }
-        />
-        <Route
-          path={removeSlash(ROUTER.REGISTER)}
-          element={
-            <Suspense fallback={<Loading />}>
-              <Register />
-            </Suspense>
-          }
-        />
-      </Route>
-      <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
-        <Route index path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
-        <Route path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
-        <Route path={removeSlash(ROUTER.RECORD) + "/:category" + ROUTER.SUMMARY} element={<RecordSummaryPage />} />
-        <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
-        {/* TODO: create LISTENING PAGE */}
-        <Route path={ROUTER.LISTENING} element={<RecordingPage />} />
-        {/* CLUB */}
-        <Route path={ROUTER.CLUB} element={<ClubPage />} />
-        <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
-        <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
-        <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
-        <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
-        <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
-        {/* CLUB DETAIL */}
-        <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />
-        <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/:clubId"} element={<ClubMemberPage />} />
-        <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_INFO + "/:clubId"} element={<ClubInfoPage />} />
-      </Route>
-      <Route path={"*"} element={<NotFoundPage />} />
-    </Routes>
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        <Route path={ROUTER.AUTH} element={<PublishRoute />}>
+          <Route index path={removeSlash(ROUTER.LOGIN)} element={<Login />} />
+          <Route path={removeSlash(ROUTER.REGISTER)} element={<Register />} />
+        </Route>
+        <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
+          <Route index path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
+          <Route index path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
+          <Route path={removeSlash(ROUTER.RECORD) + "/:category" + ROUTER.SUMMARY} element={<RecordSummaryPage />} />
+          <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
+          {/* TODO: create LISTENING PAGE */}
+          <Route path={ROUTER.LISTENING} element={<RecordingPage />} />
+          {/* CLUB */}
+          <Route path={ROUTER.CLUB} element={<ClubPage />} />
+          <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
+          <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
+          <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
+          <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
+          <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
+          {/* CLUB DETAIL */}
+          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />
+          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/:clubId"} element={<ClubMemberPage />} />
+          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_INFO + "/:clubId"} element={<ClubInfoPage />} />
+        </Route>
+        <Route path={"*"} element={<NotFoundPage />} />
+      </Routes>
+    </Suspense>
   );
 }
 
