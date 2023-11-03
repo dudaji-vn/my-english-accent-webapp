@@ -1,13 +1,11 @@
-import { AppBar, Box, CSSObject, Drawer, Theme, useTheme } from "@mui/material";
+import { CSSObject, Drawer, Theme, useTheme, useMediaQuery } from "@mui/material";
 import { ReactNode } from "react";
-import theme from "theme";
 
 type CustomAppBarProps = {
   open: boolean;
-  variant: "permanent" | "persistent" | "temporary" | undefined;
   children: ReactNode;
 };
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -30,12 +28,15 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-export default function CustomDrawer({ open, variant, children }: CustomAppBarProps) {
+export default function CustomDrawer({ open, children }: CustomAppBarProps) {
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
 
   return (
     <Drawer
-      variant={variant}
+      anchor={"left"}
+      variant={isSmallScreen ? "temporary" : "permanent"}
+      open={open}
       sx={[
         { width: drawerWidth, flexShrink: 0, whiteSpace: "nowrap", boxSizing: "border-box" },
         open && { ...openedMixin(theme), "& .MuiDrawer-paper": openedMixin(theme) },

@@ -34,7 +34,7 @@ export const ProtectedRoute = () => {
     }
   }, [token]);
 
-  return <DrawerNavigate variant='permanent' />;
+  return <DrawerNavigate />;
 };
 
 export const PublishRoute = () => {
@@ -65,7 +65,7 @@ function App() {
         </Route>
         <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
           <Route index path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
-          <Route path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
+          <Route index path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
           <Route path={removeSlash(ROUTER.RECORD) + "/:category" + ROUTER.SUMMARY} element={<RecordSummaryPage />} />
           <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
           {/* TODO: create LISTENING PAGE */}

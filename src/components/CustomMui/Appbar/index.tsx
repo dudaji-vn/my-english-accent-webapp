@@ -1,4 +1,4 @@
-import { AppBar, CSSObject, Theme, Typography, useTheme } from "@mui/material";
+import { AppBar, CSSObject, Theme, useTheme } from "@mui/material";
 import { ReactNode } from "react";
 
 type CustomAppBarProps = {
@@ -16,12 +16,14 @@ const openedMixin = (theme: Theme, drawerWidth: number): CSSObject => ({
 });
 
 export default function CustomAppbar({ open, children }: CustomAppBarProps) {
-  const drawerWidth = 240;
+  const drawerWidth = 260;
   const theme = useTheme();
   return (
     <AppBar
       sx={[
         {
+          bgcolor: "transparent",
+          boxShadow: "none",
           zIndex: theme.zIndex.drawer + 1,
           transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,

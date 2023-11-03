@@ -17,6 +17,7 @@ import {
   Toolbar,
   Typography,
   Checkbox,
+  Drawer,
 } from "@mui/material";
 
 import CustomDrawerHeader from "../CustomMui/DrawerHeader";
@@ -37,6 +38,7 @@ import ClubCheckedIcon from "@/assets/icon/people-color-icon.svg";
 
 import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
+import { useTheme } from "@emotion/react";
 
 const settings = [
   {
@@ -81,7 +83,7 @@ const menu = [
   },
 ];
 
-const DrawerNavigate = ({ variant, ...props }: any) => {
+const DrawerNavigate = ({ ...props }: any) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.replace("/", "");
@@ -151,7 +153,7 @@ const DrawerNavigate = ({ variant, ...props }: any) => {
 
   const getList = () => (
     <List>
-      {menu.map((item, index) => (
+      {menu.map((item) => (
         <ListItem key={item.name} disablePadding sx={{ display: "block" }}>
           <ListItemButton
             selected={path === item.name.toLowerCase()}
@@ -171,8 +173,8 @@ const DrawerNavigate = ({ variant, ...props }: any) => {
             >
               <Checkbox
                 checked={path === item.name.toLowerCase()}
-                icon={<Avatar src={item.icon} alt='uncheck-icon' className='w-6 h-6' />}
-                checkedIcon={<Avatar src={item.iconChecked} alt='check-icon' className='w-6 h-6' />}
+                icon={<Avatar src={item.icon} alt='uncheck-icon' sx={{ width: 24, height: 24 }} />}
+                checkedIcon={<Avatar src={item.iconChecked} alt='check-icon' sx={{ width: 24, height: 24 }} />}
               />
             </ListItemIcon>
             <ListItemText primary={item.name} sx={{ opacity: open ? 1 : 0 }} primaryTypographyProps={{ fontWeight: path === item.name.toLowerCase() ? 500 : 400 }} />
@@ -198,7 +200,7 @@ const DrawerNavigate = ({ variant, ...props }: any) => {
             }}
             disableRipple
           >
-            <Avatar src={MenuIcon} className='w-6 h-6' />
+            <Avatar src={MenuIcon} sx={{ width: 24, height: 24 }} />
             <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600 }}>{path}</Typography>
           </IconButton>
           <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600, ...(!open && { display: "none" }) }}>{path}</Typography>
@@ -216,25 +218,30 @@ const DrawerNavigate = ({ variant, ...props }: any) => {
                     children={<Typography color={"white"}>{nickName.slice(0, 1)}</Typography>}
                   />
                 </IconButton>
-                <img alt='arrow-down-icon' src={ArrowdownIcon} />
+                <Avatar alt='arrow-down-icon' src={ArrowdownIcon} sx={{ width: 12, height: 12 }} />
               </Box>
             </Tooltip>
             {getMenu()}
           </Box>
         </Toolbar>
       </CustomAppbar>
-      <CustomDrawer open={open} variant='permanent'>
+      <CustomDrawer open={open}>
         <CustomDrawerHeader>
-          <img alt='logo-app' src={LogoApp} />
-          <IconButton disableRipple onClick={handleDrawerClose}>
-            <Avatar src={Chervon} className='w-6 h-6' />
-          </IconButton>
+          {open && (
+            <>
+              <img alt='logo-app' src={LogoApp} />
+              <IconButton disableRipple onClick={handleDrawerClose}>
+                <Avatar src={Chervon} sx={{ width: "24px", height: "24px" }} />
+              </IconButton>
+            </>
+          )}
         </CustomDrawerHeader>
         <Divider />
         {getList()}
       </CustomDrawer>
       <Box component='main' sx={{ flexGrow: 1 }}>
         <CustomDrawerHeader />
+        {/* main */}
         <Outlet />
       </Box>
     </Box>
