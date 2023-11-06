@@ -9,5 +9,6 @@ export const enrollmentConvert = (id: string, enrollment: EnrollmentModal): Enro
     stage: enrollment.stage,
     updated: enrollment.updated,
     userId: enrollment.user_id,
+    totalStep: 0,
   };
 };

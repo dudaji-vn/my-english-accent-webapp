@@ -16,6 +16,7 @@ const LectureController = {
       url: "/lecture/all",
     };
   },
+
 };
 
 export default LectureController;

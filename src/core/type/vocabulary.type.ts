@@ -1,5 +1,5 @@
 import { DocumentReference, Timestamp } from "firebase/firestore";
-import {  Language } from "./user.type";
+import { Language } from "./user.type";
 import { EnrollmentResponseType } from "./enrollment.type";
 import { StageExercise } from "@/shared/type";
 

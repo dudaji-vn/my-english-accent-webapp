@@ -1,37 +1,51 @@
-import { Box, Avatar, Typography, IconButton } from "@mui/material";
-import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
-import Category from "@/components/Category";
-import { useNavigate } from "react-router-dom";
-import { StageExercise } from "@/shared/type";
-import ROUTER from "@/shared/const/router.const";
+import { Avatar, Box, Typography } from "@mui/material";
+import { StageExercise, StageLabel } from "@/shared/type";
 
 import * as _ from "lodash";
-import { nanoid } from "@reduxjs/toolkit";
-import persist from "@/shared/utils/persist.util";
-import { useGetInitialDataQuery } from "@/core/services/initialize.service";
+import { useGetLecturesByQuery } from "@/core/services";
+import { useState } from "react";
+import Category from "@/components/Category";
+import BoxCard from "@/components/BoxCard";
+import TabCustom from "@/components/TabCustom";
+import Loading from "@/components/Loading";
+import RecordEmptyIcon from "@/assets/icon/record-empty-icon.svg";
 
 export default function RecordingPage() {
-  const userId = persist.getMyInfo().userId;
+  const stageList = Object.values(StageLabel);
+  const [stage, setStage] = useState<StageExercise>(StageExercise.Open);
+  const { data, isFetching } = useGetLecturesByQuery(stage);
 
-  const { data } = useGetInitialDataQuery(userId);
-
-  const goBack = useNavigate();
+  const handleChange = (newStage: number) => {
+    setStage(() => newStage);
+  };
 
   if (_.isNull(data) || _.isUndefined(data)) return <></>;
 
-  const renderCategory = () => {
-    return Object.entries(data).map(([key, value]) => <Category key={nanoid()} stage={key as unknown as StageExercise} lectureItems={value} />);
+  const renderLectures = () => {
+    if (data.length == 0)
+      return (
+        <Box className='flex flex-col gap-2 items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+          <img src={RecordEmptyIcon} />
+          <Typography className='text-extra-large-semibold mt-4'>Empty record</Typography>
+          <Typography className='text-base-regular w-48 text-center' variant='body2'>
+            You haven't recorded any lecture yet
+          </Typography>
+        </Box>
+      );
+
+    return data.map((item) => (
+      <BoxCard classes='my-4 last:mb-0' key={item.lectureId}>
+        <Category {...item} />
+      </BoxCard>
+    ));
   };
 
+  if (isFetching) return <Loading />;
+
   return (
-    <Box>
-      <Box className='p-4 flex items-center gap-2 divider bg-white'>
-        <IconButton onClick={() => goBack(ROUTER.ROOT)}>
-          <Avatar src={ChevronIcon} className='w-6 h-6' />
-        </IconButton>
-        <Typography className='text-large-semibold'>Practice pronounciation</Typography>
-      </Box>
-      {renderCategory()}
+    <Box className='p-4'>
+      <TabCustom tab={stageList} callback={handleChange} tabIndex={stage} />
+      {renderLectures()}
     </Box>
   );
 }

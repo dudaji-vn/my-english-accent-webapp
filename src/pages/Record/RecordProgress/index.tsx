@@ -1,12 +1,13 @@
-import TranslationCard from "@/components/TranslationCard";
-import { Container, Box, IconButton, Avatar, Typography, LinearProgress, CircularProgress } from "@mui/material";
-import CloseIcon from "@/assets/icon/close-icon.svg";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { StageExercise } from "@/shared/type";
-import _ from "lodash";
-import { useGetAllVocabulariesByLectureQuery } from "@/core/services/recordProgress.service";
 import { useEffect, useMemo } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Container, Box, IconButton, Avatar, Typography, LinearProgress, CircularProgress } from "@mui/material";
+import _ from "lodash";
+import TranslationCard from "@/components/TranslationCard";
+import { StageExercise } from "@/shared/type";
+import { useGetAllVocabulariesByLectureQuery } from "@/core/services/recordProgress.service";
 import ROUTER from "@/shared/const/router.const";
+import CloseIcon from "@/assets/icon/close-icon.svg";
+import MenuIcon from "@/assets/icon/list-icon.svg";
 
 export default function RecordingProgressPage() {
   const navigate = useNavigate();
@@ -59,11 +60,15 @@ export default function RecordingProgressPage() {
           <IconButton onClick={onHandleClose}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
-          <Typography className='text-large-semibold'>{lectureName}</Typography>
+          <Typography className='text-large-semibold grow'>{lectureName}</Typography>
+          <IconButton>
+            <Avatar src={MenuIcon} className='w-6 h-6' />
+          </IconButton>
         </Box>
         {data && data.stage != StageExercise.Open && <LinearProgress variant='determinate' value={currentProgress} className='mt-3' />}
       </Container>
       {data && <TranslationCard {...data.vocabularies[data.currentStep]} currentStep={data.currentStep} totalStep={data.vocabularies.length} enrollmentId={data.enrollmentId} />}
+      {/* {data && <TranslationCard {...data.vocabularies[data.currentStep]} currentStep={data.currentStep} totalStep={data.vocabularies.length} enrollmentId={data.enrollmentId} />} */}
     </Box>
   );
 }

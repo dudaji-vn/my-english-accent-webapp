@@ -2,7 +2,7 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import persist from "@/shared/utils/persist.util";
 import Reducer from "@/shared/const/store.const";
 import UserController from "../controllers/user.controller";
-import { GoogleAuthProvider, inMemoryPersistence, setPersistence, signInWithPopup, signInWithRedirect } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/config/firebase";
 
 export const FakeUserApi = createApi({

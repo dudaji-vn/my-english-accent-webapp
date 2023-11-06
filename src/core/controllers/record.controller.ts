@@ -74,6 +74,7 @@ const RecordController = {
     });
     return Promise.all(promises).then();
   },
+  
 };
 
 export default RecordController;

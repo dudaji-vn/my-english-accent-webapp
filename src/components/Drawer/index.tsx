@@ -88,7 +88,8 @@ const DrawerNavigate = ({ ...props }: any) => {
   const { pathname } = useLocation();
   const path = pathname.replace("/", "");
   const [open, setOpen] = useState(false);
-  const nickName = persist.getMyInfo().nickName;
+  const avatar = persist.getMyInfo().avatarUrl;
+
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleDrawerOpen = () => {
@@ -215,7 +216,7 @@ const DrawerNavigate = ({ ...props }: any) => {
                       width: "24px",
                       height: "24px",
                     }}
-                    children={<Typography color={"white"}>{nickName.slice(0, 1)}</Typography>}
+                    src={avatar}
                   />
                 </IconButton>
                 <Avatar alt='arrow-down-icon' src={ArrowdownIcon} sx={{ width: 12, height: 12 }} />
@@ -225,7 +226,7 @@ const DrawerNavigate = ({ ...props }: any) => {
           </Box>
         </Toolbar>
       </CustomAppbar>
-      <CustomDrawer open={open}>
+      <CustomDrawer open={open} onClose={handleDrawerClose}>
         <CustomDrawerHeader>
           {open && (
             <>

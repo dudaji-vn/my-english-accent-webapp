@@ -12,6 +12,12 @@ h6 {
   font-weight: 600 !important
 }
 
+.text-extra-large-semibold {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600
+}
+
 .text-large-semibold {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -263,8 +269,25 @@ h6 {
   bottom: 0px
 }
 
+#root :is(.left-1\/2) {
+  left: 50%
+}
+
+#root :is(.top-1\/2) {
+  top: 50%
+}
+
+#root :is(.m-5) {
+  margin: 1.25rem
+}
+
 #root :is(.m-auto) {
   margin: auto
+}
+
+#root :is(.my-4) {
+  margin-top: 1rem;
+  margin-bottom: 1rem
 }
 
 #root :is(.mb-2) {
@@ -327,6 +350,10 @@ h6 {
   height: 2.5rem
 }
 
+#root :is(.h-12) {
+  height: 3rem
+}
+
 #root :is(.h-16) {
   height: 4rem
 }
@@ -375,12 +402,20 @@ h6 {
   width: 2.5rem
 }
 
+#root :is(.w-12) {
+  width: 3rem
+}
+
 #root :is(.w-16) {
   width: 4rem
 }
 
 #root :is(.w-4) {
   width: 1rem
+}
+
+#root :is(.w-48) {
+  width: 12rem
 }
 
 #root :is(.w-5) {
@@ -415,6 +450,18 @@ h6 {
   flex-grow: 1
 }
 
+#root :is(.-translate-x-1\/2) {
+  --tw-translate-x: -50%;
+  -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+
+#root :is(.-translate-y-1\/2) {
+  --tw-translate-y: -50%;
+  -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+
 #root :is(.transform) {
   -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
           transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
@@ -426,6 +473,10 @@ h6 {
 
 #root :is(.items-start) {
   align-items: flex-start
+}
+
+#root :is(.items-end) {
+  align-items: flex-end
 }
 
 #root :is(.items-center) {
@@ -517,6 +568,11 @@ h6 {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
 }
 
+#root :is(.bg-purple-200) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(221 214 254 / var(--tw-bg-opacity))
+}
+
 #root :is(.p-3) {
   padding: 0.75rem
 }
@@ -537,11 +593,6 @@ h6 {
   padding: 1.75rem
 }
 
-#root :is(.px-4) {
-  padding-left: 1rem;
-  padding-right: 1rem
-}
-
 #root :is(.px-5) {
   padding-left: 1.25rem;
   padding-right: 1.25rem
@@ -557,20 +608,16 @@ h6 {
   padding-bottom: 1rem
 }
 
-#root :is(.pb-2) {
-  padding-bottom: 0.5rem
-}
-
 #root :is(.pb-4) {
   padding-bottom: 1rem
 }
 
-#root :is(.pt-4) {
-  padding-top: 1rem
-}
-
 #root :is(.text-center) {
   text-align: center
+}
+
+#root :is(.capitalize) {
+  text-transform: capitalize
 }
 
 #root :is(.text-textSecondary) {
@@ -598,6 +645,14 @@ h6 {
 #root :is(.filter) {
   -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
           filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+}
+
+#root :is(.transition) {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, -webkit-transform, -webkit-filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-transform, -webkit-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
 }
 
 /* .swiper-pagination {

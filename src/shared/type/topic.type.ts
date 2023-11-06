@@ -1,8 +1,8 @@
 import { VocabularyType } from "./vocabulary.type";
 
 export enum StageExercise {
-  Inprogress = 0,
-  Open = 1,
+  Open = 0,
+  Inprogress = 1,
   Close = 2,
 }
 

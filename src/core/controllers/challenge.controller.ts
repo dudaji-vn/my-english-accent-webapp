@@ -44,6 +44,20 @@ const ChallengeController = {
       }
     );
   },
+
+  // getChallengesInClub: (clubId: string) => {
+  //   return {
+  //     url: `/club/addOrUpdateClub/${clubId}`,
+  //     method: "GET",
+  //   };
+  // },
+
+  // getChallengeDetailInClub: (challengeId: string) => {
+  //   return {
+  //     url: `/club/addOrUpdateClub/${challengeId}`,
+  //     method: "GET",
+  //   };
+  // },
 };
 
 export default ChallengeController;

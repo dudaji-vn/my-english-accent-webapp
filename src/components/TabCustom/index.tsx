@@ -1,23 +1,20 @@
+import { StageExercise } from "@/shared/type";
 import { Tabs, Tab } from "@mui/material";
-import { nanoid } from "@reduxjs/toolkit";
 import { SyntheticEvent, useState } from "react";
 
 interface TabsProp {
   tab: string[];
   callback: Function;
+  tabIndex: StageExercise;
 }
 export default function TabCustom(props: TabsProp) {
-  const [tabIndex, setTabIndex] = useState(0);
-
   const handleChangeTabIndex = (event: SyntheticEvent, newValue: number) => {
-    setTabIndex(newValue);
     props.callback(newValue);
   };
 
   return (
     <Tabs
       sx={{
-        marginTop: "16px",
         alignItems: "center",
         ".MuiTabScrollButton": {
           minHeight: "0",
@@ -39,17 +36,18 @@ export default function TabCustom(props: TabsProp) {
         },
         ".Mui-selected": {
           background: "#F9F5FF",
-          border: "none",
+          borderColor: "#F9F5FF",
         },
       }}
-      value={tabIndex}
+      value={props.tabIndex}
       onChange={handleChangeTabIndex}
       variant='scrollable'
+      scrollButtons={false}
       allowScrollButtonsMobile
       aria-label='scrollable tabs add user'
     >
       {props.tab.map((item) => {
-        return <Tab key={nanoid()} label={item} />;
+        return <Tab key={item} label={item} />;
       })}
     </Tabs>
   );

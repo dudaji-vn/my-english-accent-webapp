@@ -54,6 +54,11 @@ function App() {
           <Route path={removeSlash(ROUTER.REGISTER)} element={<Register />} />
         </Route>
         <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
+          {/* RECORD */}
+          <Route path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
+          <Route path={removeSlash(ROUTER.RECORD) + "/:category" + ROUTER.SUMMARY} element={<RecordSummaryPage />} />
+          <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
+          {/* CLUB */}
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/:clubId"} element={<ClubMemberPage />} />
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_INFO + "/:clubId"} element={<ClubInfoPage />} />
@@ -61,9 +66,7 @@ function App() {
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
           <Route index element={<RecordingPage />} />
           <Route path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
-          <Route path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
-          <Route path={removeSlash(ROUTER.RECORD) + "/:category" + ROUTER.SUMMARY} element={<RecordSummaryPage />} />
-          <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
+
           {/* TODO: create LISTENING PAGE */}
           <Route path={ROUTER.LISTENING} element={<RecordingPage />} />
           {/* CLUB */}

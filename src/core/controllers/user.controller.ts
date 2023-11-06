@@ -2,6 +2,7 @@ import { firebaseDB } from "@/config/firebase";
 import { DocumentReference, collection, doc, documentId, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { IUSerRegister, IUserLogin, UserModal, UserResponseType } from "@/core/type";
 import { userConvert } from "../coverter/user.mapping";
+import { StageExercise } from "@/shared/type";
 
 const userPath = "user";
 const userCollection = collection(firebaseDB, userPath);
@@ -27,6 +28,13 @@ const UserController = {
       url: `/auth/register`,
       method: "POST",
       body: payload,
+    };
+  },
+
+  getLecturesBy: (stage: StageExercise) => {
+    return {
+      url: "/user/lectures",
+      params: { stage, sort: -1 },
     };
   },
 

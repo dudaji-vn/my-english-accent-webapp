@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 type CustomAppBarProps = {
   open: boolean;
   children: ReactNode;
+  onClose: Function;
 };
 const drawerWidth = 260;
 
@@ -28,7 +29,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-export default function CustomDrawer({ open, children }: CustomAppBarProps) {
+export default function CustomDrawer({ open, children, onClose }: CustomAppBarProps) {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
 
@@ -37,6 +38,7 @@ export default function CustomDrawer({ open, children }: CustomAppBarProps) {
       anchor={"left"}
       variant={isSmallScreen ? "temporary" : "permanent"}
       open={open}
+      onClose={() => onClose()}
       sx={[
         { width: drawerWidth, flexShrink: 0, whiteSpace: "nowrap", boxSizing: "border-box" },
         open && { ...openedMixin(theme), "& .MuiDrawer-paper": openedMixin(theme) },
