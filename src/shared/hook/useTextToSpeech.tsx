@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Avatar, Checkbox  } from "@mui/material";
+import { Avatar, Checkbox } from "@mui/material";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 
@@ -8,7 +8,7 @@ const TextToSpeech = ({ text = "" }: { text: string }) => {
   const synth = window.speechSynthesis;
   const [checked, setChecked] = useState(false);
 
-  const onHandlePlay = async () => {
+  const onHandlePlay = () => {
     if (utterance) {
       synth.speak(utterance);
       setChecked(() => true);
@@ -38,7 +38,7 @@ const TextToSpeech = ({ text = "" }: { text: string }) => {
   }, [text]);
 
   return (
-    <Checkbox onClick={onHandlePlay} value={checked} icon={<Avatar src={SpeakerIcon} className='w-4 h-4' />} checkedIcon={<Avatar src={SpeakerFillIcon} className='w-4 h-4' />} />
+    <Checkbox onClick={onHandlePlay} checked={checked} icon={<Avatar src={SpeakerIcon} className='w-4 h-4' />} checkedIcon={<Avatar src={SpeakerFillIcon} className='w-4 h-4' />} />
   );
 };
 

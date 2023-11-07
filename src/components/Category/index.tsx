@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import { Box, Typography, Avatar } from "@mui/material";
 
 import BoxCard from "@/components/BoxCard";
@@ -12,7 +12,7 @@ export default function Category({ currentStep, lectureId, lectureName, stage, i
   const gotoRecordProgressPage = () => {
     navigate({
       pathname: ROUTER.RECORD + `/${lectureName.toLowerCase()}`,
-      search: lectureId,
+      search: `?${createSearchParams({ lectureId, stage } as any)}`,
     });
   };
 

@@ -22,7 +22,7 @@ const persist = {
     const provider = localStorage.getItem(GOOGLE_ID);
     return provider ? JSON.parse(provider) : null;
   },
-  saveProviderInfo: (payload: IUserLogin) => {
+  saveProviderInfo: (payload: IUserLogin & { avatarUrl: string }) => {
     localStorage.setItem(GOOGLE_ID, JSON.stringify(payload));
   },
   logout: () => {

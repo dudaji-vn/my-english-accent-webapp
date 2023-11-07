@@ -18,6 +18,12 @@ h6 {
   font-weight: 600
 }
 
+.text-large-medium {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 500
+}
+
 .text-large-semibold {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -273,8 +279,16 @@ h6 {
   left: 50%
 }
 
+#root :is(.top-0) {
+  top: 0px
+}
+
 #root :is(.top-1\/2) {
   top: 50%
+}
+
+#root :is(.z-10) {
+  z-index: 10
 }
 
 #root :is(.m-5) {
@@ -290,12 +304,20 @@ h6 {
   margin-bottom: 1rem
 }
 
+#root :is(.mb-10) {
+  margin-bottom: 2.5rem
+}
+
 #root :is(.mb-2) {
   margin-bottom: 0.5rem
 }
 
 #root :is(.mb-4) {
   margin-bottom: 1rem
+}
+
+#root :is(.mb-6) {
+  margin-bottom: 1.5rem
 }
 
 #root :is(.mb-8) {
@@ -511,6 +533,10 @@ h6 {
   gap: 1rem
 }
 
+#root :is(.gap-6) {
+  gap: 1.5rem
+}
+
 #root :is(.gap-8) {
   gap: 2rem
 }
@@ -566,11 +592,6 @@ h6 {
 #root :is(.bg-white) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
-}
-
-#root :is(.bg-purple-200) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(221 214 254 / var(--tw-bg-opacity))
 }
 
 #root :is(.p-3) {

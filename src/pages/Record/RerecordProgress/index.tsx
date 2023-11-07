@@ -92,7 +92,7 @@ export default function RerecordingProgressPage() {
     });
 
     if (data && mediaBlobUrl) {
-      await UploadFileController.uploadAudio(audiofile, data.vocabularyId.id, myId, callback, challengeId && clubId);
+      await UploadFileController.uploadAudio(audiofile, data.vocabularyId, myId, callback, challengeId && clubId);
     }
     if (challengeId && clubId) {
       navigate(

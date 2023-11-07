@@ -4,6 +4,7 @@ import Reducer from "@/shared/const/store.const";
 import UserController from "../controllers/user.controller";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/config/firebase";
+import { IUserLogin } from "../type";
 
 export const FakeUserApi = createApi({
   reducerPath: Reducer.fakeUserApi,
@@ -20,11 +21,13 @@ export const FakeUserApi = createApi({
           if (response) {
             const googleId = response.user.uid;
             const email = response.user.email!;
+            const avatarUrl = response.user.photoURL!;
 
             persist.saveProviderInfo({
               googleId,
               email,
-            });
+              avatarUrl,
+            } as IUserLogin & { avatarUrl: string });
 
             if (googleId && email) {
               const response = await UserController.login({
