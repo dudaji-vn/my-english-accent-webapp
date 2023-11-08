@@ -1,23 +1,23 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import { configureStore, ThunkAction, Action, combineReducers } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { FakeUserApi, LectureApi, UserApi, VocabularyApi } from "@/core/services";
-import InitializeApi from "@/core/services/initialize.service";
 import RecordProgressApi from "@/core/services/recordProgress.service";
 import ClubStudyApi from "@/core/services/club.service";
 import ChallengeApi from "@/core/services/challenge.service";
 import GlobalReducer from "@/core/store/index";
+import RecordApi from "./services/record.service";
 
 const middleware = [
   LectureApi.middleware,
   VocabularyApi.middleware,
   UserApi.middleware,
-  InitializeApi.middleware,
   RecordProgressApi.middleware,
   ClubStudyApi.middleware,
   ChallengeApi.middleware,
   FakeUserApi.middleware,
+  RecordApi.middleware,
 ] as any;
 
 export const store = configureStore({
@@ -26,11 +26,11 @@ export const store = configureStore({
     LectureApi: LectureApi.reducer,
     VocabularyApi: VocabularyApi.reducer,
     UserApi: UserApi.reducer,
-    InitializeApi: InitializeApi.reducer,
     RecordProgressApi: RecordProgressApi.reducer,
     ClubStudyApi: ClubStudyApi.reducer,
     ChallengeApi: ChallengeApi.reducer,
     FakeUserApi: FakeUserApi.reducer,
+    RecordApi: RecordApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

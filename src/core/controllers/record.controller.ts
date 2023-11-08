@@ -9,23 +9,9 @@ const recordCollection = collection(firebaseDB, recordPath);
 
 const RecordController = {
   addRecord: (payload: RecordRequest) => {
-    const { userId, challengeId, vocabularyId, voiceSrc, recordId } = payload;
-    // will update if have recordId
-    if (recordId) {
-      return setDoc(
-        doc(recordCollection, recordId),
-        {
-          voice_src: voiceSrc,
-        },
-        {
-          merge: true,
-        }
-      );
-    }
-
+    const { challengeId, vocabularyId, voiceSrc } = payload;
     // will add if no have recordId
     let challengeRef = null;
-    const userRef = doc(firebaseDB, "user", userId);
     const vocabularyRef = doc(firebaseDB, "vocabulary", vocabularyId);
     if (challengeId) {
       challengeRef = doc(firebaseDB, "challenge", challengeId);
@@ -33,7 +19,6 @@ const RecordController = {
 
     const request = addTimeStamp({
       vocabulary_id: vocabularyRef,
-      user_id: userRef,
       challenge_id: challengeRef,
       voice_src: voiceSrc,
     });
@@ -74,7 +59,21 @@ const RecordController = {
     });
     return Promise.all(promises).then();
   },
-  
+
+  addOrUpdateRecord: (payload: RecordRequest) => {
+    return {
+      url: "/record/addOrUpdateRecord",
+      method: "PUT",
+      body: payload,
+    };
+  },
+
+  getMyRecordsByLecture: (lectureId: string) => {
+    return {
+      url: "/record/getMyRecordsByLecture",
+      params: { lectureId },
+    };
+  },
 };
 
 export default RecordController;

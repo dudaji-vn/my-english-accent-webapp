@@ -22,25 +22,15 @@ export default function RecordingProgressPage() {
   const lectureId = searchParams.get("lectureId") ?? "";
   const stage = searchParams.get("stage") ?? "0";
 
-  const recordedList = useAppSelector((state) => state.GlobalStore.recordPage);
-  const [disableContinue, setDisableContinue] = useState(true);
   const parentRef = useRef<HTMLDivElement>(null);
-  const childRef = useRef<HTMLDivElement>(null);
 
   const { data, isFetching } = useGetAllVocabulariesInLectureQuery({ lectureId, stage: parseInt(stage) });
 
-  const onHandleClose = () => {
-    navigate(-1);
-  };
-
+  console.log("data::", data);
   const [renderVocabulary, setRenderVocabulary] = useState<VocabularyTypeWithNativeLanguageResponse[]>([]);
 
   const vocabularies: VocabularyTypeWithNativeLanguageResponse[] = useMemo(() => {
     const vocab = data?.vocabularies ?? [];
-    if (!renderVocabulary.length && vocab.length) {
-      const firstVocabulary = vocab[0];
-      setRenderVocabulary(() => [firstVocabulary]);
-    }
     return vocab;
   }, [data?.vocabularies]);
 
@@ -59,12 +49,27 @@ export default function RecordingProgressPage() {
     lastChildElement?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const onHandleClose = () => {
+    navigate(-1);
+  };
+
+  useEffect(() => {
+    //initRenderVocabuary
+    if (!renderVocabulary.length && vocabularies.length) {
+      const newArr = vocabularies.filter((voca) => !!voca.voiceSrc);
+      if (newArr.length) {
+        const nextIndex = vocabularies.findIndex((voca) => !voca.voiceSrc);
+        newArr.push(vocabularies[nextIndex]);
+        setRenderVocabulary(() => newArr);
+      } else {
+        setRenderVocabulary(() => [vocabularies[0]]);
+      }
+    }
+  }, [vocabularies]);
+
   useEffect(() => {
     if (renderVocabulary.length > 0 && parentRef.current) {
       scrollToLastElement();
-    }
-    if (renderVocabulary.length > 0) {
-      console.log(recordedList, renderVocabulary.length);
     }
   }, [renderVocabulary]);
 
@@ -86,12 +91,6 @@ export default function RecordingProgressPage() {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (childRef && childRef.current) {
-      console.log(childRef.current);
-    }
-  }, [childRef, childRef.current]);
-
   if (isFetching) return <Loading />;
 
   return (
@@ -111,11 +110,8 @@ export default function RecordingProgressPage() {
 
       <Box ref={parentRef} className='text-center'>
         {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse) => (
-          <TranslationCard {...val} key={val.vocabularyId} />
+          <TranslationCard {...val} key={val.vocabularyId} onClick={nextVocabulary} enrollmentId={data!.enrollmentId} />
         ))}
-        <Button variant='outlined' onClick={nextVocabulary} disabled={false}>
-          Continue
-        </Button>
       </Box>
     </Box>
   );

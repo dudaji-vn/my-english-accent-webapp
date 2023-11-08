@@ -4,14 +4,14 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import ROUTER from "@/shared/const/router.const";
 import FooterBtn from "@/components/FooterBtn";
 import persist from "@/shared/utils/persist.util";
-import { useGetAllRecordsOfVocabularyQuery } from "@/core/services/recordProgress.service";
 import { AudioRecord } from "@/components/AudioRecord";
+import { useGetMyRecordsByLectureQuery } from "@/core/services/record.service";
 
 export default function RecordSummaryPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const myId = persist.getMyInfo().userId;
-  const { data, isFetching } = useGetAllRecordsOfVocabularyQuery({ myId, lectureId: state.lectureId });
+
+  const { data, isFetching } = useGetMyRecordsByLectureQuery(state.lectureId);
 
   const onHandleContinue = () => {
     navigate(ROUTER.RECORD);

@@ -51,7 +51,7 @@ export default function RecordingAudio({ vocabularyId, currentStep, enrollmentId
     }
   };
 
-  const callback = (payload: { challengeId: string | null; userId: string; vocabularyId: string; voiceSrc: string }) => {
+  const callback = (payload: { challengeId?: string; userId: string; vocabularyId: string; voiceSrc: string }) => {
     updateEnrollmentStep({
       currentStep,
       totalStep,

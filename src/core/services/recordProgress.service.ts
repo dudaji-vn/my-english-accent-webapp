@@ -123,5 +123,6 @@ export const RecordProgress = createApi({
     }),
   }),
 });
-export const { useGetAllVocabulariesByLectureQuery, useAddRecordMutation, useUpdateEnrollmentStepMutation, useGetAllRecordsOfVocabularyQuery, useGetVocabularyByRecordQuery } = RecordProgress;
+export const { useGetAllVocabulariesByLectureQuery, useAddRecordMutation, useUpdateEnrollmentStepMutation, useGetAllRecordsOfVocabularyQuery, useGetVocabularyByRecordQuery } =
+  RecordProgress;
 export default RecordProgress;

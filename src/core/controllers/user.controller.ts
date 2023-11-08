@@ -1,6 +1,6 @@
 import { firebaseDB } from "@/config/firebase";
 import { DocumentReference, collection, doc, documentId, getDocs, limit, query, setDoc, where } from "firebase/firestore";
-import { IUSerRegister, IUserLogin, UserModal, UserResponseType } from "@/core/type";
+import { EnrollmentRequest, IUSerRegister, IUserLogin, UserModal, UserResponseType } from "@/core/type";
 import { userConvert } from "../coverter/user.mapping";
 import { StageExercise } from "@/shared/type";
 
@@ -35,6 +35,14 @@ const UserController = {
     return {
       url: "/user/lectures",
       params: { stage, sort: -1 },
+    };
+  },
+
+  addOrUpdateEnrollment: (payload: EnrollmentRequest) => {
+    return {
+      url: "/user/addOrUpdateEnrollment",
+      method: "PUT",
+      body: payload,
     };
   },
 
