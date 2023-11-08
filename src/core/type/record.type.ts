@@ -11,11 +11,9 @@ export interface RecordTypeResponse {
 }
 
 export interface RecordRequest {
-  userId: string;
   voiceSrc: string;
   vocabularyId: string;
-  challengeId: string | null;
-  recordId?: string;
+  challengeId?: string;
 }
 
 export interface RecordModal {

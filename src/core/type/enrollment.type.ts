@@ -21,3 +21,8 @@ export interface EnrollmentModal {
   updated: string;
   created: string;
 }
+
+export interface EnrollmentRequest {
+  enrollmentId?: string;
+  lectureId: string;
+}

@@ -71,10 +71,9 @@ export default function RerecordingProgressPage() {
     navigate(-1);
   };
 
-  const callback = (payload: { challengeId: string | null; userId: string; vocabularyId: string; voiceSrc: string }) => {
+  const callback = (payload: { challengeId?: string; userId: string; vocabularyId: string; voiceSrc: string }) => {
     const request = {
       ...payload,
-      recordId,
     };
 
     if (challengeId && clubId) {
@@ -113,7 +112,7 @@ export default function RerecordingProgressPage() {
         },
         {
           state: {
-            lectureId: data?.lectureId.id,
+            lectureId: data?.lectureId,
           },
         }
       );

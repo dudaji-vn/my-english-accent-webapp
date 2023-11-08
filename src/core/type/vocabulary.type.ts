@@ -7,7 +7,7 @@ export interface VocabularyTypeResponse {
   vCreated: string;
   vphoneticDisplayLanguage: string;
   vtitleDisplayLanguage: string;
-  lectureId: DocumentReference;
+  lectureId: string;
   vUpdated: string;
   vocabularyId: string;
 }
@@ -69,4 +69,7 @@ export interface VocabularyRequest {
   stage: number;
 }
 
-export interface VocabularyTypeWithNativeLanguageResponse extends NativeVocabularyTypeResponse, VocabularyTypeResponse {}
+export interface VocabularyTypeWithNativeLanguageResponse extends NativeVocabularyTypeResponse, VocabularyTypeResponse {
+  voiceSrc: string;
+  enrollmentId: string;
+}

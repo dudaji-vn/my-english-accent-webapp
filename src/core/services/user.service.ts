@@ -1,12 +1,13 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { IUSerRegister, UserResponseType } from "../type";
+import { EnrollmentRequest, IUSerRegister, UserResponseType } from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
 
 export const UserApi = createApi({
   reducerPath: Reducer.userApi,
   baseQuery: baseQuery,
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     register: builder.mutation<{ token: string; user: UserResponseType }, IUSerRegister>({
       query: UserController.register,
