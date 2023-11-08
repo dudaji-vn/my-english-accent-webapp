@@ -13,7 +13,7 @@ import ROUTER from "@/shared/const/router.const";
 import { IChallengeDetailDisplay } from "@/core/type/challenge.type";
 import { RecordRequest } from "@/core/type";
 import { useUpdateChallengeMemberMutation } from "@/core/services/challenge.service";
-import { useGetClubsOwnerQuery } from "@/core/services/club.service";
+import { useGetClubsQuery } from "@/core/services/club.service";
 
 export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
   const { state, hash } = useLocation();
@@ -25,7 +25,7 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
 
   const audioEle = useRef<HTMLAudioElement | null>(null);
 
-  const { data } = useGetClubsOwnerQuery(myId);
+  const { data } = useGetClubsQuery();
   const [addRecord] = useAddRecordMutation();
   const [addParticipant] = useUpdateChallengeMemberMutation();
 

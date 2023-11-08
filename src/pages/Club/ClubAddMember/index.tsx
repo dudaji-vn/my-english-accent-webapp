@@ -6,7 +6,7 @@ import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
 import FooterCard from "@/components/FooterBtn";
 import RecordCard from "@/components/RecordCard";
 import ROUTER from "@/shared/const/router.const";
-import { useSetClubMutation } from "@/core/services/club.service";
+import { useUpdateClubMutation } from "@/core/services";
 
 export default function ClubAddMemberPage() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function ClubAddMemberPage() {
 
   const userList: any[] = [];
 
-  const [updateClub] = useSetClubMutation();
+  const [updateClub] = useUpdateClubMutation();
   const [search, setSearch] = useState("");
   const [members, setMembers] = useState<string[]>([]);
 
@@ -28,15 +28,8 @@ export default function ClubAddMemberPage() {
   };
 
   const onHandleListUser = (id: string) => {
-    let result: string[] = [...members];
     const isFound = members.includes(id);
-    if (isFound) {
-      const removed = members.filter((userId) => userId != id);
-      result = [...removed];
-    } else {
-      result.push(id);
-    }
-    setMembers(() => result);
+    return isFound ? setMembers((pre) => [...pre, ...members.filter((userId) => userId != id)]) : setMembers((pre) => [...pre, id]);
   };
 
   const renderUsersList = () => {

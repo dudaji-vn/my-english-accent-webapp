@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
-import { Avatar, IconButton } from "@mui/material";
-import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
+import { Avatar, Checkbox } from "@mui/material";
+import SpeakerIcon from "@/assets/icon/volume-icon.svg";
+import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 
 const TextToSpeech = ({ text = "" }: { text: string }) => {
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
   const synth = window.speechSynthesis;
+  const [checked, setChecked] = useState(false);
 
-  const onHandlePlay = async () => {
+  const onHandlePlay = () => {
     if (utterance) {
       synth.speak(utterance);
+      setChecked(() => true);
+
       utterance.onend = function () {
+        setChecked(() => false);
         synth.cancel();
       };
     }
@@ -27,14 +32,13 @@ const TextToSpeech = ({ text = "" }: { text: string }) => {
     }
 
     return () => {
+      setChecked(() => false);
       synth.cancel();
     };
   }, [text]);
 
   return (
-    <IconButton onClick={onHandlePlay}>
-      <Avatar src={SpeakingIcon} alt='speaking-icon' className='w-10 h-10' />
-    </IconButton>
+    <Checkbox onClick={onHandlePlay} checked={checked} icon={<Avatar src={SpeakerIcon} className='w-4 h-4' />} checkedIcon={<Avatar src={SpeakerFillIcon} className='w-4 h-4' />} />
   );
 };
 

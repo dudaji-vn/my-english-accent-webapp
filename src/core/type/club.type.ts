@@ -24,7 +24,6 @@ export interface ClubModal {
 export interface ClubRequest {
   clubId?: string;
   clubName?: string;
-  ownerUserId?: string;
   lectures?: string[];
   members?: string[];
 }

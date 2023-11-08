@@ -10,9 +10,8 @@ export const UserApi = createApi({
   endpoints: (builder) => ({
     register: builder.mutation<{ token: string; user: UserResponseType }, IUSerRegister>({
       query: UserController.register,
-      transformResponse: (baseReturn) => {
-        const { data } = baseReturn as { data: any; status: string };
-        return data;
+      transformResponse: (response: { data: { token: string; user: UserResponseType } }) => {
+        return response.data;
       },
     }),
   }),

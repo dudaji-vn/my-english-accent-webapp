@@ -32,6 +32,7 @@ export default function CustomAppbar({ open, children }: CustomAppBarProps) {
         },
         open && { ...openedMixin(theme, drawerWidth) },
       ]}
+      className='divider'
     >
       {children}
     </AppBar>

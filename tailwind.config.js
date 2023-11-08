@@ -18,6 +18,7 @@ module.exports = {
         },
         purple: {
           50: "#F9F5FF",
+          200: "#DDD6FE",
         },
         white: "#FFF",
         stroke: "#DFE4EA",

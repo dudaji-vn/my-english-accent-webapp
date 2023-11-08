@@ -1,26 +1,30 @@
-import { Box, Typography } from "@mui/material";
-import CategoryItem from "@/components/Category/CategoryItem";
-import { StageExercise, StageLabel } from "@/shared/type";
+import { createSearchParams, useNavigate } from "react-router-dom";
+import { Box, Typography, Avatar } from "@mui/material";
+
+import BoxCard from "@/components/BoxCard";
+import ROUTER from "@/shared/const/router.const";
+import { StageExercise } from "@/shared/type";
 import { EnrollmentResponseType, LectureResponseType } from "@/core/type";
 
-export interface CategoryPropType {
-  stage: StageExercise;
-  lectureItems: (LectureResponseType & EnrollmentResponseType)[];
-}
+export default function Category({ currentStep, lectureId, lectureName, stage, imgSrc, totalStep }: LectureResponseType & EnrollmentResponseType) {
+  const navigate = useNavigate();
 
-export default function Category({ stage, lectureItems }: CategoryPropType) {
-  const renderCategoryItem = () => {
-    return lectureItems.map((item) => (
-      <Box className='mb-4 last:mb-0' key={item.enrollmentId}>
-        <CategoryItem {...item} />
-      </Box>
-    ));
+  const gotoRecordProgressPage = () => {
+    navigate({
+      pathname: ROUTER.RECORD + `/${lectureName.toLowerCase()}`,
+      search: `?${createSearchParams({ lectureId, stage } as any)}`,
+    });
   };
 
   return (
-    <Box className='p-4'>
-      <Typography className='pb-4 text-large-semibold'>{StageLabel[stage]}</Typography>
-      {renderCategoryItem()}
-    </Box>
+    <BoxCard classes='p-4'>
+      <Box className='flex justify-between items-end' onClick={() => gotoRecordProgressPage()}>
+        <Box>
+          <Typography className='text-base-semibold h-12'>{lectureName}</Typography>
+          <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${totalStep} sentences` : `${totalStep} sentences`}</Typography>
+        </Box>
+        <Avatar src={imgSrc} variant='square' alt='gallery-icon' className='w-9 h-9' />
+      </Box>
+    </BoxCard>
   );
 }

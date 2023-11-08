@@ -191,7 +191,7 @@ export const {
   useGetAllRecordInChallengeQuery,
   useUpdateChallengeMemberMutation,
   useGetRecordToListenQuery,
-  usePrefetch
+  usePrefetch,
 } = ChallengeApi;
 
 export default ChallengeApi;

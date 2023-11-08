@@ -1,5 +1,5 @@
 import { DocumentReference, Timestamp } from "firebase/firestore";
-import {  Language } from "./user.type";
+import { Language } from "./user.type";
 import { EnrollmentResponseType } from "./enrollment.type";
 import { StageExercise } from "@/shared/type";
 
@@ -21,7 +21,7 @@ export interface VocabularyModal {
 }
 
 export interface NativeVocabularyTypeResponse {
-  vocabularyId: DocumentReference;
+  vocabularyId: string;
   titleNativeLanguage: string;
   language: Language;
   updated: string;
@@ -29,7 +29,7 @@ export interface NativeVocabularyTypeResponse {
   nativeVocabulary: string;
 }
 export interface NativeVocabularyModal {
-  vocabulary_id: DocumentReference;
+  vocabulary_id: string;
   title_native_language: string;
   language: Language;
   updated: string;
@@ -38,7 +38,10 @@ export interface NativeVocabularyModal {
 
 export interface VocabularyGroupByLecture {
   lectureId: string;
-  vocabularies: VocabularyTypeResponse[];
+  currentStep: number;
+  stage: StageExercise;
+  enrollmentId: string;
+  vocabularies: VocabularyTypeWithNativeLanguageResponse[];
 }
 
 export interface VocabularyMergedEnrollMent extends EnrollmentResponseType {
@@ -60,3 +63,10 @@ export interface ClubVocabularyModal {
   created: Timestamp;
   number: number;
 }
+
+export interface VocabularyRequest {
+  lectureId: string;
+  stage: number;
+}
+
+export interface VocabularyTypeWithNativeLanguageResponse extends NativeVocabularyTypeResponse, VocabularyTypeResponse {}

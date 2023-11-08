@@ -1,7 +1,7 @@
 import { firebaseDB } from "@/config/firebase";
 import { DocumentReference, and, collection, doc, documentId, getDoc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore";
 import { clubVocbularyConvert, nativeVocbularyConvert, vocbularyConvert } from "../coverter/vocabulary.mapping";
-import { ClubVocabularyModal, NativeVocabularyModal, VocabularyModal } from "../type";
+import { ClubVocabularyModal, NativeVocabularyModal, VocabularyModal, VocabularyRequest } from "../type";
 import addTimeStamp from "@/shared/utils/addTimeStamp.util";
 
 const vocabularyPath = "vocabulary";
@@ -62,6 +62,14 @@ const VocabularyController = {
     return request.forEach((val) => {
       return setDoc(doc(collection(firebaseDB, "club_vocabulary")), val, { merge: true });
     });
+  },
+
+  getAllVocabulariesInLecture: (payload: VocabularyRequest) => {
+    return {
+      url: `/vocabulary/getAllVocabulariesByLecture`,
+      method: "GET",
+      params: payload,
+    };
   },
 };
 

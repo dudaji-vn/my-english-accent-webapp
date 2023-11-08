@@ -9,6 +9,7 @@ export interface EnrollmentResponseType {
   updated: string;
   created: string;
   enrollmentId: string;
+  totalStep: number;
 }
 
 export interface EnrollmentModal {

@@ -1,17 +1,13 @@
 import { ChangeEvent, useState } from "react";
 import { Avatar, Box, Button, Checkbox, Container, TextField, Typography } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import WebniarIcon from "@/assets/icon/webinar-icon.svg";
 
 import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
-import BoxCard from "@/components/BoxCard";
 import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CheckIcon from "@/assets/icon/circle-check-icon.svg";
 import FooterCard from "@/components/FooterBtn";
-import { useGetLecturesQuery } from "@/core/services";
-import { useSetClubMutation } from "@/core/services/club.service";
-import persist from "@/shared/utils/persist.util";
+import { useAddClubMutation, useGetLecturesQuery } from "@/core/services";
 import { nanoid } from "@reduxjs/toolkit";
 
 function LectureCard({ lectureName, lectureId, imgSrc, callback }: { lectureName: string; lectureId: string; imgSrc: string; callback: Function }) {
@@ -40,12 +36,12 @@ function LectureCard({ lectureName, lectureId, imgSrc, callback }: { lectureName
 export default function AddNewClubPage() {
   const navigate = useNavigate();
 
-  const myId = persist.getMyInfo().userId;
   const { data } = useGetLecturesQuery();
-  const [addClub] = useSetClubMutation();
+  console.log("useGetLecturesQuery", data);
+  const [addClub] = useAddClubMutation();
 
   const [clubName, setClubName] = useState("");
-  const [lecturesId, setLecturesId] = useState<string[]>([]);
+  const [lecturesId, setLecturesId] = useState<string[]>(["6540bd721860dada50828bf3", "6540bd721860dada50828c4d"]);
 
   const onSaveLectureId = (param: string) => {
     const isExist = lecturesId.find((id) => id === param);
@@ -57,21 +53,22 @@ export default function AddNewClubPage() {
     }
   };
 
-  const onCreateNewClub = () => {
-    const clubId = `clubId_${nanoid()}`;
-    addClub({
-      clubId,
-      clubName,
-      lectures: lecturesId,
-      ownerUserId: myId,
-    });
+  const onCreateNewClub = async () => {
+    try {
+      const response = await addClub({
+        clubName,
+        lectures: lecturesId,
+      }).unwrap();
 
-    navigate(
-      {
-        pathname: ROUTER.CLUB_ADD_MEMBER,
-      },
-      { state: { clubId } }
-    );
+      navigate(
+        {
+          pathname: ROUTER.CLUB_ADD_MEMBER,
+        },
+        { state: { clubId: response } }
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -100,7 +97,10 @@ export default function AddNewClubPage() {
           <Typography className='text-small-medium mb-4' variant='body2'>
             Lecture (topic)
           </Typography>
-          {data && data.map((lectue) => <LectureCard key={lectue.lectureId} lectureName={lectue.lectureName} imgSrc={lectue.imgSrc} lectureId={lectue.lectureId} callback={onSaveLectureId} />)}
+          {data &&
+            data.map((lectue) => (
+              <LectureCard key={lectue.lectureId} lectureName={lectue.lectureName} imgSrc={lectue.imgSrc} lectureId={lectue.lectureId} callback={onSaveLectureId} />
+            ))}
         </Box>
       </Container>
       <FooterCard classes='items-center'>
