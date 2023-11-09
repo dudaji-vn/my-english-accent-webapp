@@ -1,21 +1,22 @@
-import { createElement, useEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Container, Box, IconButton, Avatar, Typography, LinearProgress, Button } from "@mui/material";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { Container, Box, IconButton, Avatar, Typography, LinearProgress } from "@mui/material";
 import _ from "lodash";
 import TranslationCard from "@/components/TranslationCard";
 import { StageExercise } from "@/shared/type";
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import MenuIcon from "@/assets/icon/list-icon.svg";
+import Congratulation from "@/assets/icon/congratulation-icon.svg";
 import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
 import Loading from "@/components/Loading";
 import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
-import { useSelector } from "react-redux";
-import { useAppSelector } from "@/core/store";
+import persist from "@/shared/utils/persist.util";
+import SentenceItem from "@/components/SentenceItem";
 import ROUTER from "@/shared/const/router.const";
 
 export default function RecordingProgressPage() {
   const navigate = useNavigate();
-  const params = useParams();
+  const myInfo = persist.getMyInfo().nickName;
   const { pathname } = useLocation();
   const lectureName = decodeURI(pathname).replace("/record/", "");
   let [searchParams] = useSearchParams();
@@ -26,7 +27,6 @@ export default function RecordingProgressPage() {
 
   const { data, isFetching } = useGetAllVocabulariesInLectureQuery({ lectureId, stage: parseInt(stage) });
 
-  console.log("data::", data);
   const [renderVocabulary, setRenderVocabulary] = useState<VocabularyTypeWithNativeLanguageResponse[]>([]);
 
   const vocabularies: VocabularyTypeWithNativeLanguageResponse[] = useMemo(() => {
@@ -73,23 +73,38 @@ export default function RecordingProgressPage() {
     }
   }, [renderVocabulary]);
 
-  useEffect(() => {
-    if (data) {
-      if (data.stage === StageExercise.Close && data.currentStep === data.vocabularies.length) {
-        const path = `/${params.category}`;
-        navigate(
-          {
-            pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
-          },
-          {
-            state: {
-              lectureId: data.lectureId,
-            },
-          }
-        );
+  // useEffect(() => {
+  //   if (data) {
+  //     if (data.stage === StageExercise.Close && data.currentStep === data.vocabularies.length) {
+  //       const path = `/${params.category}`;
+  //       navigate(
+  //         {
+  //           pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
+  //         },
+  //         {
+  //           state: {
+  //             lectureId: data.lectureId,
+  //           },
+  //         }
+  //       );
+  //     }
+  //   }
+  // }, [data]);
+  console.log(renderVocabulary);
+
+  const openSentenceList = () => {
+    navigate(
+      {
+        pathname: ROUTER.RECORD_LIST,
+      },
+      {
+        state: {
+          lectureId,
+          stage,
+        },
       }
-    }
-  }, [data]);
+    );
+  };
 
   if (isFetching) return <Loading />;
 
@@ -102,16 +117,25 @@ export default function RecordingProgressPage() {
           </IconButton>
           <Typography className='text-large-semibold grow'>{lectureName}</Typography>
           <IconButton>
-            <Avatar src={MenuIcon} className='w-6 h-6' />
+            <Avatar src={MenuIcon} className='w-6 h-6' onClick={openSentenceList} />
           </IconButton>
         </Box>
         {data && data.stage != StageExercise.Open && <LinearProgress variant='determinate' value={currentProgress} className='mt-3' />}
       </Container>
 
       <Box ref={parentRef} className='text-center'>
-        {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse) => (
-          <TranslationCard {...val} key={val.vocabularyId} onClick={nextVocabulary} enrollmentId={data!.enrollmentId} />
-        ))}
+        {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse) => {
+          if (val) {
+            return <TranslationCard {...val} key={val.vocabularyId} onClick={nextVocabulary} enrollmentId={data!.enrollmentId} />;
+          }
+          return (
+            <Box className='bg-gray-100 flex flex-col items-center justify-center h-[500px] p-6' key={myInfo}>
+              <Avatar src={Congratulation} className='w-16 h-16'></Avatar>
+              <Typography className='text-extra-large-semibold'>Nice job, {myInfo}</Typography>
+              <Typography variant={"body2"}>You finally recorded all the lectures</Typography>
+            </Box>
+          );
+        })}
       </Box>
     </Box>
   );

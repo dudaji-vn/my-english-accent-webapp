@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import ROUTER from "@/shared/const/router.const";
 import FooterBtn from "@/components/FooterBtn";
-import persist from "@/shared/utils/persist.util";
 import { AudioRecord } from "@/components/AudioRecord";
 import { useGetMyRecordsByLectureQuery } from "@/core/services/record.service";
 

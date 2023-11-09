@@ -7,6 +7,7 @@ const ROUTER = {
 
   LISTENING: "/listening",
   RECORD: "/record",
+  RECORD_LIST: "/record/list",
   RERECORD: "/rerecord",
   CLUB: "/club",
   ADD_CLUB: "/add-club",
