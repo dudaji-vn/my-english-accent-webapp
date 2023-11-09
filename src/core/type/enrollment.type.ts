@@ -26,3 +26,10 @@ export interface EnrollmentRequest {
   enrollmentId?: string;
   lectureId: string;
 }
+
+export interface EnrollmentStep {
+  lectureId: string;
+  enrollmentId: string;
+  currentStep: number;
+  stage: number;
+}

@@ -4,6 +4,7 @@ import persist from "./shared/utils/persist.util";
 import ROUTER from "./shared/const/router.const";
 import DrawerNavigate from "./components/Drawer";
 import Loading from "./components/Loading";
+import RecordSentenceList from "./pages/Record/RecordList";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
@@ -56,7 +57,7 @@ function App() {
         <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
           {/* RECORD */}
           <Route path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
-          <Route path={removeSlash(ROUTER.RECORD) + "/:category" + ROUTER.SUMMARY} element={<RecordSummaryPage />} />
+          <Route path={removeSlash(ROUTER.RECORD_LIST)} element={<RecordSentenceList />} />
           <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
           {/* CLUB */}
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />

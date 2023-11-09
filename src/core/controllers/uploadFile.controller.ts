@@ -1,33 +1,20 @@
 import { firebaseStorage } from "@/config/firebase";
-import { nanoid } from "@reduxjs/toolkit";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const audioPath = "audio";
 
 const UploadFileController = {
-  uploadAudio: (audiofile: File, vocabularyId: string, myId: string, callback: Function, isClub?: boolean) => {
+  uploadAudio: async (mediaBlobUrl: string, vocabularyId: string, myId: string, isClub?: boolean) => {
+    const audioBlob = await fetch(mediaBlobUrl as unknown as URL).then((r) => r.blob());
+    const audiofile = new File([audioBlob], "audiofile.mp3", {
+      type: "audio/mp3",
+    });
+
     const storageRef = ref(firebaseStorage, `${audioPath}/${isClub ? "club" : "nonclub"}/${vocabularyId}/${myId}`);
-    const uploadTask = uploadBytesResumable(storageRef, audiofile);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        console.info("uploading::", progress);
-      },
-      (error) => {
-        alert(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-         callback({
-            challengeId: null,
-            userId: myId,
-            vocabularyId: vocabularyId,
-            voiceSrc: downloadURL,
-          });
-        });
-      }
-    );
+    const fileRef = await uploadBytes(storageRef, audiofile).then((r) => r.ref);
+    return getDownloadURL(fileRef)
+      .then((downloadURL) => downloadURL)
+      .catch((error) => error);
   },
 };
 
