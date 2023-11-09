@@ -1,7 +1,6 @@
-import { Container, Box, IconButton, Avatar, Typography, Button, Radio } from "@mui/material";
+import { Container, Box, IconButton, Avatar, Typography, Radio } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import ROUTER from "@/shared/const/router.const";
 import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
 import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
@@ -15,10 +14,10 @@ export default function RecordSentenceList() {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectionAudio, setSelectionAudio] = useState("");
-  const { data } = useGetAllVocabulariesInLectureQuery({ lectureId: state.lectureId, stage: parseInt(state.stage) });
+  const { data } = useGetAllVocabulariesInLectureQuery(state.lectureId);
 
-  const onHandleContinue = () => {
-    navigate(ROUTER.RECORD);
+  const onHandleBack = () => {
+    navigate(-1);
   };
 
   const onHanlePlayAudio = async (value: string, index: number) => {
@@ -63,9 +62,9 @@ export default function RecordSentenceList() {
 
   return (
     <Box className='flex flex-col grow min-h-screen bg-gray-100'>
-      <Container className='py-4 divider'>
+      <Container className='py-4 divider bg-white'>
         <Box className='flex items-center gap-2'>
-          <IconButton onClick={onHandleContinue}>
+          <IconButton onClick={onHandleBack}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
           <Typography className='text-large-semibold'>Sentences list</Typography>

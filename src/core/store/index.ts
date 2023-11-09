@@ -1,29 +1,41 @@
 import Reducer from "@/shared/const/store.const";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { VocabularyApi } from "../services";
+import { EnrollmentStep } from "../type";
 
 interface GlobalStoreType {
-  recordPage: { vocabularyId: string; src: string }[];
+  recordPage: EnrollmentStep;
 }
 
 const initialState: GlobalStoreType = {
-  recordPage: [],
+  recordPage: {
+    currentStep: 0,
+    enrollmentId: "",
+    lectureId: "",
+    stage: 0,
+  },
 };
 
 const globalSlice = createSlice({
   name: Reducer.globalStore,
   initialState,
   reducers: {
-    saveRecord: (state: GlobalStoreType, action: PayloadAction<{ vocabularyId: string; src: string }>) => {
-      const index = state.recordPage.findIndex((value) => value.vocabularyId === action.payload.vocabularyId);
-      if (index === -1) {
-        state.recordPage = [...state.recordPage, action.payload];
-      } else {
-        state.recordPage[index].src = action.payload.src;
-      }
-    },
+    saveEnrollmentState: (state: GlobalStoreType, action: PayloadAction<EnrollmentStep>) => {},
+  },
+  extraReducers(builder) {
+    builder.addMatcher(VocabularyApi.endpoints.getAllVocabulariesInLecture.matchFulfilled, (state, action) => {
+      state.recordPage = {
+        ...action.payload,
+      };
+    });
+    builder.addMatcher(VocabularyApi.endpoints.enrollLecture.matchFulfilled, (state, action) => {
+      state.recordPage = {
+        ...action.payload,
+      };
+    });
   },
 });
 
-export const { saveRecord } = globalSlice.actions;
+export const { saveEnrollmentState } = globalSlice.actions;
 
 export default globalSlice.reducer;

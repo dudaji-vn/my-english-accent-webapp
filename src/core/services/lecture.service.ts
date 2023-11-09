@@ -19,6 +19,9 @@ export const LectureApi = createApi({
     getLecturesBy: builder.query<(LectureResponseType & EnrollmentResponseType)[], StageExercise>({
       query: (stage) => UserController.getLecturesBy(stage),
       transformResponse: (response: { data: (LectureResponseType & EnrollmentResponseType)[] }) => response.data,
+      forceRefetch: (params) => {
+        return params.currentArg == params.previousArg;
+      },
       providesTags: (result, error, arg) => (arg ? [{ type: "Lecture" as const, stage: arg }, "Lecture"] : ["Lecture"]),
     }),
   }),

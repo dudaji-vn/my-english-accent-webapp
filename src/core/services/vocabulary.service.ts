@@ -2,7 +2,7 @@ import VocabularyController from "@/core/controllers/vocabulary.controller";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import _ from "lodash";
 import Reducer from "@/shared/const/store.const";
-import { EnrollmentRequest, VocabularyGroupByLecture, VocabularyRequest } from "../type";
+import { EnrollmentRequest, EnrollmentStep, VocabularyGroupByLecture, VocabularyRequest } from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
 
@@ -11,16 +11,20 @@ export const VocabularyApi = createApi({
   baseQuery: baseQuery,
   tagTypes: ["Vocabulary"],
   endpoints: (builder) => ({
-    getAllVocabulariesInLecture: builder.query<VocabularyGroupByLecture, VocabularyRequest>({
-      query: (payload) => VocabularyController.getAllVocabulariesInLecture(payload),
+    getAllVocabulariesInLecture: builder.query<VocabularyGroupByLecture, string>({
+      query: (lectureId) => VocabularyController.getAllVocabulariesInLecture(lectureId),
       transformResponse: (response: { data: VocabularyGroupByLecture }) => {
         return response.data;
       },
-      providesTags: (result, error, arg) => (arg ? [{ type: "Vocabulary" as const, lectureId: arg.lectureId }, "Vocabulary"] : ["Vocabulary"]),
+      forceRefetch: (params) => {
+        return params.currentArg == params.previousArg;
+      },
     }),
-    enrollLecture: builder.mutation<boolean, EnrollmentRequest>({
+    enrollLecture: builder.mutation<EnrollmentStep, EnrollmentRequest>({
       query: (payload) => UserController.addOrUpdateEnrollment(payload),
-      invalidatesTags: (result, error, arg) => (arg ? [{ type: "Vocabulary" as const, lectureId: arg.lectureId }, "Vocabulary"] : ["Vocabulary"]),
+      transformResponse: (response: { data: EnrollmentStep }) => {
+        return response.data;
+      },
     }),
   }),
 });

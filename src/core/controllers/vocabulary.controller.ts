@@ -64,11 +64,11 @@ const VocabularyController = {
     });
   },
 
-  getAllVocabulariesInLecture: (payload: VocabularyRequest) => {
+  getAllVocabulariesInLecture: (lectureId: string) => {
     return {
       url: `/vocabulary/getAllVocabulariesByLecture`,
       method: "GET",
-      params: payload,
+      params: { lectureId },
     };
   },
 };

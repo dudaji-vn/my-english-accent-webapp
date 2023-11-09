@@ -11,8 +11,8 @@ import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
 import Loading from "@/components/Loading";
 import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import persist from "@/shared/utils/persist.util";
-import SentenceItem from "@/components/SentenceItem";
 import ROUTER from "@/shared/const/router.const";
+import { useAppSelector } from "@/core/store";
 
 export default function RecordingProgressPage() {
   const navigate = useNavigate();
@@ -21,26 +21,41 @@ export default function RecordingProgressPage() {
   const lectureName = decodeURI(pathname).replace("/record/", "");
   let [searchParams] = useSearchParams();
   const lectureId = searchParams.get("lectureId") ?? "";
-  const stage = searchParams.get("stage") ?? "0";
 
   const parentRef = useRef<HTMLDivElement>(null);
 
-  const { data, isFetching } = useGetAllVocabulariesInLectureQuery({ lectureId, stage: parseInt(stage) });
+  const enrollmentData = useAppSelector((state) => state.GlobalStore.recordPage);
+  const { data, isFetching } = useGetAllVocabulariesInLectureQuery(lectureId);
 
   const [renderVocabulary, setRenderVocabulary] = useState<VocabularyTypeWithNativeLanguageResponse[]>([]);
 
   const vocabularies: VocabularyTypeWithNativeLanguageResponse[] = useMemo(() => {
     const vocab = data?.vocabularies ?? [];
+
+    //init renderVocabulary
+    const newArr = vocab.filter((voca) => !!voca.voiceSrc);
+    if (newArr.length) {
+      const nextIndex = vocab.findIndex((voca) => !voca.voiceSrc);
+      if (nextIndex !== -1) {
+        newArr.push(vocab[nextIndex]);
+      }
+      if (enrollmentData.stage === StageExercise.Close) {
+        newArr.push(vocab[-1]);
+      }
+      setRenderVocabulary(() => newArr);
+    } else {
+      setRenderVocabulary(() => [vocab[0]]);
+    }
+
     return vocab;
   }, [data?.vocabularies]);
-
-  const currentProgress = useMemo(() => {
-    return data ? (data.currentStep * 100) / vocabularies.length : 0;
-  }, [data?.currentStep, vocabularies]);
 
   const nextVocabulary = () => {
     if (vocabularies[renderVocabulary.length]) {
       setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...predeta, vocabularies[predeta.length]]);
+    }
+    if (renderVocabulary.length === vocabularies.length) {
+      setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...predeta, vocabularies[-1]]);
     }
   };
 
@@ -54,45 +69,12 @@ export default function RecordingProgressPage() {
   };
 
   useEffect(() => {
-    //initRenderVocabuary
-    if (!renderVocabulary.length && vocabularies.length) {
-      const newArr = vocabularies.filter((voca) => !!voca.voiceSrc);
-      if (newArr.length) {
-        const nextIndex = vocabularies.findIndex((voca) => !voca.voiceSrc);
-        newArr.push(vocabularies[nextIndex]);
-        setRenderVocabulary(() => newArr);
-      } else {
-        setRenderVocabulary(() => [vocabularies[0]]);
-      }
-    }
-  }, [vocabularies]);
-
-  useEffect(() => {
     if (renderVocabulary.length > 0 && parentRef.current) {
       scrollToLastElement();
     }
   }, [renderVocabulary]);
 
-  // useEffect(() => {
-  //   if (data) {
-  //     if (data.stage === StageExercise.Close && data.currentStep === data.vocabularies.length) {
-  //       const path = `/${params.category}`;
-  //       navigate(
-  //         {
-  //           pathname: ROUTER.RECORD + path + ROUTER.SUMMARY,
-  //         },
-  //         {
-  //           state: {
-  //             lectureId: data.lectureId,
-  //           },
-  //         }
-  //       );
-  //     }
-  //   }
-  // }, [data]);
-  console.log(renderVocabulary);
-
-  const openSentenceList = () => {
+  const redirectSentenceList = () => {
     navigate(
       {
         pathname: ROUTER.RECORD_LIST,
@@ -100,7 +82,6 @@ export default function RecordingProgressPage() {
       {
         state: {
           lectureId,
-          stage,
         },
       }
     );
@@ -109,24 +90,32 @@ export default function RecordingProgressPage() {
   if (isFetching) return <Loading />;
 
   return (
-    <Box className='flex flex-col grow'>
+    <Box className='flex flex-col grow  min-h-screen'>
       <Container className='py-4 divider bg-white sticky top-0 z-10'>
         <Box className='flex items-center gap-2'>
           <IconButton onClick={onHandleClose}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
           <Typography className='text-large-semibold grow'>{lectureName}</Typography>
-          <IconButton>
-            <Avatar src={MenuIcon} className='w-6 h-6' onClick={openSentenceList} />
+          <IconButton onClick={redirectSentenceList}>
+            <Avatar src={MenuIcon} className='w-6 h-6' />
           </IconButton>
         </Box>
-        {data && data.stage != StageExercise.Open && <LinearProgress variant='determinate' value={currentProgress} className='mt-3' />}
       </Container>
 
-      <Box ref={parentRef} className='text-center'>
-        {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse) => {
+      <Box ref={parentRef} className='text-center grow bg-gray-100'>
+        {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => {
           if (val) {
-            return <TranslationCard {...val} key={val.vocabularyId} onClick={nextVocabulary} enrollmentId={data!.enrollmentId} />;
+            return (
+              <TranslationCard
+                {...val}
+                key={val.vocabularyId}
+                onClick={nextVocabulary}
+                enrollmentId={enrollmentData!.enrollmentId}
+                index={index + 1}
+                totalVoca={vocabularies.length}
+              />
+            );
           }
           return (
             <Box className='bg-gray-100 flex flex-col items-center justify-center h-[500px] p-6' key={myInfo}>

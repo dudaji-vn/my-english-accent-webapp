@@ -12,7 +12,7 @@ export default function Category({ currentStep, lectureId, lectureName, stage, i
   const gotoRecordProgressPage = () => {
     navigate({
       pathname: ROUTER.RECORD + `/${lectureName.toLowerCase()}`,
-      search: `?${createSearchParams({ lectureId, stage } as any)}`,
+      search: `?${createSearchParams({ lectureId } as any)}`,
     });
   };
 

@@ -77,7 +77,7 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
       type: "audio/mp3",
     });
     if (restProps && mediaBlobUrl) {
-      await UploadFileController.uploadAudio(audiofile, vocabularies[currentStep].vocabularyId, myId, callback, true);
+      await UploadFileController.uploadAudio(mediaBlobUrl, vocabularies[currentStep].vocabularyId, myId, true);
     }
     setToggleSubBtn(false);
   };
