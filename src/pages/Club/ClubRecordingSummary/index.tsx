@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import FooterBtn from "@/components/FooterBtn";
 import { RecordTypeResponse } from "@/core/type";
-import { useGetAllRecordInChallengeQuery, useGetChallengesInClubQuery, usePrefetch } from "@/core/services/challenge.service";
+import { usePrefetch } from "@/core/services/challenge.service";
 import { useRef, useState, useEffect } from "react";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
@@ -95,7 +95,10 @@ export function ClubAudioRecord({ vocabularies, challengeName, clubId, challenge
 export default function ClubRecordingSummaryPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { data } = useGetAllRecordInChallengeQuery(state.challengeId);
+
+  const data = {
+    vocabularies: [],
+  } as any;
   const prefetChallengesInCLub = usePrefetch("getChallengesInClub", {
     force: true,
   });

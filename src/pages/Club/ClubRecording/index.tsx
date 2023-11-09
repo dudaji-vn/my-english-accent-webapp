@@ -23,6 +23,7 @@ export default function ClubRecordingPage() {
   const myId = persist.getMyInfo().userId;
   const { data } = useGetChallengeDetailInClubQuery(state.challengeId);
 
+  console.log(data)
   const vocabuaries = useMemo(() => {
     if (data && data.vocabularies) {
       return data.vocabularies;
@@ -98,7 +99,7 @@ export default function ClubRecordingPage() {
   }, [isRerecord]);
 
   return (
-    <Box className='flex flex-col grow'>
+    <Box className='flex flex-col grow min-h-screen'>
       <Container className='py-4 divider bg-white'>
         <Box className='flex items-center gap-2'>
           <IconButton onClick={onHandleClose}>

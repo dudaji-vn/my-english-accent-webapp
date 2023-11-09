@@ -34,7 +34,7 @@ export default function RecordingPage() {
       );
 
     return data.map((item) => (
-      <BoxCard classes='my-4 last:mb-0' key={item.lectureId}>
+      <BoxCard classes='basis-1/4 grow sm:max-w-[25%] mb-4 sm:mb-0' key={item.lectureId}>
         <Category {...item} />
       </BoxCard>
     ));
@@ -45,7 +45,7 @@ export default function RecordingPage() {
   return (
     <Box className='p-4'>
       <TabCustom tab={stageList} callback={handleChange} tabIndex={stage} />
-      {renderLectures()}
+      <Box className='sm:flex sm:flex-wrap gap-4 mt-4'>{renderLectures()}</Box>
     </Box>
   );
 }

@@ -8,7 +8,6 @@ import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import NoPeople from "@/assets/icon/no-member-club-icon.svg";
 import UserPlayRecord from "@/components/UserPlayRecord";
-import { useGetRecordToListenQuery } from "@/core/services/challenge.service";
 import { RecordTypeResponse, UserResponseType, VocabularyTypeResponse } from "@/core/type";
 
 export default function ClubListeningPage() {
@@ -16,7 +15,12 @@ export default function ClubListeningPage() {
   const { state } = useLocation();
   const { challengeId } = state;
 
-  const { data } = useGetRecordToListenQuery(challengeId);
+  // const { data } = useGetRecordToListenQuery(challengeId);
+
+  const data = {
+    participants: [],
+    vocabularies: [],
+  } as any;
 
   const [currentVocabulary, setCurrentVocabulary] = useState(0);
   const [audioSelected, setAudioSelected] = useState("");
@@ -76,7 +80,13 @@ export default function ClubListeningPage() {
           <>
             <Typography className='text-base-semibold pb-4'>Participants ({data.participants[currentVocabulary]?.recordUser.length})</Typography>
             {data.participants[currentVocabulary].recordUser.map((recordUser: UserResponseType & RecordTypeResponse) => (
-              <UserPlayRecord key={recordUser.userId} props={{ ...recordUser }} audioSelected={audioSelected} setAudioSelected={onAudioSelected} currentVocabulary={currentVocabulary} />
+              <UserPlayRecord
+                key={recordUser.userId}
+                props={{ ...recordUser }}
+                audioSelected={audioSelected}
+                setAudioSelected={onAudioSelected}
+                currentVocabulary={currentVocabulary}
+              />
             ))}
           </>
         );

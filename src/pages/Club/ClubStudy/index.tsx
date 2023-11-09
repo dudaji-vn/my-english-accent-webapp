@@ -1,16 +1,17 @@
 import BoxCard from "@/components/BoxCard";
-import { Container, Typography, Avatar, Box, Button } from "@mui/material";
+import { Container, Typography, Avatar, Box, Button, IconButton } from "@mui/material";
 
 import UserIcon from "@/assets/icon/user-icon.svg";
 import ClockIcon from "@/assets/icon/clock-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { IChallengeDisplay } from "@/core/type/challenge.type";
 import { useGetChallengesInClubQuery } from "@/core/services/challenge.service";
 import { timeSince } from "@/shared/utils/timeSince.util";
 import { useEffect, useMemo } from "react";
 import persist from "@/shared/utils/persist.util";
+import CloseIcon from "@/assets/icon/close-icon.svg";
 
 function ChallengeCard(props: IChallengeDisplay) {
   const navigate = useNavigate();
@@ -82,8 +83,26 @@ function ChallengeCard(props: IChallengeDisplay) {
 }
 
 export default function ClubStudyPage() {
+  const navigate = useNavigate();
   const { clubId } = useParams();
-
+  const { state } = useLocation();
   const { data } = useGetChallengesInClubQuery(clubId!);
-  return <Container className='mt-6 grow'>{data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}</Container>;
+
+  const onHandleClose = () => {
+    navigate(-1);
+  };
+  return (
+    <Box className='flex flex-col grow  min-h-screen'>
+      <Container className='py-4 divider bg-white sticky top-0 z-10'>
+        <Box className='flex items-center gap-2'>
+          <IconButton onClick={onHandleClose}>
+            <Avatar src={CloseIcon} className='w-6 h-6' />
+          </IconButton>
+          <Typography className='text-large-semibold grow'>{state.clubName}</Typography>
+        </Box>
+      </Container>
+
+      {data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}
+    </Box>
+  );
 }

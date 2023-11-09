@@ -8,7 +8,7 @@ export const clubConvert = (id: string, club: ClubModal): ClubResponseType => {
     members: club.members,
     ownerUserId: club.owner_user_id,
     lectures: club.lectures,
-    created: club.created,
-    updated: club.updated,
+    created: new Date(),
+    updated: new Date(),
   };
 };

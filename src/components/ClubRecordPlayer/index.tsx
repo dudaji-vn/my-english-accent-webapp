@@ -14,6 +14,7 @@ import { IChallengeDetailDisplay } from "@/core/type/challenge.type";
 import { RecordRequest } from "@/core/type";
 import { useUpdateChallengeMemberMutation } from "@/core/services/challenge.service";
 import { useGetClubsQuery } from "@/core/services/club.service";
+import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 
 export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
   const { state, hash } = useLocation();
@@ -26,7 +27,7 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
   const audioEle = useRef<HTMLAudioElement | null>(null);
 
   const { data } = useGetClubsQuery();
-  const [addRecord] = useAddRecordMutation();
+  const [addRecord] = useAddOrUpdateRecordMutation();
   const [addParticipant] = useUpdateChallengeMemberMutation();
 
   const [listRequest, setListRequest] = useState<RecordRequest[]>([]);
@@ -60,24 +61,20 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
     setIsRecord(() => !isRecord);
   };
 
-  const callback = (payload: { challengeId: string | null; userId: string; vocabularyId: string; voiceSrc: string }) => {
-    const request = {
-      ...payload,
-      challengeId: state.challengeId,
-    };
-    setListRequest((preVal) => {
-      const newList = [...preVal, request];
-      return newList;
-    });
-  };
-
   const onHandleNext = async () => {
-    const audioBlob = await fetch(mediaBlobUrl as string).then((r) => r.blob());
-    const audiofile = new File([audioBlob], "audiofile.mp3", {
-      type: "audio/mp3",
-    });
     if (restProps && mediaBlobUrl) {
-      await UploadFileController.uploadAudio(mediaBlobUrl, vocabularies[currentStep].vocabularyId, myId, true);
+      const vocabularyId = vocabularies[currentStep].vocabularyId;
+      console.log(vocabularyId)
+      const url = await UploadFileController.uploadAudio(mediaBlobUrl, vocabularyId, myId, true);
+      const request = {
+        voiceSrc: url,
+        vocabularyId: vocabularyId,
+        challengeId: state.challengeId,
+      };
+      setListRequest((preVal) => {
+        const newList = [...preVal, request];
+        return newList;
+      });
     }
     setToggleSubBtn(false);
   };
@@ -94,6 +91,7 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
         listRequest.map((request) => {
           addRecord(request);
         });
+
         addParticipant(state.challengeId).then(() => {
           navigate(
             {

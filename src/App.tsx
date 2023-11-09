@@ -63,6 +63,8 @@ function App() {
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/:clubId"} element={<ClubMemberPage />} />
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_INFO + "/:clubId"} element={<ClubInfoPage />} />
+
+          <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
         </Route>
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
           <Route index element={<RecordingPage />} />
@@ -74,7 +76,6 @@ function App() {
           <Route path={ROUTER.CLUB} element={<ClubPage />} />
           <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
           <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
-          <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
           <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
           <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
           {/* CLUB DETAIL */}

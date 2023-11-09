@@ -10,9 +10,16 @@ import { timeSince } from "@/shared/utils/timeSince.util";
 export default function ClubCard(props: ClubResponseType) {
   const navigate = useNavigate();
   const onRedirectToClub = () => {
-    navigate({
-      pathname: ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + props.clubId,
-    });
+    navigate(
+      {
+        pathname: ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + props.clubId,
+      },
+      {
+        state: {
+          clubName: props.clubName,
+        },
+      }
+    );
   };
   return (
     <BoxCard classes='p-4 mt-4' onClick={onRedirectToClub}>
@@ -34,7 +41,7 @@ export default function ClubCard(props: ClubResponseType) {
         <IconButton>
           <Avatar src={ClockIcon} alt='speaking-icon' className='w-4 h-4' />
         </IconButton>
-        {"Created " + timeSince(new Date(props.created.seconds * 1000).getTime()) + " ago"}
+        {"Created " + timeSince(new Date(props.created).getTime()) + " ago"}
       </Typography>
     </BoxCard>
   );

@@ -18,12 +18,12 @@ export default function Category({ currentStep, lectureId, lectureName, stage, i
 
   return (
     <BoxCard classes='p-4'>
-      <Box className='flex justify-between items-end' onClick={() => gotoRecordProgressPage()}>
+      <Avatar src={imgSrc} variant='square' alt='gallery-icon' className='w-9 h-9' />
+      <Box className='flex justify-between items-end mt-4' onClick={() => gotoRecordProgressPage()}>
         <Box>
           <Typography className='text-base-semibold h-12'>{lectureName}</Typography>
           <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${totalStep} sentences` : `${totalStep} sentences`}</Typography>
         </Box>
-        <Avatar src={imgSrc} variant='square' alt='gallery-icon' className='w-9 h-9' />
       </Box>
     </BoxCard>
   );
