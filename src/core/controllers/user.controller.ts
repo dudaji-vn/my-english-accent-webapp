@@ -19,7 +19,7 @@ const UserController = {
     });
     return response.json();
   },
-  
+
   register: (payload: IUSerRegister) => {
     return {
       url: `/auth/register`,
@@ -42,6 +42,13 @@ const UserController = {
       body: payload,
     };
   },
+
+  getAllUsers: () => {
+    return {
+      url: "/user/allUsers",
+    };
+  },
+  
 };
 
 export default UserController;

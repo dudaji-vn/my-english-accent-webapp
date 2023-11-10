@@ -10,7 +10,7 @@ export const NATIONAL: NationalType = {
   us: "English (US)",
 };
 
-export interface UserResponseType {
+export interface  UserResponseType {
   userId: string;
   nativeLanguage: Language;
   userName: string;

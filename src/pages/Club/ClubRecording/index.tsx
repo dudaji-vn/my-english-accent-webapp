@@ -12,6 +12,7 @@ import persist from "@/shared/utils/persist.util";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
 import { RecordRequest } from "@/core/type";
+import Loading from "@/components/Loading";
 
 export default function ClubRecordingPage() {
   const navigate = useNavigate();
@@ -109,6 +110,12 @@ export default function ClubRecordingPage() {
     }
   }, [isRerecord]);
 
+  if (vocabularies.length) {
+    if (!vocabularies[currentStep]) {
+      return <Loading />;
+    }
+  }
+
   return (
     <Box className='flex flex-col grow min-h-screen'>
       <Container className='py-4 divider bg-white'>
@@ -134,7 +141,10 @@ export default function ClubRecordingPage() {
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <TextToSpeech text={vocabularies[currentStep]?.vtitleDisplayLanguage} />
+              <Typography variant='body2' className='text-small-regular break-keep' component={"div"}>
+                {vocabularies[currentStep]?.vphoneticDisplayLanguage}
+                <TextToSpeech text={vocabularies[currentStep]?.vtitleDisplayLanguage} />
+              </Typography>
             </Grid>
           </Grid>
         </BoxCard>

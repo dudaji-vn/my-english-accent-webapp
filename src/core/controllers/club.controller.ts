@@ -9,19 +9,17 @@ const ClubController = {
     };
   },
 
-  addClub: (payload: ClubRequest) => {
-    return {
-      url: `/${clubPath}/addOrUpdateClub`,
-      method: "POST",
-      body: payload,
-    };
-  },
-
-  updateClub: (payload: ClubRequest) => {
+  addOrUpdateClub: (payload: ClubRequest) => {
     return {
       url: `/${clubPath}/addOrUpdateClub`,
       method: "PUT",
       body: payload,
+    };
+  },
+
+  getAllMembersClub: (clubId: string) => {
+    return {
+      url: `/${clubPath}/getMembersInfo/${clubId}`,
     };
   },
 };

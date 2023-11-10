@@ -1,26 +1,22 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
-import { Box, Avatar, Typography, Container, Button, InputBase, IconButton } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import SearchIcon from "@/assets/icon/search-icon.svg";
 import ChevronIcon from "@/assets/icon/chevron-left-icon.svg";
+import SearchIcon from "@/assets/icon/search-icon.svg";
 import FooterCard from "@/components/FooterBtn";
 import RecordCard from "@/components/RecordCard";
+import { useGetAllUsersQuery, useUpdateClubMutation } from "@/core/services";
 import ROUTER from "@/shared/const/router.const";
-import { useUpdateClubMutation } from "@/core/services";
+import { Avatar, Box, Button, Container, IconButton, InputBase, Typography } from "@mui/material";
+import { ChangeEvent, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ClubAddMemberPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const userList: any[] = [];
+  const { data: userList } = useGetAllUsersQuery();
 
   const [updateClub] = useUpdateClubMutation();
   const [search, setSearch] = useState("");
   const [members, setMembers] = useState<string[]>([]);
-
-  const handleChangeTabIndex = (newValue: number) => {
-    console.log(newValue);
-  };
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -50,7 +46,7 @@ export default function ClubAddMemberPage() {
   };
 
   return (
-    <Box className='flex flex-col grow'>
+    <Box className='flex flex-col grow min-h-screen'>
       <Box className='p-4 flex items-center gap-2 divider bg-white'>
         {/* hidden in add member page */}
         <IconButton>

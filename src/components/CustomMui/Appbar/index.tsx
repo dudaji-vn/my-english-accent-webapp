@@ -22,7 +22,7 @@ export default function CustomAppbar({ open, children }: CustomAppBarProps) {
     <AppBar
       sx={[
         {
-          bgcolor: "transparent",
+          bgcolor: "white",
           boxShadow: "none",
           zIndex: theme.zIndex.drawer + 1,
           transition: theme.transitions.create(["width", "margin"], {

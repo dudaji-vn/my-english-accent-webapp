@@ -9,18 +9,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import NoPeople from "@/assets/icon/no-member-club-icon.svg";
 import UserPlayRecord from "@/components/UserPlayRecord";
 import { RecordTypeResponse, UserResponseType, VocabularyTypeResponse } from "@/core/type";
+import { useGetRecordToListenByChallengeQuery } from "@/core/services";
 
 export default function ClubListeningPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { challengeId } = state;
 
-  // const { data } = useGetRecordToListenQuery(challengeId);
-
-  const data = {
-    participants: [],
-    vocabularies: [],
-  } as any;
+  const { data } = useGetRecordToListenByChallengeQuery(challengeId);
 
   const [currentVocabulary, setCurrentVocabulary] = useState(0);
   const [audioSelected, setAudioSelected] = useState("");
@@ -61,7 +57,7 @@ export default function ClubListeningPage() {
       return data.vocabularies.map((voca: VocabularyTypeResponse) => {
         return (
           <SwiperSlide key={voca.vocabularyId}>
-            <Box className='bg-white rounded-lg p-4 h-full flex flex-col items-center'>
+            <Box className='bg-white p-4 h-full flex flex-col items-center swiper-slide-transform'>
               <Typography className='text-small-medium'>{voca.vtitleDisplayLanguage}</Typography>
               <Typography className='text-small-regular' variant='body2'>
                 {voca.vphoneticDisplayLanguage}
@@ -105,8 +101,8 @@ export default function ClubListeningPage() {
   };
 
   return (
-    <Box className='flex flex-col grow'>
-      <Container className='py-4 divider bg-white'>
+    <Box className='flex flex-col grow min-h-screen'>
+      <Container className='py-4 divider '>
         <Box className='flex items-center gap-2'>
           <IconButton onClick={() => navigate(-1)}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
@@ -114,7 +110,7 @@ export default function ClubListeningPage() {
           <Typography className='text-large-semibold'>{"Word - guessing with designer"}</Typography>
         </Box>
       </Container>
-      <Box className='p-4 max-h-[208px] h-[208px]'>
+      <Box className='p-4 max-h-[208px] h-[208px] bg-gray-100'>
         <Swiper pagination={true} modules={[Pagination]} className='h-full' onSlideChange={onSlideChange}>
           {renderSlide()}
         </Swiper>

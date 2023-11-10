@@ -83,26 +83,12 @@ function ChallengeCard(props: IChallengeDisplay) {
 }
 
 export default function ClubStudyPage() {
-  const navigate = useNavigate();
   const { clubId } = useParams();
   const { data } = useGetChallengesInClubQuery(clubId!);
 
-  const onHandleClose = () => {
-    navigate(ROUTER.CLUB);
-  };
-
   return (
-    <Box className='flex flex-col grow  min-h-screen'>
-      <Container className='py-4 divider bg-white sticky top-0 z-10'>
-        <Box className='flex items-center gap-2'>
-          <IconButton onClick={onHandleClose}>
-            <Avatar src={CloseIcon} className='w-6 h-6' />
-          </IconButton>
-          <Typography className='text-large-semibold grow'>{data && data[0]?.clubName}</Typography>
-        </Box>
-      </Container>
-
-      {data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}
+    <Box className='flex flex-col grow  min-h-screen bg-gray-100'>
+      <Box className='p-4'>{data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}</Box>
     </Box>
   );
 }

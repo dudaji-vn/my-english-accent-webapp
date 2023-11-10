@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
 import ClubController from "../controllers/club.controller";
-import { ClubRequest, IClubDisplay } from "../type";
+import { ClubRequest, IClubDisplay, UserResponseType } from "../type";
 import baseQuery from "..";
 
 export const ClubStudyApi = createApi({
@@ -16,20 +16,24 @@ export const ClubStudyApi = createApi({
     }),
 
     addClub: builder.mutation<string, ClubRequest>({
-      query: ClubController.addClub,
+      query: ClubController.addOrUpdateClub,
       transformResponse: (response: { data: string }) => response.data,
       invalidatesTags: (result) => (result ? [{ type: "Club" as const, id: result }, "Club"] : ["Club"]),
     }),
 
     updateClub: builder.mutation<string, ClubRequest>({
-      query: ClubController.updateClub,
+      query: ClubController.addOrUpdateClub,
       transformResponse: (response: { data: string }) => response.data,
       invalidatesTags: (result) => (result ? [{ type: "Club" as const, id: result }, "Club"] : ["Club"]),
     }),
 
+    getALlMembersClub: builder.query<UserResponseType[], string>({
+      query: ClubController.getAllMembersClub,
+      transformResponse: (response: { data: UserResponseType[] }) => response.data,
+    }),
   }),
 });
 
-export const { useGetClubsQuery, useAddClubMutation, useUpdateClubMutation } = ClubStudyApi;
+export const { useGetClubsQuery, useAddClubMutation, useUpdateClubMutation, useGetALlMembersClubQuery } = ClubStudyApi;
 
 export default ClubStudyApi;

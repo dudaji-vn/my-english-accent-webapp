@@ -25,6 +25,13 @@ const ChallengeController = {
       url: `/${challengePath}/getAllRecordByChallenge/${challengeId}`,
     };
   },
+
+  getRecordToListenByChallenge: (challengeId: string) => {
+    return {
+      url: `/${challengePath}/getRecordToListenByChallenge/${challengeId}`,
+    };
+  },
+  
 };
 
 export default ChallengeController;

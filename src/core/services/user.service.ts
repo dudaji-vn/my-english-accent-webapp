@@ -15,9 +15,16 @@ export const UserApi = createApi({
         return response.data;
       },
     }),
+
+    getAllUsers: builder.query<UserResponseType[], void>({
+      query: UserController.getAllUsers,
+      transformResponse: (response: { data: UserResponseType[] }) => {
+        return response.data;
+      },
+    }),
   }),
 });
 
-export const { useRegisterMutation } = UserApi;
+export const { useRegisterMutation, useGetAllUsersQuery } = UserApi;
 
 export default UserApi;
