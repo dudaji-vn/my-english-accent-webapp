@@ -3,20 +3,26 @@ const challengePath = "challenge";
 const ChallengeController = {
   getChallengesInClub: (clubId: string) => {
     return {
-      url: `/challenge/getChallengesInClub/${clubId}`,
+      url: `/${challengePath}/getChallengesInClub/${clubId}`,
     };
   },
 
   getChallengeDetailInClub: (challengeId: string) => {
     return {
-      url: `/challenge/getChallengeDetailInClub/${challengeId}`,
+      url: `/${challengePath}/getChallengeDetailInClub/${challengeId}`,
     };
   },
 
   updateChallengeMember: (challengeId: string) => {
     return {
-      url: `/challenge/updateChallengeMember/${challengeId}`,
+      url: `/${challengePath}/updateChallengeMember/${challengeId}`,
       method: "PATCH",
+    };
+  },
+
+  getAllRecordInChallenge: (challengeId: string) => {
+    return {
+      url: `/${challengePath}/getAllRecordByChallenge/${challengeId}`,
     };
   },
 };

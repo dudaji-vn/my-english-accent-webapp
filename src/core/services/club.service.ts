@@ -27,46 +27,6 @@ export const ClubStudyApi = createApi({
       invalidatesTags: (result) => (result ? [{ type: "Club" as const, id: result }, "Club"] : ["Club"]),
     }),
 
-    // getMembersInfo: builder.query<{ ownerInfo: UserResponseType; membersInfo: UserResponseType[] }, string>({
-    //   async queryFn(clubId: string) {
-    //     try {
-    //       const res: ClubResponseType[] = await ClubController.getClubById(clubId);
-    //       const ownerInfo: UserResponseType[] = [];
-    //       const membersInfo: UserResponseType[] = [];
-    //       if (res && res.length > 0) {
-    //         const firstClub = res[0];
-    //         const ownerId = firstClub.ownerUserId;
-    //         const memembersId = firstClub.members.map((userId) => userId);
-    //         await UserController.getUsersBy([ownerId]).then((val) => ownerInfo.push(...val.flat()));
-    //         await UserController.getUsersBy(memembersId).then((val) => membersInfo.push(...val.flat()));
-    //       }
-
-    //       return {
-    //         data: { ownerInfo: ownerInfo[0], membersInfo: membersInfo },
-    //       };
-    //     } catch (error) {
-    //       return { error };
-    //     }
-    //   },
-    //   providesTags: (result, error, arg) => (arg ? [{ type: "Club" as const, id: arg }, "Club"] : ["Club"]),
-    // }),
-
-    // getClubDetail: builder.query<ClubResponseType | null, string>({
-    //   async queryFn(clubId: string) {
-    //     try {
-    //       let firstResponse = null;
-    //       const response = await ClubController.getClubById(clubId);
-    //       if (response && response.length > 0) {
-    //         firstResponse = response[0];
-    //       }
-    //       return {
-    //         data: firstResponse,
-    //       };
-    //     } catch (error) {
-    //       return { error };
-    //     }
-    //   },
-    // }),
   }),
 });
 

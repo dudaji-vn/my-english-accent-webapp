@@ -8,7 +8,7 @@ import RecordingPage from "@/pages/Record";
 import Navbar from "@/components/Navbar";
 import RecordingProgressPage from "@/pages/Record/RecordProgress";
 import RecordSummaryPage from "@/pages/Record/RecordSummary";
-import RerecordingProgressPage from "@/pages/Record/RerecordProgress";
+import RerecordingProgressPage from "@/pages/Club/ClubRerecordProgress";
 import ClubPage from "@/pages/Club";
 import AddNewClubPage from "@/pages/Club/AddNewClub";
 import ClubDetailPage from "@/pages/Club/ClubDetail";

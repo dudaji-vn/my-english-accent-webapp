@@ -1,13 +1,8 @@
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { ClubVocabularyTypeResponse, RecordRequest, RecordTypeResponse, UserResponseType, VocabularyTypeResponse } from "../type";
 import ChallengeController from "../controllers/challenge.controller";
-import VocabularyController from "../controllers/vocabulary.controller";
 import _ from "lodash";
-import { IChallengeDetailDisplay, IChallengeDisplay, IChallengeSummaryDisplay, IListenTypePage } from "../type/challenge.type";
-import RecordController from "../controllers/record.controller";
-import persist from "@/shared/utils/persist.util";
-import UserController from "../controllers/user.controller";
+import { IChallengeDetailDisplay, IChallengeDisplay, IChallengeSummaryDisplay } from "../type/challenge.type";
 import baseQuery from "..";
 
 export const ChallengeApi = createApi({
@@ -30,9 +25,14 @@ export const ChallengeApi = createApi({
       query: (challengeId: string) => ChallengeController.updateChallengeMember(challengeId),
       transformResponse: (response: { data: boolean }) => response.data,
     }),
+
+    getAllRecordInChallenge: builder.query<IChallengeSummaryDisplay, string>({
+      query: (challengeId: string) => ChallengeController.getAllRecordInChallenge(challengeId),
+      transformResponse: (response: { data: IChallengeSummaryDisplay }) => response.data,
+    }),
   }),
 });
 
-export const { useGetChallengesInClubQuery, useGetChallengeDetailInClubQuery, useUpdateChallengeMemberMutation, usePrefetch } = ChallengeApi;
+export const { useGetChallengesInClubQuery, useGetChallengeDetailInClubQuery, useUpdateChallengeMemberMutation, useGetAllRecordInChallengeQuery, usePrefetch } = ChallengeApi;
 
 export default ChallengeApi;

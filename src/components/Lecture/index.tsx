@@ -6,7 +6,7 @@ import ROUTER from "@/shared/const/router.const";
 import { StageExercise } from "@/shared/type";
 import { EnrollmentResponseType, LectureResponseType } from "@/core/type";
 
-export default function Category({ currentStep, lectureId, lectureName, stage, imgSrc, totalStep }: LectureResponseType & EnrollmentResponseType) {
+export default function Lecture({ currentStep, lectureId, lectureName, stage, imgSrc, totalStep }: LectureResponseType & EnrollmentResponseType) {
   const navigate = useNavigate();
 
   const gotoRecordProgressPage = () => {

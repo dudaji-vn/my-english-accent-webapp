@@ -2,12 +2,12 @@ import { DocumentReference } from "firebase/firestore";
 
 export interface RecordTypeResponse {
   recordId: string;
-  challengeId: DocumentReference | null;
+  challengeId?: string;
   rCreated: string;
   rUpdated: string;
-  userId: DocumentReference;
-  vocabularyId: DocumentReference;
-  rVoiceSrc: string;
+  userId: string;
+  vocabularyId: string;
+  voiceSrc: string;
 }
 
 export interface RecordRequest {
@@ -17,9 +17,9 @@ export interface RecordRequest {
 }
 
 export interface RecordModal {
-  challenge_id: DocumentReference | null;
-  vocabulary_id: DocumentReference;
-  user_id: DocumentReference;
+  challenge_id?: string;
+  vocabulary_id: string;
+  user_id: string;
   voice_src: string;
   created: string;
   updated: string;

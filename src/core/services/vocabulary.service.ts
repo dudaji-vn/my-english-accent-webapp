@@ -2,7 +2,7 @@ import VocabularyController from "@/core/controllers/vocabulary.controller";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import _ from "lodash";
 import Reducer from "@/shared/const/store.const";
-import { EnrollmentRequest, EnrollmentStep, VocabularyGroupByLecture, VocabularyRequest } from "../type";
+import { EnrollmentRequest, EnrollmentStep, NativeVocabularyTypeResponse, VocabularyGroupByLecture, VocabularyTypeResponse } from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
 
@@ -20,15 +20,23 @@ export const VocabularyApi = createApi({
         return params.currentArg == params.previousArg;
       },
     }),
+
     enrollLecture: builder.mutation<EnrollmentStep, EnrollmentRequest>({
       query: (payload) => UserController.addOrUpdateEnrollment(payload),
       transformResponse: (response: { data: EnrollmentStep }) => {
         return response.data;
       },
     }),
+
+    getVocabulary: builder.query<VocabularyTypeResponse & NativeVocabularyTypeResponse, string>({
+      query: (vocabularyId) => VocabularyController.getVocabularyById(vocabularyId),
+      transformResponse: (response: { data: VocabularyTypeResponse & NativeVocabularyTypeResponse }) => {
+        return response.data;
+      },
+    }),
   }),
 });
 
-export const { useGetAllVocabulariesInLectureQuery, useEnrollLectureMutation } = VocabularyApi;
+export const { useGetAllVocabulariesInLectureQuery, useEnrollLectureMutation, useGetVocabularyQuery } = VocabularyApi;
 
 export default VocabularyApi;

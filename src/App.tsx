@@ -11,7 +11,7 @@ const Register = lazy(() => import("@/pages/Auth/Register"));
 const RecordingPage = lazy(() => import("@/pages/Record"));
 const RecordingProgressPage = lazy(() => import("@/pages/Record/RecordProgress"));
 const RecordSummaryPage = lazy(() => import("@/pages/Record/RecordSummary"));
-const RerecordingProgressPage = lazy(() => import("@/pages/Record/RerecordProgress"));
+const RerecordingProgressPage = lazy(() => import("@/pages/Club/ClubRerecordProgress"));
 const ClubPage = lazy(() => import("@/pages/Club"));
 const AddNewClubPage = lazy(() => import("@/pages/Club/AddNewClub"));
 const ClubAddMemberPage = lazy(() => import("@/pages/Club/ClubAddMember"));
@@ -63,6 +63,7 @@ function App() {
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/:clubId"} element={<ClubMemberPage />} />
           <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_INFO + "/:clubId"} element={<ClubInfoPage />} />
+          <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
 
           <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
         </Route>
@@ -76,7 +77,6 @@ function App() {
           <Route path={ROUTER.CLUB} element={<ClubPage />} />
           <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
           <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
-          <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
           <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
           {/* CLUB DETAIL */}
         </Route>

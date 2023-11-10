@@ -77,9 +77,9 @@ export default function UserPlayRecord({ props, audioSelected, setAudioSelected,
         </Typography>
       </Box>
       <Radio
-        onChange={() => onHanlePlayAudio(props.rVoiceSrc)}
-        checked={audioSelected === props.rVoiceSrc}
-        value={props.rVoiceSrc}
+        onChange={() => onHanlePlayAudio(props.voiceSrc)}
+        checked={audioSelected === props.voiceSrc}
+        value={props.voiceSrc}
         icon={<Avatar src={SpeakerIcon} className='w-6 h-6' />}
         checkedIcon={<Avatar src={SpeakerFillIcon} className='w-6 h-6' />}
         disabled={isPlaying}

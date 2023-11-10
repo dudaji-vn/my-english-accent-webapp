@@ -4,7 +4,7 @@ import { StageExercise, StageLabel } from "@/shared/type";
 import * as _ from "lodash";
 import { useGetLecturesByQuery } from "@/core/services";
 import { useState } from "react";
-import Category from "@/components/Category";
+import Lecture from "@/components/Lecture";
 import BoxCard from "@/components/BoxCard";
 import TabCustom from "@/components/TabCustom";
 import Loading from "@/components/Loading";
@@ -35,7 +35,7 @@ export default function RecordingPage() {
 
     return data.map((item) => (
       <BoxCard classes='basis-1/4 grow sm:max-w-[25%] mb-4 sm:mb-0' key={item.lectureId}>
-        <Category {...item} />
+        <Lecture {...item} />
       </BoxCard>
     ));
   };

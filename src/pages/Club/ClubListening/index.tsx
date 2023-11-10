@@ -29,7 +29,7 @@ export default function ClubListeningPage() {
   const onHandlePlayAll = () => {
     if (data && data.participants && data.participants.length) {
       const voiceRecords: { url: string; playing: boolean; played: boolean }[] = data.participants[currentVocabulary].recordUser.map((user: RecordTypeResponse) => ({
-        url: user.rVoiceSrc,
+        url: user.voiceSrc,
         playing: false,
         played: false,
       }));

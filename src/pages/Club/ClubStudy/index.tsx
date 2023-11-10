@@ -18,7 +18,7 @@ function ChallengeCard(props: IChallengeDisplay) {
   const myId = persist.getMyInfo().userId;
 
   const isRerecord = useMemo(() => {
-    return !!props.participants.find((user) => user.id === myId);
+    return !!props.participants.find((user) => user === myId);
   }, [props]);
 
   const onHandleRecording = () => {
@@ -30,7 +30,7 @@ function ChallengeCard(props: IChallengeDisplay) {
       {
         state: {
           challengeId: props.challengeId,
-          clubId: props.clubId.id,
+          clubId: props.clubId,
         },
       }
     );
@@ -44,7 +44,7 @@ function ChallengeCard(props: IChallengeDisplay) {
       {
         state: {
           challengeId: props.challengeId,
-          clubId: props.clubId.id,
+          clubId: props.clubId,
         },
       }
     );
@@ -67,7 +67,7 @@ function ChallengeCard(props: IChallengeDisplay) {
 
       <Typography className='text-extra-small-regular flex gap-1' variant='body2'>
         <Avatar component={"span"} src={ClockIcon} alt='speaking-icon' className='w-4 h-4' />
-        {"Created " + timeSince(new Date(props?.created?.seconds * 1000).getTime()) + " ago"}
+        {"Created " + timeSince(new Date(props.created).getTime()) + " ago"}
       </Typography>
 
       <Box className='flex justify-between gap-4 mt-4'>
@@ -85,12 +85,12 @@ function ChallengeCard(props: IChallengeDisplay) {
 export default function ClubStudyPage() {
   const navigate = useNavigate();
   const { clubId } = useParams();
-  const { state } = useLocation();
   const { data } = useGetChallengesInClubQuery(clubId!);
 
   const onHandleClose = () => {
-    navigate(-1);
+    navigate(ROUTER.CLUB);
   };
+
   return (
     <Box className='flex flex-col grow  min-h-screen'>
       <Container className='py-4 divider bg-white sticky top-0 z-10'>
@@ -98,7 +98,7 @@ export default function ClubStudyPage() {
           <IconButton onClick={onHandleClose}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
-          <Typography className='text-large-semibold grow'>{state.clubName}</Typography>
+          <Typography className='text-large-semibold grow'>{data && data[0]?.clubName}</Typography>
         </Box>
       </Container>
 

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "@/assets/icon/logo-login-icon.svg";
 import background from "@/assets/icon/background.svg";
 import ROUTER from "@/shared/const/router.const";
-import { useLoginMutation } from "@/core/services/fake.service";
+import { useLoginMutation } from "@/core/services/fakeUser.service";
 
 export default function Login() {
   const navigate = useNavigate();

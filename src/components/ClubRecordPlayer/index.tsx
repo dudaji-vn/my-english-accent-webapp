@@ -1,36 +1,17 @@
-import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { useAddRecordMutation } from "@/core/services/recordProgress.service";
-import persist from "@/shared/utils/persist.util";
 import { Box, IconButton, Avatar, Typography } from "@mui/material";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder-2";
 import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import HearingIcon from "@/assets/icon/hearing-icon.svg";
 import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
-import { useLocation, useNavigate } from "react-router-dom";
-import ROUTER from "@/shared/const/router.const";
-import { IChallengeDetailDisplay } from "@/core/type/challenge.type";
-import { RecordRequest } from "@/core/type";
-import { useUpdateChallengeMemberMutation } from "@/core/services/challenge.service";
-import { useGetClubsQuery } from "@/core/services/club.service";
-import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 
-export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
-  const { state, hash } = useLocation();
-  const navigate = useNavigate();
-  const currentStep = parseInt(hash.replace("#", ""));
+interface ClubRecordingAudioProps {
+  onHandleNext: Function;
+}
 
-  const myId = persist.getMyInfo().userId;
-  const { vocabularies, ...restProps } = props;
-
-  const audioEle = useRef<HTMLAudioElement | null>(null);
-
-  const { data } = useGetClubsQuery();
-  const [addRecord] = useAddOrUpdateRecordMutation();
-  const [addParticipant] = useUpdateChallengeMemberMutation();
-
-  const [listRequest, setListRequest] = useState<RecordRequest[]>([]);
+export default function ClubRecordingAudio(props: ClubRecordingAudioProps) {
+  const audio = new Audio();
 
   const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
     audio: true,
@@ -46,8 +27,9 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
   const [toggleSubBtn, setToggleSubBtn] = useState(() => status === "stopped");
 
   const onRepeat = () => {
-    if (audioEle && audioEle.current) {
-      audioEle.current.play();
+    if (mediaBlobUrl) {
+      audio.src = mediaBlobUrl;
+      audio.play();
     }
   };
 
@@ -62,64 +44,9 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
   };
 
   const onHandleNext = async () => {
-    if (restProps && mediaBlobUrl) {
-      const vocabularyId = vocabularies[currentStep].vocabularyId;
-      console.log(vocabularyId)
-      const url = await UploadFileController.uploadAudio(mediaBlobUrl, vocabularyId, myId, true);
-      const request = {
-        voiceSrc: url,
-        vocabularyId: vocabularyId,
-        challengeId: state.challengeId,
-      };
-      setListRequest((preVal) => {
-        const newList = [...preVal, request];
-        return newList;
-      });
-    }
+    props.onHandleNext(mediaBlobUrl);
     setToggleSubBtn(false);
   };
-
-  useEffect(() => {
-    return () => {
-      audioEle.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (listRequest.length > 0)
-      if (listRequest.length === vocabularies.length) {
-        listRequest.map((request) => {
-          addRecord(request);
-        });
-
-        addParticipant(state.challengeId).then(() => {
-          navigate(
-            {
-              pathname: ROUTER.CLUB_RECORDING_SUMMARY,
-            },
-            {
-              state: {
-                clubId: restProps!.clubId.id,
-                challengeId: state.challengeId,
-              },
-            }
-          );
-        });
-      } else {
-        navigate(
-          {
-            pathname: ROUTER.CLUB_RECORDING,
-            hash: `${currentStep + 1}`,
-          },
-          {
-            state: {
-              challengeId: state.challengeId,
-              clubId: restProps && restProps.clubId.id,
-            },
-          }
-        );
-      }
-  }, [listRequest]);
 
   return (
     <Box className='text-center'>
@@ -131,14 +58,12 @@ export default function ClubRecordingAudio(props: IChallengeDetailDisplay) {
         )}
 
         <Box>
-          {/* <p>{status}</p> */}
           <IconButton className='bg-primary p-5' onClick={onHandlePlay}>
             <Avatar src={isRecord ? SoundIcon : MicrophoneIcon} />
           </IconButton>
-          <audio src={mediaBlobUrl} ref={audioEle}></audio>
         </Box>
         {toggleSubBtn && (
-          <IconButton onClick={() => onHandleNext()} className='border border-stroke border-solid'>
+          <IconButton onClick={onHandleNext} className='border border-stroke border-solid'>
             <Avatar src={ArrowRight} className='w-6 h-6' />
           </IconButton>
         )}
