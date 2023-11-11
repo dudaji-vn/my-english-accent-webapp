@@ -1,15 +1,15 @@
-import { Box, Container, IconButton, Avatar, Typography, Button, setRef } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { useLocation, useNavigate } from "react-router-dom";
-import FooterCard from "@/components/FooterBtn";
-import { useMultiAudio } from "@/shared/hook/useMultiAudio";
-import { useEffect, useState } from "react";
-import { Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import NoPeople from "@/assets/icon/no-member-club-icon.svg";
+import FooterCard from "@/components/FooterBtn";
 import UserPlayRecord from "@/components/UserPlayRecord";
-import { RecordTypeResponse, UserResponseType, VocabularyTypeResponse } from "@/core/type";
 import { useGetRecordToListenByChallengeQuery } from "@/core/services";
+import { RecordTypeResponse, UserResponseType, VocabularyTypeResponse } from "@/core/type";
+import { MultiAudioComponent } from "@/shared/hook/useMultiAudios";
+import { Avatar, Box, Container, IconButton, Typography } from "@mui/material";
+import { useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
 export default function ClubListeningPage() {
   const navigate = useNavigate();
@@ -20,37 +20,18 @@ export default function ClubListeningPage() {
 
   const [currentVocabulary, setCurrentVocabulary] = useState(0);
   const [audioSelected, setAudioSelected] = useState("");
-  const { status, players, indexAudio, playAudio } = useMultiAudio();
 
-  const onHandlePlayAll = () => {
-    if (data && data.participants && data.participants.length) {
-      const voiceRecords: { url: string; playing: boolean; played: boolean }[] = data.participants[currentVocabulary].recordUser.map((user: RecordTypeResponse) => ({
-        url: user.voiceSrc,
-        playing: false,
-        played: false,
-      }));
-      playAudio(0, voiceRecords);
+  const voiceRecords = useMemo(() => {
+    if (data) {
+      return data.participants[currentVocabulary].recordUser.map((record) => record.voiceSrc);
     }
-  };
+    return [];
+  }, [data?.participants, currentVocabulary]);
 
-  const onSlideChange = (val: any) => {
+  const onSlideChange = (val: SwiperClass) => {
     setAudioSelected(() => "");
     setCurrentVocabulary(() => val.activeIndex);
   };
-
-  const onAudioSelected = (urlSrc: string) => {
-    setAudioSelected(() => urlSrc);
-  };
-
-  useEffect(() => {
-    if (status === "stop") {
-      setAudioSelected(() => "");
-      console.log("ClubListeningPage::useEffect::stop");
-    } else if (indexAudio != -1 && players.length) {
-      setAudioSelected(() => players[indexAudio].url);
-      console.log("ClubListeningPage::useEffect", players[indexAudio].url);
-    }
-  }, [indexAudio, status]);
 
   const renderSlide = () => {
     if (data && data.vocabularies && data.vocabularies.length) {
@@ -76,13 +57,7 @@ export default function ClubListeningPage() {
           <>
             <Typography className='text-base-semibold pb-4'>Participants ({data.participants[currentVocabulary]?.recordUser.length})</Typography>
             {data.participants[currentVocabulary].recordUser.map((recordUser: UserResponseType & RecordTypeResponse) => (
-              <UserPlayRecord
-                key={recordUser.userId}
-                props={{ ...recordUser }}
-                audioSelected={audioSelected}
-                setAudioSelected={onAudioSelected}
-                currentVocabulary={currentVocabulary}
-              />
+              <UserPlayRecord key={recordUser.userId} props={{ ...recordUser }} audioSelected={audioSelected} />
             ))}
           </>
         );
@@ -117,11 +92,7 @@ export default function ClubListeningPage() {
       </Box>
       <Box className='p-4 bg-white grow'>{renderParticipant()}</Box>
       <FooterCard classes='items-center'>
-        <Button variant='contained' className='rounded-md m-auto grow' onClick={onHandlePlayAll}>
-          <Typography className='text-base-medium ' color={"white"}>
-            Listen all
-          </Typography>
-        </Button>
+        <MultiAudioComponent audioSrc={voiceRecords} />
       </FooterCard>
     </Box>
   );

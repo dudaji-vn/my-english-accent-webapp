@@ -4,18 +4,18 @@ import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import NationalityCard from "@/components/NationalityCard";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
-import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/core/store";
+import { saveAudio } from "@/core/store/index";
+import { useEffect } from "react";
 
 interface UserPlayRecordProps {
   props: UserResponseType & RecordTypeResponse;
   audioSelected: string;
-  setAudioSelected: Function;
-  currentVocabulary: number;
 }
 
-export default function UserPlayRecord({ props, audioSelected, setAudioSelected, currentVocabulary }: UserPlayRecordProps) {
-  const audioRef = useRef(new Audio());
-  const [isPlaying, setIsPlaying] = useState(false);
+export default function UserPlayRecord({ props, audioSelected }: UserPlayRecordProps) {
+  const audio: HTMLAudioElement = useAppSelector((state) => state.GlobalStore.clubPage.audio);
+  const dispatch = useAppDispatch();
 
   const language = (language: string) => {
     if (language === "vi") {
@@ -29,44 +29,19 @@ export default function UserPlayRecord({ props, audioSelected, setAudioSelected,
     }
   };
 
-  const onHanlePlayAudio = async (value: string) => {
-    setAudioSelected(value);
-    audioRef.current.src = value;
-    setIsPlaying(() => true);
+  const onHanlePlayAudio = (value: string) => {
+    dispatch(saveAudio(value));
+    if (audio.paused) {
+      audio.play().catch((error) => {
+        console.log("error occurred::", error);
+      });
+    }
   };
 
   useEffect(() => {
-    if (audioRef.current) {
-      console.log("UserPlayRecord::useEffect::playing", isPlaying);
-      isPlaying ? audioRef.current.play() : audioRef.current.pause();
-    }
-  }, [isPlaying]);
+    dispatch(saveAudio(audioSelected));
+  }, [audioSelected]);
 
-  useEffect(() => {
-    if (audioRef.current && isPlaying) {
-      console.log("UserPlayRecord::useEffect::currentVocabulary", currentVocabulary);
-      setIsPlaying(() => false);
-    }
-  }, [currentVocabulary]);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.addEventListener("ended", () => {
-        console.log("UserPlayRecord::useEffect::addEventListener");
-        setIsPlaying(() => false);
-      });
-    }
-    return () => {
-      console.log("UserPlayRecord::useEffect::removeEventListener");
-      if (audioRef.current) {
-        audioRef.current.removeEventListener("ended", () => {
-          setIsPlaying(() => false);
-        });
-      }
-    };
-  }, []);
-
-  console.log("UserPlayRecord::audioSelected::", audioSelected);
   return (
     <Box className='flex justify-between items-start py-4'>
       <Box>
@@ -82,7 +57,6 @@ export default function UserPlayRecord({ props, audioSelected, setAudioSelected,
         value={props.voiceSrc}
         icon={<Avatar src={SpeakerIcon} className='w-6 h-6' />}
         checkedIcon={<Avatar src={SpeakerFillIcon} className='w-6 h-6' />}
-        disabled={isPlaying}
       />
     </Box>
   );

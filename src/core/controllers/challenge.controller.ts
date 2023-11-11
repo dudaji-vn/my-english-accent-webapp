@@ -28,7 +28,7 @@ const ChallengeController = {
 
   getRecordToListenByChallenge: (challengeId: string) => {
     return {
-      url: `/${challengePath}/getRecordToListenByChallenge/${challengeId}`,
+      url: `/${challengePath}/getAllRecordByChallenge/${challengeId}`,
     };
   },
   
