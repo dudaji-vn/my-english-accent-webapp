@@ -57,7 +57,7 @@ export default function ClubListeningPage() {
           <>
             <Typography className='text-base-semibold pb-4'>Participants ({data.participants[currentVocabulary]?.recordUser.length})</Typography>
             {data.participants[currentVocabulary].recordUser.map((recordUser: UserResponseType & RecordTypeResponse) => (
-              <UserPlayRecord key={recordUser.userId} props={{ ...recordUser }} audioSelected={audioSelected} />
+              <UserPlayRecord key={recordUser.recordId} props={{ ...recordUser }} audioSelected={audioSelected} />
             ))}
           </>
         );

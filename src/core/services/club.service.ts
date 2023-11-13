@@ -27,9 +27,9 @@ export const ClubStudyApi = createApi({
       invalidatesTags: (result) => (result ? [{ type: "Club" as const, id: result }, "Club"] : ["Club"]),
     }),
 
-    getALlMembersClub: builder.query<UserResponseType[], string>({
+    getALlMembersClub: builder.query<{ owner: UserResponseType; members: UserResponseType[] }, string>({
       query: ClubController.getAllMembersClub,
-      transformResponse: (response: { data: UserResponseType[] }) => response.data,
+      transformResponse: (response: { data: { owner: UserResponseType; members: UserResponseType[] } }) => response.data,
     }),
   }),
 });

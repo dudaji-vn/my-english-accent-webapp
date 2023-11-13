@@ -18,9 +18,9 @@ export default function UserPlayRecord({ props, audioSelected }: UserPlayRecordP
   const dispatch = useAppDispatch();
 
   const language = (language: string) => {
-    if (language === "vi") {
+    if (language === "vn") {
       return "Vietnamese";
-    } else if (language === "en") {
+    } else if (language === "us") {
       return "English";
     } else if (language === "kr") {
       return "Korea";

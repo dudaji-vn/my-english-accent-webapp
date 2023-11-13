@@ -48,7 +48,7 @@ export default function ClubDetailPage() {
         <Tabs value={path} onChange={handleChange} aria-label='tabs' variant='fullWidth'>
           <Tab label={tabItems[0]} id={`listen-tab-${path}`} aria-controls={`listen-tabpanel-${path}`} value={removeSlash(ROUTER.CLUB_STUDY)} />
           <Tab label={tabItems[1]} id={`listen-tab-${path}`} aria-controls={`listten-tabpanel-${path}`} value={removeSlash(ROUTER.CLUB_MEMBER)} />
-          <Tab label={tabItems[2]} id={`listen-tab-${path}`} aria-controls={`listten-tabpanel-${path}`} value={removeSlash(ROUTER.CLUB_INFO)} />
+          {/* <Tab label={tabItems[2]} id={`listen-tab-${path}`} aria-controls={`listten-tabpanel-${path}`} value={removeSlash(ROUTER.CLUB_INFO)} /> */}
         </Tabs>
       </Box>
       <Outlet />
