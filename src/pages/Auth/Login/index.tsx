@@ -1,10 +1,9 @@
-import { useRef } from "react";
+import background from "@/assets/icon/background.svg";
+import logo from "@/assets/icon/logo-login-icon.svg";
+import { useLoginMutation } from "@/core/services/fakeUser.service";
+import ROUTER from "@/shared/const/router.const";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/icon/logo-login-icon.svg";
-import background from "@/assets/icon/background.svg";
-import ROUTER from "@/shared/const/router.const";
-import { useLoginMutation } from "@/core/services/fakeUser.service";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,7 +11,7 @@ export default function Login() {
   const loginApp = async () => {
     const isSuccess = await login().unwrap();
     if (isSuccess) {
-      navigate(ROUTER.REGISTER);
+      navigate(ROUTER.AUTH + ROUTER.REGISTER);
     } else {
       window.location.reload();
     }

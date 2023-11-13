@@ -74,7 +74,7 @@ function App() {
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
-          <Route index element={<RecordingPage />} />
+          <Route index element={<Navigate replace to={ROUTER.RECORD} />} />
           <Route path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
 
           {/* TODO: create LISTENING PAGE */}

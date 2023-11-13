@@ -7,12 +7,13 @@ import ROUTER from "@/shared/const/router.const";
 import { useNavigate } from "react-router-dom";
 import ClubCard from "@/components/ClubCard";
 import { useGetClubsQuery } from "@/core/services/club.service";
+import Loading from "@/components/Loading";
 
 export default function ClubPage() {
   const navigate = useNavigate();
 
-  const { data } = useGetClubsQuery();
-  console.log(data)
+  const { data, isFetching } = useGetClubsQuery();
+
   const renderNoClub = () => {
     return (
       <Container className='flex flex-col text-center items-center gap-2 mt-12'>
@@ -59,6 +60,8 @@ export default function ClubPage() {
       );
     }
   };
+
+  if (isFetching) return <Loading />;
 
   return (
     <Box className='pb-4'>
