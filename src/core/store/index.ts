@@ -5,6 +5,9 @@ import { EnrollmentStep } from "../type";
 
 interface GlobalStoreType {
   recordPage: EnrollmentStep;
+  clubPage: {
+    audio: any;
+  };
 }
 
 const initialState: GlobalStoreType = {
@@ -14,13 +17,16 @@ const initialState: GlobalStoreType = {
     lectureId: "",
     stage: 0,
   },
+  clubPage: { audio: new Audio() },
 };
 
 const globalSlice = createSlice({
   name: Reducer.globalStore,
   initialState,
   reducers: {
-    saveEnrollmentState: (state: GlobalStoreType, action: PayloadAction<EnrollmentStep>) => {},
+    saveAudio: (state: GlobalStoreType, action: PayloadAction<string>) => {
+      state.clubPage.audio.src = action.payload;
+    },
   },
   extraReducers(builder) {
     builder.addMatcher(VocabularyApi.endpoints.getAllVocabulariesInLecture.matchFulfilled, (state, action) => {
@@ -36,6 +42,6 @@ const globalSlice = createSlice({
   },
 });
 
-export const { saveEnrollmentState } = globalSlice.actions;
+export const { saveAudio } = globalSlice.actions;
 
 export default globalSlice.reducer;

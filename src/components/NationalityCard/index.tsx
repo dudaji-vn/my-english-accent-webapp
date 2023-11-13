@@ -17,7 +17,7 @@ export default function PersonInfo(props: PersonInfoType) {
   return (
     <Box className='flex gap-2'>
       {props.isShowAvatar && <Avatar alt='avatar-icon' />}
-      <Box className='flex flex-col justify-center'>{props.isShowName && <Typography className='text-base-medium'>{userInfo.userName}</Typography>}</Box>
+      <Box className='flex flex-col justify-center'>{props.isShowName && <Typography className='text-base-medium'>{userInfo.nickName}</Typography>}</Box>
     </Box>
   );
 }

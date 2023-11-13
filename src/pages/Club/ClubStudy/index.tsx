@@ -1,23 +1,24 @@
 import BoxCard from "@/components/BoxCard";
-import { Container, Typography, Avatar, Box, Button } from "@mui/material";
+import { Container, Typography, Avatar, Box, Button, IconButton } from "@mui/material";
 
 import UserIcon from "@/assets/icon/user-icon.svg";
 import ClockIcon from "@/assets/icon/clock-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import { IChallengeDisplay } from "@/core/type/challenge.type";
 import { useGetChallengesInClubQuery } from "@/core/services/challenge.service";
 import { timeSince } from "@/shared/utils/timeSince.util";
 import { useEffect, useMemo } from "react";
 import persist from "@/shared/utils/persist.util";
+import CloseIcon from "@/assets/icon/close-icon.svg";
 
 function ChallengeCard(props: IChallengeDisplay) {
   const navigate = useNavigate();
   const myId = persist.getMyInfo().userId;
 
   const isRerecord = useMemo(() => {
-    return !!props.participants.find((user) => user.id === myId);
+    return !!props.participants.find((user) => user === myId);
   }, [props]);
 
   const onHandleRecording = () => {
@@ -29,7 +30,7 @@ function ChallengeCard(props: IChallengeDisplay) {
       {
         state: {
           challengeId: props.challengeId,
-          clubId: props.clubId.id,
+          clubId: props.clubId,
         },
       }
     );
@@ -43,7 +44,7 @@ function ChallengeCard(props: IChallengeDisplay) {
       {
         state: {
           challengeId: props.challengeId,
-          clubId: props.clubId.id,
+          clubId: props.clubId,
         },
       }
     );
@@ -66,7 +67,7 @@ function ChallengeCard(props: IChallengeDisplay) {
 
       <Typography className='text-extra-small-regular flex gap-1' variant='body2'>
         <Avatar component={"span"} src={ClockIcon} alt='speaking-icon' className='w-4 h-4' />
-        {"Created " + timeSince(new Date(props?.created?.seconds * 1000).getTime()) + " ago"}
+        {"Created " + timeSince(new Date(props.created).getTime()) + " ago"}
       </Typography>
 
       <Box className='flex justify-between gap-4 mt-4'>
@@ -83,7 +84,11 @@ function ChallengeCard(props: IChallengeDisplay) {
 
 export default function ClubStudyPage() {
   const { clubId } = useParams();
-
   const { data } = useGetChallengesInClubQuery(clubId!);
-  return <Container className='mt-6 grow'>{data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}</Container>;
+
+  return (
+    <Box className='flex flex-col grow  min-h-screen bg-gray-100'>
+      <Box className='p-4'>{data && data.map((challenge) => <ChallengeCard key={challenge.challengeId} {...challenge} />)}</Box>
+    </Box>
+  );
 }

@@ -1,184 +1,161 @@
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { ClubVocabularyTypeResponse, RecordRequest, RecordTypeResponse, UserResponseType, VocabularyTypeResponse } from "../type";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import baseQuery from "..";
 import ChallengeController from "../controllers/challenge.controller";
-import VocabularyController from "../controllers/vocabulary.controller";
-import _ from "lodash";
 import { IChallengeDetailDisplay, IChallengeDisplay, IChallengeSummaryDisplay, IListenTypePage } from "../type/challenge.type";
-import RecordController from "../controllers/record.controller";
-import persist from "@/shared/utils/persist.util";
-import UserController from "../controllers/user.controller";
 
 export const ChallengeApi = createApi({
   reducerPath: Reducer.challengeApi,
-  baseQuery: fakeBaseQuery(),
+  baseQuery: baseQuery,
   tagTypes: ["Challenge"],
   endpoints: (builder) => ({
     getChallengesInClub: builder.query<IChallengeDisplay[], string>({
-      async queryFn(clubId: string) {
-        try {
-          const challenges = await ChallengeController.getChallengesInClub(clubId);
-
-          const challengesId = challenges.map((challenge) => challenge.challengeId);
-
-          const vocabularies: ClubVocabularyTypeResponse[] = [];
-          await VocabularyController.getVocabularyOfClub(challengesId).then((val) => vocabularies.push(...val.flat()));
-
-          const groupVocabularyByChallengeId = _(vocabularies)
-            .groupBy("challengeId.id")
-            .map((val, key) => ({
-              challengeId: key,
-              vocabularies: val,
-            }))
-            .value();
-
-          const mergeVocabulary = _.merge({}, challenges, groupVocabularyByChallengeId);
-
-          return {
-            data: _.values(mergeVocabulary),
-          };
-        } catch (error) {
-          return { error };
-        }
-      },
+      query: (clubId: string) => ChallengeController.getChallengesInClub(clubId),
+      transformResponse: (response: { data: IChallengeDisplay[] }) => response.data,
+      providesTags: (result, error, arg) => (arg ? [{ type: "Challenge" as const, clubId: arg }, "Challenge"] : ["Challenge"]),
     }),
 
     getChallengeDetailInClub: builder.query<IChallengeDetailDisplay, string>({
-      async queryFn(challengeId: string) {
-        try {
-          const challenge = await ChallengeController.getChallengeDetail(challengeId);
-
-          const clubVocabularies: ClubVocabularyTypeResponse[] = [];
-          await VocabularyController.getVocabularyOfClub([challengeId]).then((val) => clubVocabularies.push(...val.flat()));
-
-          const vocabulariesId = clubVocabularies.map((voca) => voca.vocabularyId);
-          const vocabularies = (await VocabularyController.getVocabulariesById(vocabulariesId)).flat();
-
-          const mergeVocabulary: VocabularyTypeResponse[] & ClubVocabularyTypeResponse[] = _.merge({}, clubVocabularies, vocabularies);
-
-          return {
-            data: {
-              ...challenge,
-              vocabularies: _.values(mergeVocabulary),
-            },
-          };
-        } catch (error) {
-          return { error };
-        }
-      },
-    }),
-
-    addRecordChallenge: builder.mutation<boolean, RecordRequest>({
-      async queryFn(payload: RecordRequest) {
-        try {
-          await RecordController.addRecord(payload);
-          return { data: true };
-        } catch (error) {
-          console.error("Challenge::addRecordChallenge::", error);
-          return { error };
-        }
-      },
-      invalidatesTags: ["Challenge"],
-    }),
-
-    getAllRecordInChallenge: builder.query<IChallengeSummaryDisplay, string>({
-      async queryFn(challengeId: string) {
-        try {
-          const myId = persist.getMyInfo().userId;
-          const challenge = await ChallengeController.getChallengeDetail(challengeId);
-          const records = await RecordController.getRecordsByChallengeId(myId, challengeId);
-
-          const vocabulariesId = records.map((record) => record.vocabularyId);
-
-          const vocabulariesRecord: VocabularyTypeResponse[] = [];
-          await VocabularyController.getVocabulariesById(vocabulariesId).then((val) => vocabulariesRecord.push(...val.flat()));
-
-          const users: UserResponseType[] = [];
-          await UserController.getUsersBy(challenge.participants).then((val) => users.push(...val.flat()));
-
-          const mergeVocabulary: RecordTypeResponse[] & VocabularyTypeResponse[] = _.merge({}, records, vocabulariesRecord);
-
-          const result = {
-            ...challenge,
-            participants: users,
-            vocabularies: _.values(mergeVocabulary),
-          };
-          return { data: result };
-        } catch (error) {
-          console.error("Challenge::getAllRecordInChallenge::", error);
-          return { error };
-        }
-      },
+      query: (challengeId: string) => ChallengeController.getChallengeDetailInClub(challengeId),
+      transformResponse: (response: { data: IChallengeDetailDisplay }) => response.data,
+      providesTags: (result, error, arg) => (arg ? [{ type: "Challenge" as const, challengeId: arg }, "Challenge"] : ["Challenge"]),
     }),
 
     updateChallengeMember: builder.mutation<boolean, string>({
-      async queryFn(challengeId: string) {
-        try {
-          const myId = persist.getMyInfo().userId;
-          const challenge = await ChallengeController.getChallengeDetail(challengeId);
-          await ChallengeController.updateChallenge(challengeId, myId, challenge.participants);
-          return { data: true };
-        } catch (error) {
-          console.error("Challenge::getAllRecordInChallenge::", error);
-          return { error };
-        }
-      },
+      query: (challengeId: string) => ChallengeController.updateChallengeMember(challengeId),
+      transformResponse: (response: { data: boolean }) => response.data,
+      invalidatesTags: (result, error, arg) => (arg ? [{ type: "Challenge" as const, challengeId: arg }, "Challenge"] : ["Challenge"]),
     }),
-    getRecordToListen: builder.query<IListenTypePage, string>({
-      async queryFn(challengeId: string) {
-        try {
-          const challenge = await ChallengeController.getChallengeDetail(challengeId);
 
-          const usersId = challenge.participants.map((user) => user.id);
+    getAllRecordInChallenge: builder.query<IChallengeSummaryDisplay, string>({
+      query: (challengeId: string) => ChallengeController.getAllRecordInChallenge(challengeId),
+      transformResponse: (response: { data: IChallengeSummaryDisplay }) => response.data,
+    }),
 
-          const records: RecordTypeResponse[] = [];
-          await RecordController.getRecordOfUsersByChallengeId(usersId, challengeId).then((val) => records.push(...val.flat()));
-
-          const clubVocabularies: ClubVocabularyTypeResponse[] = [];
-          await VocabularyController.getVocabularyOfClub([challengeId]).then((val) => clubVocabularies.push(...val.flat()));
-          const vocabulariesId = clubVocabularies.map((voca) => voca.vocabularyId);
-
-          const vocabulariesRecord: VocabularyTypeResponse[] = [];
-          await VocabularyController.getVocabulariesById(vocabulariesId).then((val) => vocabulariesRecord.push(...val.flat()));
-
-          const users: UserResponseType[] = [];
-          await UserController.getUsersBy(challenge.participants).then((val) => users.push(...val.flat()));
-
-          const newRecord = records.map((record) => ({
-            ...record,
-            ...users.find((user) => user.userId === record.userId.id),
-          }));
-
-          const populatedVocabulary = _.chain(newRecord)
-            .groupBy("vocabularyId.id")
-            .map((value, key) => {
-              const isFound = vocabulariesRecord.find((voca) => voca.vocabularyId === key);
-              return {
-                ...isFound,
-                recordUser: value,
-              };
-            })
-            .value();
-
-          const sorted = (array: any[]) => {
-            return array.sort((a: any, b: any) => {
-              const newA = a.vocabularyId as string;
-              const newB = b.vocabularyId as string;
-              if (newA < newB) return -1;
-              if (newA > newB) return 1;
-              return 0;
-            });
-          };
-          return {
-            data: {
-              vocabularies: sorted(vocabulariesRecord),
-              participants: sorted(populatedVocabulary),
+    getRecordToListenByChallenge: builder.query<IListenTypePage, string>({
+      query: (challengeId: string) => ChallengeController.getRecordToListenByChallenge(challengeId),
+      // transformResponse: (response: { data: IListenTypePage }) => response.data,
+      transformResponse: (response: { data: IListenTypePage }) => {
+        return {
+          participants: [
+            {
+              lectureId: "1",
+              recordUser: [
+                {
+                  userName: "Thien",
+                  nickName: "Thien 1",
+                  recordId: "record1",
+                  vocabularyId: "voca1",
+                  userId: "user1",
+                  avatarUrl: "",
+                  created: new Date(),
+                  displayLanguage: "vn",
+                  email: "",
+                  favoriteUserIds: [],
+                  googleId: "",
+                  nativeLanguage: "vn",
+                  rCreated: new Date(),
+                  rUpdated: new Date(),
+                  updated: new Date(),
+                  voiceSrc:
+                    "https://firebasestorage.googleapis.com/v0/b/my-english-accent-239fb.appspot.com/o/audio%2Fclub%2FJZmtmDXf1Rw0xblPIvm6%2F29naHOmbC2NGRP9DqFON?alt=media&token=b159cded-2213-4c30-bedc-0767dd6e785c",
+                },
+                {
+                  userName: "Thien",
+                  nickName: "Thien",
+                  recordId: "record2",
+                  vocabularyId: "voca1",
+                  userId: "user2",
+                  avatarUrl: "",
+                  created: new Date(),
+                  displayLanguage: "vn",
+                  email: "",
+                  favoriteUserIds: [],
+                  googleId: "",
+                  nativeLanguage: "vn",
+                  rCreated: new Date(),
+                  rUpdated: new Date(),
+                  updated: new Date(),
+                  voiceSrc:
+                    "https://firebasestorage.googleapis.com/v0/b/my-english-accent-239fb.appspot.com/o/audio%2Fnonclub%2FFFqPhagP8GPWmIt9m3dB%2F29naHOmbC2NGRP9DqFON?alt=media&token=f61b76db-4c91-4b8d-8614-7ddfabf71bc0",
+                },
+              ],
+              vCreated: new Date(),
+              vocabularyId: "voca1",
+              vphoneticDisplayLanguage: "hello",
+              vtitleDisplayLanguage: "hello",
+              vUpdated: new Date(),
             },
-          };
-        } catch (error) {
-          console.error("Challenge::getRecordToListen::", error);
-          return { error };
-        }
+            {
+              lectureId: "2",
+              recordUser: [
+                {
+                  userName: "Thien",
+                  nickName: "Thien 4",
+                  recordId: "record4",
+                  vocabularyId: "voca2",
+                  userId: "user4",
+                  avatarUrl: "",
+                  created: new Date(),
+                  displayLanguage: "vn",
+                  email: "",
+                  favoriteUserIds: [],
+                  googleId: "",
+                  nativeLanguage: "vn",
+                  rCreated: new Date(),
+                  rUpdated: new Date(),
+                  updated: new Date(),
+                  voiceSrc:
+                    "https://firebasestorage.googleapis.com/v0/b/my-english-accent-239fb.appspot.com/o/audio%2Fnonclub%2FUMFnWgQxndtMpyRFhA7C%2FDRzkoxv6bLW6FP7aVrZh?alt=media&token=923cd98e-0bb8-4f5c-9a07-6eb56725b67c",
+                },
+                {
+                  userName: "Thien",
+                  nickName: "Thien 2",
+                  recordId: "record3",
+                  vocabularyId: "voca2",
+                  userId: "user3",
+                  avatarUrl: "",
+                  created: new Date(),
+                  displayLanguage: "vn",
+                  email: "",
+                  favoriteUserIds: [],
+                  googleId: "",
+                  nativeLanguage: "vn",
+                  rCreated: new Date(),
+                  rUpdated: new Date(),
+                  updated: new Date(),
+                  voiceSrc:
+                    "https://firebasestorage.googleapis.com/v0/b/my-english-accent-239fb.appspot.com/o/audio%2Fnonclub%2FJZmtmDXf1Rw0xblPIvm6%2Fvzb8HU0Kg3tVeGtR215B?alt=media&token=ef7efc81-e9f7-4c18-8078-67866c6124c0",
+                },
+              ],
+              vCreated: new Date(),
+              vocabularyId: "voca1",
+              vphoneticDisplayLanguage: "hello",
+              vtitleDisplayLanguage: "hello",
+              vUpdated: new Date(),
+            },
+          ],
+          vocabularies: [
+            {
+              lectureId: "1",
+
+              vCreated: new Date(),
+              vocabularyId: "voca1",
+              vphoneticDisplayLanguage: "hello",
+              vtitleDisplayLanguage: "hello",
+              vUpdated: new Date(),
+            },
+            {
+              lectureId: "2",
+
+              vCreated: new Date(),
+              vocabularyId: "voca2",
+              vphoneticDisplayLanguage: "hi",
+              vtitleDisplayLanguage: "hi",
+              vUpdated: new Date(),
+            },
+          ],
+        } as any;
       },
     }),
   }),
@@ -187,10 +164,9 @@ export const ChallengeApi = createApi({
 export const {
   useGetChallengesInClubQuery,
   useGetChallengeDetailInClubQuery,
-  useAddRecordChallengeMutation,
-  useGetAllRecordInChallengeQuery,
   useUpdateChallengeMemberMutation,
-  useGetRecordToListenQuery,
+  useGetAllRecordInChallengeQuery,
+  useGetRecordToListenByChallengeQuery,
   usePrefetch,
 } = ChallengeApi;
 

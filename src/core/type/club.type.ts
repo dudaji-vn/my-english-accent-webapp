@@ -6,8 +6,8 @@ export interface ClubResponseType {
   members: DocumentReference[];
   ownerUserId: DocumentReference;
   lectures: DocumentReference[];
-  updated: Timestamp;
-  created: Timestamp;
+  updated: Date;
+  created: Date;
   clubId: string;
 }
 

@@ -1,6 +1,5 @@
 import persist from "@/shared/utils/persist.util";
-import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
-import { FetchBaseQueryError, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
+import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.REACT_APP_URL,
@@ -18,12 +17,3 @@ const baseQuery = fetchBaseQuery({
   redirect: "follow",
 });
 export default baseQuery;
-
-export function isFetchBaseQueryError(err: unknown): err is FetchBaseQueryError {
-  const { error } = err as { error: FetchBaseQueryError };
-  return typeof err === "object" && err != null && "status" in error;
-}
-
-export function someHelperForTS<T>(result: QueryReturnValue<unknown, unknown, unknown>) {
-  return result as QueryReturnValue<T, unknown, unknown>;
-}

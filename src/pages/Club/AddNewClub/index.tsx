@@ -41,7 +41,7 @@ export default function AddNewClubPage() {
   const [addClub] = useAddClubMutation();
 
   const [clubName, setClubName] = useState("");
-  const [lecturesId, setLecturesId] = useState<string[]>(["6540bd721860dada50828bf3", "6540bd721860dada50828c4d"]);
+  const [lecturesId, setLecturesId] = useState<string[]>([]);
 
   const onSaveLectureId = (param: string) => {
     const isExist = lecturesId.find((id) => id === param);
@@ -55,7 +55,7 @@ export default function AddNewClubPage() {
 
   const onCreateNewClub = async () => {
     try {
-      const response = await addClub({
+      const clubId = await addClub({
         clubName,
         lectures: lecturesId,
       }).unwrap();
@@ -64,7 +64,7 @@ export default function AddNewClubPage() {
         {
           pathname: ROUTER.CLUB_ADD_MEMBER,
         },
-        { state: { clubId: response } }
+        { state: { clubId: clubId } }
       );
     } catch (err) {
       console.error(err);

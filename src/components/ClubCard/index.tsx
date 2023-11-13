@@ -34,7 +34,7 @@ export default function ClubCard(props: ClubResponseType) {
         <IconButton>
           <Avatar src={ClockIcon} alt='speaking-icon' className='w-4 h-4' />
         </IconButton>
-        {"Created " + timeSince(new Date(props.created.seconds * 1000).getTime()) + " ago"}
+        {"Created " + timeSince(new Date(props.created).getTime()) + " ago"}
       </Typography>
     </BoxCard>
   );

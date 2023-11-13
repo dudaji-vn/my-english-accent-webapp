@@ -5,45 +5,153 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import SpeakingIcon from "@/assets/icon/speaking-icon.svg";
-import { useGetChallengeDetailInClubQuery } from "@/core/services/challenge.service";
+import { useGetChallengeDetailInClubQuery, useUpdateChallengeMemberMutation } from "@/core/services/challenge.service";
 import ClubRecordingAudio from "@/components/ClubRecordPlayer";
-import useTextToSpeech from "@/shared/hook/useTextToSpeech";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
+import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
+import UploadFileController from "@/core/controllers/uploadFile.controller";
+import { RecordRequest } from "@/core/type";
+import Loading from "@/components/Loading";
 
 export default function ClubRecordingPage() {
   const navigate = useNavigate();
   const { state, hash } = useLocation();
-  const currentStep = parseInt(hash.replace("#", ""));
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
+  const currentStep = parseInt(hash.replace("#", "")) ?? 0;
   const myId = persist.getMyInfo().userId;
-  const { data } = useGetChallengeDetailInClubQuery(state.challengeId);
+  const [listRecord, setListRecord] = useState<RecordRequest[]>([]);
+  const [open, setOpen] = useState(false);
 
-  const vocabuaries = useMemo(() => {
-    if (data && data.vocabularies) {
-      return data.vocabularies;
-    }
-    return [];
+  const { data } = useGetChallengeDetailInClubQuery(state.challengeId);
+  const [addRecord] = useAddOrUpdateRecordMutation();
+  const [addParticipant] = useUpdateChallengeMemberMutation();
+
+  const vocabularies = useMemo(() => {
+    return data ? data.vocabularies : [];
   }, [data?.vocabularies]);
+
   const isRerecord = useMemo(() => {
     if (data && data.participants) {
-      return !!data.participants.find((user) => user.id === myId);
+      return !!data.participants.find((user) => user === myId);
     }
   }, [data?.participants]);
 
-  const onHandleClose = () => {
-    if (currentStep < vocabuaries.length) {
-      handleOpen();
+  const onHandleClose = () => setOpen(false);
+  const onHandleBack = () => {
+    if (currentStep < vocabularies.length) {
+      setOpen(() => true);
     }
   };
 
-  const openModal = () => {
-    return (
-      <Modal open={open} onClose={handleClose} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+  const onHandleNext = async (mediaBlobUrl: string) => {
+    if (mediaBlobUrl) {
+      const vocabularyId = vocabularies[currentStep].vocabularyId;
+      const url = await UploadFileController.uploadAudio(mediaBlobUrl, vocabularyId, myId, true);
+      const request = {
+        voiceSrc: url,
+        vocabularyId: vocabularyId,
+        challengeId: state.challengeId,
+      };
+      setListRecord((preVal) => [...preVal, request]);
+      navigate(
+        {
+          pathname: ROUTER.CLUB_RECORDING,
+          hash: `${currentStep + 1}`,
+        },
+        {
+          state: {
+            challengeId: state.challengeId,
+            clubId: data?.clubId,
+          },
+        }
+      );
+    }
+  };
+
+  const onSaveRecord = (listRecord: RecordRequest[]) => {
+    return Promise.all(listRecord.map((request) => addRecord(request)));
+  };
+
+  useEffect(() => {
+    if (vocabularies.length) {
+      if (!vocabularies[currentStep]) {
+        onSaveRecord(listRecord);
+        addParticipant(state.challengeId).then(() =>
+          navigate(
+            {
+              pathname: ROUTER.CLUB_RECORDING_SUMMARY,
+            },
+            {
+              state: {
+                clubId: data!.clubId,
+                challengeId: data!.challengeId,
+              },
+            }
+          )
+        );
+      }
+    }
+  }, [listRecord]);
+
+  //re-recording
+  useEffect(() => {
+    if (isRerecord) {
+      navigate(
+        {
+          pathname: ROUTER.CLUB_RECORDING_SUMMARY,
+        },
+        {
+          state: {
+            clubId: data!.clubId,
+            challengeId: data!.challengeId,
+          },
+        }
+      );
+    }
+  }, [isRerecord]);
+
+  if (vocabularies.length) {
+    if (!vocabularies[currentStep]) {
+      return <Loading />;
+    }
+  }
+
+  return (
+    <Box className='flex flex-col grow min-h-screen'>
+      <Container className='py-4 divider bg-white'>
+        <Box className='flex items-center gap-2'>
+          <IconButton onClick={onHandleBack}>
+            <Avatar src={CloseIcon} className='w-6 h-6' />
+          </IconButton>
+          <Box className='flex flex-col'>
+            <Typography className='text-large-semibold'>{data?.challengeName}</Typography>
+            <Typography className='text-small-regular' variant='body2'>
+              {currentStep + 1}/{vocabularies.length} sentences
+            </Typography>
+          </Box>
+        </Box>
+      </Container>
+      <Container id='translationCard' className='py-4 bg-gray-100 flex flex-col grow justify-between'>
+        <BoxCard classes='p-4'>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Typography className='text-small-medium'>{vocabularies[currentStep]?.vtitleDisplayLanguage}</Typography>
+            </Grid>
+            <Grid item xs={12} className='py-4'>
+              <Divider />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant='body2' className='text-small-regular break-keep' component={"div"}>
+                {vocabularies[currentStep]?.vphoneticDisplayLanguage}
+                <TextToSpeech text={vocabularies[currentStep]?.vtitleDisplayLanguage} />
+              </Typography>
+            </Grid>
+          </Grid>
+        </BoxCard>
+        <ClubRecordingAudio onHandleNext={onHandleNext} />
+      </Container>
+
+      <Modal open={open} onClose={onHandleClose} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
         <Box
           sx={{
             position: "absolute" as "absolute",
@@ -68,7 +176,7 @@ export default function ClubRecordingPage() {
             All progress will be lost
           </Typography>
           <Box display={"flex"} justifyContent={"space-around"}>
-            <Button sx={{ flexGrow: 1 }} onClick={handleClose}>
+            <Button sx={{ flexGrow: 1 }} onClick={onHandleClose}>
               Stay
             </Button>
             <Button sx={{ flexGrow: 1 }} variant='contained' color='error' onClick={() => navigate(ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + state.clubId)}>
@@ -77,58 +185,6 @@ export default function ClubRecordingPage() {
           </Box>
         </Box>
       </Modal>
-    );
-  };
-
-  //re-recording
-  useEffect(() => {
-    if (isRerecord) {
-      navigate(
-        {
-          pathname: ROUTER.CLUB_RECORDING_SUMMARY,
-        },
-        {
-          state: {
-            clubId: data!.clubId.id,
-            challengeId: data!.challengeId,
-          },
-        }
-      );
-    }
-  }, [isRerecord]);
-
-  return (
-    <Box className='flex flex-col grow'>
-      <Container className='py-4 divider bg-white'>
-        <Box className='flex items-center gap-2'>
-          <IconButton onClick={onHandleClose}>
-            <Avatar src={CloseIcon} className='w-6 h-6' />
-          </IconButton>
-          <Box className='flex flex-col'>
-            <Typography className='text-large-semibold'>{data?.challengeName}</Typography>
-            <Typography className='text-small-regular' variant='body2'>
-              {currentStep + 1}/{vocabuaries.length} sentences
-            </Typography>
-          </Box>
-        </Box>
-      </Container>
-      <Container id='translationCard' className='py-4 bg-gray-100 flex flex-col grow justify-between'>
-        <BoxCard classes='p-4'>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <Typography className='text-small-medium'>{vocabuaries[currentStep]?.vtitleDisplayLanguage}</Typography>
-            </Grid>
-            <Grid item xs={12} className='py-4'>
-              <Divider />
-            </Grid>
-            <Grid item xs={12}>
-              <TextToSpeech text={vocabuaries[currentStep]?.vtitleDisplayLanguage} />
-            </Grid>
-          </Grid>
-        </BoxCard>
-        {data && <ClubRecordingAudio {...data} />}
-      </Container>
-      {openModal()}
     </Box>
   );
 }

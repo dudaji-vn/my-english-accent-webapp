@@ -3,16 +3,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import FooterBtn from "@/components/FooterBtn";
 import { RecordTypeResponse } from "@/core/type";
-import { useGetAllRecordInChallengeQuery, useGetChallengesInClubQuery, usePrefetch } from "@/core/services/challenge.service";
+import { useGetAllRecordInChallengeQuery, usePrefetch } from "@/core/services/challenge.service";
 import { useRef, useState, useEffect } from "react";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import { IChallengeSummaryDisplay } from "@/core/type/challenge.type";
+import Loading from "@/components/Loading";
 
 export function ClubAudioRecord({ vocabularies, challengeName, clubId, challengeId }: IChallengeSummaryDisplay) {
   const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  console.log(clubId);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectionRecordId, setSelectionRecordId] = useState("");
 
@@ -28,7 +30,7 @@ export function ClubAudioRecord({ vocabularies, challengeName, clubId, challenge
           recordId,
           voiceRecord,
           challengeId,
-          clubId: clubId.id,
+          clubId: clubId,
         },
       }
     );
@@ -38,14 +40,13 @@ export function ClubAudioRecord({ vocabularies, challengeName, clubId, challenge
     setSelectionRecordId(() => value);
     const index = vocabularies.findIndex((record: RecordTypeResponse) => record.recordId === value);
     if (audioRef.current) {
-      (audioRef.current as HTMLAudioElement).src = vocabularies[index].rVoiceSrc;
+      (audioRef.current as HTMLAudioElement).src = vocabularies[index].voiceSrc;
       setIsPlaying(() => true);
     }
   };
 
   useEffect(() => {
     if (audioRef.current) {
-      console.log("isPlaying", isPlaying);
       isPlaying ? audioRef.current.play() : audioRef.current.pause();
     }
   }, [isPlaying]);
@@ -78,7 +79,7 @@ export function ClubAudioRecord({ vocabularies, challengeName, clubId, challenge
               onRedirectRerecordPage({
                 recordId: record.recordId,
                 vocabularyId: record.vocabularyId,
-                voiceRecord: record.rVoiceSrc,
+                voiceRecord: record.voiceSrc,
               })
             }
           >
@@ -95,7 +96,9 @@ export function ClubAudioRecord({ vocabularies, challengeName, clubId, challenge
 export default function ClubRecordingSummaryPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { data } = useGetAllRecordInChallengeQuery(state.challengeId);
+  const { data, isFetching } = useGetAllRecordInChallengeQuery(state.challengeId);
+  console.log(data);
+
   const prefetChallengesInCLub = usePrefetch("getChallengesInClub", {
     force: true,
   });
@@ -107,15 +110,17 @@ export default function ClubRecordingSummaryPage() {
     prefetChallengesInCLub(state.clubId);
   };
 
+  if (isFetching) return <Loading />;
+
   return (
-    <Box className='flex flex-col grow'>
+    <Box className='flex flex-col grow min-h-screen'>
       <Container className='py-4 divider bg-white'>
         <Typography className='text-large-semibold'>Finished</Typography>
       </Container>
 
       <Container className='py-4 bg-gray-100 flex flex-col grow '>
         <Box className='flex flex-col justify-center items-center p-4 bg-white border rounded-t-lg'>
-          <Typography component={"h6"}>{data && data.vocabularies.length}</Typography>
+          <Typography component={"h6"}>{data?.vocabularies.length}</Typography>
           <Typography variant='body2' className='text-base-regular'>
             Sentences practiced
           </Typography>

@@ -1,63 +1,44 @@
-import { Box, Container, IconButton, Avatar, Typography, Button, setRef } from "@mui/material";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { useLocation, useNavigate } from "react-router-dom";
-import FooterCard from "@/components/FooterBtn";
-import { useMultiAudio } from "@/shared/hook/useMultiAudio";
-import { useEffect, useState } from "react";
-import { Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import NoPeople from "@/assets/icon/no-member-club-icon.svg";
+import FooterCard from "@/components/FooterBtn";
 import UserPlayRecord from "@/components/UserPlayRecord";
-import { useGetRecordToListenQuery } from "@/core/services/challenge.service";
+import { useGetRecordToListenByChallengeQuery } from "@/core/services";
 import { RecordTypeResponse, UserResponseType, VocabularyTypeResponse } from "@/core/type";
+import { MultiAudioComponent } from "@/shared/hook/useMultiAudios";
+import { Avatar, Box, Container, IconButton, Typography } from "@mui/material";
+import { useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
 export default function ClubListeningPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { challengeId } = state;
 
-  const { data } = useGetRecordToListenQuery(challengeId);
+  const { data } = useGetRecordToListenByChallengeQuery(challengeId);
 
   const [currentVocabulary, setCurrentVocabulary] = useState(0);
   const [audioSelected, setAudioSelected] = useState("");
-  const { status, players, indexAudio, playAudio } = useMultiAudio();
 
-  const onHandlePlayAll = () => {
-    if (data && data.participants && data.participants.length) {
-      const voiceRecords: { url: string; playing: boolean; played: boolean }[] = data.participants[currentVocabulary].recordUser.map((user: RecordTypeResponse) => ({
-        url: user.rVoiceSrc,
-        playing: false,
-        played: false,
-      }));
-      playAudio(0, voiceRecords);
+  const voiceRecords = useMemo(() => {
+    if (data) {
+      return data.participants[currentVocabulary].recordUser.map((record) => record.voiceSrc);
     }
-  };
+    return [];
+  }, [data?.participants, currentVocabulary]);
 
-  const onSlideChange = (val: any) => {
+  const onSlideChange = (val: SwiperClass) => {
     setAudioSelected(() => "");
     setCurrentVocabulary(() => val.activeIndex);
   };
-
-  const onAudioSelected = (urlSrc: string) => {
-    setAudioSelected(() => urlSrc);
-  };
-
-  useEffect(() => {
-    if (status === "stop") {
-      setAudioSelected(() => "");
-      console.log("ClubListeningPage::useEffect::stop");
-    } else if (indexAudio != -1 && players.length) {
-      setAudioSelected(() => players[indexAudio].url);
-      console.log("ClubListeningPage::useEffect", players[indexAudio].url);
-    }
-  }, [indexAudio, status]);
 
   const renderSlide = () => {
     if (data && data.vocabularies && data.vocabularies.length) {
       return data.vocabularies.map((voca: VocabularyTypeResponse) => {
         return (
           <SwiperSlide key={voca.vocabularyId}>
-            <Box className='bg-white rounded-lg p-4 h-full flex flex-col items-center'>
+            <Box className='bg-white p-4 h-full flex flex-col items-center swiper-slide-transform'>
               <Typography className='text-small-medium'>{voca.vtitleDisplayLanguage}</Typography>
               <Typography className='text-small-regular' variant='body2'>
                 {voca.vphoneticDisplayLanguage}
@@ -76,7 +57,7 @@ export default function ClubListeningPage() {
           <>
             <Typography className='text-base-semibold pb-4'>Participants ({data.participants[currentVocabulary]?.recordUser.length})</Typography>
             {data.participants[currentVocabulary].recordUser.map((recordUser: UserResponseType & RecordTypeResponse) => (
-              <UserPlayRecord key={recordUser.userId} props={{ ...recordUser }} audioSelected={audioSelected} setAudioSelected={onAudioSelected} currentVocabulary={currentVocabulary} />
+              <UserPlayRecord key={recordUser.userId} props={{ ...recordUser }} audioSelected={audioSelected} />
             ))}
           </>
         );
@@ -95,8 +76,8 @@ export default function ClubListeningPage() {
   };
 
   return (
-    <Box className='flex flex-col grow'>
-      <Container className='py-4 divider bg-white'>
+    <Box className='flex flex-col grow min-h-screen'>
+      <Container className='py-4 divider '>
         <Box className='flex items-center gap-2'>
           <IconButton onClick={() => navigate(-1)}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
@@ -104,18 +85,14 @@ export default function ClubListeningPage() {
           <Typography className='text-large-semibold'>{"Word - guessing with designer"}</Typography>
         </Box>
       </Container>
-      <Box className='p-4 max-h-[208px] h-[208px]'>
+      <Box className='p-4 max-h-[208px] h-[208px] bg-gray-100'>
         <Swiper pagination={true} modules={[Pagination]} className='h-full' onSlideChange={onSlideChange}>
           {renderSlide()}
         </Swiper>
       </Box>
       <Box className='p-4 bg-white grow'>{renderParticipant()}</Box>
       <FooterCard classes='items-center'>
-        <Button variant='contained' className='rounded-md m-auto grow' onClick={onHandlePlayAll}>
-          <Typography className='text-base-medium ' color={"white"}>
-            Listen all
-          </Typography>
-        </Button>
+        <MultiAudioComponent audioSrc={voiceRecords} />
       </FooterCard>
     </Box>
   );

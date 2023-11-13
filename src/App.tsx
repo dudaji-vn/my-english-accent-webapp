@@ -10,14 +10,14 @@ const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
 const RecordingPage = lazy(() => import("@/pages/Record"));
 const RecordingProgressPage = lazy(() => import("@/pages/Record/RecordProgress"));
-const RecordSummaryPage = lazy(() => import("@/pages/Record/RecordSummary"));
-const RerecordingProgressPage = lazy(() => import("@/pages/Record/RerecordProgress"));
+const RerecordingProgressPage = lazy(() => import("@/pages/Club/ClubRerecordProgress"));
 const ClubPage = lazy(() => import("@/pages/Club"));
 const AddNewClubPage = lazy(() => import("@/pages/Club/AddNewClub"));
 const ClubAddMemberPage = lazy(() => import("@/pages/Club/ClubAddMember"));
 const ClubRecordingPage = lazy(() => import("@/pages/Club/ClubRecording"));
 const ClubListeningPage = lazy(() => import("@/pages/Club/ClubListening"));
 const ClubRecordingSummaryPage = lazy(() => import("@/pages/Club/ClubRecordingSummary"));
+const ClubDetailPage = lazy(() => import("@/pages/Club/ClubDetail"));
 const ClubStudyPage = lazy(() => import("@/pages/Club/ClubStudy"));
 const ClubMemberPage = lazy(() => import("@/pages/Club/ClubMember"));
 const ClubInfoPage = lazy(() => import("@/pages/Club/ClubInfo"));
@@ -59,11 +59,20 @@ function App() {
           <Route path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
           <Route path={removeSlash(ROUTER.RECORD_LIST)} element={<RecordSentenceList />} />
           <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
-          {/* CLUB */}
-          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/:clubId"} element={<ClubStudyPage />} />
-          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_MEMBER + "/:clubId"} element={<ClubMemberPage />} />
-          <Route path={ROUTER.CLUB_DETAIL + ROUTER.CLUB_INFO + "/:clubId"} element={<ClubInfoPage />} />
+          {/* CLUB DETAIL*/}
+          <Route path={ROUTER.CLUB_DETAIL} element={<ClubDetailPage />}>
+            <Route index path={removeSlash(ROUTER.CLUB_STUDY) + "/:clubId"} element={<ClubStudyPage />} />
+            <Route path={removeSlash(ROUTER.CLUB_MEMBER) + "/:clubId"} element={<ClubMemberPage />} />
+            <Route path={removeSlash(ROUTER.CLUB_INFO) + "/:clubId"} element={<ClubInfoPage />} />
+          </Route>
+
+          <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
+          <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
+          <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
+          <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
+          <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
         </Route>
+
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
           <Route index element={<RecordingPage />} />
           <Route path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
@@ -72,12 +81,6 @@ function App() {
           <Route path={ROUTER.LISTENING} element={<RecordingPage />} />
           {/* CLUB */}
           <Route path={ROUTER.CLUB} element={<ClubPage />} />
-          <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
-          <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
-          <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
-          <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
-          <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
-          {/* CLUB DETAIL */}
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>

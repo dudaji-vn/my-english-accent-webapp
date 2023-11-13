@@ -32,7 +32,7 @@ export function AudioRecord({ vocabularies, lectureName }: ILectureDisplay) {
   const onHanlePlayAudio = async (value: string) => {
     setSelectionAudio(() => value);
     const index = vocabularies.findIndex((record: RecordTypeResponse) => record.recordId === value);
-    const newAudio = new Audio(vocabularies[index].rVoiceSrc);
+    const newAudio = new Audio(vocabularies[index].voiceSrc);
     setAudio(() => newAudio);
     setIsPlaying(() => true);
   };
