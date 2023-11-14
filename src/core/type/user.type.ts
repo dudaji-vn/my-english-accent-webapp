@@ -17,6 +17,7 @@ export interface  UserResponseType {
   nickName: string;
   avatarUrl: string;
   favoriteUserIds: string[];
+  favoriteLectureIds: string[];
   googleId: string;
   displayLanguage: Language;
   email: string;

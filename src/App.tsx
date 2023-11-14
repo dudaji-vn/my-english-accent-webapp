@@ -2,7 +2,7 @@ import { Suspense, lazy, useCallback, useEffect } from "react";
 import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import persist from "./shared/utils/persist.util";
 import ROUTER from "./shared/const/router.const";
-import DrawerNavigate from "./components/Drawer";
+import DrawerNavigate from "./components/DrawerNavigate";
 import Loading from "./components/Loading";
 import RecordSentenceList from "./pages/Record/RecordList";
 
@@ -21,6 +21,8 @@ const ClubDetailPage = lazy(() => import("@/pages/Club/ClubDetail"));
 const ClubStudyPage = lazy(() => import("@/pages/Club/ClubStudy"));
 const ClubMemberPage = lazy(() => import("@/pages/Club/ClubMember"));
 const ClubInfoPage = lazy(() => import("@/pages/Club/ClubInfo"));
+const ListenPage = lazy(() => import("@/pages/Listen"));
+const ManagePlaylist = lazy(() => import("@/pages/Listen/ManagePlaylist"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 
 export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => {
@@ -56,9 +58,9 @@ function App() {
         </Route>
         <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
           {/* RECORD */}
-          <Route path={removeSlash(ROUTER.RECORD) + "/:category"} element={<RecordingProgressPage />} />
-          <Route path={removeSlash(ROUTER.RECORD_LIST)} element={<RecordSentenceList />} />
-          <Route path={removeSlash(ROUTER.RERECORD) + "/:category"} element={<RerecordingProgressPage />} />
+          <Route path={ROUTER.RECORD + "/:category"} element={<RecordingProgressPage />} />
+          <Route path={ROUTER.RECORD_LIST} element={<RecordSentenceList />} />
+          <Route path={ROUTER.RERECORD + "/:category"} element={<RerecordingProgressPage />} />
           {/* CLUB DETAIL*/}
           <Route path={ROUTER.CLUB_DETAIL} element={<ClubDetailPage />}>
             <Route index path={removeSlash(ROUTER.CLUB_STUDY) + "/:clubId"} element={<ClubStudyPage />} />
@@ -71,14 +73,16 @@ function App() {
           <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
           <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
           <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
+
+          {/* LISTEN  */}
+          <Route path={ROUTER.LISTENING + ROUTER.MANAGE_PLAYLIST} element={<ManagePlaylist />} />
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
           <Route index element={<Navigate replace to={ROUTER.RECORD} />} />
-          <Route path={removeSlash(ROUTER.RECORD)} element={<RecordingPage />} />
-
+          <Route path={ROUTER.RECORD} element={<RecordingPage />} />
           {/* TODO: create LISTENING PAGE */}
-          <Route path={ROUTER.LISTENING} element={<RecordingPage />} />
+          <Route path={ROUTER.LISTENING} element={<ListenPage />} />
           {/* CLUB */}
           <Route path={ROUTER.CLUB} element={<ClubPage />} />
         </Route>

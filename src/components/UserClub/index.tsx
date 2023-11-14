@@ -1,6 +1,6 @@
 import { Typography, Avatar } from "@mui/material";
 import BoxCard from "../BoxCard";
-import NationalityCard from "../NationalityCard";
+import NationalityCard from "../PersonInfo";
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import { UserResponseType } from "@/core/type";
 

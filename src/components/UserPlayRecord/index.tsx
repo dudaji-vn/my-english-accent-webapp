@@ -1,7 +1,7 @@
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
-import NationalityCard from "@/components/NationalityCard";
+import NationalityCard from "@/components/PersonInfo";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { saveAudio } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
