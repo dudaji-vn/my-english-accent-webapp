@@ -4,6 +4,7 @@ import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 
 import ROUTER from "@/shared/const/router.const";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useGetClubDetailQuery } from "@/core/services";
 
 type PATH = "study" | "member" | "info";
 
@@ -13,6 +14,8 @@ export default function ClubDetailPage() {
   const { pathname } = useLocation();
   const { clubId } = useParams();
   const [path, setPath] = useState<PATH>(pathname.split("/")[2] as PATH);
+
+  const { data } = useGetClubDetailQuery(clubId ?? "");
 
   const removeSlash = useCallback((value: string) => {
     return value.replace("/", "");
@@ -41,7 +44,7 @@ export default function ClubDetailPage() {
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
           {/* TODO: change clubname */}
-          <Typography className='text-large-semibold grow'>{"clubName"}</Typography>
+          <Typography className='text-large-semibold grow'>{data?.clubName}</Typography>
         </Box>
       </Container>
       <Box className='bg-white divider'>

@@ -22,6 +22,12 @@ const ClubController = {
       url: `/${clubPath}/getMembersInfo/${clubId}`,
     };
   },
+
+  getClubDetail: (clubId: string) => {
+    return {
+      url: `/${clubPath}/getDetailClub/${clubId}`,
+    };
+  },
 };
 
 export default ClubController;

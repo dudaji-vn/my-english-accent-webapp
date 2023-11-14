@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
 import ClubController from "../controllers/club.controller";
-import { ClubRequest, IClubDisplay, UserResponseType } from "../type";
+import { ClubRequest, ClubResponseType, IClubDisplay, UserResponseType } from "../type";
 import baseQuery from "..";
 
 export const ClubStudyApi = createApi({
@@ -31,9 +31,15 @@ export const ClubStudyApi = createApi({
       query: ClubController.getAllMembersClub,
       transformResponse: (response: { data: { owner: UserResponseType; members: UserResponseType[] } }) => response.data,
     }),
+
+    getClubDetail: builder.query<ClubResponseType, string>({
+      query: ClubController.getAllMembersClub,
+      transformResponse: (response: { data: ClubResponseType }) => response.data,
+      providesTags: (result, error, arg) => (result ? [{ type: "Club" as const, id: arg }, "Club"] : ["Club"]),
+    }),
   }),
 });
 
-export const { useGetClubsQuery, useAddClubMutation, useUpdateClubMutation, useGetALlMembersClubQuery } = ClubStudyApi;
+export const { useGetClubsQuery, useAddClubMutation, useUpdateClubMutation, useGetALlMembersClubQuery, useGetClubDetailQuery } = ClubStudyApi;
 
 export default ClubStudyApi;
