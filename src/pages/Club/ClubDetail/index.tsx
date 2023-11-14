@@ -4,6 +4,7 @@ import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 
 import ROUTER from "@/shared/const/router.const";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useGetClubDetailQuery } from "@/core/services";
 
 type PATH = "study" | "member" | "info";
 
@@ -13,6 +14,8 @@ export default function ClubDetailPage() {
   const { pathname } = useLocation();
   const { clubId } = useParams();
   const [path, setPath] = useState<PATH>(pathname.split("/")[2] as PATH);
+
+  const { data } = useGetClubDetailQuery(clubId ?? "");
 
   const removeSlash = useCallback((value: string) => {
     return value.replace("/", "");
@@ -41,14 +44,14 @@ export default function ClubDetailPage() {
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
           {/* TODO: change clubname */}
-          <Typography className='text-large-semibold grow'>{"clubName"}</Typography>
+          <Typography className='text-large-semibold grow'>{data?.clubName}</Typography>
         </Box>
       </Container>
       <Box className='bg-white divider'>
         <Tabs value={path} onChange={handleChange} aria-label='tabs' variant='fullWidth'>
           <Tab label={tabItems[0]} id={`listen-tab-${path}`} aria-controls={`listen-tabpanel-${path}`} value={removeSlash(ROUTER.CLUB_STUDY)} />
           <Tab label={tabItems[1]} id={`listen-tab-${path}`} aria-controls={`listten-tabpanel-${path}`} value={removeSlash(ROUTER.CLUB_MEMBER)} />
-          <Tab label={tabItems[2]} id={`listen-tab-${path}`} aria-controls={`listten-tabpanel-${path}`} value={removeSlash(ROUTER.CLUB_INFO)} />
+          {/* <Tab label={tabItems[2]} id={`listen-tab-${path}`} aria-controls={`listten-tabpanel-${path}`} value={removeSlash(ROUTER.CLUB_INFO)} /> */}
         </Tabs>
       </Box>
       <Outlet />
