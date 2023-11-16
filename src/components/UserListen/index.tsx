@@ -1,10 +1,10 @@
-import { Typography, Avatar } from "@mui/material";
-import BoxCard from "../BoxCard";
-import NationalityCard from "../PersonInfo";
 import MessageIcon from "@/assets/icon/message-icon.svg";
-import { Language, UserResponseType } from "@/core/type";
+import { Language } from "@/core/type";
+import { PeopleistenTypeResponse } from "@/core/type/listen.type";
+import { Avatar, Box, Typography } from "@mui/material";
+import NationalityCard from "../PersonInfo";
 
-export default function UserClub(props: UserResponseType) {
+export default function UserListen(props: PeopleistenTypeResponse) {
   const language = (language: Language) => {
     const lang = {
       vn: "Vietnamese",
@@ -15,12 +15,12 @@ export default function UserClub(props: UserResponseType) {
   };
 
   return (
-    <BoxCard classes='bg-white p-4 mb-4'>
+    <Box>
       <NationalityCard isShowAvatar isShowName userInfo={props} />
       <Typography className='text-extra-small-regular flex gap-1 mt-2'>
         <Avatar src={MessageIcon} component={"span"} className='w-4 h-4' />
         Speak {language(props.nativeLanguage)} (native), {language(props.displayLanguage)}
       </Typography>
-    </BoxCard>
+    </Box>
   );
 }

@@ -60,6 +60,12 @@ h6 {
   font-weight: 500
 }
 
+.text-small-semibold {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600
+}
+
 .text-extra-small-regular {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -353,6 +359,10 @@ h6 {
   margin-top: 1.5rem
 }
 
+#root :is(.mt-36) {
+  margin-top: 9rem
+}
+
 #root :is(.block) {
   display: block
 }
@@ -469,6 +479,10 @@ h6 {
   width: 100%
 }
 
+#root :is(.w-64) {
+  width: 16rem
+}
+
 #root :is(.grow) {
   flex-grow: 1
 }
@@ -554,6 +568,10 @@ h6 {
   align-self: center
 }
 
+#root :is(.justify-self-end) {
+  justify-self: end
+}
+
 #root :is(.break-keep) {
   word-break: keep-all
 }
@@ -564,6 +582,10 @@ h6 {
 
 #root :is(.rounded-md) {
   border-radius: 0.375rem
+}
+
+#root :is(.rounded-full) {
+  border-radius: 9999px
 }
 
 #root :is(.rounded-t-lg) {
@@ -592,6 +614,11 @@ h6 {
   border-color: rgb(223 228 234 / var(--tw-border-opacity))
 }
 
+#root :is(.border-purple-200) {
+  --tw-border-opacity: 1;
+  border-color: rgb(221 214 254 / var(--tw-border-opacity))
+}
+
 #root :is(.bg-gray-100) {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity))
@@ -615,6 +642,11 @@ h6 {
 #root :is(.bg-white) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+
+#root :is(.bg-purple-200) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(221 214 254 / var(--tw-bg-opacity))
 }
 
 #root :is(.p-2) {
@@ -678,6 +710,11 @@ h6 {
   text-transform: capitalize
 }
 
+#root :is(.text-secondary) {
+  --tw-text-opacity: 1;
+  color: rgb(19 194 150 / var(--tw-text-opacity))
+}
+
 #root :is(.text-textSecondary) {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity))
@@ -686,11 +723,6 @@ h6 {
 #root :is(.text-white) {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity))
-}
-
-#root :is(.text-secondary) {
-  --tw-text-opacity: 1;
-  color: rgb(19 194 150 / var(--tw-text-opacity))
 }
 
 #root :is(.shadow-\[0_1px_3px_0px_\#A6AFC366\]) {
@@ -721,6 +753,16 @@ h6 {
 #root :is(.last\:rounded-b-lg:last-child) {
   border-bottom-right-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem
+}
+
+#root :is(.active\:bg-primary:active) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
+}
+
+#root :is(.active\:bg-purple-200:active) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(221 214 254 / var(--tw-bg-opacity))
 }
 
 @media (min-width: 640px) {

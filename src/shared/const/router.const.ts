@@ -8,6 +8,7 @@ const ROUTER = {
   LISTENING: "/listening",
   LISTENING_EMPTY_PLAYLIST: "/listening-empty-playlist",
   MANAGE_PLAYLIST: "/manage-playlist",
+  CREATE_PLAYLIST: "/create-playlist",
 
   RECORD: "/record",
   RECORD_LIST: "/record/list",

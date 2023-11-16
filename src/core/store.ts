@@ -8,6 +8,7 @@ import ClubStudyApi from "@/core/services/club.service";
 import ChallengeApi from "@/core/services/challenge.service";
 import GlobalReducer from "@/core/store/index";
 import RecordApi from "./services/record.service";
+import ListenApi from "./services/listen.service";
 
 const middleware = [
   LectureApi.middleware,
@@ -18,6 +19,7 @@ const middleware = [
   ChallengeApi.middleware,
   FakeUserApi.middleware,
   RecordApi.middleware,
+  ListenApi.middleware,
 ] as any;
 
 export const store = configureStore({
@@ -31,6 +33,7 @@ export const store = configureStore({
     ChallengeApi: ChallengeApi.reducer,
     FakeUserApi: FakeUserApi.reducer,
     RecordApi: RecordApi.reducer,
+    ListenApi: ListenApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

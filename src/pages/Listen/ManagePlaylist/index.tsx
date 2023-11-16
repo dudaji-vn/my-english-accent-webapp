@@ -1,27 +1,84 @@
-import { Avatar, Box, Button, Container, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
-import WaveIcon from "@/assets/icon/wave-icon.svg";
 import CloseIcon from "@/assets/icon/close-icon.svg";
+import { Avatar, Box, Button, Container, IconButton, Tab, Tabs, Typography } from "@mui/material";
 
+import FooterCard from "@/components/FooterBtn";
+import LecturePlaylist from "@/components/LecturePlaylist";
+import UserPlaylist from "@/components/UserPlaylist";
+import { useCreateOrUpdatePlaylistMutation, useGetLecturesAvailableQuery, useGetUsersAvailableQuery } from "@/core/services/listen.service";
+import { pluralize } from "@/shared/utils/pluralize.util";
+import _ from "lodash";
+import React, { SyntheticEvent, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import React from "react";
 
-const steps = ["Select lectures", "Select people"];
+const tabItems = ["Lectures", "Peoples"];
 
-export default function ManagePlaylist() {
+export default function CreatePlaylist() {
   const navigate = useNavigate();
+  const { data: LectureData } = useGetLecturesAvailableQuery();
+  const { data: PeopleData } = useGetUsersAvailableQuery();
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [updatePlaylist] = useCreateOrUpdatePlaylistMutation();
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const [activeTab, setActiveTab] = React.useState("Lectures");
+  const [lectureList, setLectureList] = useState<string[]>([]);
+  const [peopleList, setPeopleList] = useState<string[]>([]);
+
+  const [disabledWhenUpdate, setDisableWhenUpdate] = useState(false);
+  const disableBtn = useMemo(() => {
+    switch (activeTab) {
+      case "Lectures":
+        const bareLectureList = LectureData?.filter((val) => val.isSelected).map((val) => val.lectureId);
+        return !lectureList.length || _.isEqual(bareLectureList, lectureList);
+      case "Peoples":
+        const barePeopleList = PeopleData?.filter((val) => val.isSelected).map((val) => val.userId);
+        return !peopleList.length || _.isEqual(barePeopleList, peopleList);
+    }
+  }, [activeTab, lectureList, peopleList, PeopleData, LectureData]);
+
+  const handleNext = async () => {
+    setDisableWhenUpdate(() => true);
+    await updatePlaylist({
+      favoriteLectureIds: lectureList,
+      favoriteUserIds: peopleList,
+    }).unwrap();
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const handleChange = (event: SyntheticEvent, path: string) => {
+    setActiveTab(path);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
+  const renderList = () => {
+    switch (activeTab) {
+      case "Lectures":
+        return (
+          <LecturePlaylist
+            lectureList={lectureList}
+            setLectureList={(val: string[]) => {
+              setLectureList(() => val);
+              setDisableWhenUpdate(() => false);
+            }}
+          />
+        );
+      case "Peoples":
+        return (
+          <UserPlaylist
+            peopleList={peopleList}
+            setPeopleList={(val: string[]) => {
+              setPeopleList(() => val);
+              setDisableWhenUpdate(() => false);
+            }}
+          />
+        );
+    }
+  };
+
+  const renderFooterTitle = () => {
+    switch (activeTab) {
+      case "Lectures":
+        return pluralize(lectureList.length, "lecture") + " selected";
+      case "Peoples":
+        return pluralize(peopleList.length, "people", "") + " selected";
+    }
   };
 
   return (
@@ -31,42 +88,25 @@ export default function ManagePlaylist() {
           <IconButton onClick={() => navigate(-1)}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
-          <Typography className='text-large-semibold'>Create playlist</Typography>
+          <Typography className='text-large-semibold'>Custom playlist</Typography>
         </Box>
       </Container>
 
-      <Box>
-        <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const stepProps: { completed?: boolean } = {};
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
-        {activeStep === steps.length ? (
-          <React.Fragment>
-            <Typography>All steps completed - you&apos;re finished</Typography>
-            <Box>
-              <Box />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <Typography>Step {activeStep + 1}</Typography>
-            <Box>
-              <Button color='inherit' disabled={activeStep === 0} onClick={handleBack}>
-                Back
-              </Button>
-              <Box />
-              <Button onClick={handleNext}>{activeStep === steps.length - 1 ? "Finish" : "Next"}</Button>
-            </Box>
-          </React.Fragment>
-        )}
+      <Box className='bg-white divider'>
+        <Tabs value={activeTab} onChange={handleChange} aria-label='tabs' variant='fullWidth'>
+          <Tab label={tabItems[0]} id={`listen-tab-${activeTab}`} aria-controls={`listen-tabpanel-${activeTab}`} value={"Lectures"} />
+          <Tab label={tabItems[1]} id={`listen-tab-${activeTab}`} aria-controls={`listten-tabpanel-${activeTab}`} value={"Peoples"} />
+        </Tabs>
       </Box>
+
+      <Box className='flex flex-col p-4 grow  bg-gray-100 gap-4'>{renderList()}</Box>
+
+      <FooterCard classes='items-center justify-between'>
+        <Typography variant='body2'>{renderFooterTitle()}</Typography>
+        <Button variant='contained' className='rounded-md' onClick={handleNext} disabled={disableBtn || disabledWhenUpdate}>
+          <Typography className='text-base-medium text-white'>Save</Typography>
+        </Button>
+      </FooterCard>
     </Box>
   );
 }
