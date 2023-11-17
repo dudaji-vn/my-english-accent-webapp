@@ -14,8 +14,8 @@ const tabItems = ["Lectures", "Peoples"];
 
 export default function CreatePlaylist() {
   const navigate = useNavigate();
-  const { data: LectureData } = useGetLecturesAvailableQuery();
-  const { data: PeopleData } = useGetUsersAvailableQuery();
+  const { data: LectureData, refetch: lectureRefetch } = useGetLecturesAvailableQuery();
+  const { data: PeopleData, refetch: PeopleRefetch } = useGetUsersAvailableQuery();
 
   const [updatePlaylist] = useCreateOrUpdatePlaylistMutation();
 
@@ -37,10 +37,22 @@ export default function CreatePlaylist() {
 
   const handleNext = async () => {
     setDisableWhenUpdate(() => true);
-    await updatePlaylist({
+
+    const response = await updatePlaylist({
       favoriteLectureIds: lectureList,
       favoriteUserIds: peopleList,
     }).unwrap();
+
+    if (response) {
+      switch (activeTab) {
+        case "Lectures":
+          lectureRefetch();
+          break;
+        case "Peoples":
+          PeopleRefetch();
+          break;
+      }
+    }
   };
 
   const handleChange = (event: SyntheticEvent, path: string) => {

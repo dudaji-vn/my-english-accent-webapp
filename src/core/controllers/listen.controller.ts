@@ -22,6 +22,19 @@ const ListenController = {
       body: payload,
     };
   },
+
+  getPlaylistListenByLecture: (lectureId: string) => {
+    return {
+      url: `/${listenPath}/getPlaylistListenByLecture`,
+      params: { lectureId },
+    };
+  },
+
+  getPlaylistSummary: () => {
+    return {
+      url: `/${listenPath}/getPlaylistSummary`,
+    };
+  },
 };
 
 export default ListenController;

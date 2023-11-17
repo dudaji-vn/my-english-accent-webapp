@@ -77,7 +77,7 @@ function App() {
 
           {/* LISTEN  */}
           <Route path={ROUTER.LISTENING + ROUTER.MANAGE_PLAYLIST} element={<ManagePlaylist />} />
-          <Route path={ROUTER.LISTENING + ROUTER.CREATE_PLAYLIST} element={<ManagePlaylist />} />
+          <Route path={ROUTER.LISTENING + ROUTER.CREATE_PLAYLIST} element={<CreatePlaylist />} />
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>

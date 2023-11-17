@@ -20,6 +20,7 @@ module.exports = {
         purple: {
           50: "#F9F5FF",
           200: "#DDD6FE",
+          300: "#C4B5FD",
         },
         white: "#FFF",
         stroke: "#DFE4EA",

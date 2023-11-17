@@ -1,4 +1,7 @@
+import { IRecordOfUser } from "./challenge.type";
+import { LectureResponseType } from "./lecture.type";
 import { Language } from "./user.type";
+import { VocabularyTypeResponse } from "./vocabulary.type";
 
 export interface LectureListenTypeResponse {
   totalPeople: number;
@@ -22,4 +25,16 @@ export interface PeopleistenTypeResponse {
 export interface PlaylistRequest {
   favoriteUserIds: string[];
   favoriteLectureIds: string[];
+}
+
+export interface PlaylistLecture {
+  totalLecture: number;
+  totalPeople: number;
+  lectures: LectureResponseType[];
+}
+
+export interface PlaylistDetailLecture {
+  lecture: LectureResponseType;
+  vocabularies: VocabularyTypeResponse[];
+  participants: IRecordOfUser[];
 }
