@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { VocabularyApi } from "../services";
 import { EnrollmentStep, LectureResponseType } from "../type";
 import ListenApi from "../services/listen.service";
+import { UserPlayingType } from "@/components/PlaylistPod";
 
 interface GlobalStoreType {
   recordPage: EnrollmentStep;
@@ -17,6 +18,7 @@ interface GlobalStoreType {
     lectureId: string;
     currentIndex: number;
     total: number;
+    usersRecord: UserPlayingType[];
   };
 }
 
@@ -33,6 +35,7 @@ const initialState: GlobalStoreType = {
     lectureId: "",
     currentIndex: 0,
     total: 0,
+    usersRecord: [],
   },
 };
 
@@ -111,6 +114,17 @@ const globalSlice = createSlice({
         currentIndex: 0,
         lectureId: lectures[0].lectureId,
         total: lectures.length,
+        usersRecord: [],
+      };
+    });
+    builder.addMatcher(ListenApi.endpoints.getPlaylistListenByLecture.matchFulfilled, (state, action) => {
+      const usersRecord = action.payload.participants[0].recordUser.map((user) => ({ ...user, isPlaying: false, isPlayed: false }));
+
+
+      console.log("getPlaylistListenByLecture::")
+      state.listenPage = {
+        ...state.listenPage,
+        usersRecord,
       };
     });
   },

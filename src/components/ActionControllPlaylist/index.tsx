@@ -10,21 +10,21 @@ import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateIndexListenPage } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
 import { Avatar, Box, IconButton } from "@mui/material";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 interface ActionControllPlaylistProps {
   usersRecord: (UserResponseType & RecordTypeResponse & { isPlaying: boolean; isPlayed: boolean })[];
   setUsersRecord: Function;
-  setSlideIndex: Function;
+  onNextSlideIndex: Function;
 }
-export default forwardRef(function ActionControllPlaylist({ usersRecord, setUsersRecord, setSlideIndex }: ActionControllPlaylistProps, ref) {
+export default forwardRef(function ActionControllPlaylist({ usersRecord, setUsersRecord, onNextSlideIndex }: ActionControllPlaylistProps, ref) {
   const dispatch = useAppDispatch();
   const currentIndex = useAppSelector((state) => state.GlobalStore.listenPage.currentIndex);
   const totalLecture = useAppSelector((state) => state.GlobalStore.listenPage.total);
   const [isPlayingStatus, setIsPlayingStatus] = useState(false);
   const [indexPlaying, setIndexPlaying] = useState(0);
   const audioElement = useRef<HTMLAudioElement | null>(null);
-
+  
   const onHandleToNewLecture = (isNext: boolean) => {
     if (isNext) {
       if (currentIndex < totalLecture - 1) {
@@ -61,17 +61,25 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
     const index = nextIndex ?? indexPlaying;
     setIndexPlaying(index);
     setUsersRecord(getNewUserRecord(index));
+    console.log("onHandlePlayAudio::");
+  };
+
+  console.log("onPlayNonStop::", usersRecord);
+
+  const onPlayNonStop = () => {
+    // console.log("onPlayNonStop::", usersRecord);
+    // setUsersRecord(getNewUserRecord(0));
   };
 
   const onHandleEndAudio = () => {
     setIsPlayingStatus((preVal) => !preVal);
     const nextIndex = indexPlaying + 1;
     if (nextIndex + 1 > usersRecord.length) {
-      setUsersRecord(getNewUserRecord(usersRecord.length - 1, true));
+      // setUsersRecord(getNewUserRecord(usersRecord.length - 1, true));
       setIndexPlaying(() => 0);
 
       if (currentIndex < totalLecture - 1) {
-        setSlideIndex();
+        onNextSlideIndex();
       }
     } else {
       onHandlePlayAudio(indexPlaying + 1);
@@ -82,13 +90,22 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
     onHandlePlayAudio,
     setIndexPlaying,
     setIsPlayingStatus,
+    onPlayNonStop,
   }));
 
   useEffect(() => {
     if (audioElement.current) {
       if (isPlayingStatus) {
-        audioElement.current.play().catch((error) => console.log(error));
+        console.log("PLAY true");
+        audioElement.current.play().catch((error) => {
+          if (!audioElement.current) return;
+          audioElement.current.pause();
+          audioElement.current.play();
+          console.log(error);
+        });
       } else {
+        console.log("PLAY false");
+
         audioElement.current.pause();
       }
     }
