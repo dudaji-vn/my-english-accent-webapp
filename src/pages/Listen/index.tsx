@@ -7,12 +7,13 @@ import { pluralize } from "@/shared/utils/pluralize.util";
 import Loading from "@/components/Loading";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
+import ListenEmptyPlaylistPage from "./EmptyPlaylist";
 
 export default function ListenPage() {
   const navigate = useNavigate();
   const { data, isFetching } = useGetPlaylistSummaryQuery();
 
-  if (isFetching) <Loading />;
+  if (isFetching) return <Loading />;
 
   return (
     <Box className='p-4'>

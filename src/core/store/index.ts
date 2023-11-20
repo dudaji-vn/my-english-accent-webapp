@@ -16,9 +16,11 @@ interface GlobalStoreType {
   listenPage: {
     lectures: LectureResponseType[];
     lectureId: string;
-    currentIndex: number;
-    total: number;
+    currentLectureIndex: number;
+    totalLecture: number;
+    isTheLastVocabulary: boolean;
     usersRecord: UserPlayingType[];
+    isPlayingStatus: boolean;
   };
 }
 
@@ -33,9 +35,11 @@ const initialState: GlobalStoreType = {
   listenPage: {
     lectures: [],
     lectureId: "",
-    currentIndex: 0,
-    total: 0,
+    currentLectureIndex: 0,
+    totalLecture: 0,
     usersRecord: [],
+    isTheLastVocabulary: false,
+    isPlayingStatus: false,
   },
 };
 
@@ -79,19 +83,33 @@ const globalSlice = createSlice({
 
       state.listenPage = {
         ...state.listenPage,
-        currentIndex: index,
+        currentLectureIndex: index,
         lectureId: action.payload,
       };
     },
 
     updateIndexListenPage: (state: GlobalStoreType, action: PayloadAction<number>) => {
-      const currentIndex = state.listenPage.currentIndex;
+      const currentIndex = state.listenPage.currentLectureIndex;
       const newIndex = currentIndex + action.payload;
 
       state.listenPage = {
         ...state.listenPage,
-        currentIndex: newIndex,
+        currentLectureIndex: newIndex,
         lectureId: state.listenPage.lectures[newIndex].lectureId,
+      };
+    },
+
+    updateIsTheLastVocabulary: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
+      state.listenPage = {
+        ...state.listenPage,
+        isTheLastVocabulary: action.payload,
+      };
+    },
+
+    updatePlayingStatus: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
+      state.listenPage = {
+        ...state.listenPage,
+        isPlayingStatus: action.payload,
       };
     },
   },
@@ -111,17 +129,16 @@ const globalSlice = createSlice({
 
       state.listenPage = {
         lectures,
-        currentIndex: 0,
+        currentLectureIndex: 0,
         lectureId: lectures[0].lectureId,
-        total: lectures.length,
+        totalLecture: lectures.length,
         usersRecord: [],
+        isTheLastVocabulary: false,
+        isPlayingStatus: false,
       };
     });
     builder.addMatcher(ListenApi.endpoints.getPlaylistListenByLecture.matchFulfilled, (state, action) => {
       const usersRecord = action.payload.participants[0].recordUser.map((user) => ({ ...user, isPlaying: false, isPlayed: false }));
-
-
-      console.log("getPlaylistListenByLecture::")
       state.listenPage = {
         ...state.listenPage,
         usersRecord,
@@ -130,6 +147,7 @@ const globalSlice = createSlice({
   },
 });
 
-export const { saveAudio, setPlayAll, nextIndex, resetCLubPage, updateLectureIdListenPage, updateIndexListenPage } = globalSlice.actions;
+export const { saveAudio, setPlayAll, nextIndex, resetCLubPage, updateLectureIdListenPage, updateIndexListenPage, updateIsTheLastVocabulary, updatePlayingStatus } =
+  globalSlice.actions;
 
 export default globalSlice.reducer;

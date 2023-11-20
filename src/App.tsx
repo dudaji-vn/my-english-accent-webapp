@@ -24,6 +24,7 @@ const ClubInfoPage = lazy(() => import("@/pages/Club/ClubInfo"));
 const ListenPage = lazy(() => import("@/pages/Listen"));
 const ManagePlaylist = lazy(() => import("@/pages/Listen/ManagePlaylist"));
 const CreatePlaylist = lazy(() => import("@/pages/Listen/CreatePlaylist"));
+const SelectLecture = lazy(() => import("@/pages/Listen/SelectLecture"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 
 export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => {
@@ -78,6 +79,7 @@ function App() {
           {/* LISTEN  */}
           <Route path={ROUTER.LISTENING + ROUTER.MANAGE_PLAYLIST} element={<ManagePlaylist />} />
           <Route path={ROUTER.LISTENING + ROUTER.CREATE_PLAYLIST} element={<CreatePlaylist />} />
+          <Route path={ROUTER.LISTENING + ROUTER.SELECT_LECTURE} element={<SelectLecture />} />
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>

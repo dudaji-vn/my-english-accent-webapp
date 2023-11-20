@@ -1,30 +1,46 @@
 import DisableNextIcon from "@/assets/icon/disable-next-icon.svg";
 import DisablePreviosIcon from "@/assets/icon/disable-previous-icon.svg";
 import LoopIcon from "@/assets/icon/loop-icon.svg";
+import ActivedLoopIcon from "@/assets/icon/active-loop-icon.svg";
 import NextIcon from "@/assets/icon/next-icon.svg";
 import PauseIcon from "@/assets/icon/pause-icon.svg";
 import PlayIcon from "@/assets/icon/play-icon.svg";
+import VerticalMore from "@/assets/icon/vertial-more-icon.svg";
 import PreviosIcon from "@/assets/icon/previos-icon.svg";
 import ShuffleIcon from "@/assets/icon/shuffle-icon.svg";
+import ActivedShuffleIcon from "@/assets/icon/shuffled-active-icon.svg";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateIndexListenPage } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
+import { getShuffledArr } from "@/shared/utils/getShuffleArray.util";
 import { Avatar, Box, IconButton } from "@mui/material";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ROUTER from "@/shared/const/router.const";
 
+export interface ActionControllRef {
+  onHandlePlayAudio: Function;
+  setIndexPlaying: Function;
+  setIsPlayingStatus: Function;
+  getIsPlayingStatus: Function;
+}
 interface ActionControllPlaylistProps {
   usersRecord: (UserResponseType & RecordTypeResponse & { isPlaying: boolean; isPlayed: boolean })[];
   setUsersRecord: Function;
   onNextSlideIndex: Function;
+  setPlayingStatus: Function;
 }
-export default forwardRef(function ActionControllPlaylist({ usersRecord, setUsersRecord, onNextSlideIndex }: ActionControllPlaylistProps, ref) {
+export default forwardRef(function ActionControllPlaylist({ usersRecord, setUsersRecord, onNextSlideIndex, setPlayingStatus }: ActionControllPlaylistProps, ref) {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const currentIndex = useAppSelector((state) => state.GlobalStore.listenPage.currentIndex);
-  const totalLecture = useAppSelector((state) => state.GlobalStore.listenPage.total);
+  const currentIndex = useAppSelector((state) => state.GlobalStore.listenPage.currentLectureIndex);
+  const totalLecture = useAppSelector((state) => state.GlobalStore.listenPage.totalLecture);
+  const isTheLastVocabulary = useAppSelector((state) => state.GlobalStore.listenPage.isTheLastVocabulary);
   const [isPlayingStatus, setIsPlayingStatus] = useState(false);
   const [indexPlaying, setIndexPlaying] = useState(0);
+  const [isLoop, setIsLoop] = useState(false);
   const audioElement = useRef<HTMLAudioElement | null>(null);
-  
+
   const onHandleToNewLecture = (isNext: boolean) => {
     if (isNext) {
       if (currentIndex < totalLecture - 1) {
@@ -61,62 +77,68 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
     const index = nextIndex ?? indexPlaying;
     setIndexPlaying(index);
     setUsersRecord(getNewUserRecord(index));
-    console.log("onHandlePlayAudio::");
-  };
-
-  console.log("onPlayNonStop::", usersRecord);
-
-  const onPlayNonStop = () => {
-    // console.log("onPlayNonStop::", usersRecord);
-    // setUsersRecord(getNewUserRecord(0));
   };
 
   const onHandleEndAudio = () => {
     setIsPlayingStatus((preVal) => !preVal);
-    const nextIndex = indexPlaying + 1;
-    if (nextIndex + 1 > usersRecord.length) {
-      // setUsersRecord(getNewUserRecord(usersRecord.length - 1, true));
-      setIndexPlaying(() => 0);
 
-      if (currentIndex < totalLecture - 1) {
+    const nextIndex = indexPlaying + 1;
+
+    if (isLoop) {
+      if (nextIndex < usersRecord.length) {
+        onHandlePlayAudio(nextIndex);
+      } else {
+        setIndexPlaying(() => 0);
+        onHandlePlayAudio(0);
+      }
+      return;
+    }
+
+    if (nextIndex < usersRecord.length) {
+      onHandlePlayAudio(nextIndex);
+    } else {
+      if (isTheLastVocabulary) {
+        setIndexPlaying(() => 0);
+        setUsersRecord(getNewUserRecord(usersRecord.length - 1, true));
+      } else {
         onNextSlideIndex();
       }
-    } else {
-      onHandlePlayAudio(indexPlaying + 1);
     }
   };
 
   useImperativeHandle(ref, () => ({
-    onHandlePlayAudio,
+    onHandlePlayAudio: (nextIndex: number) => {
+      if (!usersRecord.length) return;
+
+      setIsPlayingStatus(() => true);
+      setIndexPlaying(nextIndex);
+      setUsersRecord(getNewUserRecord(nextIndex));
+    },
     setIndexPlaying,
     setIsPlayingStatus,
-    onPlayNonStop,
   }));
 
   useEffect(() => {
     if (audioElement.current) {
       if (isPlayingStatus) {
-        console.log("PLAY true");
         audioElement.current.play().catch((error) => {
           if (!audioElement.current) return;
           audioElement.current.pause();
-          audioElement.current.play();
+          setIsPlayingStatus(() => false);
           console.log(error);
         });
       } else {
-        console.log("PLAY false");
-
         audioElement.current.pause();
       }
     }
+    setPlayingStatus(isPlayingStatus);
   }, [indexPlaying, isPlayingStatus]);
 
   return (
     <Box className='flex justify-around py-4' ref={ref}>
       {usersRecord.length ? <audio ref={audioElement} src={usersRecord[indexPlaying].voiceSrc} onEnded={onHandleEndAudio} /> : null}
-
-      <IconButton>
-        <Avatar src={ShuffleIcon} alt='wave-icon' className='w-6 h-6' />
+      <IconButton onClick={() => setIsLoop((preVal) => !preVal)}>
+        <Avatar src={isLoop ? ActivedLoopIcon : LoopIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
       <IconButton onClick={() => onHandleToNewLecture(false)}>
         <Avatar src={currentIndex >= 1 ? PreviosIcon : DisablePreviosIcon} alt='wave-icon' className='w-6 h-6' />
@@ -127,8 +149,12 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
       <IconButton onClick={() => onHandleToNewLecture(true)}>
         <Avatar src={currentIndex < totalLecture - 1 ? NextIcon : DisableNextIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
-      <IconButton>
-        <Avatar src={LoopIcon} alt='wave-icon' className='w-6 h-6' />
+      <IconButton
+        onClick={() => {
+          navigate(ROUTER.LISTENING + ROUTER.SELECT_LECTURE);
+        }}
+      >
+        <Avatar src={VerticalMore} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
     </Box>
   );

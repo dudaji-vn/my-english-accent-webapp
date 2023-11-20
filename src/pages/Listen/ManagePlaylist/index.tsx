@@ -4,7 +4,7 @@ import { Avatar, Box, Button, Container, IconButton, Tab, Tabs, Typography } fro
 import FooterCard from "@/components/FooterBtn";
 import LecturePlaylist from "@/components/LecturePlaylist";
 import UserPlaylist from "@/components/UserPlaylist";
-import { useCreateOrUpdatePlaylistMutation, useGetLecturesAvailableQuery, useGetUsersAvailableQuery } from "@/core/services/listen.service";
+import { useCreateOrUpdatePlaylistMutation, useGetLecturesAvailableQuery, useGetPlaylistSummaryQuery, useGetUsersAvailableQuery } from "@/core/services/listen.service";
 import { pluralize } from "@/shared/utils/pluralize.util";
 import _ from "lodash";
 import React, { SyntheticEvent, useMemo, useState } from "react";
@@ -16,6 +16,8 @@ export default function CreatePlaylist() {
   const navigate = useNavigate();
   const { data: LectureData, refetch: lectureRefetch } = useGetLecturesAvailableQuery();
   const { data: PeopleData, refetch: PeopleRefetch } = useGetUsersAvailableQuery();
+
+  const { refetch } = useGetPlaylistSummaryQuery();
 
   const [updatePlaylist] = useCreateOrUpdatePlaylistMutation();
 
@@ -52,6 +54,7 @@ export default function CreatePlaylist() {
           PeopleRefetch();
           break;
       }
+      refetch();
     }
   };
 

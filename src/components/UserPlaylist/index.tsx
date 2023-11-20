@@ -10,9 +10,10 @@ import { PeopleistenTypeResponse } from "@/core/type/listen.type";
 
 import { pluralize } from "@/shared/utils/pluralize.util";
 import { useEffect } from "react";
+import Loading from "../Loading";
 
 export default function UserPlaylist({ peopleList, setPeopleList }: { peopleList: string[]; setPeopleList: Function }) {
-  const { data } = useGetUsersAvailableQuery();
+  const { data, isFetching } = useGetUsersAvailableQuery();
 
   const onHandleSelect = (val: string) => {
     const existed = peopleList.includes(val);
@@ -45,6 +46,8 @@ export default function UserPlaylist({ peopleList, setPeopleList }: { peopleList
       setPeopleList(selectedList);
     }
   }, [data]);
+
+  if (isFetching) return <Loading />;
 
   if (!data) return null;
 

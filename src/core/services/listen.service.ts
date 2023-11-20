@@ -12,11 +12,11 @@ export const ListenApi = createApi({
   endpoints: (builder) => ({
     getLecturesAvailable: builder.query<LectureListenTypeResponse[], void>({
       query: ListenController.getLecturesAvailable,
-      transformResponse: (response: { data: LectureListenTypeResponse[] }) => response.data,
+      transformResponse: (response: { data: LectureListenTypeResponse[] }) => response.data.sort((x, y) => Number(x) - Number(y)),
     }),
     getUsersAvailable: builder.query<PeopleistenTypeResponse[], void>({
       query: ListenController.getUsersAvailable,
-      transformResponse: (response: { data: PeopleistenTypeResponse[] }) => response.data,
+      transformResponse: (response: { data: PeopleistenTypeResponse[] }) => response.data.sort((x, y) => Number(x) - Number(y)),
     }),
     createOrUpdatePlaylist: builder.mutation<boolean, PlaylistRequest>({
       query: (payload) => ListenController.createOrUpdatePlaylist(payload),

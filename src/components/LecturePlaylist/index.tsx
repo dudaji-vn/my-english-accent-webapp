@@ -8,9 +8,10 @@ import { pluralize } from "@/shared/utils/pluralize.util";
 import { Avatar, Box, Button, Checkbox, Typography } from "@mui/material";
 import { useEffect } from "react";
 import BoxCard from "../BoxCard";
+import Loading from "../Loading";
 
 export default function LecturePlaylist({ lectureList, setLectureList }: { lectureList: string[]; setLectureList: Function }) {
-  const { data } = useGetLecturesAvailableQuery();
+  const { data, isFetching } = useGetLecturesAvailableQuery();
 
   const onHandleSelect = (val: string) => {
     const existed = lectureList.includes(val);
@@ -44,6 +45,7 @@ export default function LecturePlaylist({ lectureList, setLectureList }: { lectu
     }
   }, [data]);
 
+  if (isFetching) return <Loading />;
 
   if (!data) return null;
 
