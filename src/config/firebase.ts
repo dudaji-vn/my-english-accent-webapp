@@ -10,7 +10,7 @@ import { getStorage } from "firebase/storage";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY_FIREBASE,
-  authDomain: "https://ttalk.vercel.app",
+  authDomain: "my-english-accent-239fb.firebaseapp.com",
   projectId: "my-english-accent-239fb",
   storageBucket: "my-english-accent-239fb.appspot.com",
   messagingSenderId: "635547438609",
