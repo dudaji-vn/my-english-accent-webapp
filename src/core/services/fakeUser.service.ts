@@ -17,7 +17,10 @@ export const FakeUserApi = createApi({
           provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 
           let isLogin = false;
-          const response = await signInWithPopup(auth, provider);
+          const response = await signInWithPopup(auth, provider)
+            .then((r) => r)
+            .catch((e) => console.log(e));
+
           if (response) {
             const googleId = response.user.uid;
             const email = response.user.email!;
