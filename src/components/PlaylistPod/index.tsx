@@ -138,8 +138,6 @@ export default function PlaylistPod() {
                 ) : (
                   <Typography className='text-small-regular'>{index + 1}</Typography>
                 )}
-
-                {/* {user.isPlaying ? <Avatar alt='avatar-icon' className='w-6 h-6' src={BlackPauseIcon} /> : <Typography className='text-small-regular'>{index + 1}</Typography>} */}
               </Grid>
               <Grid item xs={2}>
                 <Avatar alt='avatar-icon' className='w-9 h-9'>

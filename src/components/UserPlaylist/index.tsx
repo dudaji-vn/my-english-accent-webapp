@@ -63,10 +63,10 @@ export default function UserPlaylist({ peopleList, setPeopleList }: { peopleList
       </Box>
       {data.map((user: PeopleistenTypeResponse) => (
         <BoxCard classes='flex justify-between items-start p-4' key={user.userId}>
-          <Box className='flex flex-col gap-4'>
+          <Box className='flex flex-col gap-2'>
             <UserListen {...user} />
             <Typography variant='body2' className='text-extra-small-regular flex gap-2'>
-              <Avatar src={BookIcon} component={"span"} className='w-4 h-4' />
+              <Avatar variant="square" src={BookIcon} component={"span"} className='w-4 h-4' />
               {`${pluralize(user.numberCompletedLectures, "lecture")}  recorded`}
               {user.numberCompletedLectures ? null : <Avatar src={WarningIcon} component={"span"} className='w-4 h-4' />}
               {user.numberCompletedLectures && user.numberSelectedLectures ? ` / ${pluralize(user.numberSelectedLectures, "lecture")} selected` : null}
