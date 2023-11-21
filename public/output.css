@@ -12,6 +12,12 @@ h6 {
   font-weight: 600 !important
 }
 
+.text-2-extra-large-semibold {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 600
+}
+
 .text-extra-large-semibold {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -331,10 +337,6 @@ h6 {
   margin-bottom: 2rem
 }
 
-#root :is(.mb-9) {
-  margin-bottom: 2.25rem
-}
-
 #root :is(.ml-5) {
   margin-left: 1.25rem
 }
@@ -504,6 +506,10 @@ h6 {
           transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
+#root :is(.cursor-pointer) {
+  cursor: pointer
+}
+
 #root :is(.flex-col) {
   flex-direction: column
 }
@@ -542,10 +548,6 @@ h6 {
 
 #root :is(.gap-2) {
   gap: 0.5rem
-}
-
-#root :is(.gap-3) {
-  gap: 0.75rem
 }
 
 #root :is(.gap-4) {

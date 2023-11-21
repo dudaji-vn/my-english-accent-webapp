@@ -17,6 +17,18 @@
   h6 {
     @apply text-2xl font-semibold !important;
   }
+  .text-2-extra-large-regular {
+    @apply text-3xl font-normal;
+  }
+  .text-2-extra-large-medium {
+    @apply text-3xl font-medium;
+  }
+  .text-2-extra-large-semibold {
+    @apply text-3xl font-semibold;
+  }
+  .text-2-extra-large-bold {
+    @apply text-3xl font-bold;
+  }
   .text-extra-large-regular {
     @apply text-xl font-normal;
   }
