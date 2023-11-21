@@ -20,7 +20,10 @@ interface GlobalStoreType {
     totalLecture: number;
     isTheLastVocabulary: boolean;
     usersRecord: UserPlayingType[];
-    isPlayingStatus: boolean;
+  };
+  listenSetting: {
+    isPlaying: boolean;
+    isLoop: boolean;
   };
 }
 
@@ -39,7 +42,10 @@ const initialState: GlobalStoreType = {
     totalLecture: 0,
     usersRecord: [],
     isTheLastVocabulary: false,
-    isPlayingStatus: false,
+  },
+  listenSetting: {
+    isPlaying: false,
+    isLoop: false,
   },
 };
 
@@ -106,10 +112,17 @@ const globalSlice = createSlice({
       };
     },
 
-    updatePlayingStatus: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
-      state.listenPage = {
-        ...state.listenPage,
-        isPlayingStatus: action.payload,
+    updateIsLoop: (state: GlobalStoreType) => {
+      state.listenSetting = {
+        ...state.listenSetting,
+        isLoop: !state.listenSetting.isLoop,
+      };
+    },
+
+    updateIsPlaying: (state: GlobalStoreType) => {
+      state.listenSetting = {
+        ...state.listenSetting,
+        isPlaying: !state.listenSetting.isPlaying,
       };
     },
   },
@@ -134,20 +147,27 @@ const globalSlice = createSlice({
         totalLecture: lectures.length,
         usersRecord: [],
         isTheLastVocabulary: false,
-        isPlayingStatus: false,
       };
     });
     builder.addMatcher(ListenApi.endpoints.getPlaylistListenByLecture.matchFulfilled, (state, action) => {
-      const usersRecord = action.payload.participants[0].recordUser.map((user) => ({ ...user, isPlaying: false, isPlayed: false }));
-      state.listenPage = {
-        ...state.listenPage,
-        usersRecord,
-      };
+      const { participants } = action.payload;
+
+      if (participants.length) {
+        const usersRecord = participants[0].recordUser.map((user) => ({ ...user, isPlaying: false, isPlayed: false }));
+        state.listenPage = {
+          ...state.listenPage,
+          usersRecord,
+        };
+      } else {
+        state.listenPage = {
+          ...state.listenPage,
+          usersRecord: [],
+        };
+      }
     });
   },
 });
 
-export const { saveAudio, setPlayAll, nextIndex, resetCLubPage, updateLectureIdListenPage, updateIndexListenPage, updateIsTheLastVocabulary, updatePlayingStatus } =
-  globalSlice.actions;
+export const { saveAudio, setPlayAll, nextIndex, resetCLubPage, updateLectureIdListenPage, updateIndexListenPage, updateIsTheLastVocabulary, updateIsLoop } = globalSlice.actions;
 
 export default globalSlice.reducer;

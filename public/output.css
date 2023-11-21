@@ -477,6 +477,10 @@ h6 {
   width: 162px
 }
 
+#root :is(.w-\[400\]) {
+  width: 400
+}
+
 #root :is(.w-full) {
   width: 100%
 }
@@ -759,5 +763,15 @@ h6 {
 
   #root :is(.sm\:flex-wrap) {
     flex-wrap: wrap
+  }
+}
+
+@media (min-width: 768px) {
+  #root :is(.md\:flex) {
+    display: flex
+  }
+
+  #root :is(.md\:w-\[400px\]) {
+    width: 400px
   }
 }

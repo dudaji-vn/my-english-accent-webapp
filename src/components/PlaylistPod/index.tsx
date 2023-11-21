@@ -35,7 +35,7 @@ export default function PlaylistPod() {
 
   const loadUserRecord = useCallback(
     (vocabularyIndex: number, isPlaying: boolean) => {
-      if (!playlistDetail) return;
+      if (!playlistDetail || !playlistDetail.participants.length) return setUsersRecord(() => []);
       const newUserRecord = playlistDetail.participants[vocabularyIndex].recordUser.map((user, index) => ({
         ...user,
         isPlaying: index === 0 ? isPlaying : false,
