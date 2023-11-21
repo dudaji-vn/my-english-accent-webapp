@@ -3,7 +3,7 @@ import BlackPlayIcon from "@/assets/icon/black-play-icon.svg";
 
 import { useGetPlaylistListenByLectureQuery, useGetPlaylistSummaryQuery } from "@/core/services/listen.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
-import { updateIsTheLastVocabulary } from "@/core/store/index";
+import { updateIsPlaying, updateIsTheLastVocabulary } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
 import EmptyLecture from "@/pages/Listen/EmptyLectures";
 import { Avatar, Box, Grid, IconButton, Typography } from "@mui/material";
@@ -30,12 +30,17 @@ export default function PlaylistPod() {
   const actionControlPlaylistElementRef = useRef<ActionControllRef>(null);
   const swiperRef = useRef<SwiperRef>(null);
   const [usersRecord, setUsersRecord] = useState<UserPlayingType[]>([]);
-  const [playingStatus, setPlayingStatus] = useState(false);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const playingStatus = useAppSelector((state) => state.GlobalStore.listenSetting.isPlaying);
+
   const trackingSwiper = useRef(Date.now());
 
   const loadUserRecord = useCallback(
     (vocabularyIndex: number, isPlaying: boolean) => {
-      if (!playlistDetail || !playlistDetail.participants.length) return setUsersRecord(() => []);
+      if (!playlistDetail || !playlistDetail.participants.length) {
+        dispatch(updateIsPlaying(false));
+        return setUsersRecord(() => []);
+      }
       const newUserRecord = playlistDetail.participants[vocabularyIndex].recordUser.map((user, index) => ({
         ...user,
         isPlaying: index === 0 ? isPlaying : false,
@@ -55,12 +60,13 @@ export default function PlaylistPod() {
     if (forcePlayAudio) {
       actionControlPlaylistElementRef.current.onHandlePlayAudio(index);
     } else {
-      actionControlPlaylistElementRef.current.setIsPlayingStatus(playingStatus);
+      dispatch(updateIsPlaying(playingStatus));
       actionControlPlaylistElementRef.current.setIndexPlaying(index);
     }
   };
 
   const onSlideChange = (val: SwiperClass) => {
+    setSlideIndex(() => val.activeIndex);
     const isManualSwipe = trackingSwiper.current && Date.now() - trackingSwiper.current < 300;
     if (isManualSwipe) {
       loadUserRecord(val.activeIndex, false);
@@ -72,7 +78,11 @@ export default function PlaylistPod() {
   };
 
   useEffect(() => {
-    loadUserRecord(0, false);
+    loadUserRecord(0, playingStatus);
+
+    setSlideIndex(() => 0);
+    if (!swiperRef.current || !swiperRef.current.swiper) return;
+    swiperRef.current.swiper.slideTo(0);
   }, [isFetching, lectureId]);
 
   if (isFetching) return <Loading />;
@@ -115,9 +125,15 @@ export default function PlaylistPod() {
         }}
         onNextSlideIndex={() => {
           if (!swiperRef.current) return;
-          swiperRef.current.swiper.slideNext();
+
+          if (playlistDetail) {
+            if (slideIndex < playlistDetail.vocabularies.length - 1) {
+              const nextSlide = slideIndex + 1;
+              setSlideIndex(nextSlide);
+              swiperRef.current.swiper.slideTo(nextSlide);
+            }
+          }
         }}
-        setPlayingStatus={(val: boolean) => setPlayingStatus(() => val)}
       />
 
       <QuenePlaylist usersRecord={usersRecord} />

@@ -8,7 +8,7 @@ import PauseIcon from "@/assets/icon/pause-icon.svg";
 import PlayIcon from "@/assets/icon/play-icon.svg";
 import PreviosIcon from "@/assets/icon/previos-icon.svg";
 import { useAppDispatch, useAppSelector } from "@/core/store";
-import { updateIndexListenPage } from "@/core/store/index";
+import { updateIndexListenPage, updateIsPlaying } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
 import { Avatar, Box, IconButton } from "@mui/material";
@@ -18,22 +18,20 @@ import { useNavigate } from "react-router-dom";
 export interface ActionControllRef {
   onHandlePlayAudio: Function;
   setIndexPlaying: Function;
-  setIsPlayingStatus: Function;
-  getIsPlayingStatus: Function;
 }
 interface ActionControllPlaylistProps {
   usersRecord: (UserResponseType & RecordTypeResponse & { isPlaying: boolean; isPlayed: boolean })[];
   setUsersRecord: Function;
   onNextSlideIndex: Function;
-  setPlayingStatus: Function;
 }
-export default forwardRef(function ActionControllPlaylist({ usersRecord, setUsersRecord, onNextSlideIndex, setPlayingStatus }: ActionControllPlaylistProps, ref) {
+export default forwardRef(function ActionControllPlaylist({ usersRecord, setUsersRecord, onNextSlideIndex }: ActionControllPlaylistProps, ref) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentIndex = useAppSelector((state) => state.GlobalStore.listenPage.currentLectureIndex);
   const totalLecture = useAppSelector((state) => state.GlobalStore.listenPage.totalLecture);
   const isTheLastVocabulary = useAppSelector((state) => state.GlobalStore.listenPage.isTheLastVocabulary);
-  const [isPlayingStatus, setIsPlayingStatus] = useState(false);
+  const isPlayingStatus = useAppSelector((state) => state.GlobalStore.listenSetting.isPlaying);
+
   const [indexPlaying, setIndexPlaying] = useState(0);
   const [isLoop, setIsLoop] = useState(false);
   const audioElement = useRef<HTMLAudioElement | null>(null);
@@ -48,7 +46,7 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
         dispatch(updateIndexListenPage(-1));
       }
     }
-    setIsPlayingStatus(false);
+    dispatch(updateIsPlaying(false));
   };
 
   const getNewUserRecord = (currentIndex: number, isEnded?: boolean) => {
@@ -67,36 +65,39 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
     return newUserRecord;
   };
 
-  const onHandlePlayAudio = (nextIndex?: number) => {
+  const onHandlePlayAudio = (isPlaying: boolean, nextIndex?: number) => {
     if (!usersRecord.length) return;
+    dispatch(updateIsPlaying(isPlaying));
 
-    setIsPlayingStatus((preVal) => !preVal);
     const index = nextIndex ?? indexPlaying;
     setIndexPlaying(index);
     setUsersRecord(getNewUserRecord(index));
   };
 
   const onHandleEndAudio = () => {
-    setIsPlayingStatus((preVal) => !preVal);
-
     const nextIndex = indexPlaying + 1;
 
     if (isLoop) {
       if (nextIndex < usersRecord.length) {
-        onHandlePlayAudio(nextIndex);
+        onHandlePlayAudio(true, nextIndex);
       } else {
         setIndexPlaying(() => 0);
-        onHandlePlayAudio(0);
+        onHandlePlayAudio(true, 0);
       }
       return;
     }
 
     if (nextIndex < usersRecord.length) {
-      onHandlePlayAudio(nextIndex);
+      onHandlePlayAudio(true, nextIndex);
     } else {
       if (isTheLastVocabulary) {
         setIndexPlaying(() => 0);
         setUsersRecord(getNewUserRecord(usersRecord.length - 1, true));
+
+        if (currentIndex < totalLecture - 1) {
+          dispatch(updateIndexListenPage(1));
+          dispatch(updateIsPlaying(true));
+        }
       } else {
         onNextSlideIndex();
       }
@@ -107,40 +108,38 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
     onHandlePlayAudio: (nextIndex: number) => {
       if (!usersRecord.length) return;
 
-      setIsPlayingStatus(() => true);
+      dispatch(updateIsPlaying(true));
       setIndexPlaying(nextIndex);
       setUsersRecord(getNewUserRecord(nextIndex));
     },
     setIndexPlaying,
-    setIsPlayingStatus,
   }));
 
   useEffect(() => {
     if (audioElement.current) {
       if (isPlayingStatus) {
         audioElement.current.play().catch((error) => {
-          if (!audioElement.current) return;
-          audioElement.current.pause();
-          setIsPlayingStatus(() => false);
+          // if (!audioElement.current) return;
+          // audioElement.current.pause();
+          // dispatch(updateIsPlaying(false));
           console.log(error);
         });
       } else {
         audioElement.current.pause();
       }
     }
-    setPlayingStatus(isPlayingStatus);
   }, [indexPlaying, isPlayingStatus, usersRecord]);
 
   return (
     <Box className='flex justify-around py-4' ref={ref}>
-      {usersRecord.length ? <audio ref={audioElement} src={usersRecord[indexPlaying].voiceSrc} onEnded={onHandleEndAudio} /> : null}
+      {usersRecord.length ? <audio ref={audioElement} autoPlay={isPlayingStatus} src={usersRecord[indexPlaying]?.voiceSrc} onEnded={onHandleEndAudio} /> : null}
       <IconButton onClick={() => setIsLoop((preVal) => !preVal)}>
         <Avatar src={isLoop ? ActivedLoopIcon : LoopIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
       <IconButton onClick={() => onHandleToNewLecture(false)}>
         <Avatar src={currentIndex >= 1 ? PreviosIcon : DisablePreviosIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
-      <IconButton className='bg-primary' onClick={() => onHandlePlayAudio()}>
+      <IconButton className='bg-primary' onClick={() => onHandlePlayAudio(!isPlayingStatus)}>
         <Avatar src={isPlayingStatus ? PauseIcon : PlayIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
       <IconButton onClick={() => onHandleToNewLecture(true)}>

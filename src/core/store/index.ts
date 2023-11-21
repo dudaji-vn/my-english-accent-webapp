@@ -119,10 +119,10 @@ const globalSlice = createSlice({
       };
     },
 
-    updateIsPlaying: (state: GlobalStoreType) => {
+    updateIsPlaying: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
       state.listenSetting = {
         ...state.listenSetting,
-        isPlaying: !state.listenSetting.isPlaying,
+        isPlaying: action.payload,
       };
     },
   },
@@ -168,6 +168,7 @@ const globalSlice = createSlice({
   },
 });
 
-export const { saveAudio, setPlayAll, nextIndex, resetCLubPage, updateLectureIdListenPage, updateIndexListenPage, updateIsTheLastVocabulary, updateIsLoop } = globalSlice.actions;
+export const { saveAudio, setPlayAll, nextIndex, resetCLubPage, updateLectureIdListenPage, updateIndexListenPage, updateIsTheLastVocabulary, updateIsLoop, updateIsPlaying } =
+  globalSlice.actions;
 
 export default globalSlice.reducer;
