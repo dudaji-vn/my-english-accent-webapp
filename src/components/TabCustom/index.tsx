@@ -11,7 +11,6 @@ export default function TabCustom(props: TabsProp) {
   const handleChangeTabIndex = (event: SyntheticEvent, newValue: number) => {
     props.callback(newValue);
   };
-
   return (
     <Tabs
       sx={{
@@ -31,12 +30,12 @@ export default function TabCustom(props: TabsProp) {
           minHeight: "0",
           maxHeight: "40px",
           padding: "8px 16px",
-          border: "1px solid #D0D5DD",
+          border: "1px solid #DDD6FE",
           borderRadius: "8px",
         },
         ".Mui-selected": {
-          background: "#F9F5FF",
-          borderColor: "#F9F5FF",
+          background: "#DDD6FE",
+          borderColor: "#DDD6FE",
         },
       }}
       value={props.tabIndex}

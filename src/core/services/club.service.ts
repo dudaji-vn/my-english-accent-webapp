@@ -33,9 +33,9 @@ export const ClubStudyApi = createApi({
     }),
 
     getClubDetail: builder.query<ClubResponseType, string>({
-      query: ClubController.getAllMembersClub,
+      query: ClubController.getClubDetail,
       transformResponse: (response: { data: ClubResponseType }) => response.data,
-      providesTags: (result, error, arg) => (result ? [{ type: "Club" as const, id: arg }, "Club"] : ["Club"]),
+      providesTags: (result, error, arg) => (arg ? [{ type: "Club" as const, id: arg }, "Club"] : ["Club"]),
     }),
   }),
 });

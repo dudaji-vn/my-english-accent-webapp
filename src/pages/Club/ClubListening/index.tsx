@@ -76,7 +76,7 @@ export default function ClubListeningPage() {
             <Avatar variant='square' src={NoPeople} alt='no-people-icon' className='w-16 h-16 mb-2' />
             <Typography className='text-base-semibold'>{"No members record yet"}</Typography>
             <Typography className='text-base-regular' variant='body2'>
-              {"Let's record the challenges and listen together."}
+              Let's record the challenges and listen together.
             </Typography>
           </Box>
         );

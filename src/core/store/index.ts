@@ -1,7 +1,9 @@
 import Reducer from "@/shared/const/store.const";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { VocabularyApi } from "../services";
-import { EnrollmentStep } from "../type";
+import { EnrollmentStep, LectureResponseType } from "../type";
+import ListenApi from "../services/listen.service";
+import { UserPlayingType } from "@/components/PlaylistPod";
 
 interface GlobalStoreType {
   recordPage: EnrollmentStep;
@@ -10,6 +12,15 @@ interface GlobalStoreType {
     recordId: string;
     isPlayAll: boolean;
     audioIndex: number;
+  };
+  listenPage: {
+    lectures: LectureResponseType[];
+    lectureId: string;
+    currentLectureIndex: number;
+    totalLecture: number;
+    isTheLastVocabulary: boolean;
+    usersRecord: UserPlayingType[];
+    isPlayingStatus: boolean;
   };
 }
 
@@ -21,6 +32,15 @@ const initialState: GlobalStoreType = {
     stage: 0,
   },
   clubPage: { recordId: "", voiceSrc: "", isPlayAll: false, audioIndex: 0 },
+  listenPage: {
+    lectures: [],
+    lectureId: "",
+    currentLectureIndex: 0,
+    totalLecture: 0,
+    usersRecord: [],
+    isTheLastVocabulary: false,
+    isPlayingStatus: false,
+  },
 };
 
 const globalSlice = createSlice({
@@ -39,20 +59,58 @@ const globalSlice = createSlice({
         ...action.payload,
       };
     },
+
     setPlayAll: (state: GlobalStoreType) => {
       state.clubPage = {
         ...state.clubPage,
         isPlayAll: !state.clubPage.isPlayAll,
       };
     },
+
     nextIndex: (state: GlobalStoreType) => {
       state.clubPage = {
         ...state.clubPage,
         audioIndex: state.clubPage.audioIndex + 1,
       };
     },
+
     resetCLubPage: (state: GlobalStoreType) => {
       state.clubPage = { recordId: "", voiceSrc: "", isPlayAll: false, audioIndex: 0 };
+    },
+
+    updateLectureIdListenPage: (state: GlobalStoreType, action: PayloadAction<string>) => {
+      const index = state.listenPage.lectures.findIndex((lecture) => lecture.lectureId === action.payload);
+
+      state.listenPage = {
+        ...state.listenPage,
+        currentLectureIndex: index,
+        lectureId: action.payload,
+      };
+    },
+
+    updateIndexListenPage: (state: GlobalStoreType, action: PayloadAction<number>) => {
+      const currentIndex = state.listenPage.currentLectureIndex;
+      const newIndex = currentIndex + action.payload;
+
+      state.listenPage = {
+        ...state.listenPage,
+        currentLectureIndex: newIndex,
+        lectureId: state.listenPage.lectures[newIndex].lectureId,
+      };
+    },
+
+    updateIsTheLastVocabulary: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
+      state.listenPage = {
+        ...state.listenPage,
+        isTheLastVocabulary: action.payload,
+      };
+    },
+
+    updatePlayingStatus: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
+      state.listenPage = {
+        ...state.listenPage,
+        isPlayingStatus: action.payload,
+      };
     },
   },
   extraReducers(builder) {
@@ -66,9 +124,30 @@ const globalSlice = createSlice({
         ...action.payload,
       };
     });
+    builder.addMatcher(ListenApi.endpoints.getPlaylistSummary.matchFulfilled, (state, action) => {
+      const lectures = action.payload?.lectures;
+
+      state.listenPage = {
+        lectures,
+        currentLectureIndex: 0,
+        lectureId: lectures[0]?.lectureId,
+        totalLecture: lectures.length,
+        usersRecord: [],
+        isTheLastVocabulary: false,
+        isPlayingStatus: false,
+      };
+    });
+    builder.addMatcher(ListenApi.endpoints.getPlaylistListenByLecture.matchFulfilled, (state, action) => {
+      const usersRecord = action.payload.participants[0].recordUser.map((user) => ({ ...user, isPlaying: false, isPlayed: false }));
+      state.listenPage = {
+        ...state.listenPage,
+        usersRecord,
+      };
+    });
   },
 });
 
-export const { saveAudio, setPlayAll, nextIndex, resetCLubPage } = globalSlice.actions;
+export const { saveAudio, setPlayAll, nextIndex, resetCLubPage, updateLectureIdListenPage, updateIndexListenPage, updateIsTheLastVocabulary, updatePlayingStatus } =
+  globalSlice.actions;
 
 export default globalSlice.reducer;

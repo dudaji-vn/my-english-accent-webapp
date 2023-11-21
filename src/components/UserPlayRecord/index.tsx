@@ -1,10 +1,10 @@
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
-import NationalityCard from "@/components/NationalityCard";
+import NationalityCard from "@/components/PersonInfo";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { saveAudio } from "@/core/store/index";
-import { RecordTypeResponse, UserResponseType } from "@/core/type";
+import { Language, RecordTypeResponse, UserResponseType } from "@/core/type";
 import { Avatar, Box, Radio, Typography } from "@mui/material";
 import { Fragment, MutableRefObject, useEffect, useState } from "react";
 
@@ -22,16 +22,13 @@ export default function UserPlayRecord({ props, audioElement }: UserPlayRecordPr
   const dispatch = useAppDispatch();
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const language = (language: string) => {
-    if (language === "vn") {
-      return "Vietnamese";
-    } else if (language === "us") {
-      return "English";
-    } else if (language === "kr") {
-      return "Korea";
-    } else {
-      return "";
-    }
+  const language = (language: Language) => {
+    const lang = {
+      vn: "Vietnamese",
+      us: "English",
+      kr: "Korea",
+    };
+    return lang[language];
   };
 
   const onHanlePlayAudio = (voiceSrc: string, recordId: string) => {

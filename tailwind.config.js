@@ -14,11 +14,13 @@ module.exports = {
         primary: "#7F56D9",
         secondary: "#13C296",
         gray: {
+          50: "#F9FAFB",
           100: "#f3f4f6",
         },
         purple: {
           50: "#F9F5FF",
           200: "#DDD6FE",
+          300: "#C4B5FD",
         },
         white: "#FFF",
         stroke: "#DFE4EA",

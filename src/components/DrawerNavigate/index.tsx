@@ -1,44 +1,42 @@
+import { MouseEvent, useState } from "react";
 import { NavigateFunction, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useState, MouseEvent } from "react";
 
 import {
   Avatar,
-  Menu,
-  MenuItem,
-  Tooltip,
-  ListItemText,
-  ListItemIcon,
   Box,
+  Checkbox,
   Divider,
   IconButton,
   List,
   ListItem,
   ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   Toolbar,
+  Tooltip,
   Typography,
-  Checkbox,
-  Drawer,
 } from "@mui/material";
 
-import CustomDrawerHeader from "../CustomMui/DrawerHeader";
-import CustomDrawer from "../CustomMui/Drawer";
-import CustomAppbar from "../CustomMui/Appbar";
-import LogoApp from "@/assets/icon/logo-icon.svg";
-import Chervon from "@/assets/icon/chevron-left-icon.svg";
 import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
-import AccountIcon from "@/assets/icon/settings-icon.svg";
+import Chervon from "@/assets/icon/chevron-left-icon.svg";
 import LogoutIcon from "@/assets/icon/log-out-icon.svg";
+import LogoApp from "@/assets/icon/logo-icon.svg";
 import MenuIcon from "@/assets/icon/menu-icon.svg";
-import MusicIcon from "@/assets/icon/music-play-icon.svg";
-import MusicCheckedIcon from "@/assets/icon/music-play-color-icon.svg";
-import RecordIcon from "@/assets/icon/microphone-2-icon.svg";
 import RecordCheckedIcon from "@/assets/icon/microphone-2-color-icon.svg";
-import ClubIcon from "@/assets/icon/people-icon.svg";
+import RecordIcon from "@/assets/icon/microphone-2-icon.svg";
+import MusicCheckedIcon from "@/assets/icon/music-play-color-icon.svg";
+import MusicIcon from "@/assets/icon/music-play-icon.svg";
 import ClubCheckedIcon from "@/assets/icon/people-color-icon.svg";
+import ClubIcon from "@/assets/icon/people-icon.svg";
+import AccountIcon from "@/assets/icon/settings-icon.svg";
+import CustomAppbar from "../CustomMui/Appbar";
+import CustomDrawer from "../CustomMui/Drawer";
+import CustomDrawerHeader from "../CustomMui/DrawerHeader";
 
 import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
-import { useTheme } from "@emotion/react";
 
 const settings = [
   {
@@ -240,7 +238,7 @@ const DrawerNavigate = ({ ...props }: any) => {
         <Divider />
         {getList()}
       </CustomDrawer>
-      <Box component='main' sx={{ flexGrow: 1 }}>
+      <Box component='main' sx={{ minHeight: "100vh", flexGrow: 1, background: "#f3f4f6" }}>
         <CustomDrawerHeader />
         {/* main */}
         <Outlet />

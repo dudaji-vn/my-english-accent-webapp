@@ -14,7 +14,6 @@ export function ClubAudioRecord({ vocabularies, challengeName, clubId, challenge
   const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  console.log(clubId);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectionRecordId, setSelectionRecordId] = useState("");
 

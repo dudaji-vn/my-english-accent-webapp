@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { Avatar, Checkbox, Grid, Typography } from "@mui/material";
-import PersonInfo from "@/components/NationalityCard";
+import PersonInfo from "@/components/PersonInfo";
 import AvatarIcon from "@/assets/icon/avatar-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
