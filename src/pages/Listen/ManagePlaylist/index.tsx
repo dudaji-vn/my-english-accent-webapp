@@ -4,20 +4,30 @@ import { Avatar, Box, Button, Container, Dialog, DialogActions, DialogContent, D
 import FooterCard from "@/components/FooterBtn";
 import LecturePlaylist from "@/components/LecturePlaylist";
 import UserPlaylist from "@/components/UserPlaylist";
-import { useCreateOrUpdatePlaylistMutation, useGetLecturesAvailableQuery, useGetPlaylistSummaryQuery, useGetUsersAvailableQuery } from "@/core/services/listen.service";
+import {
+  useCreateOrUpdatePlaylistMutation,
+  useGetLecturesAvailableQuery,
+  useGetPlaylistListenByLectureQuery,
+  useGetPlaylistSummaryQuery,
+  useGetUsersAvailableQuery,
+} from "@/core/services/listen.service";
 import { pluralize } from "@/shared/utils/pluralize.util";
 import _ from "lodash";
 import React, { SyntheticEvent, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/core/store";
 
-const tabItems = ["Lectures", "Peoples"];
+const tabItems = ["Lectures", "People"];
 
 export default function ManagePlaylist() {
   const navigate = useNavigate();
+  const lectureId = useAppSelector((state) => state.GlobalStore.listenPage.lectureId);
+
   const { data: LectureData, refetch: lectureRefetch } = useGetLecturesAvailableQuery();
   const { data: PeopleData, refetch: PeopleRefetch } = useGetUsersAvailableQuery();
 
   const { refetch } = useGetPlaylistSummaryQuery();
+  const { refetch: refetchPlaylistDetail } = useGetPlaylistListenByLectureQuery(lectureId ?? "");
 
   const [updatePlaylist] = useCreateOrUpdatePlaylistMutation();
 
@@ -32,7 +42,7 @@ export default function ManagePlaylist() {
       case "Lectures":
         const bareLectureList = LectureData?.filter((val) => val.isSelected).map((val) => val.lectureId);
         return !lectureList.length || _.isEqual(bareLectureList, lectureList);
-      case "Peoples":
+      case "People":
         const barePeopleList = PeopleData?.filter((val) => val.isSelected).map((val) => val.userId);
         return !peopleList.length || _.isEqual(barePeopleList, peopleList);
     }
@@ -51,11 +61,12 @@ export default function ManagePlaylist() {
         case "Lectures":
           lectureRefetch();
           break;
-        case "Peoples":
+        case "People":
           PeopleRefetch();
           break;
       }
       refetch();
+      refetchPlaylistDetail();
     }
   };
 
@@ -75,7 +86,7 @@ export default function ManagePlaylist() {
             }}
           />
         );
-      case "Peoples":
+      case "People":
         return (
           <UserPlaylist
             peopleList={peopleList}
@@ -92,7 +103,7 @@ export default function ManagePlaylist() {
     switch (activeTab) {
       case "Lectures":
         return pluralize(lectureList.length, "lecture") + " selected";
-      case "Peoples":
+      case "People":
         return pluralize(peopleList.length, "people", "") + " selected";
     }
   };
@@ -112,7 +123,7 @@ export default function ManagePlaylist() {
   const handleToBack = () => {
     navigate(-1);
   };
-  
+
   return (
     <Box className='flex flex-col grow min-h-screen'>
       <Box className='sticky bg-white z-10 top-0'>
@@ -128,7 +139,7 @@ export default function ManagePlaylist() {
         <Box className='bg-white divider'>
           <Tabs value={activeTab} onChange={handleChange} aria-label='tabs' variant='fullWidth'>
             <Tab label={tabItems[0]} id={`listen-tab-${activeTab}`} aria-controls={`listen-tabpanel-${activeTab}`} value={"Lectures"} />
-            <Tab label={tabItems[1]} id={`listen-tab-${activeTab}`} aria-controls={`listten-tabpanel-${activeTab}`} value={"Peoples"} />
+            <Tab label={tabItems[1]} id={`listen-tab-${activeTab}`} aria-controls={`listten-tabpanel-${activeTab}`} value={"People"} />
           </Tabs>
         </Box>
       </Box>

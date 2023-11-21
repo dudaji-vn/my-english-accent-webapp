@@ -129,7 +129,7 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
       }
     }
     setPlayingStatus(isPlayingStatus);
-  }, [indexPlaying, isPlayingStatus]);
+  }, [indexPlaying, isPlayingStatus, usersRecord]);
 
   return (
     <Box className='flex justify-around py-4' ref={ref}>

@@ -17,8 +17,8 @@ export default function UserListen(props: PeopleistenTypeResponse) {
   return (
     <Box>
       <NationalityCard isShowAvatar isShowName userInfo={props} />
-      <Typography className='text-extra-small-regular flex gap-1 mt-2'>
-        <Avatar src={MessageIcon} component={"span"} className='w-4 h-4' />
+      <Typography className='text-extra-small-regular flex gap-1 mt-2' variant="body2">
+        <Avatar variant='square' src={MessageIcon} component={"span"} className='w-4 h-4' />
         Speak {language(props.nativeLanguage)} (native), {language(props.displayLanguage)}
       </Typography>
     </Box>

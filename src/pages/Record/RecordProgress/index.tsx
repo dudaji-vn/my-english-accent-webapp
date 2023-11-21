@@ -118,8 +118,8 @@ export default function RecordingProgressPage() {
             );
           }
           return (
-            <Box className='bg-gray-100 flex flex-col items-center justify-center h-[500px] p-6' key={myInfo}>
-              <Avatar src={Congratulation} className='w-16 h-16'></Avatar>
+            <Box className='bg-gray-100 flex flex-col items-center justify-center h-[500px] p-6 gap-2' key={myInfo}>
+              <Avatar src={Congratulation} className='w-16 h-16 mb-4'></Avatar>
               <Typography className='text-extra-large-semibold'>Nice job, {myInfo}</Typography>
               <Typography variant={"body2"}>You finally recorded all the lectures</Typography>
             </Box>
