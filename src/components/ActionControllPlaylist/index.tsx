@@ -151,7 +151,7 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
           navigate(ROUTER.LISTENING + ROUTER.SELECT_LECTURE);
         }}
       >
-        <Avatar src={LectureListIcon} alt='wave-icon' className='w-6 h-6' />
+        <Avatar variant='square' src={LectureListIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
     </Box>
   );
