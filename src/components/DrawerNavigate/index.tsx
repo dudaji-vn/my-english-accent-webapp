@@ -14,9 +14,11 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Theme,
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 
 import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
@@ -71,23 +73,23 @@ const menu = [
       navigate(ROUTER.LISTENING);
     },
   },
-  {
-    name: "Club",
-    icon: ClubIcon,
-    iconChecked: ClubCheckedIcon,
-    action: (navigate: NavigateFunction) => {
-      navigate(ROUTER.CLUB);
-    },
-  },
+  // {
+  //   name: "Club",
+  //   icon: ClubIcon,
+  //   iconChecked: ClubCheckedIcon,
+  //   action: (navigate: NavigateFunction) => {
+  //     navigate(ROUTER.CLUB);
+  //   },
+  // },
 ];
 
 const DrawerNavigate = ({ ...props }: any) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.replace("/", "");
-  const [open, setOpen] = useState(false);
+  const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
+  const [open, setOpen] = useState(!isSmallScreen);
   const avatar = persist.getMyInfo().avatarUrl;
-
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleDrawerOpen = () => {
@@ -161,7 +163,10 @@ const DrawerNavigate = ({ ...props }: any) => {
               justifyContent: open ? "initial" : "center",
               px: 2.5,
             }}
-            onClick={() => item.action(navigate)}
+            onClick={() => {
+              isSmallScreen && handleDrawerClose()
+              item.action(navigate)
+            }}
           >
             <ListItemIcon
               sx={{
@@ -224,7 +229,7 @@ const DrawerNavigate = ({ ...props }: any) => {
           </Box>
         </Toolbar>
       </CustomAppbar>
-      <CustomDrawer open={open} onClose={handleDrawerClose}>
+        <CustomDrawer key={Number(open)} open={open} onClose={handleDrawerClose}>
         <CustomDrawerHeader>
           {open && (
             <>
