@@ -7,13 +7,14 @@ import UserPlaylist from "@/components/UserPlaylist";
 import { pluralize } from "@/shared/utils/pluralize.util";
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCreateOrUpdatePlaylistMutation } from "@/core/services/listen.service";
+import { useCreateOrUpdatePlaylistMutation, useGetPlaylistSummaryQuery } from "@/core/services/listen.service";
 import ROUTER from "@/shared/const/router.const";
 
 const steps = ["Select lectures", "Select people"];
 
 export default function CreatePlaylist() {
   const navigate = useNavigate();
+  const { refetch } = useGetPlaylistSummaryQuery();
 
   const [updatePlaylist] = useCreateOrUpdatePlaylistMutation();
 
@@ -39,6 +40,7 @@ export default function CreatePlaylist() {
     if (responseUpdate && activeStep === 0) {
       setActiveStep((preVal) => preVal + 1);
     } else if (responseUpdate && activeStep === 1) {
+      refetch();
       navigate(ROUTER.LISTENING);
     }
   };

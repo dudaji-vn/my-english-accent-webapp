@@ -8,8 +8,6 @@ import Loading from "@/components/Loading";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import ListenEmptyPlaylistPage from "./EmptyPlaylist";
-import ManagePlaylist from "./ManagePlaylist";
-import { useEffect } from "react";
 
 export default function ListenPage() {
   const navigate = useNavigate();
