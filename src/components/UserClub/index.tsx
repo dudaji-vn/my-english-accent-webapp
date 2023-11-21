@@ -9,7 +9,7 @@ export default function UserClub(props: UserResponseType) {
     const lang = {
       vn: "Vietnamese",
       us: "English",
-      kr: "Korea",
+      kr: "Korean",
     };
     return lang[language];
   };

@@ -35,16 +35,16 @@ export default function SelectLecture() {
 
   return (
     <Box className='flex flex-col grow min-h-screen'>
-      <Container className='py-4 divider sticky bg-white z-10 top-0'>
+      <Box className='p-4 divider sticky bg-white z-10 top-0'>
         <Box className='flex items-center gap-2'>
           <IconButton onClick={() => navigate(ROUTER.LISTENING)}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
           </IconButton>
           <Typography className='text-large-semibold'>Select lecture</Typography>
         </Box>
-      </Container>
+      </Box>
 
-      <Container className='py-4 bg-gray-100 flex flex-col grow'>{renderLectureList()}</Container>
+      <Box className='p-4 bg-gray-100 flex flex-col grow'>{renderLectureList()}</Box>
     </Box>
   );
 }

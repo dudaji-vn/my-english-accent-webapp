@@ -26,7 +26,7 @@ export default function UserPlayRecord({ props, audioElement }: UserPlayRecordPr
     const lang = {
       vn: "Vietnamese",
       us: "English",
-      kr: "Korea",
+      kr: "Korean",
     };
     return lang[language];
   };

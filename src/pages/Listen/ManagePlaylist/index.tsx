@@ -127,17 +127,16 @@ export default function ManagePlaylist() {
   return (
     <Box className='flex flex-col grow min-h-screen'>
       <Box className='sticky bg-white z-10 top-0'>
-        <Container className='py-4 divider '>
+        <Box className='p-4 divider'>
           <Box className='flex items-center gap-2'>
             <IconButton onClick={handleClickOpen}>
               <Avatar src={CloseIcon} className='w-6 h-6' />
             </IconButton>
             <Typography className='text-large-semibold'>Custom playlist</Typography>
           </Box>
-        </Container>
-
-        <Box className='bg-white divider'>
-          <Tabs value={activeTab} onChange={handleChange} aria-label='tabs' variant='fullWidth'>
+        </Box>
+        <Box className='bg-white md:flex'>
+          <Tabs value={activeTab} onChange={handleChange} aria-label='tabs' variant='fullWidth' className="md:w-[400px]">
             <Tab label={tabItems[0]} id={`listen-tab-${activeTab}`} aria-controls={`listen-tabpanel-${activeTab}`} value={"Lectures"} />
             <Tab label={tabItems[1]} id={`listen-tab-${activeTab}`} aria-controls={`listten-tabpanel-${activeTab}`} value={"People"} />
           </Tabs>

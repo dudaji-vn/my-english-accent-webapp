@@ -74,27 +74,29 @@ export default function CreatePlaylist() {
 
   return (
     <Box className='flex flex-col grow min-h-screen'>
-      <Container className='py-4 divider '>
-        <Box className='flex items-center gap-2'>
-          <IconButton onClick={() => navigate(-1)}>
-            <Avatar src={CloseIcon} className='w-6 h-6' />
-          </IconButton>
-          <Typography className='text-large-semibold'>Create playlist</Typography>
+      <Box className='sticky bg-white z-10 top-0'>
+        <Box className='p-4 divider'>
+          <Box className='flex items-center gap-2'>
+            <IconButton onClick={() => navigate(-1)}>
+              <Avatar src={CloseIcon} className='w-6 h-6' />
+            </IconButton>
+            <Typography className='text-large-semibold'>Create playlist</Typography>
+          </Box>
         </Box>
-      </Container>
 
-      <Box className='p-4'>
-        <Stepper>
-          {steps.map((label, index) => {
-            return (
-              <Step key={label}>
-                <StepLabel StepIconComponent={() => stepperComponent(index + 1)}>
-                  <Typography className='text-small-semibold'>{label}</Typography>
-                </StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
+        <Box className='p-4'>
+          <Stepper>
+            {steps.map((label, index) => {
+              return (
+                <Step key={label}>
+                  <StepLabel StepIconComponent={() => stepperComponent(index + 1)}>
+                    <Typography className='text-small-semibold'>{label}</Typography>
+                  </StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        </Box>
       </Box>
 
       <Box className='flex flex-col p-4 grow  bg-gray-100 gap-4'>{renderList()}</Box>

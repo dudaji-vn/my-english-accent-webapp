@@ -9,7 +9,7 @@ export default function UserListen(props: PeopleistenTypeResponse) {
     const lang = {
       vn: "Vietnamese",
       us: "English",
-      kr: "Korea",
+      kr: "Korean",
     };
     return lang[language];
   };
