@@ -8,6 +8,8 @@ import Loading from "@/components/Loading";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
 import ListenEmptyPlaylistPage from "./EmptyPlaylist";
+import ManagePlaylist from "./ManagePlaylist";
+import { useEffect } from "react";
 
 export default function ListenPage() {
   const navigate = useNavigate();
@@ -17,21 +19,25 @@ export default function ListenPage() {
 
   return (
     <Box className='p-4'>
-      <Box className='flex flex-col grow bg-white'>
-        <Box className='flex justify-between p-4 divider'>
-          <Box>
-            <Typography className='text-base-medium'>My playlist</Typography>
-            <Typography className='text-extra-small-regular' variant='body2'>
-              {pluralize(data?.totalLecture ?? 0, "lecture")} &#x2022; {pluralize(data?.totalPeople ?? 0, "people", "")}
-            </Typography>
+      {data?.totalLecture ? (
+        <Box className='flex flex-col grow bg-white'>
+          <Box className='flex justify-between p-4 divider'>
+            <Box>
+              <Typography className='text-base-medium'>My playlist</Typography>
+              <Typography className='text-extra-small-regular' variant='body2'>
+                {pluralize(data?.totalLecture ?? 0, "lecture")} &#x2022; {pluralize(data?.totalPeople ?? 0, "people", "")}
+              </Typography>
+            </Box>
+            <IconButton onClick={() => navigate(ROUTER.LISTENING + ROUTER.MANAGE_PLAYLIST)}>
+              <Avatar src={OptionIcon} alt='wave-icon' className='w-6 h-6' />
+            </IconButton>
           </Box>
-          <IconButton onClick={() => navigate(ROUTER.LISTENING + ROUTER.MANAGE_PLAYLIST)}>
-            <Avatar src={OptionIcon} alt='wave-icon' className='w-6 h-6' />
-          </IconButton>
-        </Box>
 
-        <PlaylistPod />
-      </Box>
+          <PlaylistPod />
+        </Box>
+      ) : (
+        <ListenEmptyPlaylistPage />
+      )}
     </Box>
   );
 }

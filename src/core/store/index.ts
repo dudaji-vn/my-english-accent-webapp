@@ -130,7 +130,7 @@ const globalSlice = createSlice({
       state.listenPage = {
         lectures,
         currentLectureIndex: 0,
-        lectureId: lectures[0].lectureId,
+        lectureId: lectures[0]?.lectureId,
         totalLecture: lectures.length,
         usersRecord: [],
         isTheLastVocabulary: false,

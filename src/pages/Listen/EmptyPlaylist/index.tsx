@@ -5,7 +5,7 @@ import ROUTER from "@/shared/const/router.const";
 export default function ListenEmptyPlaylistPage() {
   const navigate = useNavigate();
   return (
-    <Box className='flex flex-col grow items-center gap-6 justify-center p-4' sx={{ minHeight: (theme) => `calc(100% - ${theme.mixins.toolbar.minHeight}px)` }}>
+    <Box className='flex flex-col grow items-center gap-6 justify-center p-4 bg-white' sx={{ minHeight: (theme) => `calc(100vh - ${theme.mixins.toolbar.minHeight}px - 32px)` }}>
       <Avatar src={WaveIcon} alt='wave-icon' className='w-16 h-16' />
       <Box className='text-center'>
         <Typography className='text-large-semibold'>Empty playlist</Typography>

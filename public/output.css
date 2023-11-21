@@ -504,25 +504,6 @@ h6 {
           transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
-@-webkit-keyframes spin {
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg)
-  }
-}
-
-@keyframes spin {
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg)
-  }
-}
-
-#root :is(.animate-spin) {
-  -webkit-animation: spin 1s linear infinite;
-          animation: spin 1s linear infinite
-}
-
 #root :is(.flex-col) {
   flex-direction: column
 }
@@ -650,11 +631,6 @@ h6 {
   background-color: rgb(221 214 254 / var(--tw-bg-opacity))
 }
 
-#root :is(.bg-purple-300) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(196 181 253 / var(--tw-bg-opacity))
-}
-
 #root :is(.bg-purple-50) {
   --tw-bg-opacity: 1;
   background-color: rgb(249 245 255 / var(--tw-bg-opacity))
@@ -759,16 +735,6 @@ h6 {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-transform, -webkit-filter, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms
-}
-
-#root :is(.transition-all) {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms
-}
-
-#root :is(.duration-200) {
-  transition-duration: 200ms
 }
 
 #root :is(.last\:rounded-b-lg:last-child) {

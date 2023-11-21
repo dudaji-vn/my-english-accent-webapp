@@ -1,22 +1,19 @@
+import ActivedLoopIcon from "@/assets/icon/active-loop-icon.svg";
 import DisableNextIcon from "@/assets/icon/disable-next-icon.svg";
 import DisablePreviosIcon from "@/assets/icon/disable-previous-icon.svg";
+import LectureListIcon from "@/assets/icon/lecture-list-icon.svg";
 import LoopIcon from "@/assets/icon/loop-icon.svg";
-import ActivedLoopIcon from "@/assets/icon/active-loop-icon.svg";
 import NextIcon from "@/assets/icon/next-icon.svg";
 import PauseIcon from "@/assets/icon/pause-icon.svg";
 import PlayIcon from "@/assets/icon/play-icon.svg";
-import VerticalMore from "@/assets/icon/vertial-more-icon.svg";
 import PreviosIcon from "@/assets/icon/previos-icon.svg";
-import ShuffleIcon from "@/assets/icon/shuffle-icon.svg";
-import ActivedShuffleIcon from "@/assets/icon/shuffled-active-icon.svg";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateIndexListenPage } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
-import { getShuffledArr } from "@/shared/utils/getShuffleArray.util";
+import ROUTER from "@/shared/const/router.const";
 import { Avatar, Box, IconButton } from "@mui/material";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ROUTER from "@/shared/const/router.const";
 
 export interface ActionControllRef {
   onHandlePlayAudio: Function;
@@ -154,7 +151,7 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
           navigate(ROUTER.LISTENING + ROUTER.SELECT_LECTURE);
         }}
       >
-        <Avatar src={VerticalMore} alt='wave-icon' className='w-6 h-6' />
+        <Avatar src={LectureListIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
     </Box>
   );

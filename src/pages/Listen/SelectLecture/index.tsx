@@ -35,7 +35,7 @@ export default function SelectLecture() {
 
   return (
     <Box className='flex flex-col grow min-h-screen'>
-      <Container className='py-4 divider '>
+      <Container className='py-4 divider sticky bg-white z-10 top-0'>
         <Box className='flex items-center gap-2'>
           <IconButton onClick={() => navigate(ROUTER.LISTENING)}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
