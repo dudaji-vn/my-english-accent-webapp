@@ -70,7 +70,10 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
     } else if (isRerecord) {
       audio.src = props.voiceSrc;
     }
-    audio.play();
+    audio.play().catch((error) => {
+      dispatch(updateDisableAllAction(false));
+      console.log(error);
+    });
     dispatch(updateDisableAllAction(true));
   };
 
