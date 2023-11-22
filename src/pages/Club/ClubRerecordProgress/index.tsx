@@ -80,7 +80,7 @@ export default function RerecordingProgressPage() {
                 <Grid item xs={12}>
                   <Typography variant='body2' className='text-small-regular break-keep' component={"div"}>
                     {data.vphoneticDisplayLanguage}
-                    <TextToSpeech text={data.vtitleDisplayLanguage} />
+                    {/* <TextToSpeech text={data.vtitleDisplayLanguage} /> */}
                   </Typography>
                 </Grid>
               </Grid>
