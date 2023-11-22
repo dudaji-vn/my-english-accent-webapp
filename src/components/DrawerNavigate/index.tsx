@@ -214,7 +214,7 @@ const DrawerNavigate = ({ ...props }: any) => {
               <Box onClick={handleOpenUserMenu}
                  sx={{
                    "&:hover": {
-                      background: 'rgba(73, 69, 79, 0.08)',
+                      background: '#49454F14',
                   },
                 }}
                  className="cursor-pointer flex items-center rounded-lg px-2 py-1"
