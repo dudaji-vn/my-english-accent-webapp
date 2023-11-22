@@ -46,7 +46,7 @@ export default function TabCustom(props: TabsProp) {
       aria-label='scrollable tabs add user'
     >
       {props.tab.map((item) => {
-        return <Tab key={item} label={item} />;
+        return <Tab className="hover:bg-purple-200" key={item} label={item} />;
       })}
     </Tabs>
   );
