@@ -50,10 +50,25 @@ export default function RecordingProgressPage() {
     return vocab;
   }, [data?.vocabularies]);
 
-  const nextVocabulary = () => {
-    if (vocabularies[renderVocabulary.length]) {
-      setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...predeta, vocabularies[predeta.length]]);
+  const nextVocabulary = ({ voiceSrc, index, isUpdate }: { voiceSrc: string; index: number; isUpdate: boolean }) => {
+    if (vocabularies[index] && !isUpdate) {
+      const newArr = [...renderVocabulary];
+      newArr[index - 1] = {
+        ...newArr[index - 1],
+        voiceSrc,
+      };
+      setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...newArr, vocabularies[index]]);
     }
+
+    if (vocabularies[index] && isUpdate) {
+      const newArr = [...renderVocabulary];
+      newArr[index - 1] = {
+        ...newArr[index - 1],
+        voiceSrc,
+      };
+      setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...newArr]);
+    }
+
     if (renderVocabulary.length === vocabularies.length) {
       setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...predeta, vocabularies[-1]]);
     }
@@ -110,7 +125,7 @@ export default function RecordingProgressPage() {
               <TranslationCard
                 {...val}
                 key={val.vocabularyId}
-                onClick={nextVocabulary}
+                nextVocabulary={nextVocabulary}
                 enrollmentId={enrollmentData!.enrollmentId}
                 index={index + 1}
                 totalVoca={vocabularies.length}
