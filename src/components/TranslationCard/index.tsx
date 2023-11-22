@@ -14,7 +14,7 @@ import persist from "@/shared/utils/persist.util";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
 
-export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { onClick: Function; index: number; totalVoca: number }) {
+export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
   const myId = persist.getMyInfo().userId;
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
@@ -37,9 +37,9 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
     return status === "recording";
   });
 
-  const [isRerecord] = useState(() => {
+  const isRerecord = useMemo(() => {
     return !!props.voiceSrc;
-  });
+  }, [props]);
 
   const displayRepeatBtn = useMemo(() => {
     return (mediaBlobUrl || isRerecord) && !isRecord;
@@ -65,10 +65,10 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   };
 
   const onRepeat = () => {
-    if (isRerecord) {
-      audio.src = props.voiceSrc;
-    } else if (mediaBlobUrl) {
+    if (mediaBlobUrl) {
       audio.src = mediaBlobUrl;
+    } else if (isRerecord) {
+      audio.src = props.voiceSrc;
     }
     audio.play();
     dispatch(updateDisableAllAction(true));
@@ -91,6 +91,8 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
           lectureId: props.lectureId,
         });
       }
+
+      props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: false });
     }
   };
 
@@ -103,6 +105,8 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
         vocabularyId: props.vocabularyId,
         voiceSrc: url,
       }).unwrap();
+
+      props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: true });
     }
   };
 
@@ -135,14 +139,14 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
           </Grid>
           <Grid item xs={12}>
             <IconButton
-              className={`p-5 w-12 h-12 ${isDiableAllAction && !isRecord ? "bg-purple-300" : "bg-primary"}`}
+              className={`p-5 w-16 h-16 ${isDiableAllAction && !isRecord ? "bg-purple-300" : "bg-primary"}`}
               onClick={onHandlePlay}
               disabled={isDiableAllAction && !isRecord}
             >
               <Avatar src={isRecord ? RecordingIcon : MicrophoneIcon} className='w-6 h-6' />
             </IconButton>
             {displayRepeatBtn && (
-              <IconButton className={`p-5 w-12 h-12 ml-5 ${isDiableAllAction ? "bg-purple-300" : "bg-primary"}`} onClick={onRepeat} disabled={isDiableAllAction}>
+              <IconButton className={`p-5 w-16 h-16 ml-5 ${isDiableAllAction ? "bg-purple-300" : "bg-primary"}`} onClick={onRepeat} disabled={isDiableAllAction}>
                 <Avatar src={SpeakingIcon} className='w-6 h-6' />
               </IconButton>
             )}
@@ -155,17 +159,20 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
           </Grid>
         </Grid>
       </BoxCard>
+
       {displayContinueBtn && !hideContinueBtn && (
         <Button
           variant='outlined'
           onClick={() => {
             onAddRecord();
-            props.onClick();
           }}
+          className='h-12'
         >
           Continue
         </Button>
       )}
+
+      <Box className={`${props.voiceSrc ? "invisible" : "h-28 visible"}`}></Box>
     </Container>
   );
 }

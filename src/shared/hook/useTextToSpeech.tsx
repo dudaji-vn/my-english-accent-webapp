@@ -14,12 +14,12 @@ const TextToSpeech = ({ text = "" }: { text: string }) => {
   const [checked, setChecked] = useState(false);
   const onHandlePlay = () => {
     if (utterance) {
-      synth.speak(utterance);
       setChecked(() => true);
       dispatch(updateDisableAllAction(true));
+      synth.speak(utterance);
       utterance.onend = function () {
-        setChecked(() => false);
         dispatch(updateDisableAllAction(false));
+        setChecked(() => false);
 
         synth.cancel();
       };

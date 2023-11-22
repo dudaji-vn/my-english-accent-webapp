@@ -365,14 +365,6 @@ h6 {
   margin-top: 1.5rem
 }
 
-#root :is(.mb-14) {
-  margin-bottom: 3.5rem
-}
-
-#root :is(.mb-\[120px\]) {
-  margin-bottom: 120px
-}
-
 #root :is(.block) {
   display: block
 }
@@ -395,6 +387,10 @@ h6 {
 
 #root :is(.h-16) {
   height: 4rem
+}
+
+#root :is(.h-28) {
+  height: 7rem
 }
 
 #root :is(.h-4) {
@@ -431,30 +427,6 @@ h6 {
 
 #root :is(.h-screen) {
   height: 100vh
-}
-
-#root :is(.h-\[371px\]) {
-  height: 371px
-}
-
-#root :is(.h-0) {
-  height: 0px
-}
-
-#root :is(.h-\[100px\]) {
-  height: 100px
-}
-
-#root :is(.h-\[50px\]) {
-  height: 50px
-}
-
-#root :is(.h-\[200\]) {
-  height: 200
-}
-
-#root :is(.h-\[200px\]) {
-  height: 200px
 }
 
 #root :is(.max-h-\[208px\]) {
@@ -673,6 +645,11 @@ h6 {
   background-color: rgb(221 214 254 / var(--tw-bg-opacity))
 }
 
+#root :is(.bg-purple-300) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(196 181 253 / var(--tw-bg-opacity))
+}
+
 #root :is(.bg-purple-50) {
   --tw-bg-opacity: 1;
   background-color: rgb(249 245 255 / var(--tw-bg-opacity))
@@ -681,11 +658,6 @@ h6 {
 #root :is(.bg-white) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
-}
-
-#root :is(.bg-purple-300) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(196 181 253 / var(--tw-bg-opacity))
 }
 
 #root :is(.p-2) {
@@ -784,30 +756,9 @@ h6 {
   transition-duration: 150ms
 }
 
-#root :is(.last\:invisible:last-child) {
-  visibility: hidden
-}
-
-#root :is(.last\:block:last-child) {
-  display: block
-}
-
-#root :is(.last\:h-\[371px\]:last-child) {
-  height: 371px
-}
-
-#root :is(.last\:h-\[100px\]:last-child) {
-  height: 100px
-}
-
 #root :is(.last\:rounded-b-lg:last-child) {
   border-bottom-right-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem
-}
-
-#root :is(.last\:bg-primary:last-child) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(127 86 217 / var(--tw-bg-opacity))
 }
 
 @media (min-width: 640px) {
