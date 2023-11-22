@@ -1,18 +1,18 @@
-import { useReactMediaRecorder } from "react-media-recorder-2";
-import { useMemo, useState } from "react";
-import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
-import BoxCard from "@/components/BoxCard";
-import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
-import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import RecordingIcon from "@/assets/icon/stop-circle-icon.svg";
 import SpeakingIcon from "@/assets/icon/volume-high-white-icon.svg";
-import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
-import { useEnrollLectureMutation } from "@/core/services";
+import BoxCard from "@/components/BoxCard";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import persist from "@/shared/utils/persist.util";
+import { useEnrollLectureMutation } from "@/core/services";
+import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
+import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
+import TextToSpeech from "@/shared/hook/useTextToSpeech";
+import persist from "@/shared/utils/persist.util";
+import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
+import { useMemo, useState } from "react";
+import { useReactMediaRecorder } from "react-media-recorder-2";
 
 export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
   const myId = persist.getMyInfo().userId;
@@ -23,7 +23,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   const dispatch = useAppDispatch();
   const audio = new Audio();
 
-  const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
+  const { status, startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } = useReactMediaRecorder({
     audio: true,
     blobPropertyBag: {
       type: "audio/mp3",
@@ -79,7 +79,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
 
   const onAddRecord = async () => {
     if (mediaBlobUrl) {
-      setHideUpdateRecordBtn(() => true);
+      dispatch(updateDisableAllAction(true));
       setHideContinueBtn(() => true);
       const url = await UploadFileController.uploadAudio(mediaBlobUrl, props.vocabularyId, myId, false);
 
@@ -96,11 +96,14 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
       }
 
       props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: false });
+      clearBlobUrl();
+      dispatch(updateDisableAllAction(false));
     }
   };
 
   const onUpdateRecord = async () => {
     if (mediaBlobUrl) {
+      dispatch(updateDisableAllAction(true));
       setHideUpdateRecordBtn(() => true);
       const url = await UploadFileController.uploadAudio(mediaBlobUrl, props.vocabularyId, myId, false);
 
@@ -110,6 +113,8 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
       }).unwrap();
 
       props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: true });
+      clearBlobUrl();
+      dispatch(updateDisableAllAction(false));
     }
   };
 
@@ -170,11 +175,11 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
             onAddRecord();
           }}
           className='h-12'
+          disabled={isDiableAllAction}
         >
           Continue
         </Button>
       )}
-
       <Box className={`${props.voiceSrc ? "invisible" : "h-28 visible"}`}></Box>
     </Container>
   );

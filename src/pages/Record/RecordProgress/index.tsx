@@ -1,18 +1,17 @@
+import CloseIcon from "@/assets/icon/close-icon.svg";
+import Congratulation from "@/assets/icon/congratulation-icon.svg";
+import MenuIcon from "@/assets/icon/list-icon.svg";
+import Loading from "@/components/Loading";
+import TranslationCard from "@/components/TranslationCard";
+import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
+import { useAppSelector } from "@/core/store";
+import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
+import ROUTER from "@/shared/const/router.const";
+import { StageExercise } from "@/shared/type";
+import persist from "@/shared/utils/persist.util";
+import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Container, Box, IconButton, Avatar, Typography, LinearProgress, Button } from "@mui/material";
-import _ from "lodash";
-import TranslationCard from "@/components/TranslationCard";
-import { StageExercise } from "@/shared/type";
-import CloseIcon from "@/assets/icon/close-icon.svg";
-import MenuIcon from "@/assets/icon/list-icon.svg";
-import Congratulation from "@/assets/icon/congratulation-icon.svg";
-import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
-import Loading from "@/components/Loading";
-import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
-import persist from "@/shared/utils/persist.util";
-import ROUTER from "@/shared/const/router.const";
-import { useAppSelector } from "@/core/store";
 
 export default function RecordingProgressPage() {
   const navigate = useNavigate();
@@ -51,26 +50,15 @@ export default function RecordingProgressPage() {
   }, [data?.vocabularies]);
 
   const nextVocabulary = ({ voiceSrc, index, isUpdate }: { voiceSrc: string; index: number; isUpdate: boolean }) => {
-    if (vocabularies[index] && !isUpdate) {
+    if (vocabularies[index - 1]) {
       const newArr = [...renderVocabulary];
       newArr[index - 1] = {
         ...newArr[index - 1],
         voiceSrc,
       };
-      setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...newArr, vocabularies[index]]);
-    }
-
-    if (vocabularies[index] && isUpdate) {
-      const newArr = [...renderVocabulary];
-      newArr[index - 1] = {
-        ...newArr[index - 1],
-        voiceSrc,
-      };
-      setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...newArr]);
-    }
-
-    if (renderVocabulary.length === vocabularies.length) {
-      setRenderVocabulary((predeta: VocabularyTypeWithNativeLanguageResponse[]) => [...predeta, vocabularies[-1]]);
+      setRenderVocabulary(() => {
+        return isUpdate ? [...newArr] : [...newArr, vocabularies[index]];
+      });
     }
   };
 
