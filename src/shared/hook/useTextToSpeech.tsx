@@ -1,42 +1,39 @@
-import { useState, useEffect } from "react";
-import { Avatar, Checkbox } from "@mui/material";
+import { useState, useEffect, useMemo } from "react";
+import { Avatar, Box, Checkbox } from "@mui/material";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import { updateDisableAllAction } from "@/core/store/index";
 import { useAppSelector, useAppDispatch } from "@/core/store";
 
-const TextToSpeech = ({ text = "" }: { text: string }) => {
+const TextToSpeech = ({ text = "Text default" }: { text: string }) => {
   const isDiableAllAction = useAppSelector((state) => state.GlobalStore.recordAudio.disableAllAction);
   const dispatch = useAppDispatch();
-
-  const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
   const synth = window.speechSynthesis;
-  const [checked, setChecked] = useState(false);
-  const onHandlePlay = () => {
-    if (utterance) {
-      setChecked(() => true);
-      dispatch(updateDisableAllAction(true));
-      synth.speak(utterance);
-      utterance.onend = function () {
-        dispatch(updateDisableAllAction(false));
-        setChecked(() => false);
 
-        synth.cancel();
-      };
-    }
+  const utterance = useMemo<SpeechSynthesisUtterance>(() => {
+    const u = new SpeechSynthesisUtterance(text);
+    const voices: SpeechSynthesisVoice[] = synth.getVoices();
+    const index = voices.findIndex((voice) => voice.lang === "zh-CN");
+    u.voice = voices[index];
+    u.lang = "zh-CN";
+    return u;
+  }, [text]);
+
+  const [checked, setChecked] = useState(false);
+
+  const onHandlePlay = () => {
+    setChecked(() => true);
+    dispatch(updateDisableAllAction(true));
+  };
+
+  utterance.onend = function () {
+    dispatch(updateDisableAllAction(false));
+    setChecked(() => false);
+
+    synth.cancel();
   };
 
   useEffect(() => {
-    const u = new SpeechSynthesisUtterance(text);
-    const voices: SpeechSynthesisVoice[] = synth.getVoices();
-
-    const index = voices.findIndex((voice) => voice.lang === "Samantha");
-    u.voice = voices[index];
-    u.lang = "en-US";
-    if (u) {
-      setUtterance(u);
-    }
-
     return () => {
       setChecked(() => false);
       dispatch(updateDisableAllAction(false));
@@ -44,6 +41,12 @@ const TextToSpeech = ({ text = "" }: { text: string }) => {
       synth.cancel();
     };
   }, [text]);
+
+  useEffect(() => {
+    if (checked) {
+      synth.speak(utterance);
+    }
+  }, [checked]);
 
   return (
     <Checkbox
