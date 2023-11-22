@@ -41,11 +41,11 @@ import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
 
 const settings = [
-  {
-    title: "Account",
-    icon: AccountIcon,
-    action: () => {},
-  },
+  // {
+  //   title: "Account",
+  //   icon: AccountIcon,
+  //   action: () => {},
+  // },
   {
     title: "Log out",
     icon: LogoutIcon,
@@ -211,8 +211,15 @@ const DrawerNavigate = ({ ...props }: any) => {
           <Box sx={{ flexGrow: 1 }} />
           <Box>
             <Tooltip title='Open settings'>
-              <Box className='flex items-center'>
-                <IconButton onClick={handleOpenUserMenu} disableRipple>
+              <Box onClick={handleOpenUserMenu}
+                 sx={{
+                   "&:hover": {
+                      background: 'rgba(73, 69, 79, 0.08)',
+                  },
+                }}
+                 className="cursor-pointer flex items-center rounded-lg px-2 py-1"
+              >
+                <IconButton disableRipple>
                   <Avatar
                     alt='avatar-icon'
                     sx={{
