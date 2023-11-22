@@ -11,12 +11,16 @@ import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useEnrollLectureMutation } from "@/core/services";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
 import persist from "@/shared/utils/persist.util";
+import { useAppDispatch, useAppSelector } from "@/core/store";
+import { updateDisableAllAction } from "@/core/store/index";
 
 export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { onClick: Function; index: number; totalVoca: number }) {
   const myId = persist.getMyInfo().userId;
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
 
+  const isDiableAllAction = useAppSelector((state) => state.GlobalStore.recordAudio.disableAllAction);
+  const dispatch = useAppDispatch();
   const audio = new Audio();
 
   const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
@@ -57,6 +61,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
     }
     setIsRecord(() => !isRecord);
     setHideUpdateRecordBtn(() => false);
+    dispatch(updateDisableAllAction(!isDiableAllAction));
   };
 
   const onRepeat = () => {
@@ -66,6 +71,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
       audio.src = mediaBlobUrl;
     }
     audio.play();
+    dispatch(updateDisableAllAction(true));
   };
 
   const onAddRecord = async () => {
@@ -100,9 +106,13 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
     }
   };
 
+  audio.onended = function () {
+    dispatch(updateDisableAllAction(false));
+  };
+
   return (
     <Container className='py-4 bg-gray-100 flex flex-col grow justify-between items-center'>
-      <BoxCard classes='p-4 mb-4'>
+      <BoxCard classes='p-4 mb-4 max-w-[375px]'>
         <Grid container textAlign={"center"} gap={5}>
           <Grid item xs={12}>
             <Box className='mb-10'>
@@ -118,17 +128,21 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
           </Grid>
           <Grid item xs={12}>
             {displayUpdateRecordBtn && !hideUpdateRecordBtn && (
-              <Button variant='outlined' onClick={onUpdateRecord}>
+              <Button variant='outlined' onClick={onUpdateRecord} disabled={isDiableAllAction}>
                 Update new record
               </Button>
             )}
           </Grid>
           <Grid item xs={12}>
-            <IconButton className='bg-primary p-5 w-12 h-12' onClick={onHandlePlay}>
+            <IconButton
+              className={`p-5 w-12 h-12 ${isDiableAllAction && !isRecord ? "bg-purple-300" : "bg-primary"}`}
+              onClick={onHandlePlay}
+              disabled={isDiableAllAction && !isRecord}
+            >
               <Avatar src={isRecord ? RecordingIcon : MicrophoneIcon} className='w-6 h-6' />
             </IconButton>
             {displayRepeatBtn && (
-              <IconButton className='bg-primary p-5 w-12 h-12 ml-5' onClick={onRepeat}>
+              <IconButton className={`p-5 w-12 h-12 ml-5 ${isDiableAllAction ? "bg-purple-300" : "bg-primary"}`} onClick={onRepeat} disabled={isDiableAllAction}>
                 <Avatar src={SpeakingIcon} className='w-6 h-6' />
               </IconButton>
             )}

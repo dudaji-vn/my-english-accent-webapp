@@ -143,7 +143,7 @@ export default function ClubRecordingPage() {
             <Grid item xs={12}>
               <Typography variant='body2' className='text-small-regular break-keep' component={"div"}>
                 {vocabularies[currentStep]?.vphoneticDisplayLanguage}
-                <TextToSpeech text={vocabularies[currentStep]?.vtitleDisplayLanguage} />
+                {/* <TextToSpeech text={vocabularies[currentStep]?.vtitleDisplayLanguage} /> */}
               </Typography>
             </Grid>
           </Grid>

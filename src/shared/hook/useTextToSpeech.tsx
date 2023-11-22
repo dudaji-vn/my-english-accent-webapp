@@ -2,19 +2,25 @@ import { useState, useEffect } from "react";
 import { Avatar, Checkbox } from "@mui/material";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
+import { updateDisableAllAction } from "@/core/store/index";
+import { useAppSelector, useAppDispatch } from "@/core/store";
 
 const TextToSpeech = ({ text = "" }: { text: string }) => {
+  const isDiableAllAction = useAppSelector((state) => state.GlobalStore.recordAudio.disableAllAction);
+  const dispatch = useAppDispatch();
+
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
   const synth = window.speechSynthesis;
   const [checked, setChecked] = useState(false);
-
   const onHandlePlay = () => {
     if (utterance) {
       synth.speak(utterance);
       setChecked(() => true);
-
+      dispatch(updateDisableAllAction(true));
       utterance.onend = function () {
         setChecked(() => false);
+        dispatch(updateDisableAllAction(false));
+
         synth.cancel();
       };
     }
@@ -33,12 +39,20 @@ const TextToSpeech = ({ text = "" }: { text: string }) => {
 
     return () => {
       setChecked(() => false);
+      dispatch(updateDisableAllAction(false));
+
       synth.cancel();
     };
   }, [text]);
 
   return (
-    <Checkbox onClick={onHandlePlay} checked={checked} icon={<Avatar src={SpeakerIcon} className='w-4 h-4' />} checkedIcon={<Avatar src={SpeakerFillIcon} className='w-4 h-4' />} />
+    <Checkbox
+      disabled={isDiableAllAction}
+      onClick={onHandlePlay}
+      checked={checked}
+      icon={<Avatar src={SpeakerIcon} className='w-4 h-4' />}
+      checkedIcon={<Avatar src={SpeakerFillIcon} className='w-4 h-4' />}
+    />
   );
 };
 

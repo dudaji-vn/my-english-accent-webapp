@@ -7,6 +7,9 @@ import { UserPlayingType } from "@/components/PlaylistPod";
 
 interface GlobalStoreType {
   recordPage: EnrollmentStep;
+  recordAudio: {
+    disableAllAction: boolean;
+  };
   clubPage: {
     voiceSrc: string;
     recordId: string;
@@ -33,6 +36,9 @@ const initialState: GlobalStoreType = {
     enrollmentId: "",
     lectureId: "",
     stage: 0,
+  },
+  recordAudio: {
+    disableAllAction: false,
   },
   clubPage: { recordId: "", voiceSrc: "", isPlayAll: false, audioIndex: 0 },
   listenPage: {
@@ -70,6 +76,12 @@ const globalSlice = createSlice({
       state.clubPage = {
         ...state.clubPage,
         isPlayAll: !state.clubPage.isPlayAll,
+      };
+    },
+
+    updateDisableAllAction: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
+      state.recordAudio = {
+        disableAllAction: action.payload,
       };
     },
 
@@ -149,26 +161,20 @@ const globalSlice = createSlice({
         isTheLastVocabulary: false,
       };
     });
-    builder.addMatcher(ListenApi.endpoints.getPlaylistListenByLecture.matchFulfilled, (state, action) => {
-      const { participants } = action.payload;
-
-      if (participants.length) {
-        const usersRecord = participants[0].recordUser.map((user) => ({ ...user, isPlaying: false, isPlayed: false }));
-        state.listenPage = {
-          ...state.listenPage,
-          usersRecord,
-        };
-      } else {
-        state.listenPage = {
-          ...state.listenPage,
-          usersRecord: [],
-        };
-      }
-    });
   },
 });
 
-export const { saveAudio, setPlayAll, nextIndex, resetCLubPage, updateLectureIdListenPage, updateIndexListenPage, updateIsTheLastVocabulary, updateIsLoop, updateIsPlaying } =
-  globalSlice.actions;
+export const {
+  saveAudio,
+  setPlayAll,
+  nextIndex,
+  resetCLubPage,
+  updateLectureIdListenPage,
+  updateIndexListenPage,
+  updateIsTheLastVocabulary,
+  updateIsLoop,
+  updateIsPlaying,
+  updateDisableAllAction,
+} = globalSlice.actions;
 
 export default globalSlice.reducer;

@@ -37,30 +37,32 @@ export default function PlaylistPod() {
 
   const loadUserRecord = useCallback(
     (vocabularyIndex: number, isPlaying: boolean) => {
-      if (!playlistDetail || !playlistDetail.participants.length) {
+      if (playlistDetail && playlistDetail.participants.length) {
+        const newUserRecord = playlistDetail.participants[vocabularyIndex].recordUser.map((user, index) => ({
+          ...user,
+          isPlaying: index === 0 ? isPlaying : false,
+          isPlayed: false,
+        }));
+
+        setUsersRecord(() => newUserRecord);
+        dispatch(updateIsPlaying(isPlaying));
+        if (vocabularyIndex + 1 != playlistDetail.participants.length) {
+          dispatch(updateIsTheLastVocabulary(false));
+        }
+      } else {
+        setUsersRecord(() => []);
         dispatch(updateIsPlaying(false));
-        return setUsersRecord(() => []);
-      }
-      const newUserRecord = playlistDetail.participants[vocabularyIndex].recordUser.map((user, index) => ({
-        ...user,
-        isPlaying: index === 0 ? isPlaying : false,
-        isPlayed: false,
-      }));
-      setUsersRecord(() => newUserRecord);
-      if (vocabularyIndex + 1 != playlistDetail.participants.length) {
-        dispatch(updateIsTheLastVocabulary(false));
       }
     },
     [playlistDetail]
   );
 
-  const onHandleActionControl = (index: number, playingStatus: boolean, forcePlayAudio: boolean = false) => {
+  const onHandleActionControl = (index: number, forcePlayAudio: boolean = false) => {
     if (!actionControlPlaylistElementRef.current) return;
 
     if (forcePlayAudio) {
       actionControlPlaylistElementRef.current.onHandlePlayAudio(index);
     } else {
-      dispatch(updateIsPlaying(playingStatus));
       actionControlPlaylistElementRef.current.setIndexPlaying(index);
     }
   };
@@ -70,10 +72,10 @@ export default function PlaylistPod() {
     const isManualSwipe = trackingSwiper.current && Date.now() - trackingSwiper.current < 300;
     if (isManualSwipe) {
       loadUserRecord(val.activeIndex, false);
-      onHandleActionControl(0, false);
+      onHandleActionControl(0);
     } else {
       loadUserRecord(val.activeIndex, true);
-      onHandleActionControl(0, true);
+      onHandleActionControl(0);
     }
   };
 
@@ -143,7 +145,7 @@ export default function PlaylistPod() {
 
         {usersRecord.length ? (
           usersRecord.map((user, index) => (
-            <Grid container key={user.userId} alignItems='center' justifyItems={"center"} padding={1} onClick={() => onHandleActionControl(index, true, true)}>
+            <Grid container key={user.userId} alignItems='center' justifyItems={"center"} padding={1} onClick={() => onHandleActionControl(index, true)}>
               <Grid item xs={1}>
                 {user.isPlaying ? (
                   playingStatus ? (
