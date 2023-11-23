@@ -42,13 +42,13 @@ function LanguageComponent({ nation, selected, onClick }: { nation: Language; se
 }
 
 export default function Register() {
-  const MAX_STEP = 2;
+  const MAX_STEP = 1;
   const navigate = useNavigate();
 
   const [step, setStep] = useState(0);
   const [nickName, setNickName] = useState("");
   const [nativeLanguage, setNativeLanguage] = useState<Language | null>(null);
-  const [displayLanguage, setDisplayLanguage] = useState<Language | null>(null);
+  const [displayLanguage] = useState<Language>("us");
   const provider = persist.getProviderInfo();
 
   const [registerAccount] = useRegisterMutation();
@@ -58,14 +58,10 @@ export default function Register() {
       return !provider || !nickName;
     }
 
-    if (step === 1) {
+    if (step === MAX_STEP) {
       return !nativeLanguage;
     }
-
-    if (step === MAX_STEP) {
-      return !displayLanguage;
-    }
-  }, [provider, nickName, nativeLanguage, displayLanguage]);
+  }, [provider, nickName, nativeLanguage]);
 
   const renderNational = (selected: Language | null, isNativeLanguage: boolean) => {
     return Object.keys(NATIONAL).map((item) => (
@@ -74,11 +70,7 @@ export default function Register() {
         selected={selected as Language}
         key={item}
         onClick={(value: Language) => {
-          if (isNativeLanguage) {
-            setNativeLanguage(() => value);
-          } else {
-            setDisplayLanguage(() => value);
-          }
+          setNativeLanguage(() => value);
         }}
       />
     ));
@@ -110,16 +102,6 @@ export default function Register() {
               What’s your native language?
             </Typography>
             {renderNational(nativeLanguage, true)}
-          </Box>
-        );
-        break;
-      case 2:
-        element = (
-          <Box className='flex flex-col w-full'>
-            <Typography component={"h6"} className='text-center mb-8 self-center w-80'>
-              Would you like to display app language in?
-            </Typography>
-            {renderNational(displayLanguage, false)}
           </Box>
         );
         break;
