@@ -40,7 +40,7 @@ export default function CustomDrawer({ open, children, onClose }: CustomAppBarPr
       open={open}
       onClose={() => onClose()}
       sx={[
-        { width: drawerWidth, flexShrink: 0, whiteSpace: "nowrap", boxSizing: "border-box" },
+        { width: drawerWidth, flexShrink: 0, whiteSpace: "nowrap", boxSizing: "border-box", "& .MuiDrawer-paper": { backgroundColor: "#f3f4f6"} },
         open && { ...openedMixin(theme), "& .MuiDrawer-paper": openedMixin(theme) },
         !open && { ...closedMixin(theme), "& .MuiDrawer-paper": closedMixin(theme) },
       ]}
