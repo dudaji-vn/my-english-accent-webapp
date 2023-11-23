@@ -4,6 +4,31 @@
 
 @import url("swiper/css/bundle");
 
+@font-face {
+  font-family:'Inter' ;
+  src: url('../public/fonts/Inter-Light.ttf');
+  font-weight: 300
+}
+@font-face {
+  font-family:'Inter' ;
+  src: url('../public/fonts/Inter-Regular.ttf');
+  font-weight: 400
+}
+@font-face {
+  font-family:'Inter' ;
+  src: url('../public/fonts/Inter-Medium.ttf');
+  font-weight: 500
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('../public/fonts/Inter-SemiBold.ttf');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('../public/fonts/Inter-Bold.ttf');
+  font-weight: 700;
+}
 @layer base {
   html {
     @apply font-inter !important;
