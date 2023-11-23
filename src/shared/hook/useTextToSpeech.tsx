@@ -13,9 +13,9 @@ const TextToSpeech = ({ text = "Text default" }: { text: string }) => {
   const utterance = useMemo<SpeechSynthesisUtterance>(() => {
     const u = new SpeechSynthesisUtterance(text);
     const voices: SpeechSynthesisVoice[] = synth.getVoices();
-    const index = voices.findIndex((voice) => voice.lang === "zh-CN");
+    const index = voices.findIndex((voice) => voice.lang === "en-GB");
     u.voice = voices[index];
-    u.lang = "zh-CN";
+    u.lang = "en-GB";
     return u;
   }, [text]);
 
