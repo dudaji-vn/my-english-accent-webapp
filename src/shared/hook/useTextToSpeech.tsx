@@ -4,54 +4,62 @@ import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import { updateDisableAllAction } from "@/core/store/index";
 import { useAppSelector, useAppDispatch } from "@/core/store";
+import { Console } from "console";
 
-const TextToSpeech = ({ text = "Text default" }: { text: string }) => {
+const TextToSpeech = ({ text = "a" }: { text: string }) => {
   const isDiableAllAction = useAppSelector((state) => state.GlobalStore.recordAudio.disableAllAction);
   const dispatch = useAppDispatch();
+  const [checked, setChecked] = useState(false);
+  const saying = new Set();
+  const defaultSaying = "a";
+
   const synth = window.speechSynthesis;
 
-  const utterance = useMemo<SpeechSynthesisUtterance>(() => {
-    const u = new SpeechSynthesisUtterance(text);
-    const voices: SpeechSynthesisVoice[] = synth.getVoices();
-    const index = voices.findIndex((voice) => voice.lang === "en-GB");
-    u.voice = voices[index];
-    u.lang = "en-GB";
-    return u;
-  }, [text]);
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const [checked, setChecked] = useState(false);
-
-  const onHandlePlay = () => {
+  const say = (speech: string, rate = 1.0, pitch = 1.0, lang = "en-GB", volume = 1.0) => {
+    // rate: (0.1,10), pitch: (0,2), lang: BCP 47 language tag
+    // So 0.1 < rate < 10, see https://en.wikipedia.org/wiki/Interval_(mathematics)
+    const u = new SpeechSynthesisUtterance(speech);
+    u.lang = lang;
+    u.pitch = pitch;
+    u.rate = rate;
+    u.volume = volume;
+    saying.add(u);
+    synth.speak(u);
     setChecked(() => true);
     dispatch(updateDisableAllAction(true));
+
+    u.onend = (e) => {
+      saying.delete(e.utterance);
+      if (e.utterance.text !== defaultSaying) {
+        setChecked(() => false);
+        dispatch(updateDisableAllAction(false));
+      }
+    };
   };
 
-  utterance.onend = function () {
-    dispatch(updateDisableAllAction(false));
-    setChecked(() => false);
+  async function sayAllViaSleepyJack() {
+    say(defaultSaying, 9, 1, "en-GB", 0); // Wake sleeping audio jack.
 
-    synth.cancel();
-  };
+    await sleep(1).then(() => {
+      say(text);
+    });
+  }
 
   useEffect(() => {
     return () => {
       setChecked(() => false);
       dispatch(updateDisableAllAction(false));
-
+      saying.clear();
       synth.cancel();
     };
   }, [text]);
 
-  useEffect(() => {
-    if (checked) {
-      synth.speak(utterance);
-    }
-  }, [checked]);
-
   return (
     <Checkbox
       disabled={isDiableAllAction}
-      onClick={onHandlePlay}
+      onClick={sayAllViaSleepyJack}
       checked={checked}
       icon={<Avatar src={SpeakerIcon} className='w-4 h-4' />}
       checkedIcon={<Avatar src={SpeakerFillIcon} className='w-4 h-4' />}
