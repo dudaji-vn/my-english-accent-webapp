@@ -1,19 +1,16 @@
-import { useState } from "react";
-import { Avatar, Box, Button, Checkbox, Container, IconButton, InputBase, Typography } from "@mui/material";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import ReactCountryFlag from "react-country-flag";
-import { auth } from "@/config/firebase";
-import FooterCard from "@/components/FooterBtn";
-import _ from "lodash";
-import { useNavigate } from "react-router-dom";
-import { Language, NATIONAL } from "@/core/type";
-import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
-import CheckIcon from "@/assets/icon/circle-check-icon.svg";
 import ChervonIcon from "@/assets/icon/chevron-left-icon.svg";
+import CheckIcon from "@/assets/icon/circle-check-icon.svg";
+import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import ROUTER from "@/shared/const/router.const";
+import FooterCard from "@/components/FooterBtn";
 import { useRegisterMutation } from "@/core/services";
+import { Language, NATIONAL } from "@/core/type";
+import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
+import { Avatar, Box, Button, Checkbox, Container, InputBase, Typography } from "@mui/material";
+import { useMemo, useState } from "react";
+import ReactCountryFlag from "react-country-flag";
+import { useNavigate } from "react-router-dom";
 
 function LanguageComponent({ nation, selected, onClick }: { nation: Language; selected: Language; onClick: Function }) {
   const onSelectLecture = () => {
@@ -56,22 +53,19 @@ export default function Register() {
 
   const [registerAccount] = useRegisterMutation();
 
-  const register = async () => {
-    await createUserWithEmailAndPassword(auth, "thien@gmail.com", "password")
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        // navigate("/login");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        // ..
-      });
-  };
+  const disableContinueBtn = useMemo(() => {
+    if (step === 0) {
+      return !provider || !nickName;
+    }
+
+    if (step === 1) {
+      return !nativeLanguage;
+    }
+
+    if (step === MAX_STEP) {
+      return !displayLanguage;
+    }
+  }, [provider, nickName, nativeLanguage, displayLanguage]);
 
   const renderNational = (selected: Language | null, isNativeLanguage: boolean) => {
     return Object.keys(NATIONAL).map((item) => (
@@ -172,7 +166,7 @@ export default function Register() {
       </Box>
       <Container className='flex flex-col gap-4 items-center grow'>{displayLayoutRegister()}</Container>
       <FooterCard classes='justify-center'>
-        <Button className='p-3 text-base-medium' variant='contained' fullWidth onClick={onHandleNext} disabled={!provider}>
+        <Button className='p-3 text-base-medium' variant='contained' fullWidth onClick={onHandleNext} disabled={disableContinueBtn}>
           Continue
         </Button>
       </FooterCard>
