@@ -93,8 +93,8 @@ export default function RecordingProgressPage() {
   if (isFetching) return <Loading />;
 
   return (
-    <Box className='flex flex-col grow  min-h-screen'>
-      <Container className='py-4 divider bg-white sticky top-0 z-10'>
+    <Box className='flex flex-col grow bg-gray-100 min-h-screen'>
+      <Container className='py-4 divider bg-gray-100 sticky top-0 z-10'>
         <Box className='flex items-center gap-2'>
           <IconButton onClick={onHandleClose}>
             <Avatar src={CloseIcon} className='w-6 h-6' />
