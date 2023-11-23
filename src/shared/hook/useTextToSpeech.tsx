@@ -16,7 +16,7 @@ const TextToSpeech = ({ text = "a" }: { text: string }) => {
 
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const say = (speech: string, rate = 1.0, pitch = 1.0, lang = "en-GB", volume = 1.0) => {
+  const say = (speech: string, rate = 1.0, pitch = 1.0, lang = "en", volume = 1.0) => {
     // rate: (0.1,10), pitch: (0,2), lang: BCP 47 language tag
     // So 0.1 < rate < 10, see https://en.wikipedia.org/wiki/Interval_(mathematics)
     const u = new SpeechSynthesisUtterance(speech);
@@ -41,7 +41,7 @@ const TextToSpeech = ({ text = "a" }: { text: string }) => {
   };
 
   async function sayAllViaSleepyJack() {
-    say(defaultSaying, 9, 1, "en-GB", 0); // Wake sleeping audio jack.
+    say(defaultSaying, 9, 1, "en", 0); // Wake sleeping audio jack.
 
     await sleep(100).then(() => {
       say(text);
