@@ -1,16 +1,15 @@
-import { useState, useEffect, useMemo } from "react";
-import { Avatar, Box, Checkbox } from "@mui/material";
-import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
+import SpeakerIcon from "@/assets/icon/volume-icon.svg";
+import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
-import { useAppSelector, useAppDispatch } from "@/core/store";
-import { Console } from "console";
+import { Avatar, Checkbox } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const TextToSpeech = ({ text = "a" }: { text: string }) => {
   const isDiableAllAction = useAppSelector((state) => state.GlobalStore.recordAudio.disableAllAction);
   const dispatch = useAppDispatch();
   const [checked, setChecked] = useState(false);
-  const saying = new Set();
+  const utterances: SpeechSynthesisUtterance[] = [];
   const defaultSaying = "a";
 
   const synth = window.speechSynthesis;
@@ -25,24 +24,26 @@ const TextToSpeech = ({ text = "a" }: { text: string }) => {
     u.pitch = pitch;
     u.rate = rate;
     u.volume = volume;
-    saying.add(u);
+    utterances.push(u);
     synth.speak(u);
     setChecked(() => true);
     dispatch(updateDisableAllAction(true));
 
     u.onend = (e) => {
-      saying.delete(e.utterance);
-      if (e.utterance.text !== defaultSaying) {
-        setChecked(() => false);
-        dispatch(updateDisableAllAction(false));
+      if (utterances.length) {
+        if (utterances[0].text !== defaultSaying) {
+          setChecked(() => false);
+          dispatch(updateDisableAllAction(false));
+        }
       }
+      utterances.shift();
     };
   };
 
   async function sayAllViaSleepyJack() {
     say(defaultSaying, 9, 1, "en-GB", 0); // Wake sleeping audio jack.
 
-    await sleep(1).then(() => {
+    await sleep(100).then(() => {
       say(text);
     });
   }
@@ -51,7 +52,6 @@ const TextToSpeech = ({ text = "a" }: { text: string }) => {
     return () => {
       setChecked(() => false);
       dispatch(updateDisableAllAction(false));
-      saying.clear();
       synth.cancel();
     };
   }, [text]);
