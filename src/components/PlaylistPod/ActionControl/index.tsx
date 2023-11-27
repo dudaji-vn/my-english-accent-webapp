@@ -15,16 +15,18 @@ import { Avatar, Box, IconButton } from "@mui/material";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export interface ActionControllRef {
-  onHandlePlayAudio: Function;
+export interface ActionControlRef {
+  onHandlePlayAudioBySelectUser: Function;
   setIndexPlaying: Function;
 }
-interface ActionControllPlaylistProps {
+
+interface ActionControlPlaylistProps {
   usersRecord: (UserResponseType & RecordTypeResponse & { isPlaying: boolean; isPlayed: boolean })[];
   setUsersRecord: Function;
   onNextSlideIndex: Function;
 }
-export default forwardRef(function ActionControllPlaylist({ usersRecord, setUsersRecord, onNextSlideIndex }: ActionControllPlaylistProps, ref) {
+
+const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextSlideIndex }: ActionControlPlaylistProps, ref) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentIndex = useAppSelector((state) => state.GlobalStore.listenPage.currentLectureIndex);
@@ -81,7 +83,6 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
       if (nextIndex < usersRecord.length) {
         onHandlePlayAudio(true, nextIndex);
       } else {
-        setIndexPlaying(() => 0);
         onHandlePlayAudio(true, 0);
       }
       return;
@@ -93,6 +94,7 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
       if (isTheLastVocabulary) {
         setIndexPlaying(() => 0);
         setUsersRecord(getNewUserRecord(usersRecord.length - 1, true));
+        dispatch(updateIsPlaying(false));
 
         if (currentIndex < totalLecture - 1) {
           dispatch(updateIndexListenPage(1));
@@ -105,12 +107,10 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
   };
 
   useImperativeHandle(ref, () => ({
-    onHandlePlayAudio: (nextIndex: number) => {
+    onHandlePlayAudioBySelectUser: (nextIndex: number) => {
       if (!usersRecord.length) return;
 
-      dispatch(updateIsPlaying(true));
-      setIndexPlaying(nextIndex);
-      setUsersRecord(getNewUserRecord(nextIndex));
+      onHandlePlayAudio(true, nextIndex);
     },
     setIndexPlaying,
   }));
@@ -139,7 +139,7 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
       <IconButton onClick={() => onHandleToNewLecture(false)}>
         <Avatar src={currentIndex >= 1 ? PreviosIcon : DisablePreviosIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
-      <IconButton className='bg-primary' onClick={() => onHandlePlayAudio(!isPlayingStatus)}>
+      <IconButton className='bg-primary w-12 h-12' onClick={() => onHandlePlayAudio(!isPlayingStatus)}>
         <Avatar src={isPlayingStatus ? PauseIcon : PlayIcon} alt='wave-icon' className='w-6 h-6' />
       </IconButton>
       <IconButton onClick={() => onHandleToNewLecture(true)}>
@@ -155,3 +155,5 @@ export default forwardRef(function ActionControllPlaylist({ usersRecord, setUser
     </Box>
   );
 });
+
+export default ActionControlPlaylist;
