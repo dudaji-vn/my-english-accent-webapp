@@ -1,8 +1,8 @@
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import { useLazyTextToSpeechQuery } from "@/core/services/google.service";
-import { updateDisableAllAction } from "@/core/store/index";
 import { useAppDispatch, useAppSelector } from "@/core/store";
+import { updateDisableAllAction } from "@/core/store/index";
 import { Avatar, Checkbox } from "@mui/material";
 import { useState } from "react";
 
@@ -13,15 +13,16 @@ const TextToSpeech = ({ text }: { text: string }) => {
 
   const [trigger] = useLazyTextToSpeechQuery();
 
-  const playAudio = async (bufferData: number[]) => {
+  const onLoadAudio = async (bufferData: number[]) => {
+    const audioCtx = new AudioContext();
+    const audioSource = audioCtx.createBufferSource();
+
     const audioArrayBuffer = new Uint8Array(bufferData).buffer;
-    const audioCtx = new window.AudioContext();
     const audioData = await audioCtx.decodeAudioData(audioArrayBuffer);
-    const source = audioCtx.createBufferSource();
-    source.buffer = audioData;
-    source.connect(audioCtx.destination);
-    source.start();
-    source.onended = function () {
+    audioSource.buffer = audioData;
+    await audioSource.connect(audioCtx.destination);
+    audioSource.start();
+    audioSource.onended = function () {
       setChecked(() => false);
       dispatch(updateDisableAllAction(false));
     };
@@ -32,7 +33,7 @@ const TextToSpeech = ({ text }: { text: string }) => {
       setChecked(() => true);
       dispatch(updateDisableAllAction(true));
       const bufferResponse = await trigger(text).unwrap();
-      playAudio(bufferResponse.data);
+      await onLoadAudio(bufferResponse.data);
     } catch (error) {
       console.log(error);
     }
