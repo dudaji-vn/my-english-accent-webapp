@@ -10,6 +10,7 @@ const Reducer = {
   clubStudyApi: "ClubStudyApi",
   challengeApi: "ChallengeApi",
   listenApi: "ListenApi",
+  googleApi: "GoogleApi",
 };
 
 export default Reducer;

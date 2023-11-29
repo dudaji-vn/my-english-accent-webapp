@@ -1,14 +1,14 @@
-import { Avatar, Box, Typography } from "@mui/material";
 import { StageExercise, StageLabel } from "@/shared/type";
+import { Box, Typography } from "@mui/material";
 
-import * as _ from "lodash";
-import { useGetLecturesByQuery } from "@/core/services";
-import { useState } from "react";
-import Lecture from "@/components/Lecture";
-import BoxCard from "@/components/BoxCard";
-import TabCustom from "@/components/TabCustom";
-import Loading from "@/components/Loading";
 import RecordEmptyIcon from "@/assets/icon/record-empty-icon.svg";
+import BoxCard from "@/components/BoxCard";
+import Lecture from "@/components/Lecture";
+import Loading from "@/components/Loading";
+import TabCustom from "@/components/TabCustom";
+import { useGetLecturesByQuery } from "@/core/services";
+import * as _ from "lodash";
+import { useState } from "react";
 
 export default function RecordingPage() {
   const stageList = Object.values(StageLabel);
