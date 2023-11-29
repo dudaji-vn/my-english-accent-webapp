@@ -124,7 +124,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
 
   return (
     <Container className='py-4 bg-gray-100 flex flex-col grow justify-between items-center'>
-      <BoxCard classes='p-4 mb-4 max-w-[375px]'>
+      <BoxCard classes='p-4 mb-4 max-w-[375px] w-full'>
         <Grid container textAlign={"center"} gap={5}>
           <Grid item xs={12}>
             <Box className='mb-10'>

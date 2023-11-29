@@ -11,7 +11,7 @@ export default function Lecture({ currentStep, lectureId, lectureName, stage, im
 
   const gotoRecordProgressPage = () => {
     navigate({
-      pathname: ROUTER.RECORD + `/${lectureName.toLowerCase()}`,
+      pathname: ROUTER.RECORD + `/${encodeURIComponent(lectureName)}`,
       search: `?${createSearchParams({ lectureId } as any)}`,
     });
   };
@@ -19,7 +19,7 @@ export default function Lecture({ currentStep, lectureId, lectureName, stage, im
   return (
     <BoxCard onClick={() => gotoRecordProgressPage()} classes='cursor-pointer p-4 hover:shadow-xl transition duration-300 ease-in-out'>
       <Avatar src={imgSrc} variant='square' alt='gallery-icon' className='w-9 h-9' />
-      <Box className='flex justify-between items-end mt-4' >
+      <Box className='flex justify-between items-end mt-4'>
         <Box>
           <Typography className='text-base-semibold h-12'>{lectureName}</Typography>
           <Typography className='text-extra-small-regular'>{stage != StageExercise.Open ? `${currentStep}/${totalStep} sentences` : `${totalStep} sentences`}</Typography>
