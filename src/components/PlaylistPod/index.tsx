@@ -96,7 +96,7 @@ export default function PlaylistPod() {
           <Typography className='text-base-medium'>{playlistDetail?.lecture.lectureName}</Typography>
         </Box>
 
-        <Box className={`px-4`}>
+        <Box className={`px-4`} sx={isSmallScreen ? { width: `calc(100vw - 32px)` } : {}}>
           <Swiper
             pagination={true}
             slidesPerView={"auto"}
