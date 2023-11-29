@@ -17,7 +17,7 @@ export default function RecordingProgressPage() {
   const navigate = useNavigate();
   const myInfo = persist.getMyInfo().nickName;
   const { pathname } = useLocation();
-  const lectureName = decodeURI(pathname).replace("/record/", "");
+  const lectureName = decodeURIComponent(pathname).replace("/record/", "");
   let [searchParams] = useSearchParams();
   const lectureId = searchParams.get("lectureId") ?? "";
 
