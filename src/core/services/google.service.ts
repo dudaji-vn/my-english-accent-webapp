@@ -1,7 +1,6 @@
 import Reducer from "@/shared/const/store.const";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import GoogleApiController from "../controllers/google.controller";
-import { Language } from "../type";
 
 export const GoogleApi = createApi({
   reducerPath: Reducer.googleApi,
@@ -12,9 +11,11 @@ export const GoogleApi = createApi({
     mode: "cors",
     redirect: "follow",
   }),
+  tagTypes: ["TTS"],
   endpoints: (builder) => ({
     textToSpeech: builder.query<any, string>({
       query: (text: string) => GoogleApiController.textToSpeech(text),
+      providesTags: (result, error, arg) => (arg ? [{ type: "TTS" as const, text: arg }, "TTS"] : ["TTS"]),
       transformResponse: (response: {
         data: {
           audioContent: {
