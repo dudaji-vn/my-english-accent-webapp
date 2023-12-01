@@ -14,6 +14,7 @@ import ROUTER from "@/shared/const/router.const";
 import { Avatar, Box, IconButton } from "@mui/material";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as Bowser from "bowser"; // TypeScript
 
 export interface ActionControlRef {
   onHandlePlayAudioBySelectUser: Function;
@@ -27,6 +28,7 @@ interface ActionControlPlaylistProps {
 }
 
 const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextSlideIndex }: ActionControlPlaylistProps, ref) => {
+  const getBrowserName = Bowser.getParser(window.navigator.userAgent).getBrowserName();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentIndex = useAppSelector((state) => state.GlobalStore.listenPage.currentLectureIndex);
@@ -68,6 +70,9 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
   };
 
   const onHandlePlayAudio = (isPlaying: boolean, nextIndex?: number) => {
+    if (getBrowserName === "Safari") {
+      return alert("Not supported this browser yet. Please use a Chrome browser for a better experience");
+    }
     if (!usersRecord.length) return;
     dispatch(updateIsPlaying(isPlaying));
 
