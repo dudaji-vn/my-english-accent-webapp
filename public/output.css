@@ -297,6 +297,10 @@ h6 {
   bottom: 0px;
 }
 
+#root :is(.left-0) {
+  left: 0px;
+}
+
 #root :is(.left-1\/2) {
   left: 50%;
 }
@@ -306,6 +310,10 @@ h6 {
 }
 
 #root :is(.top-1\/2) {
+  top: 50%;
+}
+
+#root :is(.top-2\/4) {
   top: 50%;
 }
 
@@ -853,5 +861,22 @@ h6 {
 
   #root :is(.md\:w-\[400px\]) {
     width: 400px;
+  }
+
+  #root :is(.md\:min-w-\[400px\]) {
+    min-width: 400px;
+  }
+
+  #root :is(.md\:items-center) {
+    align-items: center;
+  }
+
+  #root :is(.md\:justify-center) {
+    justify-content: center;
+  }
+
+  #root :is(.md\:px-\[120px\]) {
+    padding-left: 120px;
+    padding-right: 120px;
   }
 }

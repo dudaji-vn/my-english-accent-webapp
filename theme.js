@@ -108,6 +108,11 @@ const theme = extendTheme({
         fullWidth: true,
       },
     },
+    MuiDivider: {
+      defaultProps: {
+        color: tailwindConfig.theme.colors.gray[100],
+      },
+    },
   },
 });
 
