@@ -43,10 +43,10 @@ export default function ClubRecordingPage() {
     }
   };
 
-  const onHandleNext = async (mediaBlobUrl: string) => {
-    if (mediaBlobUrl) {
+  const onHandleNext = async (mediaFile: File) => {
+    if (mediaFile) {
       const vocabularyId = vocabularies[currentStep].vocabularyId;
-      const url = await UploadFileController.uploadAudio(mediaBlobUrl, vocabularyId, myId, true);
+      const url = await UploadFileController.uploadAudio(mediaFile, vocabularyId, myId, true);
       const request = {
         voiceSrc: url,
         vocabularyId: vocabularyId,

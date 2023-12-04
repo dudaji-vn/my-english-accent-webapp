@@ -5,6 +5,8 @@ import ROUTER from "./shared/const/router.const";
 import DrawerNavigate from "./components/DrawerNavigate";
 import Loading from "./components/Loading";
 import RecordSentenceList from "./pages/Record/RecordList";
+import AudioRecorder from "audio-recorder-polyfill";
+import AudioRecorderMPEG from "audio-recorder-polyfill/mpeg-encoder";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
@@ -27,6 +29,14 @@ const CreatePlaylistPage = lazy(() => import("@/pages/Listen/CreatePlaylist"));
 const SelectLecturePage = lazy(() => import("@/pages/Listen/SelectLecture"));
 const NoLectureInListenPage = lazy(() => import("@/pages/Listen/EmptyPlaylist"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
+
+const supportsWebm = typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported("audio/webm");
+
+if (!supportsWebm) {
+  // AudioRecorder.encoder = AudioRecorderMPEG;
+  // AudioRecorder.prototype.mimeType = "audio/mpeg";
+  window.MediaRecorder = AudioRecorder;
+}
 
 export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => {
   const token = persist.getToken();
