@@ -1,5 +1,5 @@
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { Avatar, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Tab, Tabs, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Tab, Tabs, Typography } from "@mui/material";
 
 import FooterCard from "@/components/FooterBtn";
 import LecturePlaylist from "@/components/LecturePlaylist";
@@ -126,8 +126,8 @@ export default function ManagePlaylist() {
 
   return (
     <Box className='flex flex-col grow min-h-screen'>
-      <Box className='sticky bg-white z-10 top-0'>
-        <Box className='p-4 divider'>
+      <Box className='sticky bg-white z-10 top-0 md:px-[120px]'>
+        <Box className='p-4'>
           <Box className='flex items-center gap-2'>
             <IconButton onClick={handleClickOpen}>
               <Avatar src={CloseIcon} className='w-6 h-6' />
@@ -135,17 +135,20 @@ export default function ManagePlaylist() {
             <Typography className='text-large-semibold'>Custom playlist</Typography>
           </Box>
         </Box>
+
+        <Divider className='absolute left-0 top-2/4 w-full' />
+
         <Box className='bg-white md:flex'>
-          <Tabs value={activeTab} onChange={handleChange} aria-label='tabs' variant='fullWidth' className="md:w-[400px]">
+          <Tabs value={activeTab} onChange={handleChange} aria-label='tabs' variant='fullWidth' className='md:w-[400px]'>
             <Tab label={tabItems[0]} id={`listen-tab-${activeTab}`} aria-controls={`listen-tabpanel-${activeTab}`} value={"Lectures"} />
             <Tab label={tabItems[1]} id={`listen-tab-${activeTab}`} aria-controls={`listten-tabpanel-${activeTab}`} value={"People"} />
           </Tabs>
         </Box>
       </Box>
 
-      <Box className='flex flex-col p-4 grow  bg-gray-100 gap-4'>{renderList()}</Box>
+      <Box className='flex flex-col p-4 grow bg-gray-100 gap-4 md:px-[120px]'>{renderList()}</Box>
 
-      <FooterCard classes='items-center justify-between'>
+      <FooterCard classes='items-center justify-between md:justify-center'>
         <Typography variant='body2'>{renderFooterTitle()}</Typography>
         <Button variant='contained' className='rounded-md' onClick={handleNext} disabled={disableBtn || disabledWhenUpdate}>
           <Typography className='text-base-medium text-white'>Save</Typography>

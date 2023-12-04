@@ -1,5 +1,5 @@
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { Avatar, Box, Button, Container, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, Divider, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
 
 import FooterCard from "@/components/FooterBtn";
 import LecturePlaylist from "@/components/LecturePlaylist";
@@ -74,8 +74,8 @@ export default function CreatePlaylist() {
 
   return (
     <Box className='flex flex-col grow min-h-screen'>
-      <Box className='sticky bg-white z-10 top-0'>
-        <Box className='p-4 divider'>
+      <Box className='sticky bg-white z-10 top-0 md:px-[120px]'>
+        <Box className='p-4'>
           <Box className='flex items-center gap-2'>
             <IconButton onClick={() => navigate(-1)}>
               <Avatar src={CloseIcon} className='w-6 h-6' />
@@ -84,6 +84,8 @@ export default function CreatePlaylist() {
           </Box>
         </Box>
 
+        <Divider className="absolute left-0 top-2/4 w-full"/>
+        
         <Box className='p-4'>
           <Stepper>
             {steps.map((label, index) => {
@@ -99,9 +101,9 @@ export default function CreatePlaylist() {
         </Box>
       </Box>
 
-      <Box className='flex flex-col p-4 grow  bg-gray-100 gap-4'>{renderList()}</Box>
+      <Box className='flex flex-col p-4 grow bg-gray-100 gap-4 md:px-[120px]'>{renderList()}</Box>
 
-      <FooterCard classes='items-center justify-between'>
+      <FooterCard classes='items-center justify-between md:justify-center'>
         <Typography variant='body2'>{renderFooterTitle()}</Typography>
         <Button variant='contained' className='rounded-md' onClick={handleNext} disabled={disableBtn}>
           <Typography className='text-base-medium text-white'>{activeStep === 1 ? "Done" : "Next"}</Typography>
