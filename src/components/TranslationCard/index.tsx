@@ -12,7 +12,7 @@ import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
-import { useReactMediaRecorder } from "react-media-recorder-2";
+import useMicRecorder from "../useMicRecorder";
 
 export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
   const myId = persist.getMyInfo().userId;
@@ -23,12 +23,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   const dispatch = useAppDispatch();
   const audio = new Audio();
 
-  const { status, startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } = useReactMediaRecorder({
-    audio: true,
-    blobPropertyBag: {
-      type: "audio/mp3",
-    },
-  });
+  const { status, startRecording, stopRecording, mediaFile, clearFile } = useMicRecorder();
 
   const [hideUpdateRecordBtn, setHideUpdateRecordBtn] = useState(true);
   const [hideContinueBtn, setHideContinueBtn] = useState(false);
@@ -42,12 +37,12 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   }, [props]);
 
   const displayRepeatBtn = useMemo(() => {
-    return (mediaBlobUrl || isRerecord) && !isRecord;
-  }, [mediaBlobUrl, isRecord, isRerecord]);
+    return (mediaFile || isRerecord) && !isRecord;
+  }, [mediaFile, isRecord, isRerecord]);
 
   const displayContinueBtn = useMemo(() => {
-    return mediaBlobUrl && !isRecord && !isRerecord;
-  }, [mediaBlobUrl, isRecord]);
+    return mediaFile && !isRecord && !isRerecord;
+  }, [mediaFile, isRecord]);
 
   const displayUpdateRecordBtn = useMemo(() => {
     return status === "stopped" && isRerecord;
@@ -65,8 +60,8 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   };
 
   const onRepeat = () => {
-    if (mediaBlobUrl) {
-      audio.src = mediaBlobUrl;
+    if (mediaFile) {
+      audio.src = URL.createObjectURL(mediaFile);
     } else if (isRerecord) {
       audio.src = props.voiceSrc;
     }
@@ -78,10 +73,10 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   };
 
   const onAddRecord = async () => {
-    if (mediaBlobUrl) {
+    if (mediaFile) {
       dispatch(updateDisableAllAction(true));
       setHideContinueBtn(() => true);
-      const url = await UploadFileController.uploadAudio(mediaBlobUrl, props.vocabularyId, myId, false);
+      const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
 
       const isSuccess = await addOrUpdateRecord({
         vocabularyId: props.vocabularyId,
@@ -96,16 +91,16 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
       }
 
       props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: false });
-      clearBlobUrl();
+      clearFile();
       dispatch(updateDisableAllAction(false));
     }
   };
 
   const onUpdateRecord = async () => {
-    if (mediaBlobUrl) {
+    if (mediaFile) {
       dispatch(updateDisableAllAction(true));
       setHideUpdateRecordBtn(() => true);
-      const url = await UploadFileController.uploadAudio(mediaBlobUrl, props.vocabularyId, myId, false);
+      const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
 
       addOrUpdateRecord({
         vocabularyId: props.vocabularyId,
@@ -113,7 +108,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
       }).unwrap();
 
       props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: true });
-      clearBlobUrl();
+      clearFile();
       dispatch(updateDisableAllAction(false));
     }
   };

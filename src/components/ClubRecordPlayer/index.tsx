@@ -5,6 +5,7 @@ import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import HearingIcon from "@/assets/icon/hearing-icon.svg";
 import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
+import useMicRecorder from "../useMicRecorder";
 
 interface ClubRecordingAudioProps {
   onHandleNext: Function;
@@ -13,12 +14,7 @@ interface ClubRecordingAudioProps {
 export default function ClubRecordingAudio(props: ClubRecordingAudioProps) {
   const audio = new Audio();
 
-  const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
-    audio: true,
-    blobPropertyBag: {
-      type: "audio/mp3",
-    },
-  });
+  const { status, startRecording, stopRecording, mediaFile, clearFile } = useMicRecorder();
 
   const [isRecord, setIsRecord] = useState(() => {
     return status === "recording";
@@ -27,8 +23,8 @@ export default function ClubRecordingAudio(props: ClubRecordingAudioProps) {
   const [toggleSubBtn, setToggleSubBtn] = useState(() => status === "stopped");
 
   const onRepeat = () => {
-    if (mediaBlobUrl) {
-      audio.src = mediaBlobUrl;
+    if (mediaFile) {
+      audio.src = URL.createObjectURL(mediaFile);
       audio.play();
     }
   };
@@ -44,7 +40,7 @@ export default function ClubRecordingAudio(props: ClubRecordingAudioProps) {
   };
 
   const onHandleNext = async () => {
-    props.onHandleNext(mediaBlobUrl);
+    props.onHandleNext(mediaFile);
     setToggleSubBtn(false);
   };
 

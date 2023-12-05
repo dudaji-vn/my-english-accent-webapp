@@ -30,9 +30,9 @@ export default function RerecordingProgressPage() {
     navigate(-1);
   };
 
-  const onHandleNext = async (mediaBlobUrl: string) => {
-    if (data && mediaBlobUrl) {
-      const url = await UploadFileController.uploadAudio(mediaBlobUrl, data.vocabularyId, myId, true);
+  const onHandleNext = async (mediaFile: File) => {
+    if (data && mediaFile) {
+      const url = await UploadFileController.uploadAudio(mediaFile, data.vocabularyId, myId, true);
 
       await updateRecord({
         vocabularyId: data.vocabularyId,
