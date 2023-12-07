@@ -3,7 +3,7 @@ import RecordingIcon from "@/assets/icon/stop-circle-icon.svg";
 import SpeakingIcon from "@/assets/icon/volume-high-white-icon.svg";
 import BoxCard from "@/components/BoxCard";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { useEnrollLectureMutation } from "@/core/services";
+import { useEnrollLectureMutation, useLazySpeechToTextQuery } from "@/core/services";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
@@ -11,19 +11,26 @@ import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
-import useMicRecorder from "../useMicRecorder";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import { words } from "lodash";
+import WordHighlight from "../WordHighlight";
+import useMicRecorder from "@/shared/hook/useMicRecorder";
 
-export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
+export default function RecordingCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
   const myId = persist.getMyInfo().userId;
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
 
   const isDiableAllAction = useAppSelector((state) => state.GlobalStore.recordAudio.disableAllAction);
   const dispatch = useAppDispatch();
-  const audio = new Audio();
 
-  const { status, startRecording, stopRecording, mediaFile, clearFile } = useMicRecorder();
+  //record
+  const audio = new Audio();
+  const { status, startRecording, stopRecording, mediaFile, clearFile, mediaBase64 } = useMicRecorder();
+
+  //Speech to text
+  const [trigger, { data: transcript }] = useLazySpeechToTextQuery();
 
   const [hideUpdateRecordBtn, setHideUpdateRecordBtn] = useState(true);
   const [hideContinueBtn, setHideContinueBtn] = useState(false);
@@ -48,12 +55,16 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
     return status === "stopped" && isRerecord;
   }, [isRerecord, status]);
 
+  const [isValidSentence, setIsValidSentence] = useState(false);
+
   const onHandlePlay = () => {
     if (isRecord) {
       stopRecording();
     } else {
       startRecording();
     }
+
+    setIsValidSentence(() => false);
     setIsRecord(() => !isRecord);
     setHideUpdateRecordBtn(() => false);
     dispatch(updateDisableAllAction(!isDiableAllAction));
@@ -117,16 +128,22 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
     dispatch(updateDisableAllAction(false));
   };
 
+  useEffect(() => {
+    if (mediaBase64) {
+      trigger(mediaBase64);
+    }
+  }, [mediaBase64]);
+
   return (
     <Container className='py-4 bg-gray-100 flex flex-col grow justify-between items-center'>
       <BoxCard classes='p-4 mb-4 max-w-[375px] w-full'>
         <Grid container textAlign={"center"} gap={5}>
           <Grid item xs={12}>
             <Box className='mb-10'>
-              <Typography className='text-extra-small-medium mb-6' variant={"body2"}>
+              <Typography className='text-extra-small-medium mb-6' variant='body2'>
                 {props.index} / {props.totalVoca}
               </Typography>
-              <Typography className='text-large-medium mb-6'>{props.vtitleDisplayLanguage}</Typography>
+              <WordHighlight sentence={props.vtitleDisplayLanguage} transcript={transcript} />
               <Typography variant='body2' className='text-small-regular' component={"div"}>
                 {props.vphoneticDisplayLanguage}
                 <TextToSpeech text={props.vtitleDisplayLanguage} />

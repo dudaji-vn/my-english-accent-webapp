@@ -2,7 +2,7 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import Congratulation from "@/assets/icon/congratulation-icon.svg";
 import MenuIcon from "@/assets/icon/list-icon.svg";
 import Loading from "@/components/Loading";
-import TranslationCard from "@/components/TranslationCard";
+import RecordingCard from "@/components/RecordingCard";
 import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
 import { useAppSelector } from "@/core/store";
 import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
@@ -110,7 +110,7 @@ export default function RecordingProgressPage() {
         {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => {
           if (val) {
             return (
-              <TranslationCard
+              <RecordingCard
                 {...val}
                 key={val.vocabularyId}
                 nextVocabulary={nextVocabulary}

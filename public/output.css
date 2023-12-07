@@ -353,6 +353,10 @@ h6 {
   margin-left: 1.25rem;
 }
 
+#root :is(.mr-1) {
+  margin-right: 0.25rem;
+}
+
 #root :is(.mt-12) {
   margin-top: 3rem;
 }
@@ -375,6 +379,10 @@ h6 {
 
 #root :is(.block) {
   display: block;
+}
+
+#root :is(.inline-block) {
+  display: inline-block;
 }
 
 #root :is(.flex) {
@@ -584,6 +592,10 @@ h6 {
 
 #root :is(.self-center) {
   align-self: center;
+}
+
+#root :is(.break-words) {
+  overflow-wrap: break-word;
 }
 
 #root :is(.break-keep) {
@@ -816,6 +828,10 @@ h6 {
   font-weight: 700;
 }
 
+#root :is(.last\:mr-0:last-child) {
+  margin-right: 0px;
+}
+
 #root :is(.last\:rounded-b-lg:last-child) {
   border-bottom-right-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
@@ -861,14 +877,6 @@ h6 {
 
   #root :is(.md\:w-\[400px\]) {
     width: 400px;
-  }
-
-  #root :is(.md\:min-w-\[400px\]) {
-    min-width: 400px;
-  }
-
-  #root :is(.md\:items-center) {
-    align-items: center;
   }
 
   #root :is(.md\:justify-center) {

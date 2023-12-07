@@ -5,7 +5,7 @@ import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import HearingIcon from "@/assets/icon/hearing-icon.svg";
 import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
-import useMicRecorder from "../useMicRecorder";
+import useMicRecorder from "@/shared/hook/useMicRecorder";
 
 interface ClubRecordingAudioProps {
   onHandleNext: Function;
