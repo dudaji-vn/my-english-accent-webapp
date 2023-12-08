@@ -1,15 +1,28 @@
+import { TECHTALK_DEFINE } from "@/config/globalDefine";
 import { similarityScore } from "@/shared/utils/similarity.util";
 import { Typography } from "@mui/material";
 import { memo, useCallback } from "react";
 
 function WordHighlight({ sentence = "", transcript = "" }: { sentence: string; transcript: string }) {
+  const patternRegex = /[&\/\\#,+()$~%.'":*?<>{}]/;
+  const splitSentence = sentence.split(" ");
+
   const renderWords = useCallback(() => {
     const splitTranscript = transcript.split(" ");
-    const splitSentence = sentence.split(" ");
+    return splitSentence.map((word, keyIndex) => {
+      const removeSpecialCharactersInWord = word.replace(new RegExp(patternRegex, "g"), "").toLowerCase();
+      const index = splitTranscript.findIndex((transcript) => transcript == removeSpecialCharactersInWord);
+      let tmpTranscript = "";
+      if (index != -1) {
+        tmpTranscript = splitTranscript[index];
+        splitTranscript.splice(index, 1);
+      }
 
-    return splitSentence.map((word, index) => {
       return (
-        <span className={`mr-1 last:mr-0 inline-block ${similarityScore(word, splitTranscript[index]) > 0.5 ? "text-secondary" : ""}`} key={word + index}>
+        <span
+          className={`mr-1 last:mr-0 inline-block ${similarityScore(removeSpecialCharactersInWord, tmpTranscript) >= TECHTALK_DEFINE.SIMILAR_PASS ? "text-secondary" : ""}`}
+          key={keyIndex}
+        >
           {word}
         </span>
       );

@@ -2,20 +2,20 @@ import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import RecordingIcon from "@/assets/icon/stop-circle-icon.svg";
 import SpeakingIcon from "@/assets/icon/volume-high-white-icon.svg";
 import BoxCard from "@/components/BoxCard";
+import { TECHTALK_DEFINE } from "@/config/globalDefine";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
 import { useEnrollLectureMutation, useLazySpeechToTextQuery } from "@/core/services";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
 import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
+import useMicRecorder from "@/shared/hook/useMicRecorder";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
+import { similarityScore } from "@/shared/utils/similarity.util";
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
-import { words } from "lodash";
+import { useEffect, useMemo, useState } from "react";
 import WordHighlight from "../WordHighlight";
-import useMicRecorder from "@/shared/hook/useMicRecorder";
 
 export default function RecordingCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
   const myId = persist.getMyInfo().userId;
@@ -55,7 +55,9 @@ export default function RecordingCard(props: VocabularyTypeWithNativeLanguageRes
     return status === "stopped" && isRerecord;
   }, [isRerecord, status]);
 
-  const [isValidSentence, setIsValidSentence] = useState(false);
+  const isInvalidAudioRecording = useMemo(() => {
+    return TECHTALK_DEFINE.SIMILAR_PASS >= similarityScore(props.vtitleDisplayLanguage, transcript);
+  }, [transcript]);
 
   const onHandlePlay = () => {
     if (isRecord) {
@@ -64,7 +66,6 @@ export default function RecordingCard(props: VocabularyTypeWithNativeLanguageRes
       startRecording();
     }
 
-    setIsValidSentence(() => false);
     setIsRecord(() => !isRecord);
     setHideUpdateRecordBtn(() => false);
     dispatch(updateDisableAllAction(!isDiableAllAction));
@@ -152,7 +153,7 @@ export default function RecordingCard(props: VocabularyTypeWithNativeLanguageRes
           </Grid>
           <Grid item xs={12}>
             {displayUpdateRecordBtn && !hideUpdateRecordBtn && (
-              <Button variant='outlined' onClick={onUpdateRecord} disabled={isDiableAllAction}>
+              <Button variant='outlined' onClick={onUpdateRecord} disabled={isDiableAllAction || isInvalidAudioRecording}>
                 Update new record
               </Button>
             )}
@@ -187,7 +188,7 @@ export default function RecordingCard(props: VocabularyTypeWithNativeLanguageRes
             onAddRecord();
           }}
           className='h-12'
-          disabled={isDiableAllAction}
+          disabled={isDiableAllAction || isInvalidAudioRecording}
         >
           Continue
         </Button>

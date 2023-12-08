@@ -32,8 +32,23 @@ export const GoogleApi = createApi({
       query: (dataBase64: string) => GoogleApiController.speechToText(dataBase64),
       providesTags: (result, error, arg) => (arg ? [{ type: "STT" as const, text: arg }, "STT"] : ["STT"]),
       transformResponse: (response: ISpeechRecognition) => {
-        const transcript = response?.results[0]?.alternatives[0]?.transcript;
-        return transcript ?? "";
+        const { results } = response;
+
+        let theHighestConfident = 0;
+        let transcript = "";
+
+        results?.forEach((result) => {
+          result.alternatives?.forEach((alternative) => {
+            const { confidence, transcript: transcriptSource } = alternative;
+
+            if (confidence > theHighestConfident) {
+              theHighestConfident = confidence;
+              transcript = transcriptSource;
+            }
+          });
+        });
+
+        return transcript;
       },
     }),
   }),
