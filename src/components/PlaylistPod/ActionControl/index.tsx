@@ -1,20 +1,20 @@
-import ActivedLoopIcon from "@/assets/icon/active-loop-icon.svg";
-import DisableNextIcon from "@/assets/icon/disable-next-icon.svg";
-import DisablePreviosIcon from "@/assets/icon/disable-previous-icon.svg";
-import LectureListIcon from "@/assets/icon/lecture-list-icon.svg";
-import LoopIcon from "@/assets/icon/loop-icon.svg";
-import NextIcon from "@/assets/icon/next-icon.svg";
-import PauseIcon from "@/assets/icon/pause-icon.svg";
-import PlayIcon from "@/assets/icon/play-icon.svg";
-import PreviosIcon from "@/assets/icon/previos-icon.svg";
-import { useAppDispatch, useAppSelector } from "@/core/store";
-import { updateIndexListenPage, updateIsPlaying } from "@/core/store/index";
-import { RecordTypeResponse, UserResponseType } from "@/core/type";
-import ROUTER from "@/shared/const/router.const";
-import { Avatar, Box, IconButton } from "@mui/material";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import * as Bowser from "bowser"; // TypeScript
+import ActivedLoopIcon from '@/assets/icon/active-loop-icon.svg';
+import DisableNextIcon from '@/assets/icon/disable-next-icon.svg';
+import DisablePreviosIcon from '@/assets/icon/disable-previous-icon.svg';
+import LectureListIcon from '@/assets/icon/lecture-list-icon.svg';
+import LoopIcon from '@/assets/icon/loop-icon.svg';
+import NextIcon from '@/assets/icon/next-icon.svg';
+import PauseIcon from '@/assets/icon/pause-icon.svg';
+import PlayIcon from '@/assets/icon/play-icon.svg';
+import PreviosIcon from '@/assets/icon/previos-icon.svg';
+import { useAppDispatch, useAppSelector } from '@/core/store';
+import { updateIndexListenPage, updateIsPlaying } from '@/core/store/index';
+import { RecordTypeResponse, UserResponseType } from '@/core/type';
+import ROUTER from '@/shared/const/router.const';
+import { Avatar, Box, IconButton } from '@mui/material';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as Bowser from 'bowser'; // TypeScript
 
 export interface ActionControlRef {
   onHandlePlayAudioBySelectUser: Function;
@@ -70,9 +70,9 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
   };
 
   const onHandlePlayAudio = (isPlaying: boolean, nextIndex?: number) => {
-    if (getBrowserName === "Safari") {
-      return alert("Not supported this browser yet. Please use a Chrome browser for a better experience");
-    }
+    // if (getBrowserName === "Safari") {
+    //   return alert("Not supported this browser yet. Please use a Chrome browser for a better experience");
+    // }
     if (!usersRecord.length) return;
     dispatch(updateIsPlaying(isPlaying));
 
@@ -136,26 +136,28 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
   }, [indexPlaying, isPlayingStatus, usersRecord]);
 
   return (
-    <Box className='flex justify-around py-4' ref={ref}>
-      {usersRecord.length ? <audio ref={audioElement} autoPlay={isPlayingStatus} src={usersRecord[indexPlaying]?.voiceSrc} onEnded={onHandleEndAudio} /> : null}
+    <Box className="flex justify-around py-4" ref={ref}>
+      {usersRecord.length ? (
+        <audio ref={audioElement} autoPlay={isPlayingStatus} src={usersRecord[indexPlaying]?.voiceSrc} onEnded={onHandleEndAudio} />
+      ) : null}
       <IconButton onClick={() => setIsLoop((preVal) => !preVal)}>
-        <Avatar src={isLoop ? ActivedLoopIcon : LoopIcon} alt='wave-icon' className='w-6 h-6' />
+        <Avatar src={isLoop ? ActivedLoopIcon : LoopIcon} alt="wave-icon" className="w-6 h-6" />
       </IconButton>
       <IconButton onClick={() => onHandleToNewLecture(false)}>
-        <Avatar src={currentIndex >= 1 ? PreviosIcon : DisablePreviosIcon} alt='wave-icon' className='w-6 h-6' />
+        <Avatar src={currentIndex >= 1 ? PreviosIcon : DisablePreviosIcon} alt="wave-icon" className="w-6 h-6" />
       </IconButton>
-      <IconButton className='bg-primary w-12 h-12' onClick={() => onHandlePlayAudio(!isPlayingStatus)}>
-        <Avatar src={isPlayingStatus ? PauseIcon : PlayIcon} alt='wave-icon' className='w-6 h-6' />
+      <IconButton className="bg-primary w-12 h-12" onClick={() => onHandlePlayAudio(!isPlayingStatus)}>
+        <Avatar src={isPlayingStatus ? PauseIcon : PlayIcon} alt="wave-icon" className="w-6 h-6" />
       </IconButton>
       <IconButton onClick={() => onHandleToNewLecture(true)}>
-        <Avatar src={currentIndex < totalLecture - 1 ? NextIcon : DisableNextIcon} alt='wave-icon' className='w-6 h-6' />
+        <Avatar src={currentIndex < totalLecture - 1 ? NextIcon : DisableNextIcon} alt="wave-icon" className="w-6 h-6" />
       </IconButton>
       <IconButton
         onClick={() => {
           navigate(ROUTER.LISTENING + ROUTER.SELECT_LECTURE);
         }}
       >
-        <Avatar variant='square' src={LectureListIcon} alt='wave-icon' className='w-6 h-6' />
+        <Avatar variant="square" src={LectureListIcon} alt="wave-icon" className="w-6 h-6" />
       </IconButton>
     </Box>
   );
