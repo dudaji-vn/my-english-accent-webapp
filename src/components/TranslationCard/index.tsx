@@ -13,11 +13,13 @@ import persist from "@/shared/utils/persist.util";
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import useMicRecorder from "../useMicRecorder";
+import Bowser from "bowser";
 
 export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
   const myId = persist.getMyInfo().userId;
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
+  const getBrowserName = Bowser.getParser(window.navigator.userAgent).getBrowserName();
 
   const isDiableAllAction = useAppSelector((state) => state.GlobalStore.recordAudio.disableAllAction);
   const dispatch = useAppDispatch();
@@ -49,6 +51,10 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   }, [isRerecord, status]);
 
   const onHandlePlay = () => {
+    if (getBrowserName && getBrowserName !== "Chrome") {
+      alert("For better experience. Please use of Chrome browser to record our lectures");
+      return <></>;
+    }
     if (isRecord) {
       stopRecording();
     } else {
