@@ -129,7 +129,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   audio.onended = function () {
     dispatch(updateDisableAllAction(false));
   };
-
+  
   return (
     <Container className='py-4 bg-gray-100 flex flex-col grow justify-between items-center'>
       <BoxCard classes='p-4 mb-4 max-w-[375px] w-full'>
@@ -147,7 +147,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
             </Box>
           </Grid>
           <Grid item xs={12}>
-            {displayUpdateRecordBtn && !hideUpdateRecordBtn && (
+            {mediaFile && displayUpdateRecordBtn && !hideUpdateRecordBtn && (
               <Button variant='outlined' onClick={onUpdateRecord} disabled={isDiableAllAction}>
                 Update new record
               </Button>
