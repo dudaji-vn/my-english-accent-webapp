@@ -11,12 +11,13 @@ import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useMicRecorder from "../useMicRecorder";
 import Bowser from "bowser";
 
 export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
   const myId = persist.getMyInfo().userId;
+  
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
   const getBrowserName = Bowser.getParser(window.navigator.userAgent).getBrowserName();
@@ -49,8 +50,9 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   const displayUpdateRecordBtn = useMemo(() => {
     return status === "stopped" && isRerecord;
   }, [isRerecord, status]);
+  
 
-  const onHandlePlay = () => {
+  const onRecord = () => {
     if (getBrowserName && getBrowserName !== "Chrome") {
       alert("For better experience. Please use of Chrome browser to record our lectures");
       return <></>;
@@ -71,11 +73,16 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
     } else if (isRerecord) {
       audio.src = props.voiceSrc;
     }
-    audio.play().catch((error) => {
-      dispatch(updateDisableAllAction(false));
-      console.log(error);
-    });
-    dispatch(updateDisableAllAction(true));
+    
+    setTimeout(()=>{
+      audio.play().catch((error) => {
+        dispatch(updateDisableAllAction(false));
+        console.log(error);
+      });
+      dispatch(updateDisableAllAction(true));
+    },100)
+    
+   
   };
 
   const onAddRecord = async () => {
@@ -149,7 +156,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
           <Grid item xs={12}>
             <IconButton
               className={`p-5 w-16 h-16 ${isDiableAllAction && !isRecord ? "bg-purple-300" : "bg-primary"}`}
-              onClick={onHandlePlay}
+              onClick={onRecord}
               disabled={isDiableAllAction && !isRecord}
             >
               <Avatar src={isRecord ? RecordingIcon : MicrophoneIcon} className='w-6 h-6' />
