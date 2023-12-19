@@ -14,15 +14,16 @@ const TextToSpeech = ({ text }: { text: string }) => {
   const [trigger] = useLazyTextToSpeechQuery();
 
   const onLoadAudio = async (bufferData: number[]) => {
-    const audioCtx = new AudioContext();
-    const audioSource = audioCtx.createBufferSource();
-
     const audioArrayBuffer = new Uint8Array(bufferData).buffer;
-    const audioData = await audioCtx.decodeAudioData(audioArrayBuffer);
-    audioSource.buffer = audioData;
-    await audioSource.connect(audioCtx.destination);
-    audioSource.start();
-    audioSource.onended = function () {
+    const blob = new Blob([audioArrayBuffer], { type: "audio/wav" });
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio();
+    audio.src = url;
+    audio.play().catch((err) => {
+      setChecked(() => false);
+      dispatch(updateDisableAllAction(false));
+    });
+    audio.onended = () => {
       setChecked(() => false);
       dispatch(updateDisableAllAction(false));
     };
@@ -32,7 +33,7 @@ const TextToSpeech = ({ text }: { text: string }) => {
     try {
       setChecked(() => true);
       dispatch(updateDisableAllAction(true));
-      const bufferResponse = await trigger(text).unwrap();
+      const bufferResponse = await trigger(text, true).unwrap();
       await onLoadAudio(bufferResponse.data);
     } catch (error) {
       console.log(error);
@@ -89,10 +90,10 @@ const TextToSpeech = ({ text }: { text: string }) => {
   return (
     <Checkbox
       disabled={isDiableAllAction}
-      onClick={sayAllViaSleepyJack}
+      onClick={onHandlePlayAudio}
       checked={checked}
-      icon={<Avatar src={SpeakerIcon} className='w-4 h-4' />}
-      checkedIcon={<Avatar src={SpeakerFillIcon} className='w-4 h-4' />}
+      icon={<Avatar src={SpeakerIcon} className="w-4 h-4" />}
+      checkedIcon={<Avatar src={SpeakerFillIcon} className="w-4 h-4" />}
     />
   );
 };
