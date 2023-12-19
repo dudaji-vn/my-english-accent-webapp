@@ -3,7 +3,7 @@ import RecordingIcon from "@/assets/icon/stop-circle-icon.svg";
 import SpeakingIcon from "@/assets/icon/volume-high-white-icon.svg";
 import BoxCard from "@/components/BoxCard";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { useEnrollLectureMutation } from "@/core/services";
+import { useEnrollLectureMutation, useLazySpeechToTextQuery } from "@/core/services";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
@@ -14,10 +14,15 @@ import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography }
 import { useEffect, useMemo, useState } from "react";
 import useMicRecorder from "../useMicRecorder";
 import Bowser from "bowser";
+import WordHighLight from "../WordHighLight";
 
-export default function TranslationCard(props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }) {
+export default function TranslationCard(
+  props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }
+) {
   const myId = persist.getMyInfo().userId;
-  
+
+  // const [trigger, { data: transcript }] = useLazySpeechToTextQuery();
+
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
   const getBrowserName = Bowser.getParser(window.navigator.userAgent).getBrowserName();
@@ -26,7 +31,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   const dispatch = useAppDispatch();
   const audio = new Audio();
 
-  const { status, startRecording, stopRecording, mediaFile, clearFile } = useMicRecorder();
+  const { status, startRecording, stopRecording, mediaFile, clearFile, mediaBase64 } = useMicRecorder();
 
   const [hideUpdateRecordBtn, setHideUpdateRecordBtn] = useState(true);
   const [hideContinueBtn, setHideContinueBtn] = useState(false);
@@ -50,9 +55,14 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   const displayUpdateRecordBtn = useMemo(() => {
     return status === "stopped" && isRerecord;
   }, [isRerecord, status]);
-  
 
-  const onRecord = () => {
+  // useEffect(() => {
+  //   if (mediaBase64) {
+  //     trigger(mediaBase64);
+  //   }
+  // }, [mediaBase64]);
+
+  const onRecord = async () => {
     if (getBrowserName && getBrowserName !== "Chrome") {
       alert("For better experience. Please use of Chrome browser to record our lectures");
       return <></>;
@@ -73,16 +83,14 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
     } else if (isRerecord) {
       audio.src = props.voiceSrc;
     }
-    
-    setTimeout(()=>{
+
+    setTimeout(() => {
       audio.play().catch((error) => {
         dispatch(updateDisableAllAction(false));
         console.log(error);
       });
       dispatch(updateDisableAllAction(true));
-    },100)
-    
-   
+    }, 100);
   };
 
   const onAddRecord = async () => {
@@ -129,18 +137,19 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
   audio.onended = function () {
     dispatch(updateDisableAllAction(false));
   };
-  
+
   return (
-    <Container className='py-4 bg-gray-100 flex flex-col grow justify-between items-center'>
-      <BoxCard classes='p-4 mb-4 max-w-[375px] w-full'>
+    <Container className="py-4 bg-gray-100 flex flex-col grow justify-between items-center">
+      <BoxCard classes="p-4 mb-4 max-w-[375px] w-full">
         <Grid container textAlign={"center"} gap={5}>
           <Grid item xs={12}>
-            <Box className='mb-10'>
-              <Typography className='text-extra-small-medium mb-6' variant={"body2"}>
+            <Box className="mb-10">
+              <Typography className="text-extra-small-medium mb-6" variant={"body2"}>
                 {props.index} / {props.totalVoca}
               </Typography>
-              <Typography className='text-large-medium mb-6'>{props.vtitleDisplayLanguage}</Typography>
-              <Typography variant='body2' className='text-small-regular' component={"div"}>
+              <Typography className="text-large-medium mb-6">{props.vtitleDisplayLanguage}</Typography>
+              {/* <WordHighLight sentence={props.vtitleDisplayLanguage} transcript={transcript} /> */}
+              <Typography variant="body2" className="text-small-regular" component={"div"}>
                 {props.vphoneticDisplayLanguage}
                 <TextToSpeech text={props.vtitleDisplayLanguage} />
               </Typography>
@@ -148,7 +157,7 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
           </Grid>
           <Grid item xs={12}>
             {mediaFile && displayUpdateRecordBtn && !hideUpdateRecordBtn && (
-              <Button variant='outlined' onClick={onUpdateRecord} disabled={isDiableAllAction}>
+              <Button variant="outlined" onClick={onUpdateRecord} disabled={isDiableAllAction}>
                 Update new record
               </Button>
             )}
@@ -159,17 +168,21 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
               onClick={onRecord}
               disabled={isDiableAllAction && !isRecord}
             >
-              <Avatar src={isRecord ? RecordingIcon : MicrophoneIcon} className='w-6 h-6' />
+              <Avatar src={isRecord ? RecordingIcon : MicrophoneIcon} className="w-6 h-6" />
             </IconButton>
             {displayRepeatBtn && (
-              <IconButton className={`p-5 w-16 h-16 ml-5 ${isDiableAllAction ? "bg-purple-300" : "bg-primary"}`} onClick={onRepeat} disabled={isDiableAllAction}>
-                <Avatar src={SpeakingIcon} className='w-6 h-6' />
+              <IconButton
+                className={`p-5 w-16 h-16 ml-5 ${isDiableAllAction ? "bg-purple-300" : "bg-primary"}`}
+                onClick={onRepeat}
+                disabled={isDiableAllAction}
+              >
+                <Avatar src={SpeakingIcon} className="w-6 h-6" />
               </IconButton>
             )}
           </Grid>
           <Grid item xs={12}>
             <Divider />
-            <Typography variant='body2' className='text-small-regular mt-4'>
+            <Typography variant="body2" className="text-small-regular mt-4">
               {props.titleNativeLanguage}
             </Typography>
           </Grid>
@@ -178,11 +191,11 @@ export default function TranslationCard(props: VocabularyTypeWithNativeLanguageR
 
       {displayContinueBtn && !hideContinueBtn && (
         <Button
-          variant='outlined'
+          variant="outlined"
           onClick={() => {
             onAddRecord();
           }}
-          className='h-12'
+          className="h-12"
           disabled={isDiableAllAction}
         >
           Continue
