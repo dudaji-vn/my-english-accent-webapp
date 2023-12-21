@@ -288,6 +288,10 @@ h6 {
   position: absolute;
 }
 
+#root :is(.relative) {
+  position: relative;
+}
+
 #root :is(.sticky) {
   position: -webkit-sticky;
   position: sticky;
@@ -586,6 +590,10 @@ h6 {
   align-self: center;
 }
 
+#root :is(.break-words) {
+  overflow-wrap: break-word;
+}
+
 #root :is(.break-keep) {
   word-break: keep-all;
 }
@@ -641,6 +649,10 @@ h6 {
 #root :is(.bg-gray-50) {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
+#root :is(.bg-orange) {
+  background-color: #d32f2f4d;
 }
 
 #root :is(.bg-primary) {
@@ -730,8 +742,23 @@ h6 {
   text-align: center;
 }
 
+#root :is(.text-sm) {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+#root :is(.text-base) {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 #root :is(.capitalize) {
   text-transform: capitalize;
+}
+
+#root :is(.text-red-400) {
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity));
 }
 
 #root :is(.text-secondary) {
@@ -747,6 +774,11 @@ h6 {
 #root :is(.text-white) {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#root :is(.text-gray-400) {
+  --tw-text-opacity: 1;
+  color: rgb(148 163 184 / var(--tw-text-opacity));
 }
 
 #root :is(.shadow-\[0_1px_3px_0px_\#A6AFC366\]) {
@@ -861,14 +893,6 @@ h6 {
 
   #root :is(.md\:w-\[400px\]) {
     width: 400px;
-  }
-
-  #root :is(.md\:min-w-\[400px\]) {
-    min-width: 400px;
-  }
-
-  #root :is(.md\:items-center) {
-    align-items: center;
   }
 
   #root :is(.md\:justify-center) {

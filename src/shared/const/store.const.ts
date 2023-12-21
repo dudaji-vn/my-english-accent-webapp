@@ -11,6 +11,7 @@ const Reducer = {
   challengeApi: "ChallengeApi",
   listenApi: "ListenApi",
   googleApi: "GoogleApi",
+  voiceApi: "VoiceApi",
 };
 
 export default Reducer;

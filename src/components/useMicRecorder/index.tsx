@@ -2,12 +2,11 @@ import MicRecorder from "mic-recorder-to-mp3";
 import { useState } from "react";
 
 type StatusType = "recording" | "stopped" | "idle";
+const recorder = new MicRecorder({ bitRate: 128 });
 export default function useMicRecorder() {
   const [status, setStatus] = useState<StatusType>("idle");
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaBase64, setMediaBase64] = useState<string>("");
-
-  const [recorder, setRecorder] = useState(new MicRecorder({ bitRate: 128 }));
 
   const toBase64 = (file: File) =>
     new Promise((resolve, reject) => {

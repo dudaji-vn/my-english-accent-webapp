@@ -10,6 +10,7 @@ import GlobalReducer from "@/core/store/index";
 import RecordApi from "./services/record.service";
 import ListenApi from "./services/listen.service";
 import GoogleApi from "./services/google.service";
+import VoiceApi from "./services/voice.service";
 
 const middleware = [
   LectureApi.middleware,
@@ -22,6 +23,7 @@ const middleware = [
   RecordApi.middleware,
   ListenApi.middleware,
   GoogleApi.middleware,
+  VoiceApi.middleware,
 ] as any;
 
 export const store = configureStore({
@@ -37,6 +39,7 @@ export const store = configureStore({
     RecordApi: RecordApi.reducer,
     ListenApi: ListenApi.reducer,
     GoogleApi: GoogleApi.reducer,
+    VoiceApi: VoiceApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

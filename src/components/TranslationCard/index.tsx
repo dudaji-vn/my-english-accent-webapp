@@ -1,13 +1,13 @@
 import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
 import RecordingIcon from "@/assets/icon/stop-circle-icon.svg";
-import SpeakingIcon from "@/assets/icon/volume-high-white-icon.svg";
+import SpeakingIcon from "@/assets/icon/volume-purple-icon.svg";
 import BoxCard from "@/components/BoxCard";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
 import { useEnrollLectureMutation, useLazySpeechToTextQuery } from "@/core/services";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
-import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
+import { EMPTY_TRANSCRIPT, VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
@@ -21,7 +21,7 @@ export default function TranslationCard(
 ) {
   const myId = persist.getMyInfo().userId;
 
-  // const [trigger, { data: transcript }] = useLazySpeechToTextQuery();
+  const [trigger, { data: transcript }] = useLazySpeechToTextQuery();
 
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
@@ -32,6 +32,7 @@ export default function TranslationCard(
   const audio = new Audio();
 
   const { status, startRecording, stopRecording, mediaFile, clearFile, mediaBase64 } = useMicRecorder();
+  const [isHearing, setIsHearing] = useState<boolean>(false);
 
   const [hideUpdateRecordBtn, setHideUpdateRecordBtn] = useState(true);
   const [hideContinueBtn, setHideContinueBtn] = useState(false);
@@ -49,18 +50,19 @@ export default function TranslationCard(
   }, [mediaFile, isRecord, isRerecord]);
 
   const displayContinueBtn = useMemo(() => {
-    return mediaFile && !isRecord && !isRerecord;
-  }, [mediaFile, isRecord]);
+    console.log(mediaFile && !isRecord && !isRerecord && transcript !== EMPTY_TRANSCRIPT);
+    return mediaFile && !isRecord && !isRerecord && transcript && transcript !== EMPTY_TRANSCRIPT;
+  }, [mediaFile, isRecord, transcript]);
 
   const displayUpdateRecordBtn = useMemo(() => {
-    return status === "stopped" && isRerecord;
-  }, [isRerecord, status]);
+    return status === "stopped" && isRerecord && mediaFile && transcript && transcript !== EMPTY_TRANSCRIPT;
+  }, [isRerecord, status, mediaFile, transcript]);
 
-  // useEffect(() => {
-  //   if (mediaBase64) {
-  //     trigger(mediaBase64);
-  //   }
-  // }, [mediaBase64]);
+  useEffect(() => {
+    if (mediaBase64) {
+      trigger(mediaBase64);
+    }
+  }, [mediaBase64]);
 
   const onRecord = async () => {
     if (getBrowserName && getBrowserName !== "Chrome") {
@@ -85,8 +87,10 @@ export default function TranslationCard(
     }
 
     setTimeout(() => {
+      setIsHearing(true);
       audio.play().catch((error) => {
         dispatch(updateDisableAllAction(false));
+        setIsHearing(false);
         console.log(error);
       });
       dispatch(updateDisableAllAction(true));
@@ -136,6 +140,7 @@ export default function TranslationCard(
 
   audio.onended = function () {
     dispatch(updateDisableAllAction(false));
+    setIsHearing(false);
   };
 
   return (
@@ -148,23 +153,24 @@ export default function TranslationCard(
                 {props.index} / {props.totalVoca}
               </Typography>
               <Typography className="text-large-medium mb-6">{props.vtitleDisplayLanguage}</Typography>
-              {/* <WordHighLight sentence={props.vtitleDisplayLanguage} transcript={transcript} /> */}
-              <Typography variant="body2" className="text-small-regular" component={"div"}>
+              <Typography variant="body2" className="text-small-regular mb-6" component={"div"}>
                 {props.vphoneticDisplayLanguage}
                 <TextToSpeech text={props.vtitleDisplayLanguage} />
               </Typography>
+
+              <WordHighLight sentence={props.vtitleDisplayLanguage} transcript={transcript} />
             </Box>
           </Grid>
           <Grid item xs={12}>
-            {mediaFile && displayUpdateRecordBtn && !hideUpdateRecordBtn && (
+            {displayUpdateRecordBtn && !hideUpdateRecordBtn && (
               <Button variant="outlined" onClick={onUpdateRecord} disabled={isDiableAllAction}>
                 Update new record
               </Button>
             )}
           </Grid>
-          <Grid item xs={12}>
+          <Grid xs={12} sx={{ position: "relative" }}>
             <IconButton
-              className={`p-5 w-16 h-16 ${isDiableAllAction && !isRecord ? "bg-purple-300" : "bg-primary"}`}
+              className={` p-5 w-16 h-16 ${isRecord ? "bg-orange" : isDiableAllAction ? "bg-purple-300" : "bg-primary"}`}
               onClick={onRecord}
               disabled={isDiableAllAction && !isRecord}
             >
@@ -172,7 +178,7 @@ export default function TranslationCard(
             </IconButton>
             {displayRepeatBtn && (
               <IconButton
-                className={`p-5 w-16 h-16 ml-5 ${isDiableAllAction ? "bg-purple-300" : "bg-primary"}`}
+                className={`absolute top-1/2 -translate-y-1/2 p-5 w-12 h-12 ml-5 ${isHearing ? "bg-purple-300" : "bg-purple-200"}`}
                 onClick={onRepeat}
                 disabled={isDiableAllAction}
               >

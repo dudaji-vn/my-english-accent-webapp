@@ -1,6 +1,6 @@
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
 import SpeakerIcon from "@/assets/icon/volume-icon.svg";
-import { useLazyTextToSpeechQuery } from "@/core/services/google.service";
+import { useLazyTextToSpeechQuery } from "@/core/services/voice.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
 import { Avatar, Checkbox } from "@mui/material";

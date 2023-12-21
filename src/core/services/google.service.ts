@@ -2,29 +2,15 @@ import Reducer from "@/shared/const/store.const";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import GoogleApiController from "../controllers/google.controller";
 import { ISpeechRecognition } from "../type/google.type";
-import baseQuery from "..";
+import { EMPTY_TRANSCRIPT } from "../type";
 
 export const GoogleApi = createApi({
   reducerPath: Reducer.googleApi,
-  baseQuery: baseQuery,
-  tagTypes: ["TTS", "STT"],
+  baseQuery: fetchBaseQuery(),
+  tagTypes: ["STT"],
   endpoints: (builder) => ({
-    textToSpeech: builder.query<any, string>({
-      query: (text: string) => GoogleApiController.textToSpeech(text),
-      providesTags: (result, error, arg) => (arg ? [{ type: "TTS" as const, text: arg }, "TTS"] : ["TTS"]),
-      transformResponse: (response: {
-        data: {
-          audioContent: {
-            data: number[];
-            type: string;
-          };
-        };
-      }) => {
-        return response.data.audioContent;
-      },
-    }),
     speechToText: builder.query<any, string>({
-      query: (dataBase64: string) => GoogleApiController.speechToText(dataBase64),
+      query: (voiceFile) => GoogleApiController.speechToText(voiceFile),
       providesTags: (result, error, arg) => (arg ? [{ type: "STT" as const, text: arg }, "STT"] : ["STT"]),
       transformResponse: (response: ISpeechRecognition) => {
         const { results } = response;
@@ -43,12 +29,12 @@ export const GoogleApi = createApi({
           });
         });
 
-        return transcript;
+        return transcript.length > 0 ? transcript : EMPTY_TRANSCRIPT;
       },
     }),
   }),
 });
 
-export const { useLazyTextToSpeechQuery, useLazySpeechToTextQuery } = GoogleApi;
+export const { useLazySpeechToTextQuery } = GoogleApi;
 
 export default GoogleApi;
