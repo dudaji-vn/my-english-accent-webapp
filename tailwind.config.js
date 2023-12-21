@@ -13,10 +13,15 @@ module.exports = {
       colors: {
         primary: "#7F56D9",
         secondary: "#13C296",
+        orange: "#d32f2f4d",
         gray: {
           50: "#F9FAFB",
           100: "#f3f4f6",
-          200: "#49454F14"
+          200: "#49454F14",
+          400: "#94A3B8",
+        },
+        red: {
+          400: "#F87171",
         },
         purple: {
           50: "#F9F5FF",
