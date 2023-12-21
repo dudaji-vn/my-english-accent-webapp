@@ -1,4 +1,4 @@
-import { DocumentReference } from "firebase/firestore";
+export const EMPTY_TRANSCRIPT = "EMPTY_TRANSCRIPT";
 
 export interface RecordTypeResponse {
   recordId: string;
