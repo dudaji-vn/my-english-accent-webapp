@@ -7,7 +7,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers) => {
     const token = persist.getToken() ?? "";
     if (token) {
-      headers.set("Content-Type", "application/json");
+      // headers.set("Content-Type", "application/json");
       headers.set("Authorization", `Bearer ${token}`);
     }
     return headers;
@@ -16,4 +16,5 @@ const baseQuery = fetchBaseQuery({
   mode: "cors",
   redirect: "follow",
 });
+
 export default baseQuery;
