@@ -22,10 +22,11 @@ export default function RecordingPage() {
   if (_.isNull(data) || _.isUndefined(data)) return <></>;
 
   const renderLectures = () => {
-    if (data.length == 0)
+    if(isFetching) return <div className="w-full"><Loading /></div>
+    if (data.length === 0)
       return (
-        <Box className='flex flex-col gap-2 items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
-          <img src={RecordEmptyIcon} />
+        <Box className='flex flex-col gap-2 items-center w-full mt-10 md:mt-20'>
+          <img src={RecordEmptyIcon} alt="Empty record"/>
           <Typography className='text-extra-large-semibold mt-4'>Empty record</Typography>
           <Typography className='text-base-regular w-48 text-center' variant='body2'>
             You haven't recorded any lecture yet
@@ -39,8 +40,6 @@ export default function RecordingPage() {
       </BoxCard>
     ));
   };
-
-  if (isFetching) return <Loading />;
 
   return (
     <Box className='p-4'>

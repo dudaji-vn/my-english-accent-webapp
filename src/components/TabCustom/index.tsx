@@ -1,13 +1,13 @@
 import { StageExercise } from "@/shared/type";
 import { Tabs, Tab } from "@mui/material";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, memo, useState } from "react";
 
 interface TabsProp {
   tab: string[];
   callback: Function;
   tabIndex: StageExercise;
 }
-export default function TabCustom(props: TabsProp) {
+function TabCustom(props: TabsProp) {
   const handleChangeTabIndex = (event: SyntheticEvent, newValue: number) => {
     props.callback(newValue);
   };
@@ -51,3 +51,5 @@ export default function TabCustom(props: TabsProp) {
     </Tabs>
   );
 }
+
+export default memo(TabCustom);
