@@ -28,6 +28,7 @@ interface GlobalStoreType {
     isPlaying: boolean;
     isLoop: boolean;
   };
+  currentRecordTab: number | null;
 }
 
 const initialState: GlobalStoreType = {
@@ -53,6 +54,7 @@ const initialState: GlobalStoreType = {
     isPlaying: false,
     isLoop: false,
   },
+  currentRecordTab: null
 };
 
 const globalSlice = createSlice({
@@ -137,6 +139,9 @@ const globalSlice = createSlice({
         isPlaying: action.payload,
       };
     },
+    changeRecordTab(state, action: PayloadAction<number>) {
+      state.currentRecordTab = action.payload;
+    },
   },
   extraReducers(builder) {
     builder.addMatcher(VocabularyApi.endpoints.getAllVocabulariesInLecture.matchFulfilled, (state, action) => {
@@ -175,6 +180,7 @@ export const {
   updateIsLoop,
   updateIsPlaying,
   updateDisableAllAction,
+  changeRecordTab
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

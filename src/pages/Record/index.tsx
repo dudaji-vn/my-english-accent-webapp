@@ -9,13 +9,18 @@ import TabCustom from "@/components/TabCustom";
 import { useGetLecturesByQuery } from "@/core/services";
 import * as _ from "lodash";
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/core/store";
+import { changeRecordTab } from "@/core/store/index";
 
 export default function RecordingPage() {
   const stageList = Object.values(StageLabel);
   const [stage, setStage] = useState<StageExercise>(StageExercise.Open);
-  const { data, isFetching } = useGetLecturesByQuery(stage);
-
+  const currentRecordTab = useAppSelector((state) => state.GlobalStore.currentRecordTab); 
+  const { data, isFetching } = useGetLecturesByQuery(currentRecordTab || stage);
+  const dispatch = useAppDispatch();
+  
   const handleChange = (newStage: number) => {
+    dispatch(changeRecordTab(newStage));
     setStage(() => newStage);
   };
 
@@ -43,7 +48,7 @@ export default function RecordingPage() {
 
   return (
     <Box className='p-4'>
-      <TabCustom tab={stageList} callback={handleChange} tabIndex={stage} />
+      <TabCustom tab={stageList} callback={handleChange} tabIndex={currentRecordTab || stage} />
       <Box className='sm:flex sm:flex-wrap gap-4 mt-4'>{renderLectures()}</Box>
     </Box>
   );
