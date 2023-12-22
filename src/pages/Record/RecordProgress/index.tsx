@@ -75,7 +75,7 @@ export default function RecordingProgressPage() {
     if (renderVocabulary.length > 0 && parentRef.current) {
       scrollToLastElement();
     }
-  }, [renderVocabulary]);
+  });
 
   const redirectSentenceList = () => {
     navigate(
