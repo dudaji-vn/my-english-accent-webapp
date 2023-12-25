@@ -48,6 +48,12 @@ const UserController = {
       url: "/user/allUsers",
     };
   },
+
+  checkUserCompleteEvent: () => {
+    return {
+      url: "/user/checkUserCompleteEvent",
+    };
+  }
   
 };
 

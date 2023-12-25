@@ -141,8 +141,6 @@ export default function RecordingProgressPage() {
           );
         })}
       </Box>
-      <ModalCongratulation isShow={isShowCongratulationModal} toggle={toggleModalCongratulation} />
-      <ModalAnnouncement isShow={isShowAnnouncementModal} toggle={toggleModalAnnouncement} />
     </Box>
   );
 }
