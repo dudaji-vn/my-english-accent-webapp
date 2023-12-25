@@ -3,7 +3,7 @@ import RecordingIcon from "@/assets/icon/stop-circle-icon.svg";
 import SpeakingIcon from "@/assets/icon/volume-purple-icon.svg";
 import BoxCard from "@/components/BoxCard";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { useEnrollLectureMutation, useLazySpeechToTextQuery } from "@/core/services";
+import { useEnrollLectureMutation, useLazyCheckUserCompleteEventQuery, useLazySpeechToTextQuery } from "@/core/services";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
@@ -15,6 +15,8 @@ import { useEffect, useMemo, useState } from "react";
 import useMicRecorder from "../useMicRecorder";
 import Bowser from "bowser";
 import WordHighLight from "../WordHighLight";
+import {EVENTS} from "@/shared/const/event.const";
+import { StageExercise } from "@/shared/type";
 
 export default function TranslationCard(
   props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }
@@ -25,6 +27,9 @@ export default function TranslationCard(
 
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
+  const [triggerCheckUserCompleteEvent] = useLazyCheckUserCompleteEventQuery();
+
+
   const getBrowserName = Bowser.getParser(window.navigator.userAgent).getBrowserName();
 
   const isDiableAllAction = useAppSelector((state) => state.GlobalStore.recordAudio.disableAllAction);
@@ -50,7 +55,6 @@ export default function TranslationCard(
   }, [mediaFile, isRecord, isRerecord]);
 
   const displayContinueBtn = useMemo(() => {
-    console.log(mediaFile && !isRecord && !isRerecord && transcript !== EMPTY_TRANSCRIPT);
     return mediaFile && !isRecord && !isRerecord && transcript && transcript !== EMPTY_TRANSCRIPT;
   }, [mediaFile, isRecord, transcript]);
 
@@ -96,7 +100,6 @@ export default function TranslationCard(
       dispatch(updateDisableAllAction(true));
     }, 100);
   };
-
   const onAddRecord = async () => {
     if (mediaFile) {
       dispatch(updateDisableAllAction(true));
@@ -109,10 +112,14 @@ export default function TranslationCard(
       }).unwrap();
 
       if (isSuccess) {
-        enrollmentLecture({
+        const res = await enrollmentLecture({
           enrollmentId: props.enrollmentId,
           lectureId: props.lectureId,
-        });
+        }).unwrap();
+
+        if(res?.stage === StageExercise.Close && Object.values(EVENTS).length > 0) {
+          await triggerCheckUserCompleteEvent();
+        }
       }
 
       props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: false });

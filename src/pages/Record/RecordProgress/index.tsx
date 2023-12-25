@@ -2,6 +2,8 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import Congratulation from "@/assets/icon/congratulation-icon.svg";
 import MenuIcon from "@/assets/icon/list-icon.svg";
 import Loading from "@/components/Loading";
+import ModalAnnouncement from "@/components/Modal/ModalAnnouncement";
+import ModalCongratulation from "@/components/Modal/ModalCongratulation";
 import TranslationCard from "@/components/TranslationCard";
 import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
 import { useAppSelector } from "@/core/store";
@@ -9,7 +11,7 @@ import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
 import { StageExercise } from "@/shared/type";
 import persist from "@/shared/utils/persist.util";
-import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, IconButton, Modal, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
@@ -20,6 +22,11 @@ export default function RecordingProgressPage() {
   const lectureName = decodeURIComponent(pathname).replace("/record/", "");
   let [searchParams] = useSearchParams();
   const lectureId = searchParams.get("lectureId") ?? "";
+
+  const [isShowCongratulationModal, setIsShowCongratulationModal] = useState(false);
+  const toggleModalCongratulation = () => setIsShowCongratulationModal((prev) => !prev)
+  const [isShowAnnouncementModal, setIsShowAnnouncementModal] = useState(false);
+  const toggleModalAnnouncement = () => setIsShowAnnouncementModal((prev) => !prev)
 
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -105,7 +112,7 @@ export default function RecordingProgressPage() {
           </IconButton>
         </Box>
       </Container>
-
+      
       <Box ref={parentRef} className='text-center grow bg-gray-100'>
         {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => {
           if (val) {

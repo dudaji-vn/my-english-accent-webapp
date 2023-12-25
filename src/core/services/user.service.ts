@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { EnrollmentRequest, IUSerRegister, UserResponseType } from "../type";
+import { EnrollmentRequest, IIsUserWinEvent, IUSerRegister, UserResponseType } from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
 
@@ -15,16 +15,21 @@ export const UserApi = createApi({
         return response.data;
       },
     }),
-
+    checkUserCompleteEvent: builder.query<IIsUserWinEvent, void>({
+      query: () => UserController.checkUserCompleteEvent(),
+      transformResponse: (response: { data: IIsUserWinEvent }) => {
+        return response.data;
+      },
+    }),
     getAllUsers: builder.query<UserResponseType[], void>({
       query: UserController.getAllUsers,
       transformResponse: (response: { data: UserResponseType[] }) => {
         return response.data;
       },
     }),
-  }),
+  })
 });
 
-export const { useRegisterMutation, useGetAllUsersQuery } = UserApi;
+export const { useRegisterMutation, useGetAllUsersQuery, useLazyCheckUserCompleteEventQuery } = UserApi;
 
 export default UserApi;

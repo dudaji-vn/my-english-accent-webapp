@@ -49,3 +49,8 @@ export interface UserModal {
   updated: string;
   created: string;
 }
+
+export interface IIsUserWinEvent {
+  status: string;
+  message: string;
+}
