@@ -157,7 +157,7 @@ export default function TranslationCard(
           <Grid item xs={12}>
             <Box className="mb-10">
               <Typography className="text-extra-small-medium mb-6" variant={"body2"}>
-                {props.index} / {props.totalVoca}
+                {props.index + 1} / {props.totalVoca}
               </Typography>
               <Typography className="text-large-medium mb-6">{props.vtitleDisplayLanguage}</Typography>
               <Typography variant="body2" className="text-small-regular mb-6" component={"div"}>
