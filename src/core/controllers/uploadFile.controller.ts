@@ -4,6 +4,7 @@ import { CLOUDINARY_CONFIG } from "../../shared/const/cloudinary";
 export interface ICloudinaryResponse {
   url: string;
   type: string;
+  secure_url: string;
 }
 const UploadFileController = {
   // uploadAudio: async (mediaFile: File, vocabularyId: string, myId: string, isClub?: boolean) => {
@@ -22,7 +23,7 @@ const UploadFileController = {
     try {
       let res = await axios.post<ICloudinaryResponse>(cloudiaryUrl, formData);
       console.log(res.data);
-      return res.data.url;
+      return res.data.secure_url;
     } catch (err) {
       console.log(err);
       return "";
