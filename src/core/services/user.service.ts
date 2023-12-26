@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { EnrollmentRequest, IIsUserWinEvent, IUSerRegister, UserResponseType } from "../type";
+import { EnrollmentRequest, IAddOrUpdateGoogleTranscript, IIsUserWinEvent, IUSerRegister, UserResponseType } from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
 
@@ -27,9 +27,18 @@ export const UserApi = createApi({
         return response.data;
       },
     }),
-  })
+    addOrUpdateGoogleTranscript: builder.mutation<boolean, IAddOrUpdateGoogleTranscript>({
+      query: UserController.addOrUpdateGoogleTranscript,
+      transformResponse: (response: { data: boolean }) => response.data,
+    }),
+  }),
 });
 
-export const { useRegisterMutation, useGetAllUsersQuery, useLazyCheckUserCompleteEventQuery } = UserApi;
+export const {
+  useRegisterMutation,
+  useGetAllUsersQuery,
+  useLazyCheckUserCompleteEventQuery,
+  useAddOrUpdateGoogleTranscriptMutation,
+} = UserApi;
 
 export default UserApi;

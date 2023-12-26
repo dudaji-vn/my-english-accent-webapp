@@ -1,4 +1,4 @@
-import { EnrollmentRequest, IUSerRegister, IUserLogin } from "@/core/type";
+import { EnrollmentRequest, IAddOrUpdateGoogleTranscript, IUSerRegister, IUserLogin } from "@/core/type";
 import { StageExercise } from "@/shared/type";
 
 const userPath = "user";
@@ -53,8 +53,14 @@ const UserController = {
     return {
       url: "/user/checkUserCompleteEvent",
     };
-  }
-  
+  },
+  addOrUpdateGoogleTranscript: (payload: IAddOrUpdateGoogleTranscript) => {
+    return {
+      url: "/user/addOrUpdateGoogleTranscript",
+      method: "PUT",
+      body: payload,
+    };
+  },
 };
 
 export default UserController;

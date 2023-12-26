@@ -76,7 +76,7 @@ export default function RecordingProgressPage() {
   };
 
   useEffect(() => {
-    if (renderVocabulary.length > 0 && parentRef.current) {
+    if (renderVocabulary.length > 0 && parentRef.current&&enrollmentData.stage !== StageExercise.Close) {
       scrollToLastElement();
     }
   });
