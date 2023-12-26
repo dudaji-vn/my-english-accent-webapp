@@ -130,15 +130,15 @@ export default function TranslationCard(
         if (res?.stage === StageExercise.Close && Object.values(EVENTS).length > 0) {
           await triggerCheckUserCompleteEvent();
         }
+        if (speakToTextData) {
+          addOrUpdateGoogleTranscript({
+            finalTranscript: speakToTextData.finalTranscript,
+            recordId: recordId,
+            transcripts: speakToTextData.transcripts,
+          });
+        }
       }
 
-      if (speakToTextData) {
-        addOrUpdateGoogleTranscript({
-          finalTranscript: speakToTextData.finalTranscript,
-          recordId: recordId,
-          transcripts: speakToTextData.transcripts,
-        });
-      }
     }
   };
 
