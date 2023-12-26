@@ -12,6 +12,7 @@ import "./input.css";
 import App from "@/App";
 import theme from "../theme";
 import { store } from "./core/store";
+import CommonComponent from "./components/CommonComponent";
 
 // register Swiper custom elements
 register();
@@ -24,6 +25,7 @@ root.render(
         <StyledEngineProvider injectFirst>
           <CssVarsProvider theme={theme}>
             <CssBaseline />
+            <CommonComponent />
             <App />
           </CssVarsProvider>
         </StyledEngineProvider>

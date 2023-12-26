@@ -24,3 +24,12 @@ export interface RecordModal {
   created: string;
   updated: string;
 }
+
+export interface IAddOrUpdateGoogleTranscript {
+  recordId: string;
+  transcripts: {
+    transcript: string;
+    confidence: number;
+  }[];
+  finalTranscript: string;
+}

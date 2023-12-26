@@ -11,9 +11,9 @@ export const RecordApi = createApi({
   baseQuery: baseQuery,
   tagTypes: ["Record"],
   endpoints: (builder) => ({
-    addOrUpdateRecord: builder.mutation<boolean, RecordRequest>({
+    addOrUpdateRecord: builder.mutation<string, RecordRequest>({
       query: RecordController.addOrUpdateRecord,
-      transformResponse: (response: { data: boolean }) => response.data,
+      transformResponse: (response: { data: string }) => response.data,
     }),
     getMyRecordsByLecture: builder.query<ILectureDisplay, string>({
       query: (payload) => RecordController.getMyRecordsByLecture(payload),

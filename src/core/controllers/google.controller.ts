@@ -12,7 +12,7 @@ const GoogleApiController = {
         },
         config: {
           encoding: "MP3",
-          sampleRateHertz: 30000,
+          sampleRateHertz: 20000,
           languageCode: "en-us",
           alternativeLanguageCodes: ["en-GB", "en-CA", "en-HK", "en-IN", "en-NZ"],
         },

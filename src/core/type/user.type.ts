@@ -10,7 +10,7 @@ export const NATIONAL: NationalType = {
   us: "English (US)",
 };
 
-export interface  UserResponseType {
+export interface UserResponseType {
   userId: string;
   nativeLanguage: Language;
   userName: string;
@@ -35,7 +35,7 @@ export interface IUSerRegister {
 
 export interface IUserLogin {
   email: string;
-  googleId: string;
+  googleToken: string;
 }
 
 export interface UserModal {
@@ -48,4 +48,9 @@ export interface UserModal {
   favorite_user_ids: string[];
   updated: string;
   created: string;
+}
+
+export interface IIsUserWinEvent {
+  status: string;
+  message: string;
 }

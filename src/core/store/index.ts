@@ -1,9 +1,11 @@
 import Reducer from "@/shared/const/store.const";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { VocabularyApi } from "../services";
+import { UserApi, VocabularyApi } from "../services";
 import { EnrollmentStep, LectureResponseType } from "../type";
 import ListenApi from "../services/listen.service";
 import { UserPlayingType } from "@/components/PlaylistPod";
+import { ModalType } from "@/shared/const/modal-type.const";
+import { EVENT_STATUS } from "@/shared/const/event.const";
 
 interface GlobalStoreType {
   recordPage: EnrollmentStep;
@@ -29,6 +31,9 @@ interface GlobalStoreType {
     isLoop: boolean;
   };
   currentRecordTab: number | null;
+  modal: {
+    type: string;
+  }
 }
 
 const initialState: GlobalStoreType = {
@@ -54,7 +59,10 @@ const initialState: GlobalStoreType = {
     isPlaying: false,
     isLoop: false,
   },
-  currentRecordTab: null
+  currentRecordTab: null,
+  modal: {
+    type: "",
+  }
 };
 
 const globalSlice = createSlice({
@@ -142,6 +150,9 @@ const globalSlice = createSlice({
     changeRecordTab(state, action: PayloadAction<number>) {
       state.currentRecordTab = action.payload;
     },
+    toggleModal(state, action: PayloadAction<string | undefined>) {
+      state.modal.type = action.payload || "";
+    }
   },
   extraReducers(builder) {
     builder.addMatcher(VocabularyApi.endpoints.getAllVocabulariesInLecture.matchFulfilled, (state, action) => {
@@ -166,6 +177,21 @@ const globalSlice = createSlice({
         isTheLastVocabulary: false,
       };
     });
+    builder.addMatcher(UserApi.endpoints.checkUserCompleteEvent.matchFulfilled, (state, action) => {
+      const status = action.payload?.status || "";
+      if(status === EVENT_STATUS.WIN) {
+        state.modal.type = ModalType.CONGRATULATION;
+      }
+      if(status === EVENT_STATUS.CLOSE) {
+        state.modal.type = ModalType.EVENT_END;
+      }
+      if(status === EVENT_STATUS.MAX_WINNER) {
+        state.modal.type = ModalType.MAX_WINNER;
+      }
+      if(!status) {
+        state.modal.type = "";
+      }
+    });
   },
 });
 
@@ -180,7 +206,8 @@ export const {
   updateIsLoop,
   updateIsPlaying,
   updateDisableAllAction,
-  changeRecordTab
+  changeRecordTab,
+  toggleModal
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

@@ -2,6 +2,8 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import Congratulation from "@/assets/icon/congratulation-icon.svg";
 import MenuIcon from "@/assets/icon/list-icon.svg";
 import Loading from "@/components/Loading";
+import ModalAnnouncement from "@/components/Modal/ModalAnnouncement";
+import ModalCongratulation from "@/components/Modal/ModalCongratulation";
 import TranslationCard from "@/components/TranslationCard";
 import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
 import { useAppSelector } from "@/core/store";
@@ -9,9 +11,10 @@ import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
 import { StageExercise } from "@/shared/type";
 import persist from "@/shared/utils/persist.util";
-import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, IconButton, Modal, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { ExitStatus } from "typescript";
 
 export default function RecordingProgressPage() {
   const navigate = useNavigate();
@@ -20,14 +23,12 @@ export default function RecordingProgressPage() {
   const lectureName = decodeURIComponent(pathname).replace("/record/", "");
   let [searchParams] = useSearchParams();
   const lectureId = searchParams.get("lectureId") ?? "";
-
   const parentRef = useRef<HTMLDivElement>(null);
-
   const enrollmentData = useAppSelector((state) => state.GlobalStore.recordPage);
+
   const { data, isFetching } = useGetAllVocabulariesInLectureQuery(lectureId);
-
+  const [isFinish, setIsFinish] = useState(data?.stage === StageExercise.Close);
   const [renderVocabulary, setRenderVocabulary] = useState<VocabularyTypeWithNativeLanguageResponse[]>([]);
-
   const vocabularies: VocabularyTypeWithNativeLanguageResponse[] = useMemo(() => {
     const vocab = data?.vocabularies ?? [];
 
@@ -38,11 +39,8 @@ export default function RecordingProgressPage() {
       if (nextIndex !== -1) {
         newArr.push(vocab[nextIndex]);
       }
-      if (enrollmentData.stage === StageExercise.Close) {
-        newArr.push(vocab[-1]);
-      }
       setRenderVocabulary(() => newArr);
-    } else {
+    } else if(vocab.length > 0) {
       setRenderVocabulary(() => [vocab[0]]);
     }
 
@@ -50,15 +48,21 @@ export default function RecordingProgressPage() {
   }, [data?.vocabularies]);
 
   const nextVocabulary = ({ voiceSrc, index, isUpdate }: { voiceSrc: string; index: number; isUpdate: boolean }) => {
-    if (vocabularies[index - 1]) {
+    if (vocabularies[index]) {
       const newArr = [...renderVocabulary];
-      newArr[index - 1] = {
-        ...newArr[index - 1],
+      newArr[index] = {
+        ...newArr[index],
         voiceSrc,
       };
-      setRenderVocabulary(() => {
-        return isUpdate ? [...newArr] : [...newArr, vocabularies[index]];
-      });
+
+      if(!isUpdate && index >= vocabularies.length - 1 && !isFinish) {
+        setIsFinish(true);
+      }
+      if(!isUpdate && index < vocabularies.length - 1) {
+        newArr.push(vocabularies[index + 1]);
+      }
+      setRenderVocabulary(newArr);
+
     }
   };
 
@@ -72,10 +76,18 @@ export default function RecordingProgressPage() {
   };
 
   useEffect(() => {
-    if (renderVocabulary.length > 0 && parentRef.current) {
+    if (renderVocabulary.length > 0 && parentRef.current&&enrollmentData.stage !== StageExercise.Close) {
       scrollToLastElement();
     }
   });
+
+  useEffect(()=>{
+    if (data?.stage === StageExercise.Close) {
+      setIsFinish(true);
+    } else {
+      setIsFinish(false);
+    }
+  }, [data?.stage])
 
   const redirectSentenceList = () => {
     navigate(
@@ -105,34 +117,30 @@ export default function RecordingProgressPage() {
           </IconButton>
         </Box>
       </Container>
-
+      
       <Box ref={parentRef} className='text-center grow bg-gray-100'>
-        {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => {
-          if (val) {
-            return (
-              <TranslationCard
-                {...val}
-                key={val.vocabularyId}
-                nextVocabulary={nextVocabulary}
-                enrollmentId={enrollmentData!.enrollmentId}
-                index={index + 1}
-                totalVoca={vocabularies.length}
-              />
-            );
-          }
-          return (
-            <Box className='bg-gray-100 flex flex-col items-center justify-center h-[500px] p-6 gap-2' key={myInfo}>
-              <Avatar src={Congratulation} className='w-16 h-16 mb-4'></Avatar>
-              <Typography className='text-extra-large-semibold'>Nice job, {myInfo}</Typography>
-              <Typography variant={"body2"} className='mb-4'>
-                You finally recorded all the lectures
-              </Typography>
-              <Button onClick={() => navigate(ROUTER.RECORD)} variant='outlined'>
-                Finished
-              </Button>
-            </Box>
-          );
-        })}
+        {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => (
+          <TranslationCard
+            {...val}
+            key={val.vocabularyId}
+            nextVocabulary={nextVocabulary}
+            enrollmentId={enrollmentData!.enrollmentId}
+            index={index}
+            totalVoca={vocabularies.length}
+          />
+        ))}
+        {isFinish && 
+          <Box className='bg-gray-100 flex flex-col items-center justify-center h-[500px] p-6 gap-2' key={myInfo}>
+            <Avatar src={Congratulation} className='w-16 h-16 mb-4'></Avatar>
+            <Typography className='text-extra-large-semibold'>Nice job, {myInfo}</Typography>
+            <Typography variant={"body2"} className='mb-4'>
+              You finally recorded all the lectures
+            </Typography>
+            <Button onClick={() => navigate(ROUTER.RECORD)} variant='outlined'>
+              Finished
+            </Button>
+          </Box>
+        }
       </Box>
     </Box>
   );
