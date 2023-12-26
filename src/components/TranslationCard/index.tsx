@@ -138,7 +138,6 @@ export default function TranslationCard(
           });
         }
       }
-
     }
   };
 
@@ -180,7 +179,7 @@ export default function TranslationCard(
                 {props.index + 1} / {props.totalVoca}
               </Typography>
               <Typography className="text-large-medium mb-6">{props.vtitleDisplayLanguage}</Typography>
-              <Typography variant="body2" className="text-small-regular mb-6" component={"div"}>
+              <Typography variant="body2" className="text-small-regular mb-6 break-words" component={"div"}>
                 {props.vphoneticDisplayLanguage}
                 <TextToSpeech text={props.vtitleDisplayLanguage} />
               </Typography>
