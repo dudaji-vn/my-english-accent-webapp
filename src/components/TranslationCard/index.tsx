@@ -3,7 +3,12 @@ import RecordingIcon from "@/assets/icon/stop-circle-icon.svg";
 import SpeakingIcon from "@/assets/icon/volume-purple-icon.svg";
 import BoxCard from "@/components/BoxCard";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { useEnrollLectureMutation, useLazyCheckUserCompleteEventQuery, useLazySpeechToTextQuery } from "@/core/services";
+import {
+  useEnrollLectureMutation,
+  useLazyCheckUserCompleteEventQuery,
+  useLazySpeechToTextQuery,
+  useAddOrUpdateGoogleTranscriptMutation,
+} from "@/core/services";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
@@ -15,7 +20,7 @@ import { useEffect, useMemo, useState } from "react";
 import useMicRecorder from "../useMicRecorder";
 import Bowser from "bowser";
 import WordHighLight from "../WordHighLight";
-import {EVENTS} from "@/shared/const/event.const";
+import { EVENTS } from "@/shared/const/event.const";
 import { StageExercise } from "@/shared/type";
 
 export default function TranslationCard(
@@ -23,12 +28,12 @@ export default function TranslationCard(
 ) {
   const myId = persist.getMyInfo().userId;
 
-  const [trigger, { data: transcript }] = useLazySpeechToTextQuery();
+  const [trigger, { data: speakToTextData }] = useLazySpeechToTextQuery();
 
   const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
+  const [addOrUpdateGoogleTranscript] = useAddOrUpdateGoogleTranscriptMutation();
   const [enrollmentLecture] = useEnrollLectureMutation();
   const [triggerCheckUserCompleteEvent] = useLazyCheckUserCompleteEventQuery();
-
 
   const getBrowserName = Bowser.getParser(window.navigator.userAgent).getBrowserName();
 
@@ -55,12 +60,14 @@ export default function TranslationCard(
   }, [mediaFile, isRecord, isRerecord]);
 
   const displayContinueBtn = useMemo(() => {
-    return mediaFile && !isRecord && !isRerecord && transcript && transcript !== EMPTY_TRANSCRIPT;
-  }, [mediaFile, isRecord, transcript]);
+    return mediaFile && !isRecord && !isRerecord && speakToTextData && speakToTextData.finalTranscript !== EMPTY_TRANSCRIPT;
+  }, [mediaFile, isRecord, speakToTextData]);
 
   const displayUpdateRecordBtn = useMemo(() => {
-    return status === "stopped" && isRerecord && mediaFile && transcript && transcript !== EMPTY_TRANSCRIPT;
-  }, [isRerecord, status, mediaFile, transcript]);
+    return (
+      status === "stopped" && isRerecord && mediaFile && speakToTextData && speakToTextData.finalTranscript !== EMPTY_TRANSCRIPT
+    );
+  }, [isRerecord, status, mediaFile, speakToTextData]);
 
   useEffect(() => {
     if (mediaBase64) {
@@ -106,25 +113,32 @@ export default function TranslationCard(
       setHideContinueBtn(() => true);
       const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
 
-      const isSuccess = await addOrUpdateRecord({
+      const recordId = await addOrUpdateRecord({
         vocabularyId: props.vocabularyId,
         voiceSrc: url,
       }).unwrap();
 
-      if (isSuccess) {
+      if (recordId) {
+        props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: false });
+        clearFile();
+        dispatch(updateDisableAllAction(false));
         const res = await enrollmentLecture({
           enrollmentId: props.enrollmentId,
           lectureId: props.lectureId,
         }).unwrap();
 
-        if(res?.stage === StageExercise.Close && Object.values(EVENTS).length > 0) {
+        if (res?.stage === StageExercise.Close && Object.values(EVENTS).length > 0) {
           await triggerCheckUserCompleteEvent();
         }
       }
 
-      props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: false });
-      clearFile();
-      dispatch(updateDisableAllAction(false));
+      if (speakToTextData) {
+        addOrUpdateGoogleTranscript({
+          finalTranscript: speakToTextData.finalTranscript,
+          recordId: recordId,
+          transcripts: speakToTextData.transcripts,
+        });
+      }
     }
   };
 
@@ -134,14 +148,20 @@ export default function TranslationCard(
       setHideUpdateRecordBtn(() => true);
       const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
 
-      addOrUpdateRecord({
-        vocabularyId: props.vocabularyId,
-        voiceSrc: url,
-      }).unwrap();
-
       props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: true });
       clearFile();
       dispatch(updateDisableAllAction(false));
+      const recordId = await addOrUpdateRecord({
+        vocabularyId: props.vocabularyId,
+        voiceSrc: url,
+      }).unwrap();
+      if (speakToTextData && recordId) {
+        addOrUpdateGoogleTranscript({
+          finalTranscript: speakToTextData.finalTranscript,
+          recordId: recordId,
+          transcripts: speakToTextData.transcripts,
+        });
+      }
     }
   };
 
@@ -164,8 +184,7 @@ export default function TranslationCard(
                 {props.vphoneticDisplayLanguage}
                 <TextToSpeech text={props.vtitleDisplayLanguage} />
               </Typography>
-
-              <WordHighLight sentence={props.vtitleDisplayLanguage} transcript={transcript} />
+              <WordHighLight sentence={props.vtitleDisplayLanguage} transcript={speakToTextData?.finalTranscript || ""} />
             </Box>
           </Grid>
           <Grid item xs={12}>
@@ -185,7 +204,9 @@ export default function TranslationCard(
             </IconButton>
             {displayRepeatBtn && (
               <IconButton
-                className={`absolute top-1/2 -translate-y-1/2 p-5 w-12 h-12 ml-5 ${isHearing ? "bg-purple-300" : "bg-purple-200"}`}
+                className={`absolute top-1/2 -translate-y-1/2 p-5 w-12 h-12 ml-5 ${
+                  isHearing ? "bg-purple-300" : "bg-purple-200"
+                }`}
                 onClick={onRepeat}
                 disabled={isDiableAllAction}
               >
