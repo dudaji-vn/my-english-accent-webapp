@@ -14,7 +14,7 @@ export const FakeUserApi = createApi({
       queryFn: async () => {
         try {
           const provider = new GoogleAuthProvider();
-          provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
+          //provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 
           let isLogin = false;
           const response = await signInWithPopup(auth, provider)
@@ -25,16 +25,16 @@ export const FakeUserApi = createApi({
             const googleId = response.user.uid;
             const email = response.user.email!;
             const avatarUrl = response.user.photoURL!;
+            const googleToken = (response as any)._tokenResponse.oauthIdToken;
 
             persist.saveProviderInfo({
-              googleId,
               email,
               avatarUrl,
             } as IUserLogin & { avatarUrl: string });
 
             if (googleId && email) {
               const response = await UserController.login({
-                googleId,
+                googleToken,
                 email,
               });
               if (response.status === "success") {
