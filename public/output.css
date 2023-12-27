@@ -305,10 +305,6 @@ h6 {
   left: 0px;
 }
 
-#root :is(.left-1\/2) {
-  left: 50%;
-}
-
 #root :is(.top-0) {
   top: 0px;
 }
@@ -357,6 +353,10 @@ h6 {
   margin-left: 1.25rem;
 }
 
+#root :is(.mt-10) {
+  margin-top: 2.5rem;
+}
+
 #root :is(.mt-12) {
   margin-top: 3rem;
 }
@@ -375,10 +375,6 @@ h6 {
 
 #root :is(.mt-6) {
   margin-top: 1.5rem;
-}
-
-#root :is(.mt-10) {
-  margin-top: 2.5rem;
 }
 
 #root :is(.block) {
@@ -403,6 +399,10 @@ h6 {
 
 #root :is(.h-16) {
   height: 4rem;
+}
+
+#root :is(.h-20) {
+  height: 5rem;
 }
 
 #root :is(.h-28) {
@@ -465,6 +465,10 @@ h6 {
   width: 4rem;
 }
 
+#root :is(.w-20) {
+  width: 5rem;
+}
+
 #root :is(.w-4) {
   width: 1rem;
 }
@@ -505,6 +509,10 @@ h6 {
   width: 100%;
 }
 
+#root :is(.max-w-\[300px\]) {
+  max-width: 300px;
+}
+
 #root :is(.max-w-\[375px\]) {
   max-width: 375px;
 }
@@ -515,16 +523,6 @@ h6 {
 
 #root :is(.basis-1\/4) {
   flex-basis: 25%;
-}
-
-#root :is(.basis-1\/3) {
-  flex-basis: 33.333333%;
-}
-
-#root :is(.-translate-x-1\/2) {
-  --tw-translate-x: -50%;
-  -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 #root :is(.-translate-y-1\/2) {
@@ -872,10 +870,6 @@ h6 {
     margin-bottom: 0px;
   }
 
-  #root :is(.sm\:mt-10) {
-    margin-top: 2.5rem;
-  }
-
   #root :is(.sm\:block) {
     display: block;
   }
@@ -904,6 +898,14 @@ h6 {
 
   #root :is(.md\:w-\[400px\]) {
     width: 400px;
+  }
+
+  #root :is(.md\:max-w-\[500px\]) {
+    max-width: 500px;
+  }
+
+  #root :is(.md\:max-w-\[600px\]) {
+    max-width: 600px;
   }
 
   #root :is(.md\:justify-center) {

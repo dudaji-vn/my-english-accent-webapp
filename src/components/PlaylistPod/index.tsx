@@ -91,13 +91,14 @@ export default function PlaylistPod() {
   return (
     <Grid container>
       <Grid item xs={isSmallScreen ? 12 : 6}>
-        <Box className='flex flex-col justify-center items-center gap-4 text-center p-4'>
-          <Avatar variant='square' className='hidden w-16 h-16 sm:block' src={playlistDetail?.lecture.imgSrc} />
-          <Typography className='text-base-medium'>{playlistDetail?.lecture.lectureName}</Typography>
+        <Box className="flex flex-col justify-center items-center gap-4 text-center p-4">
+          <Avatar variant="square" className="hidden w-16 h-16 sm:block" src={playlistDetail?.lecture.imgSrc} />
+          <Typography className="text-base-medium">{playlistDetail?.lecture.lectureName}</Typography>
         </Box>
 
         <Box className={`px-4`} sx={isSmallScreen ? { width: `calc(100vw - 32px)` } : {}}>
           <Swiper
+            className="md:max-w-[600px]"
             pagination={true}
             slidesPerView={"auto"}
             modules={[Pagination]}
@@ -110,9 +111,9 @@ export default function PlaylistPod() {
           >
             {playlistDetail?.vocabularies.map((voca) => (
               <SwiperSlide key={voca.vocabularyId}>
-                <Box className='bg-gray-50 p-4 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border max-h-[208px] h-[208px]'>
-                  <Typography className='text-small-medium'>{voca.vtitleDisplayLanguage}</Typography>
-                  <Typography className='text-small-regular' variant='body2'>
+                <Box className="bg-gray-50 p-4 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border max-h-[208px] h-[208px]">
+                  <Typography className="text-small-medium">{voca.vtitleDisplayLanguage}</Typography>
+                  <Typography className="text-small-regular" variant="body2">
                     {voca.vphoneticDisplayLanguage}
                   </Typography>
                 </Box>
@@ -143,8 +144,8 @@ export default function PlaylistPod() {
         <QuenePlaylist usersRecord={usersRecord} />
       </Grid>
       <Grid item xs={isSmallScreen ? 12 : 6}>
-        <Box className='p-4'>
-          <Typography className='text-base-medium pb-4'>People</Typography>
+        <Box className="p-4">
+          <Typography className="text-base-medium pb-4">People</Typography>
           <PeopleControl userRecord={usersRecord} onUserPlayAudio={onHandleActionControl} />
         </Box>
       </Grid>
