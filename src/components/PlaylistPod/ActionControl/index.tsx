@@ -1,20 +1,19 @@
-import ActivedLoopIcon from '@/assets/icon/active-loop-icon.svg';
-import DisableNextIcon from '@/assets/icon/disable-next-icon.svg';
-import DisablePreviosIcon from '@/assets/icon/disable-previous-icon.svg';
-import LectureListIcon from '@/assets/icon/lecture-list-icon.svg';
-import LoopIcon from '@/assets/icon/loop-icon.svg';
-import NextIcon from '@/assets/icon/next-icon.svg';
-import PauseIcon from '@/assets/icon/pause-icon.svg';
-import PlayIcon from '@/assets/icon/play-icon.svg';
-import PreviosIcon from '@/assets/icon/previos-icon.svg';
-import { useAppDispatch, useAppSelector } from '@/core/store';
-import { updateIndexListenPage, updateIsPlaying } from '@/core/store/index';
-import { RecordTypeResponse, UserResponseType } from '@/core/type';
-import ROUTER from '@/shared/const/router.const';
-import { Avatar, Box, IconButton } from '@mui/material';
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import * as Bowser from 'bowser'; // TypeScript
+import ActivedLoopIcon from "@/assets/icon/active-loop-icon.svg";
+import DisableNextIcon from "@/assets/icon/disable-next-icon.svg";
+import DisablePreviosIcon from "@/assets/icon/disable-previous-icon.svg";
+import LectureListIcon from "@/assets/icon/lecture-list-icon.svg";
+import LoopIcon from "@/assets/icon/loop-icon.svg";
+import NextIcon from "@/assets/icon/next-icon.svg";
+import PauseIcon from "@/assets/icon/pause-icon.svg";
+import PlayIcon from "@/assets/icon/play-icon.svg";
+import PreviosIcon from "@/assets/icon/previos-icon.svg";
+import { useAppDispatch, useAppSelector } from "@/core/store";
+import { updateIndexListenPage, updateIsPlaying } from "@/core/store/index";
+import { RecordTypeResponse, UserResponseType } from "@/core/type";
+import ROUTER from "@/shared/const/router.const";
+import { Avatar, Box, IconButton } from "@mui/material";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export interface ActionControlRef {
   onHandlePlayAudioBySelectUser: Function;
@@ -28,9 +27,9 @@ interface ActionControlPlaylistProps {
 }
 
 const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextSlideIndex }: ActionControlPlaylistProps, ref) => {
-  const getBrowserName = Bowser.getParser(window.navigator.userAgent).getBrowserName();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const currentIndex = useAppSelector((state) => state.GlobalStore.listenPage.currentLectureIndex);
   const totalLecture = useAppSelector((state) => state.GlobalStore.listenPage.totalLecture);
   const isTheLastVocabulary = useAppSelector((state) => state.GlobalStore.listenPage.isTheLastVocabulary);
@@ -39,6 +38,23 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
   const [indexPlaying, setIndexPlaying] = useState(0);
   const [isLoop, setIsLoop] = useState(false);
   const audioElement = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined = undefined;
+    if (usersRecord.length === 0 && isPlayingStatus) {
+      timer = setTimeout(() => {
+        if (currentIndex < totalLecture - 1) {
+          dispatch(updateIndexListenPage(1));
+        } else {
+          dispatch(updateIsPlaying(false));
+        }
+      }, 2000);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [usersRecord, isPlayingStatus]);
 
   const onHandleToNewLecture = (isNext: boolean) => {
     if (isNext) {
@@ -70,14 +86,9 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
   };
 
   const onHandlePlayAudio = (isPlaying: boolean, nextIndex?: number) => {
-    // if (getBrowserName === "Safari") {
-    //   return alert("Not supported this browser yet. Please use a Chrome browser for a better experience");
-    // }
-    if (!usersRecord.length) return;
-    dispatch(updateIsPlaying(isPlaying));
-
     const index = nextIndex ?? indexPlaying;
     setIndexPlaying(index);
+    dispatch(updateIsPlaying(isPlaying));
     setUsersRecord(getNewUserRecord(index));
   };
 
@@ -123,6 +134,7 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
   useEffect(() => {
     if (audioElement.current) {
       if (isPlayingStatus) {
+        //  debugger;
         audioElement.current.play().catch((error) => {
           // if (!audioElement.current) return;
           // audioElement.current.pause();
@@ -134,11 +146,17 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
       }
     }
   }, [indexPlaying, isPlayingStatus, usersRecord]);
+  console.log(currentIndex === totalLecture - 1);
 
   return (
     <Box className="flex justify-around py-4" ref={ref}>
       {usersRecord.length ? (
-        <audio ref={audioElement} autoPlay={isPlayingStatus} src={usersRecord[indexPlaying]?.voiceSrc} onEnded={onHandleEndAudio} />
+        <audio
+          ref={audioElement}
+          autoPlay={isPlayingStatus}
+          src={usersRecord[indexPlaying]?.voiceSrc}
+          onEnded={onHandleEndAudio}
+        />
       ) : null}
       <IconButton onClick={() => setIsLoop((preVal) => !preVal)}>
         <Avatar src={isLoop ? ActivedLoopIcon : LoopIcon} alt="wave-icon" className="w-6 h-6" />
@@ -146,8 +164,16 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
       <IconButton onClick={() => onHandleToNewLecture(false)}>
         <Avatar src={currentIndex >= 1 ? PreviosIcon : DisablePreviosIcon} alt="wave-icon" className="w-6 h-6" />
       </IconButton>
-      <IconButton className="bg-primary w-12 h-12" onClick={() => onHandlePlayAudio(!isPlayingStatus)}>
-        <Avatar src={isPlayingStatus ? PauseIcon : PlayIcon} alt="wave-icon" className="w-6 h-6" />
+      <IconButton
+        disabled={currentIndex === totalLecture - 1}
+        className="bg-primary w-12 h-12"
+        onClick={() => onHandlePlayAudio(!isPlayingStatus)}
+      >
+        <Avatar
+          src={isPlayingStatus && currentIndex !== totalLecture - 1 ? PauseIcon : PlayIcon}
+          alt="wave-icon"
+          className="w-6 h-6"
+        />
       </IconButton>
       <IconButton onClick={() => onHandleToNewLecture(true)}>
         <Avatar src={currentIndex < totalLecture - 1 ? NextIcon : DisableNextIcon} alt="wave-icon" className="w-6 h-6" />
