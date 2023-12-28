@@ -509,10 +509,6 @@ h6 {
   width: 100%;
 }
 
-#root :is(.max-w-\[300px\]) {
-  max-width: 300px;
-}
-
 #root :is(.max-w-\[375px\]) {
   max-width: 375px;
 }
@@ -898,10 +894,6 @@ h6 {
 
   #root :is(.md\:w-\[400px\]) {
     width: 400px;
-  }
-
-  #root :is(.md\:max-w-\[500px\]) {
-    max-width: 500px;
   }
 
   #root :is(.md\:max-w-\[600px\]) {
