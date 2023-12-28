@@ -16,6 +16,7 @@ export default function ModalNotify({isShow, toggle, children } : Props) {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 450,
+            maxWidth: "90%",
             background: "#FFF",
             borderRadius: 2,
             p: 4,
