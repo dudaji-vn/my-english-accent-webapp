@@ -12,7 +12,7 @@ import { updateIndexListenPage, updateIsPlaying } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
 import { AlertTitle, Avatar, Box, IconButton, Snackbar, Stack } from "@mui/material";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 
@@ -144,6 +144,16 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
     }
   }, [indexPlaying, isPlayingStatus, usersRecord]);
 
+  const isShowPauseIcon = () => {
+    if (!usersRecord || usersRecord.length === 0) {
+      if (isPlayingStatus && currentIndex !== totalLecture - 1) {
+        return true;
+      }
+      return false;
+    }
+    return isPlayingStatus;
+  };
+
   return (
     <Box className="flex justify-around py-4" ref={ref}>
       <Snackbar
@@ -176,15 +186,11 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
         <Avatar src={currentIndex >= 1 ? PreviosIcon : DisablePreviosIcon} alt="wave-icon" className="w-6 h-6" />
       </IconButton>
       <IconButton
-        disabled={currentIndex === totalLecture - 1}
+        disabled={currentIndex === totalLecture - 1 && usersRecord.length === 0}
         className="bg-primary w-12 h-12"
         onClick={() => onHandlePlayAudio(!isPlayingStatus)}
       >
-        <Avatar
-          src={isPlayingStatus && currentIndex !== totalLecture - 1 ? PauseIcon : PlayIcon}
-          alt="wave-icon"
-          className="w-6 h-6"
-        />
+        <Avatar src={isShowPauseIcon() ? PauseIcon : PlayIcon} alt="wave-icon" className="w-6 h-6" />
       </IconButton>
       <IconButton onClick={() => onHandleToNewLecture(true)}>
         <Avatar src={currentIndex < totalLecture - 1 ? NextIcon : DisableNextIcon} alt="wave-icon" className="w-6 h-6" />
