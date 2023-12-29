@@ -11,9 +11,10 @@ import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateIndexListenPage, updateIsPlaying } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
-import { Avatar, Box, IconButton } from "@mui/material";
+import { AlertTitle, Avatar, Box, IconButton, Snackbar, Stack } from "@mui/material";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 export interface ActionControlRef {
   onHandlePlayAudioBySelectUser: Function;
@@ -48,7 +49,7 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
         } else {
           dispatch(updateIsPlaying(false));
         }
-      }, 2000);
+      }, 3000);
     }
     return () => {
       clearTimeout(timer);
@@ -134,11 +135,7 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
   useEffect(() => {
     if (audioElement.current) {
       if (isPlayingStatus) {
-        //  debugger;
         audioElement.current.play().catch((error) => {
-          // if (!audioElement.current) return;
-          // audioElement.current.pause();
-          // dispatch(updateIsPlaying(false));
           console.log(error);
         });
       } else {
@@ -146,10 +143,24 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
       }
     }
   }, [indexPlaying, isPlayingStatus, usersRecord]);
-  console.log(currentIndex === totalLecture - 1);
 
   return (
     <Box className="flex justify-around py-4" ref={ref}>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isPlayingStatus && usersRecord.length === 0}
+        autoHideDuration={3000}
+      >
+        <Alert elevation={6} severity="info">
+          <AlertTitle
+            sx={{
+              margin: 0,
+            }}
+          >
+            Skip it because of no record
+          </AlertTitle>
+        </Alert>
+      </Snackbar>
       {usersRecord.length ? (
         <audio
           ref={audioElement}
