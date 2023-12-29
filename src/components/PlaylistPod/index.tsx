@@ -50,7 +50,6 @@ export default function PlaylistPod() {
         }
       } else {
         setUsersRecord(() => []);
-        dispatch(updateIsPlaying(false));
       }
     },
     [playlistDetail]
