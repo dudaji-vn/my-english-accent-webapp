@@ -33,7 +33,7 @@ interface GlobalStoreType {
   currentRecordTab: number | null;
   modal: {
     type: string;
-  }
+  };
 }
 
 const initialState: GlobalStoreType = {
@@ -62,7 +62,7 @@ const initialState: GlobalStoreType = {
   currentRecordTab: null,
   modal: {
     type: "",
-  }
+  },
 };
 
 const globalSlice = createSlice({
@@ -118,8 +118,12 @@ const globalSlice = createSlice({
 
     updateIndexListenPage: (state: GlobalStoreType, action: PayloadAction<number>) => {
       const currentIndex = state.listenPage.currentLectureIndex;
+      const numberVocabularies = state.listenPage.lectures.length;
       const newIndex = currentIndex + action.payload;
 
+      if (newIndex >= numberVocabularies) {
+        return;
+      }
       state.listenPage = {
         ...state.listenPage,
         currentLectureIndex: newIndex,
@@ -152,7 +156,7 @@ const globalSlice = createSlice({
     },
     toggleModal(state, action: PayloadAction<string | undefined>) {
       state.modal.type = action.payload || "";
-    }
+    },
   },
   extraReducers(builder) {
     builder.addMatcher(VocabularyApi.endpoints.getAllVocabulariesInLecture.matchFulfilled, (state, action) => {
@@ -179,16 +183,16 @@ const globalSlice = createSlice({
     });
     builder.addMatcher(UserApi.endpoints.checkUserCompleteEvent.matchFulfilled, (state, action) => {
       const status = action.payload?.status || "";
-      if(status === EVENT_STATUS.WIN) {
+      if (status === EVENT_STATUS.WIN) {
         state.modal.type = ModalType.CONGRATULATION;
       }
-      if(status === EVENT_STATUS.CLOSE) {
+      if (status === EVENT_STATUS.CLOSE) {
         state.modal.type = ModalType.EVENT_END;
       }
-      if(status === EVENT_STATUS.MAX_WINNER) {
+      if (status === EVENT_STATUS.MAX_WINNER) {
         state.modal.type = ModalType.MAX_WINNER;
       }
-      if(!status) {
+      if (!status) {
         state.modal.type = "";
       }
     });
@@ -207,7 +211,7 @@ export const {
   updateIsPlaying,
   updateDisableAllAction,
   changeRecordTab,
-  toggleModal
+  toggleModal,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;
