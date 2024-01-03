@@ -11,10 +11,10 @@ import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateIndexListenPage, updateIsPlaying } from "@/core/store/index";
 import { RecordTypeResponse, UserResponseType } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
-import { AlertTitle, Avatar, Box, IconButton, Snackbar, Stack } from "@mui/material";
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { AlertTitle, Avatar, Box, IconButton, Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export interface ActionControlRef {
   onHandlePlayAudioBySelectUser: Function;

@@ -25,7 +25,7 @@ export default function ClubAddMemberPage() {
 
   const onHandleListUser = (id: string) => {
     const isFound = members.includes(id);
-    return isFound ? setMembers((pre) => [...pre, ...members.filter((userId) => userId != id)]) : setMembers((pre) => [...pre, id]);
+    return isFound ? setMembers((pre) => [...pre, ...members.filter((userId) => userId !== id)]) : setMembers((pre) => [...pre, id]);
   };
 
   const renderUsersList = () => {

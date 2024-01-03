@@ -1,5 +1,4 @@
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import Vietnamflag from "@/assets/icon/vietnam-flag-icon.svg";
 import BoxCard from "@/components/BoxCard";
 import ClubRecordingAudio from "@/components/ClubRecordPlayer";
 import Loading from "@/components/Loading";
@@ -7,7 +6,6 @@ import UploadFileController from "@/core/controllers/uploadFile.controller";
 import { useGetVocabularyQuery } from "@/core/services";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import ROUTER from "@/shared/const/router.const";
-import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
 import { Avatar, Box, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -45,6 +45,8 @@ const TextToSpeech = ({ text }: { text: string }) => {
       setChecked(() => false);
       dispatch(updateDisableAllAction(false));
     };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 
   return (
