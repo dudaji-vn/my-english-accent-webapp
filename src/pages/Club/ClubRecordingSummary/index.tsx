@@ -1,14 +1,14 @@
-import { Container, Box, Avatar, Typography, Button, Grid, Radio } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import ROUTER from "@/shared/const/router.const";
-import FooterBtn from "@/components/FooterBtn";
-import { RecordTypeResponse } from "@/core/type";
-import { useGetAllRecordInChallengeQuery, usePrefetch } from "@/core/services/challenge.service";
-import { useRef, useState, useEffect } from "react";
-import SpeakerIcon from "@/assets/icon/volume-icon.svg";
 import SpeakerFillIcon from "@/assets/icon/volume-fill-icon.svg";
-import { IChallengeSummaryDisplay } from "@/core/type/challenge.type";
+import SpeakerIcon from "@/assets/icon/volume-icon.svg";
+import FooterBtn from "@/components/FooterBtn";
 import Loading from "@/components/Loading";
+import { useGetAllRecordInChallengeQuery, usePrefetch } from "@/core/services/challenge.service";
+import { RecordTypeResponse } from "@/core/type";
+import { IChallengeSummaryDisplay } from "@/core/type/challenge.type";
+import ROUTER from "@/shared/const/router.const";
+import { Avatar, Box, Button, Container, Radio, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function ClubAudioRecord({ vocabularies, challengeName, clubId, challengeId }: IChallengeSummaryDisplay) {
   const navigate = useNavigate();

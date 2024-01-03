@@ -61,6 +61,7 @@ export default function Register() {
     if (step === MAX_STEP) {
       return !nativeLanguage;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider, nickName, nativeLanguage]);
 
   const renderNational = (selected: Language | null, isNativeLanguage: boolean) => {

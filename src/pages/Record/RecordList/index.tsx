@@ -31,6 +31,8 @@ export default function RecordSentenceList() {
 
   useEffect(() => {
     if (audio) isPlaying ? audio.play() : audio.pause();
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying]);
 
   useEffect(() => {

@@ -1,6 +1,5 @@
 import { MouseEvent, useState } from "react";
 import { NavigateFunction, Outlet, useLocation, useNavigate } from "react-router-dom";
-
 import {
   Avatar,
   Box,
@@ -30,9 +29,6 @@ import RecordCheckedIcon from "@/assets/icon/microphone-2-color-icon.svg";
 import RecordIcon from "@/assets/icon/microphone-2-icon.svg";
 import MusicCheckedIcon from "@/assets/icon/music-play-color-icon.svg";
 import MusicIcon from "@/assets/icon/music-play-icon.svg";
-import ClubCheckedIcon from "@/assets/icon/people-color-icon.svg";
-import ClubIcon from "@/assets/icon/people-icon.svg";
-import AccountIcon from "@/assets/icon/settings-icon.svg";
 import CustomAppbar from "../CustomMui/Appbar";
 import CustomDrawer from "../CustomMui/Drawer";
 import CustomDrawerHeader from "../CustomMui/DrawerHeader";
@@ -41,11 +37,6 @@ import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
 
 const settings = [
-  // {
-  //   title: "Account",
-  //   icon: AccountIcon,
-  //   action: () => {},
-  // },
   {
     title: "Log out",
     icon: LogoutIcon,

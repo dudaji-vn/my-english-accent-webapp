@@ -1,18 +1,16 @@
 import BoxCard from "@/components/BoxCard";
 import ROUTER from "@/shared/const/router.const";
-import { Box, Container, IconButton, Avatar, Typography, Grid, Divider, Modal, Button } from "@mui/material";
+import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Modal, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { useGetChallengeDetailInClubQuery, useUpdateChallengeMemberMutation } from "@/core/services/challenge.service";
 import ClubRecordingAudio from "@/components/ClubRecordPlayer";
-import TextToSpeech from "@/shared/hook/useTextToSpeech";
-import persist from "@/shared/utils/persist.util";
-import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
-import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { RecordRequest } from "@/core/type";
 import Loading from "@/components/Loading";
+import UploadFileController from "@/core/controllers/uploadFile.controller";
+import { useGetChallengeDetailInClubQuery, useUpdateChallengeMemberMutation } from "@/core/services/challenge.service";
+import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
+import { RecordRequest } from "@/core/type";
+import persist from "@/shared/utils/persist.util";
 
 export default function ClubRecordingPage() {
   const navigate = useNavigate();
@@ -28,12 +26,14 @@ export default function ClubRecordingPage() {
 
   const vocabularies = useMemo(() => {
     return data ? data.vocabularies : [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.vocabularies]);
 
   const isRerecord = useMemo(() => {
     if (data && data.participants) {
       return !!data.participants.find((user) => user === myId);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.participants]);
 
   const onHandleClose = () => setOpen(false);
@@ -91,6 +91,7 @@ export default function ClubRecordingPage() {
         );
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listRecord]);
 
   //re-recording
@@ -108,6 +109,7 @@ export default function ClubRecordingPage() {
         }
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRerecord]);
 
   if (vocabularies.length) {

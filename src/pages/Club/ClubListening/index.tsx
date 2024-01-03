@@ -36,6 +36,7 @@ export default function ClubListeningPage() {
       }));
     }
     return [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.participants, currentVocabulary]);
 
   const onSlideChange = (val: SwiperClass) => {

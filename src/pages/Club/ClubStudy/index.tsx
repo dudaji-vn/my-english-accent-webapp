@@ -1,17 +1,16 @@
 import BoxCard from "@/components/BoxCard";
-import { Container, Typography, Avatar, Box, Button, IconButton } from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 
-import UserIcon from "@/assets/icon/user-icon.svg";
 import ClockIcon from "@/assets/icon/clock-icon.svg";
 import MessageIcon from "@/assets/icon/message-icon.svg";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import ROUTER from "@/shared/const/router.const";
-import { IChallengeDisplay } from "@/core/type/challenge.type";
+import UserIcon from "@/assets/icon/user-icon.svg";
 import { useGetChallengesInClubQuery } from "@/core/services/challenge.service";
-import { timeSince } from "@/shared/utils/timeSince.util";
-import { useEffect, useMemo } from "react";
+import { IChallengeDisplay } from "@/core/type/challenge.type";
+import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
-import CloseIcon from "@/assets/icon/close-icon.svg";
+import { timeSince } from "@/shared/utils/timeSince.util";
+import { useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ChallengeCard(props: IChallengeDisplay) {
   const navigate = useNavigate();
@@ -19,6 +18,7 @@ function ChallengeCard(props: IChallengeDisplay) {
 
   const isRerecord = useMemo(() => {
     return !!props.participants.find((user) => user === myId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
 
   const onHandleRecording = () => {

@@ -2,8 +2,6 @@ import CloseIcon from "@/assets/icon/close-icon.svg";
 import Congratulation from "@/assets/icon/congratulation-icon.svg";
 import MenuIcon from "@/assets/icon/list-icon.svg";
 import Loading from "@/components/Loading";
-import ModalAnnouncement from "@/components/Modal/ModalAnnouncement";
-import ModalCongratulation from "@/components/Modal/ModalCongratulation";
 import TranslationCard from "@/components/TranslationCard";
 import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
 import { useAppSelector } from "@/core/store";
@@ -11,10 +9,9 @@ import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
 import { StageExercise } from "@/shared/type";
 import persist from "@/shared/utils/persist.util";
-import { Avatar, Box, Button, Container, IconButton, Modal, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ExitStatus } from "typescript";
 
 export default function RecordingProgressPage() {
   const navigate = useNavigate();
