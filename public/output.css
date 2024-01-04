@@ -377,12 +377,24 @@ h6 {
   margin-top: 1.5rem;
 }
 
+#root :is(.mb-9) {
+  margin-bottom: 2.25rem;
+}
+
+#root :is(.mb-3) {
+  margin-bottom: 0.75rem;
+}
+
 #root :is(.block) {
   display: block;
 }
 
 #root :is(.flex) {
   display: flex;
+}
+
+#root :is(.grid) {
+  display: grid;
 }
 
 #root :is(.hidden) {
@@ -536,6 +548,14 @@ h6 {
   cursor: pointer;
 }
 
+#root :is(.grid-cols-4) {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+#root :is(.grid-cols-3) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 #root :is(.flex-col) {
   flex-direction: column;
 }
@@ -586,6 +606,10 @@ h6 {
 
 #root :is(.gap-8) {
   gap: 2rem;
+}
+
+#root :is(.gap-5) {
+  gap: 1.25rem;
 }
 
 #root :is(.self-center) {
@@ -736,8 +760,17 @@ h6 {
   padding-bottom: 1rem;
 }
 
+#root :is(.px-6) {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
 #root :is(.pb-4) {
   padding-bottom: 1rem;
+}
+
+#root :is(.pb-6) {
+  padding-bottom: 1.5rem;
 }
 
 #root :is(.text-center) {
@@ -900,6 +933,22 @@ h6 {
     max-width: 600px;
   }
 
+  #root :is(.md\:grid-cols-1) {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  #root :is(.md\:grid-cols-4) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  #root :is(.md\:grid-cols-3) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #root :is(.md\:grid-cols-2) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   #root :is(.md\:justify-center) {
     justify-content: center;
   }
@@ -907,5 +956,21 @@ h6 {
   #root :is(.md\:px-\[120px\]) {
     padding-left: 120px;
     padding-right: 120px;
+  }
+}
+
+@media (min-width: 1024px) {
+  #root :is(.lg\:grid-cols-4) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  #root :is(.lg\:grid-cols-3) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  #root :is(.xl\:grid-cols-4) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
