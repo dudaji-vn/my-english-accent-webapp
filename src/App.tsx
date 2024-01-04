@@ -6,7 +6,7 @@ import DrawerNavigate from "./components/DrawerNavigate";
 import Loading from "./components/Loading";
 import RecordSentenceList from "./pages/Record/RecordList";
 import AudioRecorder from "audio-recorder-polyfill";
-import AudioRecorderMPEG from "audio-recorder-polyfill/mpeg-encoder";
+import CertificateProgressPage from "./pages/Certificate/CertificateProgress";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
@@ -14,16 +14,6 @@ const RecordingPage = lazy(() => import("@/pages/Record"));
 const RecordingProgressPage = lazy(() => import("@/pages/Record/RecordProgress"));
 const RerecordingProgressPage = lazy(() => import("@/pages/Club/ClubRerecordProgress"));
 const CertificatePage = lazy(() => import("@/pages/Certificate"));
-const ClubPage = lazy(() => import("@/pages/Club"));
-const AddNewClubPage = lazy(() => import("@/pages/Club/AddNewClub"));
-const ClubAddMemberPage = lazy(() => import("@/pages/Club/ClubAddMember"));
-const ClubRecordingPage = lazy(() => import("@/pages/Club/ClubRecording"));
-const ClubListeningPage = lazy(() => import("@/pages/Club/ClubListening"));
-const ClubRecordingSummaryPage = lazy(() => import("@/pages/Club/ClubRecordingSummary"));
-const ClubDetailPage = lazy(() => import("@/pages/Club/ClubDetail"));
-const ClubStudyPage = lazy(() => import("@/pages/Club/ClubStudy"));
-const ClubMemberPage = lazy(() => import("@/pages/Club/ClubMember"));
-const ClubInfoPage = lazy(() => import("@/pages/Club/ClubInfo"));
 const ListenPage = lazy(() => import("@/pages/Listen"));
 const ManagePlaylistPage = lazy(() => import("@/pages/Listen/ManagePlaylist"));
 const CreatePlaylistPage = lazy(() => import("@/pages/Listen/CreatePlaylist"));
@@ -34,8 +24,6 @@ const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 const supportsWebm = typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported("audio/webm");
 
 if (!supportsWebm) {
-  // AudioRecorder.encoder = AudioRecorderMPEG;
-  // AudioRecorder.prototype.mimeType = "audio/mpeg";
   window.MediaRecorder = AudioRecorder;
 }
 
@@ -75,23 +63,12 @@ function App() {
           <Route path={ROUTER.RECORD_LIST} element={<RecordSentenceList />} />
           <Route path={ROUTER.RERECORD + "/:category"} element={<RerecordingProgressPage />} />
 
-          {/* CLUB DETAIL*/}
-          <Route path={ROUTER.CLUB_DETAIL} element={<ClubDetailPage />}>
-            <Route index path={removeSlash(ROUTER.CLUB_STUDY) + "/:clubId"} element={<ClubStudyPage />} />
-            <Route path={removeSlash(ROUTER.CLUB_MEMBER) + "/:clubId"} element={<ClubMemberPage />} />
-            <Route path={removeSlash(ROUTER.CLUB_INFO) + "/:clubId"} element={<ClubInfoPage />} />
-          </Route>
-
-          <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
-          <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
-          <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
-          <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
-          <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
-
           {/* LISTEN  */}
           <Route path={ROUTER.LISTENING + ROUTER.MANAGE_PLAYLIST} element={<ManagePlaylistPage />} />
           <Route path={ROUTER.LISTENING + ROUTER.CREATE_PLAYLIST} element={<CreatePlaylistPage />} />
           <Route path={ROUTER.LISTENING + ROUTER.SELECT_LECTURE} element={<SelectLecturePage />} />
+          {/** CERTIFICATE */}
+          <Route path={ROUTER.CERTIFICATE + "/:category"} element={<CertificateProgressPage />} />
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
@@ -101,7 +78,6 @@ function App() {
           <Route path={ROUTER.CERTIFICATE} element={<CertificatePage />} />
           <Route path={ROUTER.LISTENING} element={<ListenPage />} />
           <Route path={ROUTER.LISTENING_EMPTY_PLAYLIST} element={<NoLectureInListenPage />} />
-          <Route path={ROUTER.CLUB} element={<ClubPage />} />
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>
