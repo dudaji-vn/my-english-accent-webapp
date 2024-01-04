@@ -13,6 +13,7 @@ const Register = lazy(() => import("@/pages/Auth/Register"));
 const RecordingPage = lazy(() => import("@/pages/Record"));
 const RecordingProgressPage = lazy(() => import("@/pages/Record/RecordProgress"));
 const RerecordingProgressPage = lazy(() => import("@/pages/Club/ClubRerecordProgress"));
+const CertificatePage = lazy(() => import("@/pages/Certificate"));
 const ClubPage = lazy(() => import("@/pages/Club"));
 const AddNewClubPage = lazy(() => import("@/pages/Club/AddNewClub"));
 const ClubAddMemberPage = lazy(() => import("@/pages/Club/ClubAddMember"));
@@ -57,7 +58,6 @@ export const PublishRoute = () => {
 };
 
 function App() {
-  // return <Box className='bg-gray-100 min-h-screen h-full flex flex-col'>{routing}</Box>;
   const removeSlash = useCallback((value: string) => {
     return value.replace("/", "");
   }, []);
@@ -70,10 +70,11 @@ function App() {
           <Route path={removeSlash(ROUTER.REGISTER)} element={<Register />} />
         </Route>
         <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
-          {/* RECORD */}
+          {/* RECORD DETAIL */}
           <Route path={ROUTER.RECORD + "/:category"} element={<RecordingProgressPage />} />
           <Route path={ROUTER.RECORD_LIST} element={<RecordSentenceList />} />
           <Route path={ROUTER.RERECORD + "/:category"} element={<RerecordingProgressPage />} />
+
           {/* CLUB DETAIL*/}
           <Route path={ROUTER.CLUB_DETAIL} element={<ClubDetailPage />}>
             <Route index path={removeSlash(ROUTER.CLUB_STUDY) + "/:clubId"} element={<ClubStudyPage />} />
@@ -96,10 +97,10 @@ function App() {
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
           <Route index element={<Navigate replace to={ROUTER.RECORD} />} />
           <Route path={ROUTER.RECORD} element={<RecordingPage />} />
-          {/* TODO: create LISTENING PAGE */}
+          <Route path={ROUTER.RECORD} element={<RecordingPage />} />
+          <Route path={ROUTER.CERTIFICATE} element={<CertificatePage />} />
           <Route path={ROUTER.LISTENING} element={<ListenPage />} />
           <Route path={ROUTER.LISTENING_EMPTY_PLAYLIST} element={<NoLectureInListenPage />} />
-          {/* CLUB */}
           <Route path={ROUTER.CLUB} element={<ClubPage />} />
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
