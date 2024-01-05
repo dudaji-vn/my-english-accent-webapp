@@ -1,14 +1,15 @@
 import RewardIcon from "@/assets/icon/reward-icon.svg";
 import { Avatar, Box, Button, Typography } from "@mui/material";
-const CertificateInfo = () => {
+import { useNavigate } from "react-router-dom";
+interface ICertificateInfoProps {
+  onConfirm: () => void;
+}
+const CertificateInfo = (props: ICertificateInfoProps) => {
+  const { onConfirm } = props;
+  const navigate = useNavigate();
   return (
     <Box className="flex flex-col items-center mt-6">
-      <Box
-        className="shadow-[0_1px_3px_0px_#A6AFC366] bg-white rounded-2xl max-w-[95%] md:max-w-[50%] lg:max-w-[35%]"
-        // sx={{
-        //   maxWidth: "35%",
-        // }}
-      >
+      <Box className="shadow-[0_1px_3px_0px_#A6AFC366] bg-white rounded-2xl max-w-[95%] md:max-w-[50%] lg:max-w-[35%]">
         <Box className="p-4 bg-yellow-400 flex items-center rounded-t-2xl gap-4">
           <Box className="rounded-full p-2 bg-white">
             <Avatar src={RewardIcon} />
@@ -18,7 +19,7 @@ const CertificateInfo = () => {
             TechTalk Certificates
           </Typography>
         </Box>
-        <Box className="p-4">
+        <Box className="p-6">
           <Box className="mt-4 mb-12">
             <Typography className="text-large-semibold mb-4">This is your spoken IT-English test level.</Typography>
             <Typography className="mb-1">
@@ -34,10 +35,10 @@ const CertificateInfo = () => {
             </Typography>
           </Box>
           <Box className="flex flex-col">
-            <Button className="mb-4" variant="contained" color="primary">
+            <Button onClick={onConfirm} className="mb-4" variant="contained" color="primary">
               Ok, I’m ready
             </Button>
-            <Button>Test later</Button>
+            <Button onClick={() => navigate(-1)}>Test later</Button>
           </Box>
         </Box>
       </Box>
