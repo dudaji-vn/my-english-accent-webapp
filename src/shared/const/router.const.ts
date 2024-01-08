@@ -12,6 +12,8 @@ const ROUTER = {
   SELECT_LECTURE: "/select-lecture",
 
   RECORD: "/record",
+  CERTIFICATE: "/certificate",
+  CERTIFICATE_USER: "/certificate/user",
   RECORD_LIST: "/record/list",
   RERECORD: "/rerecord",
   CLUB: "/club",
