@@ -4,7 +4,7 @@ import StarIcon from "@/assets/icon/star-icon.svg";
 import StartActiveIcon from "@/assets/icon/start-color-icon.svg";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useGetPlaylistListenByLectureQuery } from "@/core/services";
 import PauseIcon from "@/assets/icon/pause-icon.svg";
 import PlayIcon from "@/assets/icon/play-icon.svg";
@@ -14,10 +14,14 @@ interface IModalCompleteCertificateProps {}
 const CertificateUser = (props: IModalCompleteCertificateProps) => {
   const swiperRef = useRef<SwiperRef>(null);
   const trackingSwiper = useRef(Date.now());
-  const { data: playlistDetail, isFetching } = useGetPlaylistListenByLectureQuery("6566afd6e16a3a763b425348");
+  const { data: playlistDetail } = useGetPlaylistListenByLectureQuery("6566afd6e16a3a763b425348");
+  console.log({ playlistDetail });
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handlePlay = () => {};
 
   return (
-    <Box className="xs:flex m-4 xs:m-0 flex-col items-center justify-center h-screen">
+    <Box className="flex mt-8 md:mt-0 flex-col items-center justify-center md:h-screen">
       <Typography className="text-center text-primary font-bold text-[25px] md:text-[32px] tracking-wider uppercase">
         TechTalk Certificate
       </Typography>
@@ -27,7 +31,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
             border: "8px solid rgba(127, 86, 217, 0.24)",
             maxWidth: "calc(100vw - 32px)",
           }}
-          className=" shadow-[0_1px_3px_0px_#A6AFC366]bg-white rounded-2xl flex flex-col items-center justify-center lg:w-[500px]"
+          className="shadow-[0_1px_3px_0px_#A6AFC366]bg-white rounded-2xl flex flex-col items-center justify-center lg:w-[500px]"
         >
           <Avatar
             sx={{

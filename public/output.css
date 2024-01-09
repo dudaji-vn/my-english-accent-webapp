@@ -307,6 +307,10 @@ h6 {
   bottom: 0px;
 }
 
+#root :is(.bottom-4) {
+  bottom: 1rem;
+}
+
 #root :is(.left-0) {
   left: 0px;
 }
@@ -335,6 +339,11 @@ h6 {
   margin: auto;
 }
 
+#root :is(.my-6) {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
 #root :is(.mb-1) {
   margin-bottom: 0.25rem;
 }
@@ -357,6 +366,10 @@ h6 {
 
 #root :is(.mb-4) {
   margin-bottom: 1rem;
+}
+
+#root :is(.mb-5) {
+  margin-bottom: 1.25rem;
 }
 
 #root :is(.mb-6) {
@@ -397,6 +410,10 @@ h6 {
 
 #root :is(.mt-6) {
   margin-top: 1.5rem;
+}
+
+#root :is(.mt-8) {
+  margin-top: 2rem;
 }
 
 #root :is(.block) {
@@ -473,6 +490,10 @@ h6 {
 
 #root :is(.max-h-\[208px\]) {
   max-height: 208px;
+}
+
+#root :is(.min-h-\[120px\]) {
+  min-height: 120px;
 }
 
 #root :is(.min-h-screen) {
@@ -672,8 +693,24 @@ h6 {
   border-top-width: 1px;
 }
 
+#root :is(.border-t-4) {
+  border-top-width: 4px;
+}
+
+#root :is(.border-t-2) {
+  border-top-width: 2px;
+}
+
+#root :is(.border-t) {
+  border-top-width: 1px;
+}
+
 #root :is(.border-solid) {
   border-style: solid;
+}
+
+#root :is(.border-dashed) {
+  border-style: dashed;
 }
 
 #root :is(.border-purple-200) {
@@ -684,6 +721,11 @@ h6 {
 #root :is(.border-stroke) {
   --tw-border-opacity: 1;
   border-color: rgb(223 228 234 / var(--tw-border-opacity));
+}
+
+#root :is(.border-t-stroke) {
+  --tw-border-opacity: 1;
+  border-top-color: rgb(223 228 234 / var(--tw-border-opacity));
 }
 
 #root :is(.bg-gray-100) {
@@ -774,6 +816,11 @@ h6 {
   padding-right: 1.5rem;
 }
 
+#root :is(.px-8) {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 #root :is(.py-1) {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -797,8 +844,21 @@ h6 {
   padding-bottom: 1.5rem;
 }
 
+#root :is(.pt-6) {
+  padding-top: 1.5rem;
+}
+
 #root :is(.text-center) {
   text-align: center;
+}
+
+#root :is(.text-3xl) {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+#root :is(.text-\[25px\]) {
+  font-size: 25px;
 }
 
 #root :is(.text-base) {
@@ -806,13 +866,56 @@ h6 {
   line-height: 1.5rem;
 }
 
+#root :is(.text-sm) {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+#root :is(.text-xl) {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+#root :is(.font-bold) {
+  font-weight: 700;
+}
+
+#root :is(.font-medium) {
+  font-weight: 500;
+}
+
+#root :is(.font-semibold) {
+  font-weight: 600;
+}
+
+#root :is(.uppercase) {
+  text-transform: uppercase;
+}
+
 #root :is(.capitalize) {
   text-transform: capitalize;
+}
+
+#root :is(.\!leading-\[1\.1\]) {
+  line-height: 1.1 !important;
+}
+
+#root :is(.tracking-wide) {
+  letter-spacing: 0.025em;
+}
+
+#root :is(.tracking-wider) {
+  letter-spacing: 0.05em;
 }
 
 #root :is(.text-gray-400) {
   --tw-text-opacity: 1;
   color: rgb(148 163 184 / var(--tw-text-opacity));
+}
+
+#root :is(.text-primary) {
+  --tw-text-opacity: 1;
+  color: rgb(127 86 217 / var(--tw-text-opacity));
 }
 
 #root :is(.text-red-400) {
@@ -945,12 +1048,20 @@ h6 {
 }
 
 @media (min-width: 768px) {
+  #root :is(.md\:mt-0) {
+    margin-top: 0px;
+  }
+
   #root :is(.md\:mt-20) {
     margin-top: 5rem;
   }
 
   #root :is(.md\:flex) {
     display: flex;
+  }
+
+  #root :is(.md\:h-screen) {
+    height: 100vh;
   }
 
   #root :is(.md\:w-\[400px\]) {
@@ -969,23 +1080,45 @@ h6 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  #root :is(.md\:flex-row) {
+    flex-direction: row;
+  }
+
   #root :is(.md\:justify-center) {
     justify-content: center;
+  }
+
+  #root :is(.md\:justify-between) {
+    justify-content: space-between;
   }
 
   #root :is(.md\:px-\[120px\]) {
     padding-left: 120px;
     padding-right: 120px;
   }
+
+  #root :is(.md\:text-4xl) {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  #root :is(.md\:text-5xl) {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  #root :is(.md\:text-\[32px\]) {
+    font-size: 32px;
+  }
 }
 
 @media (min-width: 1024px) {
-  #root :is(.lg\:max-w-\[35\%\]) {
-    max-width: 35%;
+  #root :is(.lg\:w-\[500px\]) {
+    width: 500px;
   }
 
-  #root :is(.lg\:max-w-\[400px\]) {
-    max-width: 400px;
+  #root :is(.lg\:max-w-\[35\%\]) {
+    max-width: 35%;
   }
 
   #root :is(.lg\:grid-cols-3) {

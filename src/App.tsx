@@ -7,6 +7,7 @@ import Loading from "./components/Loading";
 import RecordSentenceList from "./pages/Record/RecordList";
 import AudioRecorder from "audio-recorder-polyfill";
 import CertificateProgressPage from "./pages/Certificate/CertificateProgress";
+import CertificateUser from "./pages/Certificate/CertificateUser";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
@@ -14,6 +15,7 @@ const RecordingPage = lazy(() => import("@/pages/Record"));
 const RecordingProgressPage = lazy(() => import("@/pages/Record/RecordProgress"));
 const RerecordingProgressPage = lazy(() => import("@/pages/Club/ClubRerecordProgress"));
 const CertificatePage = lazy(() => import("@/pages/Certificate"));
+const CertificateUserPage = lazy(() => import("@/pages/Certificate/CertificateUser"));
 const ListenPage = lazy(() => import("@/pages/Listen"));
 const ManagePlaylistPage = lazy(() => import("@/pages/Listen/ManagePlaylist"));
 const CreatePlaylistPage = lazy(() => import("@/pages/Listen/CreatePlaylist"));
@@ -69,6 +71,7 @@ function App() {
           <Route path={ROUTER.LISTENING + ROUTER.SELECT_LECTURE} element={<SelectLecturePage />} />
           {/** CERTIFICATE */}
           <Route path={ROUTER.CERTIFICATE + "/:category"} element={<CertificateProgressPage />} />
+          <Route path={ROUTER.CERTIFICATE_USER + "/:email"} element={<CertificateUserPage />} />
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
