@@ -63,8 +63,6 @@ export default function CertificateProgressPage() {
   }, [certificateContent?.contents]);
 
   const nextVocabulary = ({ voiceSrc, result, index, isUpdate }: IResultCertificateItem) => {
-    console.log(renderVocabulary);
-    //debugger;
     if (vocabularies[index]) {
       const newArr = [...renderVocabulary];
       newArr[index] = {

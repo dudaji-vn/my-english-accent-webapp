@@ -47,7 +47,6 @@ export default function RecordCertificate(
   }, [mediaFile, isRecord, isRerecord]);
 
   const displayUpdateRecordBtn = useMemo(() => {
-    console.log({ isRerecord });
     return (
       status === "stopped" && isRerecord && mediaFile && speakToTextData && speakToTextData.finalTranscript !== EMPTY_TRANSCRIPT
     );
@@ -91,7 +90,6 @@ export default function RecordCertificate(
       dispatch(updateDisableAllAction(true));
       audio.play().catch((error) => {
         dispatch(updateDisableAllAction(false));
-        console.log(error);
       });
     }, 100);
   };
