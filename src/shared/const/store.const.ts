@@ -12,6 +12,7 @@ const Reducer = {
   listenApi: "ListenApi",
   googleApi: "GoogleApi",
   voiceApi: "VoiceApi",
+  certificateApi: "CertificateApi",
 };
 
 export default Reducer;

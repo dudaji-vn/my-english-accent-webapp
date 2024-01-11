@@ -428,6 +428,10 @@ h6 {
   display: grid;
 }
 
+#root :is(.contents) {
+  display: contents;
+}
+
 #root :is(.hidden) {
   display: none;
 }
@@ -689,28 +693,16 @@ h6 {
   border-width: 0px;
 }
 
-#root :is(.border-t-\[1px\]) {
+#root :is(.border-t) {
   border-top-width: 1px;
 }
 
-#root :is(.border-t-4) {
-  border-top-width: 4px;
-}
-
-#root :is(.border-t-2) {
-  border-top-width: 2px;
-}
-
-#root :is(.border-t) {
+#root :is(.border-t-\[1px\]) {
   border-top-width: 1px;
 }
 
 #root :is(.border-solid) {
   border-style: solid;
-}
-
-#root :is(.border-dashed) {
-  border-style: dashed;
 }
 
 #root :is(.border-purple-200) {
@@ -842,6 +834,10 @@ h6 {
 
 #root :is(.pb-6) {
   padding-bottom: 1.5rem;
+}
+
+#root :is(.pt-4) {
+  padding-top: 1rem;
 }
 
 #root :is(.pt-6) {
