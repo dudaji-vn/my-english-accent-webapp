@@ -8,14 +8,14 @@ const CertificateInfo = (props: ICertificateInfoProps) => {
   const { onConfirm } = props;
   const navigate = useNavigate();
   return (
-    <Box className="flex flex-col items-center mt-6">
+    <Box className="flex flex-col items-center my-6">
       <Box className="shadow-[0_1px_3px_0px_#A6AFC366] bg-white rounded-2xl max-w-[95%] md:max-w-[50%] lg:max-w-[35%]">
         <Box className="p-4 bg-yellow-400 flex items-center rounded-t-2xl gap-4">
           <Box className="rounded-full p-2 bg-white">
             <Avatar src={RewardIcon} />
           </Box>
 
-          <Typography className="text-extra-large-bold  " color={"white"}>
+          <Typography className="text-extra-large-bold" color={"white"}>
             TechTalk Certificates
           </Typography>
         </Box>

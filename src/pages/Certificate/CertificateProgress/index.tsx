@@ -5,55 +5,79 @@ import ModalCompleteCertificate from "@/components/Modal/ModalCompleteCertificat
 import ModalLeaveExam from "@/components/Modal/ModalLeaveExam";
 import RecordCertificate from "@/components/RecordCertificate";
 import ResultCertificate from "@/components/ResultCertificate";
-import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
-import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
+import { useIsArchivedQuery, useLazyGetCertificateContentByIdQuery } from "@/core/services";
+import { IVocabularyContent } from "@/core/type";
 import { Avatar, Box, Container, IconButton, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { removeSpecialCharacters } from "../../../shared/utils/string.util";
+
+export interface IResultCertificateItem {
+  voiceSrc: string;
+  result: string;
+  index: number;
+  isUpdate: boolean;
+}
 
 export default function CertificateProgressPage() {
   const navigate = useNavigate();
-
   const { pathname } = useLocation();
   const certificateName = decodeURIComponent(pathname).replace("/certificate/", "");
-  const [isStart, setIsStart] = useState(false);
   const [isOpenModalCompleteCertificate, setIsOpenModalCompleteCertificate] = useState(false);
   const [isOpenModalLeaveExam, setIsOpenModalLeaveExam] = useState(false);
   const [searchParams] = useSearchParams();
   const certificateId = searchParams.get("certificateId") ?? "";
   const parentRef = useRef<HTMLDivElement>(null);
+  const { data: isArchived, isFetching } = useIsArchivedQuery(certificateId);
+  const [trigger, { data: certificateContent, isFetching: isFetchingContent }] = useLazyGetCertificateContentByIdQuery();
 
-  const { data, isFetching } = useGetAllVocabulariesInLectureQuery(certificateId);
-  const [isFinish, setIsFinish] = useState(false);
-  const [renderVocabulary, setRenderVocabulary] = useState<VocabularyTypeWithNativeLanguageResponse[]>([]);
-  const vocabularies: VocabularyTypeWithNativeLanguageResponse[] = useMemo(() => {
-    const vocab = data?.vocabularies ?? [];
-    const newArr = vocab.filter((voca) => !!voca.voiceSrc);
-    if (newArr.length) {
-      const nextIndex = vocab.findIndex((voca) => !voca.voiceSrc);
-      if (nextIndex !== -1) {
-        newArr.push(vocab[nextIndex]);
+  const [isStart, setIsStart] = useState(false);
+  // const [isFinish, setIsFinish] = useState(false);
+  const [renderVocabulary, setRenderVocabulary] = useState<IVocabularyContent[]>([]);
+  const point = useMemo(() => {
+    let total = 0;
+    if (!renderVocabulary || !certificateContent) {
+      return;
+    }
+
+    const unitPoint = certificateContent.totalScore / renderVocabulary.length;
+    renderVocabulary.forEach((item) => {
+      if (item.result) {
+        if (removeSpecialCharacters(item.result) !== removeSpecialCharacters(item.title)) {
+          total += unitPoint;
+        }
       }
-      setRenderVocabulary(() => newArr);
-    } else if (vocab.length > 0) {
-      setRenderVocabulary(() => [vocab[0]]);
+    });
+    return total;
+  }, [renderVocabulary, certificateContent]);
+  console.log(point);
+
+  const vocabularies: IVocabularyContent[] = useMemo(() => {
+    const vocab = certificateContent?.contents ?? [];
+
+    if (vocab && vocab[0]) {
+      setRenderVocabulary([vocab[0]]);
     }
 
     return vocab;
-  }, [data?.vocabularies]);
+  }, [certificateContent?.contents]);
 
-  const nextVocabulary = ({ voiceSrc, index, isUpdate }: { voiceSrc: string; index: number; isUpdate: boolean }) => {
+  const nextVocabulary = ({ voiceSrc, result, index, isUpdate }: IResultCertificateItem) => {
     if (vocabularies[index]) {
       const newArr = [...renderVocabulary];
       newArr[index] = {
         ...newArr[index],
         voiceSrc,
+        result,
       };
-
-      if (!isUpdate && index >= vocabularies.length - 1 && !isFinish) {
+      if ((!voiceSrc || !result) && newArr.length === vocabularies.length) {
+        setIsOpenModalCompleteCertificate(true);
+        return;
+      }
+      if (!isUpdate && newArr.length === vocabularies.length) {
         setIsOpenModalCompleteCertificate(true);
       }
-      if (!isUpdate && index < vocabularies.length - 1) {
+      if (!isUpdate && newArr.length < vocabularies.length) {
         newArr.push(vocabularies[index + 1]);
       }
       setRenderVocabulary(newArr);
@@ -67,6 +91,9 @@ export default function CertificateProgressPage() {
       navigate(-1);
     }
   };
+  useEffect(() => {
+    scrollToLastElement();
+  }, [renderVocabulary]);
   const scrollToLastElement = () => {
     if (parentRef && parentRef.current) {
       const lastChildElement = parentRef.current!.lastElementChild;
@@ -74,24 +101,23 @@ export default function CertificateProgressPage() {
     }
   };
 
-  useEffect(() => {
-    scrollToLastElement();
-  });
-
-  if (isFetching) return <Loading />;
-  if (isFinish) {
-    return <ResultCertificate />;
-  }
+  if (isFetching || isFetchingContent) return <Loading />;
 
   return (
     <Box className="flex flex-col grow bg-gray-100 min-h-screen">
-      <ModalCompleteCertificate
-        onConfirm={() => {
-          setIsFinish(true);
-        }}
-        open={isOpenModalCompleteCertificate}
-        onClose={() => setIsOpenModalCompleteCertificate(false)}
-      />
+      {certificateContent && (
+        <ModalCompleteCertificate
+          percent={point! / certificateContent.totalScore}
+          start={Math.round((4 * point!) / certificateContent.totalScore)}
+          onConfirm={() => {
+            setIsOpenModalCompleteCertificate(false);
+            //  setIsFinish(true);
+          }}
+          open={isOpenModalCompleteCertificate}
+          onClose={() => setIsOpenModalCompleteCertificate(false)}
+        />
+      )}
+
       <ModalLeaveExam
         onConfirm={() => navigate(-1)}
         onClose={() => {
@@ -107,15 +133,19 @@ export default function CertificateProgressPage() {
           <Typography className="text-large-semibold grow">{`TechTalk certificate ${certificateName}`}</Typography>
         </Box>
       </Container>
-      {!isStart ? (
+
+      {isArchived ? (
+        <ResultCertificate />
+      ) : !isStart ? (
         <CertificateInfo
           onConfirm={() => {
+            trigger({ strategyType: "vocabulary", certificateId });
             setIsStart(true);
           }}
         />
       ) : (
         <Box ref={parentRef} className="text-center grow bg-gray-100">
-          {renderVocabulary.slice(0, 3).map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => (
+          {renderVocabulary.map((val, index: number) => (
             <RecordCertificate
               {...val}
               key={val.vocabularyId}

@@ -15,7 +15,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
   const swiperRef = useRef<SwiperRef>(null);
   const trackingSwiper = useRef(Date.now());
   const { data: playlistDetail } = useGetPlaylistListenByLectureQuery("6566afd6e16a3a763b425348");
-  console.log({ playlistDetail });
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePlay = () => {};

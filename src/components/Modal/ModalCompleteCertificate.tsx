@@ -4,12 +4,15 @@ import MedalActiveIcon from "@/assets/icon/medal-color-icon.svg";
 import StarIcon from "@/assets/icon/star-icon.svg";
 import StartActiveIcon from "@/assets/icon/start-color-icon.svg";
 interface IModalCompleteCertificateProps {
+  start: number;
+  percent: number;
   open: boolean;
   onConfirm: () => void;
   onClose: () => void;
 }
 const ModalCompleteCertificate = (props: IModalCompleteCertificateProps) => {
-  const { open, onClose, onConfirm } = props;
+  console.log({ per: props.percent });
+  const { open, onClose, onConfirm, percent } = props;
   return (
     <Modal onClose={onClose} open={open}>
       <Box
@@ -40,17 +43,18 @@ const ModalCompleteCertificate = (props: IModalCompleteCertificateProps) => {
           {[1, 2, 3, 4].map((star) => {
             return (
               <Avatar
+                key={star}
                 sx={{
                   width: 20,
                   height: 20,
                 }}
                 variant="square"
-                src={3 < star ? StarIcon : StartActiveIcon}
+                src={props.start < star ? StarIcon : StartActiveIcon}
               />
             );
           })}
         </Box>
-        <Typography sx={{ marginBottom: "16px", fontSize: "20px", fontWeight: 600 }}>Highest result: 90%</Typography>
+        <Typography sx={{ marginBottom: "16px", fontSize: "20px", fontWeight: 600 }}>Highest result: {percent * 100}%</Typography>
         <Typography
           sx={{
             marginBottom: "40px",

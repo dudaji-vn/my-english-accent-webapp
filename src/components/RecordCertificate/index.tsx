@@ -3,28 +3,25 @@ import RecordingIcon from "@/assets/icon/stop-circle-icon.svg";
 import SpeakingIcon from "@/assets/icon/volume-purple-icon.svg";
 import BoxCard from "@/components/BoxCard";
 import UploadFileController from "@/core/controllers/uploadFile.controller";
-import { useLazySpeechToTextQuery, useAddOrUpdateGoogleTranscriptMutation } from "@/core/services";
-import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
+import { useLazySpeechToTextQuery } from "@/core/services";
 import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateDisableAllAction } from "@/core/store/index";
-import { EMPTY_TRANSCRIPT, VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
+import { EMPTY_TRANSCRIPT, IVocabularyContent } from "@/core/type";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import useMicRecorder from "../useMicRecorder";
 import Bowser from "bowser";
+import { useEffect, useMemo, useState } from "react";
 import WordHighLight from "../WordHighLight";
+import useMicRecorder from "../useMicRecorder";
+import { IResultCertificateItem } from "../../pages/Certificate/CertificateProgress";
 
 export default function RecordCertificate(
-  props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }
+  props: IVocabularyContent & { nextVocabulary: (data: IResultCertificateItem) => void; index: number; totalVoca: number }
 ) {
   const myId = persist.getMyInfo().userId;
 
   const [trigger, { data: speakToTextData }] = useLazySpeechToTextQuery();
-
-  const [addOrUpdateRecord] = useAddOrUpdateRecordMutation();
-  const [addOrUpdateGoogleTranscript] = useAddOrUpdateGoogleTranscriptMutation();
 
   const getBrowserName = Bowser.getParser(window.navigator.userAgent).getBrowserName();
 
@@ -33,7 +30,6 @@ export default function RecordCertificate(
   const audio = new Audio();
 
   const { status, startRecording, stopRecording, mediaFile, clearFile, mediaBase64 } = useMicRecorder();
-  const [isHearing, setIsHearing] = useState<boolean>(false);
 
   const [hideUpdateRecordBtn, setHideUpdateRecordBtn] = useState(true);
   const [hideContinueBtn, setHideContinueBtn] = useState(false);
@@ -50,15 +46,17 @@ export default function RecordCertificate(
     return (mediaFile || isRerecord) && !isRecord;
   }, [mediaFile, isRecord, isRerecord]);
 
-  const displayContinueBtn = useMemo(() => {
-    return mediaFile && !isRecord && !isRerecord && speakToTextData;
-  }, [mediaFile, isRecord, speakToTextData]);
-
   const displayUpdateRecordBtn = useMemo(() => {
     return (
       status === "stopped" && isRerecord && mediaFile && speakToTextData && speakToTextData.finalTranscript !== EMPTY_TRANSCRIPT
     );
   }, [isRerecord, status, mediaFile, speakToTextData]);
+  const displayContinueBtn = useMemo(() => {
+    if (props.index === props.totalVoca - 1 && mediaBase64) {
+      return true;
+    }
+    return mediaFile && !isRerecord && speakToTextData;
+  }, [mediaFile, isRecord, speakToTextData]);
 
   useEffect(() => {
     if (mediaBase64) {
@@ -84,29 +82,33 @@ export default function RecordCertificate(
   const onRepeat = () => {
     if (mediaFile) {
       audio.src = URL.createObjectURL(mediaFile);
-    } else if (isRerecord) {
+    } else if (isRerecord && props.voiceSrc) {
       audio.src = props.voiceSrc;
     }
 
     setTimeout(() => {
-      setIsHearing(true);
+      dispatch(updateDisableAllAction(true));
       audio.play().catch((error) => {
         dispatch(updateDisableAllAction(false));
-        setIsHearing(false);
-        console.log(error);
       });
-      dispatch(updateDisableAllAction(true));
     }, 100);
   };
   const onAddRecord = async () => {
     if (mediaFile) {
-      // dispatch(updateDisableAllAction(true));
       if (props.index < props.totalVoca - 1) {
         setHideContinueBtn(() => true);
+        setHideUpdateRecordBtn(() => true);
       }
-
       const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
-      props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: false });
+      props.nextVocabulary({
+        voiceSrc: url,
+        result: speakToTextData?.finalTranscript ?? "",
+        index: props.index,
+        isUpdate: false,
+      });
+      clearFile();
+    } else {
+      props.nextVocabulary({ voiceSrc: "", result: "", index: props.index, isUpdate: false });
     }
   };
 
@@ -115,27 +117,14 @@ export default function RecordCertificate(
       dispatch(updateDisableAllAction(true));
       setHideUpdateRecordBtn(() => true);
       const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
-
-      props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: true });
+      props.nextVocabulary({ voiceSrc: url, result: speakToTextData?.finalTranscript ?? "", index: props.index, isUpdate: true });
       clearFile();
       dispatch(updateDisableAllAction(false));
-      const recordId = await addOrUpdateRecord({
-        vocabularyId: props.vocabularyId,
-        voiceSrc: url,
-      }).unwrap();
-      if (speakToTextData && recordId) {
-        addOrUpdateGoogleTranscript({
-          finalTranscript: speakToTextData.finalTranscript,
-          recordId: recordId,
-          transcripts: speakToTextData.transcripts,
-        });
-      }
     }
   };
 
   audio.onended = function () {
     dispatch(updateDisableAllAction(false));
-    setIsHearing(false);
   };
 
   return (
@@ -147,12 +136,12 @@ export default function RecordCertificate(
               <Typography className="text-extra-small-medium mb-6" variant={"body2"}>
                 {props.index + 1} / {props.totalVoca}
               </Typography>
-              <Typography className="text-large-medium mb-6">{props.vtitleDisplayLanguage}</Typography>
+              <Typography className="text-large-medium mb-6">{props.title}</Typography>
               <Typography variant="body2" className="text-small-regular mb-6 break-words" component={"div"}>
-                {props.vphoneticDisplayLanguage}
-                <TextToSpeech text={props.vtitleDisplayLanguage} />
+                {props.phonetic}
+                <TextToSpeech text={props.title} />
               </Typography>
-              <WordHighLight sentence={props.vtitleDisplayLanguage} transcript={speakToTextData?.finalTranscript || ""} />
+              <WordHighLight sentence={props.title} transcript={speakToTextData?.finalTranscript || ""} />
             </Box>
           </Grid>
           <Grid item xs={12}>
@@ -164,7 +153,7 @@ export default function RecordCertificate(
           </Grid>
           <Grid xs={12} sx={{ position: "relative" }}>
             <IconButton
-              className={` p-5 w-16 h-16 ${isRecord ? "bg-orange" : isDiableAllAction ? "bg-purple-300" : "bg-primary"}`}
+              className={` p-5 w-16 h-16 ${isRecord ? "bg-orange" : isDiableAllAction ? "bg-purple-200" : "bg-primary"}`}
               onClick={onRecord}
               disabled={isDiableAllAction && !isRecord}
             >
@@ -173,7 +162,7 @@ export default function RecordCertificate(
             {displayRepeatBtn && (
               <IconButton
                 className={`absolute top-1/2 -translate-y-1/2 p-5 w-12 h-12 ml-5 ${
-                  isHearing ? "bg-purple-300" : "bg-purple-200"
+                  isDiableAllAction ? "bg-purple-200" : "bg-purple-300"
                 }`}
                 onClick={onRepeat}
                 disabled={isDiableAllAction}
@@ -185,7 +174,7 @@ export default function RecordCertificate(
           <Grid item xs={12}>
             <Divider />
             <Typography variant="body2" className="text-small-regular mt-4">
-              {props.titleNativeLanguage}
+              {props.textTranslate}
             </Typography>
           </Grid>
         </Grid>
