@@ -145,6 +145,7 @@ export default function CertificateProgressPage() {
     const data = await addOrUpdateUserContentCertificate(payload).unwrap();
     if (data) {
       refetch();
+      setIsHideCertificate(false);
       setIsOpenModalCompleteCertificate(false);
     }
   };
