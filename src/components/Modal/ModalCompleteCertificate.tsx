@@ -9,12 +9,12 @@ interface IModalCompleteCertificateProps {
   open: boolean;
   onConfirm: () => void;
   onClose: () => void;
+  correctSentences: number;
 }
 const ModalCompleteCertificate = (props: IModalCompleteCertificateProps) => {
-  console.log({ per: props.percent });
-  const { open, onClose, onConfirm, percent } = props;
+  const { open, onClose, onConfirm, percent, correctSentences } = props;
   return (
-    <Modal onClose={onClose} open={open}>
+    <Modal open={open}>
       <Box
         sx={{
           display: "flex",
@@ -60,11 +60,14 @@ const ModalCompleteCertificate = (props: IModalCompleteCertificateProps) => {
             marginBottom: "40px",
           }}
         >
-          You have mastered 10 words and sentences. You can understand essential conversations and can already speak several
-          important sentences in IT-English.
+          {props.percent === 0
+            ? `You have not passed the test, please try again for a better result.`
+            : `You have mastered ${correctSentences} words and sentences. You can understand essential conversations and can already speak several
+            important sentences in IT-English.`}
         </Typography>
 
         <Button
+          disabled={props.percent === 0}
           onClick={onConfirm}
           sx={{
             borderRadius: "20px",
@@ -88,7 +91,7 @@ const ModalCompleteCertificate = (props: IModalCompleteCertificateProps) => {
           fullWidth
           color="primary"
         >
-          Cancel
+          Test again
         </Button>
       </Box>
     </Modal>

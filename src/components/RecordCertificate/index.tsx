@@ -14,7 +14,7 @@ import Bowser from "bowser";
 import { useEffect, useMemo, useState } from "react";
 import WordHighLight from "../WordHighLight";
 import useMicRecorder from "../useMicRecorder";
-import { IResultCertificateItem } from "../../pages/Certificate/CertificateProgress";
+import { IResultCertificateItem } from "@/pages/Certificate/CertificateProgress";
 
 export default function RecordCertificate(
   props: IVocabularyContent & { nextVocabulary: (data: IResultCertificateItem) => void; index: number; totalVoca: number }
@@ -32,7 +32,6 @@ export default function RecordCertificate(
   const { status, startRecording, stopRecording, mediaFile, clearFile, mediaBase64 } = useMicRecorder();
 
   const [hideUpdateRecordBtn, setHideUpdateRecordBtn] = useState(true);
-  const [hideContinueBtn, setHideContinueBtn] = useState(false);
 
   const [isRecord, setIsRecord] = useState(() => {
     return status === "recording";
@@ -52,10 +51,11 @@ export default function RecordCertificate(
     );
   }, [isRerecord, status, mediaFile, speakToTextData]);
   const displayContinueBtn = useMemo(() => {
-    if (props.index === props.totalVoca - 1 && mediaBase64) {
-      return true;
-    }
-    return mediaFile && !isRerecord && speakToTextData;
+    // if (props.index === props.totalVoca - 1 && mediaBase64) {
+    //   return true;
+    // }
+
+    return mediaFile && !isRerecord && speakToTextData && speakToTextData.finalTranscript !== EMPTY_TRANSCRIPT;
   }, [mediaFile, isRecord, speakToTextData]);
 
   useEffect(() => {
@@ -96,7 +96,6 @@ export default function RecordCertificate(
   const onAddRecord = async () => {
     if (mediaFile) {
       if (props.index < props.totalVoca - 1) {
-        setHideContinueBtn(() => true);
         setHideUpdateRecordBtn(() => true);
       }
       const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
@@ -180,7 +179,7 @@ export default function RecordCertificate(
         </Grid>
       </BoxCard>
 
-      {displayContinueBtn && !hideContinueBtn && (
+      {displayContinueBtn && (
         <Button
           variant="outlined"
           onClick={() => {
