@@ -1,8 +1,8 @@
 import Reducer from "@/shared/const/store.const";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQuery from "..";
-import { ICertificate, ICertificateContent, IGetContentById } from "../type";
 import CertificateController from "../controllers/certificate.controller";
+import { ICertificate, ICertificateContent, IGetContentById, IUserCertificateRequest, IUserCertificate } from "../type";
 
 export const CertificateApi = createApi({
   reducerPath: Reducer.certificateApi,
@@ -17,14 +17,27 @@ export const CertificateApi = createApi({
       query: ({ strategyType, certificateId }) => CertificateController.getContentById(strategyType, certificateId),
       transformResponse: (response: { data: ICertificateContent }) => response.data,
     }),
-
     isArchived: builder.query<boolean, string>({
       query: (certificateId) => CertificateController.isArchived(certificateId),
       transformResponse: (response: { data: boolean }) => response.data,
     }),
+    addOrUpdateUserContentCertificate: builder.mutation<boolean, IUserCertificateRequest>({
+      query: CertificateController.addOrUpdateUserContentCertificate,
+      transformResponse: (response: { data: boolean }) => response.data,
+    }),
+    getUserCertificate: builder.query<IUserCertificate, string>({
+      query: (certificateId) => CertificateController.getUserCertificate(certificateId),
+      transformResponse: (response: { data: IUserCertificate }) => response.data,
+    }),
   }),
 });
 
-export const { useIsArchivedQuery, useGetCertificateProgressQuery, useLazyGetCertificateContentByIdQuery } = CertificateApi;
+export const {
+  useIsArchivedQuery,
+  useGetCertificateProgressQuery,
+  useLazyGetCertificateContentByIdQuery,
+  useAddOrUpdateUserContentCertificateMutation,
+  useGetUserCertificateQuery,
+} = CertificateApi;
 
 export default CertificateApi;

@@ -4,15 +4,23 @@ import ROUTER from "@/shared/const/router.const";
 import { Avatar, Box, Button, Theme, Typography, useMediaQuery } from "@mui/material";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DownloadIcon from "../icons/dowload-icon";
 import LogoCertificateIcon from "../icons/logo-certificate-icon";
 import ShareIcon from "../icons/share-icon";
 import UndoIcon from "../icons/undo-icon";
+import { IUserCertificate } from "@/core/type";
 
-interface IModalCompleteCertificateProps {}
+import { formatDMMMYYYY } from "@/shared/utils/date";
+
+interface IModalCompleteCertificateProps {
+  userCertificate: IUserCertificate;
+  onClickTestAgain: () => void;
+}
 const ResultCertificate = (props: IModalCompleteCertificateProps) => {
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
+  const { userCertificate, onClickTestAgain } = props;
+  const { archivedDate, certificateName, nickName, score, totalScore, star } = userCertificate;
   const navigate = useNavigate();
   const handleDownloadCertificate = () => {
     const input = document.getElementById("download-certificate");
@@ -45,23 +53,27 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
           <LogoCertificateIcon />
 
           <Box className="flex gap-5 mt-4 mb-3">
-            {[1, 2, 3, 4].map((star) => {
-              return <Avatar className="w-5 h-5" variant="square" src={3 < star ? StarIcon : StartActiveIcon} />;
+            {[1, 2, 3, 4].map((item) => {
+              return <Avatar className="w-5 h-5" variant="square" src={star < item ? StarIcon : StartActiveIcon} />;
             })}
           </Box>
-          <Typography className="uppercase text-3xl font-semibold mb-6">Level 2</Typography>
+          <Typography className="uppercase text-3xl font-semibold mb-6">{certificateName}</Typography>
+          <Typography className="text-textSecondary font-semibold mb-6">{`  Highest result: ${
+            (score * 100) / totalScore
+          }%`}</Typography>
+
           <Box className="p-6 w-full flex flex-col items-center">
-            <Typography className="font-medium">Proudly presented to</Typography>
+            <Typography className="text-textSecondary text-lg font-medium">Proudly presented to</Typography>
             <Typography className="tracking-wide text-secondary uppercase text-3xl md:text-5xl !leading-[1.1] font-semibold pt-6 pb-4 text-center">
-              TRƯƠNG NGUYỄN BẢO NGỌC HÀ
+              {nickName}
             </Typography>
             <Typography className="mb-4">For successfully completed recording TechTalk’s lecture</Typography>
-            <Typography className="text-sm ">8, Jan 2024</Typography>
+            {archivedDate && <Typography className="text-sm ">{formatDMMMYYYY(archivedDate)}</Typography>}
           </Box>
         </div>
 
         <Box className="p-6  border-solid border-0 border-t  border-t-stroke gap-1 flex flex-col md:flex-row w-full items-center justify-center md:justify-between ">
-          <Button startIcon={<UndoIcon />} className="text-base font-semibold" color="primary">
+          <Button onClick={onClickTestAgain} startIcon={<UndoIcon />} className="text-base font-semibold" color="primary">
             Test again
           </Button>
           <Button
@@ -72,16 +84,18 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
           >
             Download
           </Button>
-          <Button
-            onClick={handleGotoSharePage}
-            fullWidth={isSmallScreen}
-            startIcon={<ShareIcon />}
-            className="px-8 rounded-2xl text-base font-semibold"
-            variant="contained"
-            color="primary"
-          >
-            Share
-          </Button>
+          <Link target="_blank" to={`${ROUTER.CERTIFICATE_USER}/linh?cer-name=123`}>
+            <Button
+              // onClick={handleGotoSharePage}
+              fullWidth={isSmallScreen}
+              startIcon={<ShareIcon />}
+              className="px-8 rounded-2xl text-base font-semibold"
+              variant="contained"
+              color="primary"
+            >
+              Share
+            </Button>
+          </Link>
         </Box>
       </Box>
     </Box>

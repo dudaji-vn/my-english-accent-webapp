@@ -872,6 +872,11 @@ h6 {
   line-height: 1.75rem;
 }
 
+#root :is(.text-lg) {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
 #root :is(.font-bold) {
   font-weight: 700;
 }

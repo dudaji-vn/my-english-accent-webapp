@@ -1,5 +1,6 @@
+export type TNameCertificateStrategy = "vocabulary";
 export interface IGetContentById {
-  strategyType: "vocabulary";
+  strategyType: TNameCertificateStrategy;
   certificateId: string;
 }
 export interface ICertificate {
@@ -31,4 +32,26 @@ export interface ISubmitExam {
 }
 export interface ICertificateContent extends ICertificate {
   contents: IVocabularyContent[];
+}
+
+export interface IUserCertificateRequest {
+  strategyType: TNameCertificateStrategy;
+  certificateId: string;
+  records: {
+    vocabularyId: string;
+    voiceSrc: string;
+    result: string;
+  }[];
+  score: number;
+  star: number;
+  correctSentences: number;
+}
+
+export interface IUserCertificate {
+  nickName: string;
+  score: number;
+  totalScore: number;
+  certificateName: string;
+  archivedDate: string;
+  star: number;
 }
