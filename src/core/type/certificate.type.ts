@@ -49,9 +49,32 @@ export interface IUserCertificateRequest {
 
 export interface IUserCertificate {
   nickName: string;
+  userId: string;
+  score: number;
+  totalScore: number;
+  certificateName: string;
+  certificateId: string;
+  archivedDate: string;
+  star: number;
+}
+
+export interface IUserRecordCertificate {
+  nickName: string;
   score: number;
   totalScore: number;
   certificateName: string;
   archivedDate: string;
   star: number;
+  records: {
+    recordId: string;
+    voiceSrc: string;
+    result: string;
+    title: string;
+    phonetic: string;
+  }[];
+}
+
+export interface IGetUserCertificateQuery {
+  certificateId: string;
+  userId: string;
 }
