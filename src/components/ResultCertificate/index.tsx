@@ -20,8 +20,8 @@ interface IModalCompleteCertificateProps {
 const ResultCertificate = (props: IModalCompleteCertificateProps) => {
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
   const { userCertificate, onClickTestAgain } = props;
-  const { archivedDate, certificateName, nickName, score, totalScore, star } = userCertificate;
-  const navigate = useNavigate();
+  const { archivedDate, certificateName, nickName, score, totalScore, star, userId, certificateId } = userCertificate;
+
   const handleDownloadCertificate = () => {
     const input = document.getElementById("download-certificate");
     if (!input) {
@@ -37,19 +37,18 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
       pdf.save("download.pdf");
     });
   };
-  const handleGotoSharePage = () => {
-    navigate(`${ROUTER.CERTIFICATE_USER}/linh?cer-name=123`);
-  };
+
   return (
     <Box className="flex mt-6 items-center justify-center">
       <Box
         sx={{
           width: "640px",
           maxWidth: "calc(100% - 32px)",
+          position: "relative",
         }}
         className="mb-5 shadow-[0_1px_3px_0px_#A6AFC366] bg-white rounded-2xl max-w-[calc(100% - 32px)] flex flex-col items-center justify-center"
       >
-        <div id="download-certificate" className="pt-6 px-6 flex flex-col items-center mb-6">
+        <div className="pt-6 px-6 flex flex-col items-center mb-6">
           <LogoCertificateIcon />
 
           <Box className="flex gap-5 mt-4 mb-3">
@@ -57,7 +56,29 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
               return <Avatar className="w-5 h-5" variant="square" src={star < item ? StarIcon : StartActiveIcon} />;
             })}
           </Box>
-          <Typography className="uppercase text-3xl font-semibold mb-6">{certificateName}</Typography>
+          <Typography className="text-3xl font-semibold mb-6">{certificateName}</Typography>
+          <Typography className="text-textSecondary font-semibold mb-6">{`  Highest result: ${
+            (score * 100) / totalScore
+          }%`}</Typography>
+
+          <Box className="p-6 w-full flex flex-col items-center">
+            <Typography className="text-textSecondary text-lg font-medium">Proudly presented to</Typography>
+            <Typography className="tracking-wide text-secondary uppercase text-3xl md:text-5xl !leading-[1.1] font-semibold pt-6 pb-4 text-center">
+              {nickName}
+            </Typography>
+            <Typography className="mb-4">For successfully completed recording TechTalk’s lecture</Typography>
+            {archivedDate && <Typography className="text-sm ">{formatDMMMYYYY(archivedDate)}</Typography>}
+          </Box>
+        </div>
+        <div id="download-certificate" className="absolute -top-[1000px]  w-[640px] pt-6 px-6 flex flex-col items-center mb-6">
+          <LogoCertificateIcon />
+
+          <Box className="flex gap-5 mt-4 mb-3">
+            {[1, 2, 3, 4].map((item) => {
+              return <Avatar className="w-5 h-5" variant="square" src={star < item ? StarIcon : StartActiveIcon} />;
+            })}
+          </Box>
+          <Typography className="text-3xl font-semibold mb-6">{certificateName}</Typography>
           <Typography className="text-textSecondary font-semibold mb-6">{`  Highest result: ${
             (score * 100) / totalScore
           }%`}</Typography>
@@ -84,13 +105,11 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
           >
             Download
           </Button>
-          <Link target="_blank" to={`${ROUTER.CERTIFICATE_USER}/linh?cer-name=123`}>
+          <Link target="_blank" to={`${ROUTER.CERTIFICATE_USER}/${userId}?id=${certificateId}`}>
             <Button
-              // onClick={handleGotoSharePage}
               fullWidth={isSmallScreen}
               startIcon={<ShareIcon />}
               className="px-8 rounded-2xl text-base font-semibold"
-              variant="contained"
               color="primary"
             >
               Share

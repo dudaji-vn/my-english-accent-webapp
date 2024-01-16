@@ -1,4 +1,4 @@
-import { IUserCertificateRequest } from "../type";
+import { IGetUserCertificateQuery, IUserCertificateRequest } from "../type";
 
 const CertificateController = {
   progress: () => {
@@ -14,6 +14,11 @@ const CertificateController = {
   getUserCertificate: (certificateId: string) => {
     return {
       url: `/certificate/getUserCertificate?certificateId=${certificateId}`,
+    };
+  },
+  getUserRecordCertificate: (params: IGetUserCertificateQuery) => {
+    return {
+      url: `/certificate/getUserRecordsCertificate?certificateId=${params.certificateId}&userId=${params.userId}`,
     };
   },
   isArchived: (certificateId: string) => {

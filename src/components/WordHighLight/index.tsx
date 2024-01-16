@@ -11,7 +11,7 @@ function WordHighlight({ sentence = "", transcript = "" }: { sentence: string; t
   return (
     <div>
       {transcript === EMPTY_TRANSCRIPT ? (
-        <Typography className={`mb-6 break-words text-base text-gray-400`}>Sorry, we couldn't here you.</Typography>
+        <Typography className={`mb-6 break-words text-base text-gray-400`}>Sorry, we couldn't hear you.</Typography>
       ) : (
         <Typography className={`mb-6 break-words text-base ${isHighLight ? "text-secondary" : "text-red-400"}`}>
           {isHighLight ? sentence : transcript}

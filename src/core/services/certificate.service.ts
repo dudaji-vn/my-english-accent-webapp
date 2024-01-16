@@ -2,7 +2,15 @@ import Reducer from "@/shared/const/store.const";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQuery from "..";
 import CertificateController from "../controllers/certificate.controller";
-import { ICertificate, ICertificateContent, IGetContentById, IUserCertificateRequest, IUserCertificate } from "../type";
+import {
+  ICertificate,
+  ICertificateContent,
+  IGetContentById,
+  IUserCertificateRequest,
+  IUserCertificate,
+  IUserRecordCertificate,
+  IGetUserCertificateQuery,
+} from "../type";
 
 export const CertificateApi = createApi({
   reducerPath: Reducer.certificateApi,
@@ -29,6 +37,10 @@ export const CertificateApi = createApi({
       query: (certificateId) => CertificateController.getUserCertificate(certificateId),
       transformResponse: (response: { data: IUserCertificate }) => response.data,
     }),
+    getUserRecordCertificate: builder.query<IUserRecordCertificate, IGetUserCertificateQuery>({
+      query: (params) => CertificateController.getUserRecordCertificate(params),
+      transformResponse: (response: { data: IUserRecordCertificate }) => response.data,
+    }),
   }),
 });
 
@@ -38,6 +50,7 @@ export const {
   useLazyGetCertificateContentByIdQuery,
   useAddOrUpdateUserContentCertificateMutation,
   useGetUserCertificateQuery,
+  useGetUserRecordCertificateQuery,
 } = CertificateApi;
 
 export default CertificateApi;
