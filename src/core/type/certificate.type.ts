@@ -8,6 +8,7 @@ export interface ICertificate {
   name: string;
   type: number;
   star: number;
+  score: number;
   totalScore: number;
 }
 export interface IVocabularyContent {
