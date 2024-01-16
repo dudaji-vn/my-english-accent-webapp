@@ -347,6 +347,10 @@ h6 {
   top: -10000px;
 }
 
+#root :is(.bottom-8) {
+  bottom: 2rem;
+}
+
 #root :is(.z-10) {
   z-index: 10;
 }
@@ -565,6 +569,14 @@ h6 {
   min-height: 125px;
 }
 
+#root :is(.min-h-\[150px\]) {
+  min-height: 150px;
+}
+
+#root :is(.min-h-\[100px\]) {
+  min-height: 100px;
+}
+
 #root :is(.w-10) {
   width: 2.5rem;
 }
@@ -668,6 +680,23 @@ h6 {
           transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+@-webkit-keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+#root :is(.animate-pulse) {
+  -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 #root :is(.cursor-pointer) {
   cursor: pointer;
 }
@@ -746,6 +775,10 @@ h6 {
 
 #root :is(.break-words) {
   overflow-wrap: break-word;
+}
+
+#root :is(.break-all) {
+  word-break: break-all;
 }
 
 #root :is(.break-keep) {
@@ -947,6 +980,10 @@ h6 {
 
 #root :is(.pt-1) {
   padding-top: 0.25rem;
+}
+
+#root :is(.pb-10) {
+  padding-bottom: 2.5rem;
 }
 
 #root :is(.text-center) {

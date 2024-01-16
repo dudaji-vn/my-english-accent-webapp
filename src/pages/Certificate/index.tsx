@@ -49,7 +49,13 @@ const Certificate = () => {
               </Box>
 
               <Box className="flex flex-col items-center mt-6">
-                <Typography className="text-base-semibold mb-9 ">{item.name}</Typography>
+                <Typography className="text-base-semibold mb-8">{item.name}</Typography>
+
+                <Typography className="text-center text-textSecondary font-semibold mb-9">
+                  {item.star !== CertificateStatus.NONE
+                    ? `Highest result: ${(item.score * 100) / item.totalScore}%`
+                    : "Test to see your result"}
+                </Typography>
                 <Typography className="text-base-semibold" color={"primary"}>
                   {item.star === CertificateStatus.NONE ? "Test now" : "Test again"}
                 </Typography>

@@ -142,7 +142,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
                   className="md:max-w-[600px]"
                   pagination={{
                     enabled: true,
-                    horizontalClass: "bottom-4",
+                    horizontalClass: "bottom-0",
                   }}
                   slidesPerView={"auto"}
                   modules={[Pagination]}
@@ -153,9 +153,9 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
                 >
                   {userCertificate?.records.map((record) => (
                     <SwiperSlide key={record.recordId}>
-                      <Box className="bg-gray-50 p-4 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border min-h-[125px]">
-                        <Typography className="text-small-medium">{record.title}</Typography>
-                        <Typography className="text-small-regular " variant="body2">
+                      <Box className="bg-gray-50 p-4 pb-10 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border min-h-[100px] ">
+                        <Typography className="text-small-medium break-words ">{record.title}</Typography>
+                        <Typography className="text-small-regular break-all" variant="body2">
                           {record.phonetic}
                         </Typography>
                       </Box>
