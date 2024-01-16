@@ -327,6 +327,22 @@ h6 {
   top: 50%;
 }
 
+#root :is(.top-\[-1000vw\]) {
+  top: -1000vw;
+}
+
+#root :is(.top-\[-1000vh\]) {
+  top: -1000vh;
+}
+
+#root :is(.top-\[1000px\]) {
+  top: 1000px;
+}
+
+#root :is(.-top-\[1000px\]) {
+  top: -1000px;
+}
+
 #root :is(.z-10) {
   z-index: 10;
 }
@@ -342,6 +358,11 @@ h6 {
 #root :is(.my-6) {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+#root :is(.my-8) {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 #root :is(.mb-1) {
@@ -414,6 +435,22 @@ h6 {
 
 #root :is(.mt-8) {
   margin-top: 2rem;
+}
+
+#root :is(.mt-1) {
+  margin-top: 0.25rem;
+}
+
+#root :is(.mt-0) {
+  margin-top: 0px;
+}
+
+#root :is(.mt-\[-1000px\]) {
+  margin-top: -1000px;
+}
+
+#root :is(.mt-\[1000px\]) {
+  margin-top: 1000px;
 }
 
 #root :is(.block) {
@@ -492,6 +529,14 @@ h6 {
   height: 100vh;
 }
 
+#root :is(.h-\[300px\]) {
+  height: 300px;
+}
+
+#root :is(.h-\[295px\]) {
+  height: 295px;
+}
+
 #root :is(.max-h-\[208px\]) {
   max-height: 208px;
 }
@@ -558,6 +603,22 @@ h6 {
 
 #root :is(.w-full) {
   width: 100%;
+}
+
+#root :is(.w-\[300px\]) {
+  width: 300px;
+}
+
+#root :is(.w-\[500px\]) {
+  width: 500px;
+}
+
+#root :is(.w-\[100vw\]) {
+  width: 100vw;
+}
+
+#root :is(.w-\[640px\]) {
+  width: 640px;
 }
 
 #root :is(.max-w-\[375px\]) {
@@ -877,6 +938,11 @@ h6 {
   line-height: 1.75rem;
 }
 
+#root :is(.text-2xl) {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
 #root :is(.font-bold) {
   font-weight: 700;
 }
@@ -1057,6 +1123,10 @@ h6 {
     margin-top: 5rem;
   }
 
+  #root :is(.md\:mb-6) {
+    margin-bottom: 1.5rem;
+  }
+
   #root :is(.md\:flex) {
     display: flex;
   }
@@ -1091,6 +1161,10 @@ h6 {
 
   #root :is(.md\:justify-between) {
     justify-content: space-between;
+  }
+
+  #root :is(.md\:p-6) {
+    padding: 1.5rem;
   }
 
   #root :is(.md\:px-\[120px\]) {
