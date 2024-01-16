@@ -1,23 +1,23 @@
 const ShareIcon = () => {
   return (
-    <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
-        d="M9.16675 8.09264L14.6334 2.62598"
-        stroke="white"
+        d="M11.3333 9.92611L18.1666 3.09277"
+        stroke="#7F56D9"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
-        d="M15.1666 5.29277V2.09277H11.9666"
-        stroke="white"
+        d="M18.8333 6.42676V2.42676H14.8333"
+        stroke="#7F56D9"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
-        d="M7.83325 2.09277H6.49992C3.16659 2.09277 1.83325 3.42611 1.83325 6.75944V10.7594C1.83325 14.0928 3.16659 15.4261 6.49992 15.4261H10.4999C13.8333 15.4261 15.1666 14.0928 15.1666 10.7594V9.42611"
-        stroke="white"
+        d="M9.66675 2.42676H8.00008C3.83341 2.42676 2.16675 4.09342 2.16675 8.26009V13.2601C2.16675 17.4268 3.83341 19.0934 8.00008 19.0934H13.0001C17.1667 19.0934 18.8334 17.4268 18.8334 13.2601V11.5934"
+        stroke="#7F56D9"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"

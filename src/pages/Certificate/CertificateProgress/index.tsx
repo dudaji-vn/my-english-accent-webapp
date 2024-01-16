@@ -8,7 +8,6 @@ import ResultCertificate from "@/components/ResultCertificate";
 import {
   useAddOrUpdateUserContentCertificateMutation,
   useGetUserCertificateQuery,
-  useIsArchivedQuery,
   useLazyGetCertificateContentByIdQuery,
 } from "@/core/services";
 import { IUserCertificateRequest, IVocabularyContent } from "@/core/type";
