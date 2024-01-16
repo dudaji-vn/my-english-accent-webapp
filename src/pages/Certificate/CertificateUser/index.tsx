@@ -153,7 +153,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
                 >
                   {userCertificate?.records.map((record) => (
                     <SwiperSlide key={record.recordId}>
-                      <Box className="bg-gray-50 p-4 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border min-h-[120px]">
+                      <Box className="bg-gray-50 p-4 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border min-h-[125px]">
                         <Typography className="text-small-medium">{record.title}</Typography>
                         <Typography className="text-small-regular " variant="body2">
                           {record.phonetic}
@@ -166,7 +166,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
                   <IconButton
                     onClick={handlePlayAudio}
                     disabled={userCertificate?.records.length === 0}
-                    className="bg-primary w-12 h-12"
+                    className="bg-primary w-16 h-16"
                   >
                     <Avatar src={isPlaying ? PauseIcon : PlayIcon} alt="wave-icon" className="w-6 h-6" />
                   </IconButton>
