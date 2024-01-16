@@ -46,6 +46,9 @@ export const PublishRoute = () => {
 
   return <Outlet />;
 };
+const AnonymousRoute = () => {
+  return <Outlet />;
+};
 
 function App() {
   const removeSlash = useCallback((value: string) => {
@@ -72,7 +75,7 @@ function App() {
           {/** CERTIFICATE */}
           <Route path={ROUTER.CERTIFICATE + "/:category"} element={<CertificateProgressPage />} />
         </Route>
-        <Route path={ROUTER.ROOT} element={<PublishRoute />}>
+        <Route path={ROUTER.ROOT} element={<AnonymousRoute />}>
           <Route path={ROUTER.CERTIFICATE_USER + "/:userId"} element={<CertificateUserPage />} />
         </Route>
 

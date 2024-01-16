@@ -128,7 +128,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
 
           <Typography className="mb-2 md:mb-4 text-center">This certificate is presented to</Typography>
           {isFetching ? (
-            <Box sx={{ minHeight: "480px" }}>
+            <Box sx={{ minHeight: "500px", transition: "height 3s ease" }}>
               <Loading />
             </Box>
           ) : (
