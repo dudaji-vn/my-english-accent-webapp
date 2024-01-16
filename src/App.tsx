@@ -71,6 +71,8 @@ function App() {
           <Route path={ROUTER.LISTENING + ROUTER.SELECT_LECTURE} element={<SelectLecturePage />} />
           {/** CERTIFICATE */}
           <Route path={ROUTER.CERTIFICATE + "/:category"} element={<CertificateProgressPage />} />
+        </Route>
+        <Route path={ROUTER.ROOT} element={<PublishRoute />}>
           <Route path={ROUTER.CERTIFICATE_USER + "/:userId"} element={<CertificateUserPage />} />
         </Route>
 

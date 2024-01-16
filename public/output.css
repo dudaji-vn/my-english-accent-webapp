@@ -541,6 +541,10 @@ h6 {
   height: 295px;
 }
 
+#root :is(.h-14) {
+  height: 3.5rem;
+}
+
 #root :is(.max-h-\[208px\]) {
   max-height: 208px;
 }
@@ -551,6 +555,14 @@ h6 {
 
 #root :is(.min-h-screen) {
   min-height: 100vh;
+}
+
+#root :is(.min-h-\[130px\]) {
+  min-height: 130px;
+}
+
+#root :is(.min-h-\[125px\]) {
+  min-height: 125px;
 }
 
 #root :is(.w-10) {
@@ -623,6 +635,10 @@ h6 {
 
 #root :is(.w-\[640px\]) {
   width: 640px;
+}
+
+#root :is(.w-14) {
+  width: 3.5rem;
 }
 
 #root :is(.max-w-\[375px\]) {
