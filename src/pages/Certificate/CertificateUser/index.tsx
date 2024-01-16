@@ -75,7 +75,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isCopying} autoHideDuration={3000}>
         <Alert severity="success">Your link has been copied successfully.</Alert>
       </Snackbar>
-      <Box className="flex mt-6 items-center justify-center">
+      <Box className="flex mt-4 md:mt-6 items-center justify-center">
         <Box
           sx={{
             border: "8px solid rgba(127, 86, 217, 0.24)",
@@ -87,7 +87,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
             sx={{
               width: "100px",
               height: "100px",
-              marginBottom: "28px",
+              marginBottom: "12px",
             }}
             src={MedalActiveIcon}
             variant="square"
@@ -95,6 +95,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
           />
           {userCertificate?.star && (
             <Box
+              className="flex gap-5 mb-2 md:mb-9"
               sx={{
                 display: "flex",
                 gap: "20px",
@@ -125,19 +126,17 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
             }%`}</Typography>
           )}
 
-          <Typography className="mb-4 text-center">This certificate is presented to</Typography>
+          <Typography className="mb-2 md:mb-4 text-center">This certificate is presented to</Typography>
           {isFetching ? (
-            <Box sx={{ minHeight: "600px" }}>
+            <Box sx={{ minHeight: "480px" }}>
               <Loading />
             </Box>
           ) : (
             <>
-              <Typography className="px-4 text-center text-secondary text-xl md:text-4xl font-semibold mb-4 ">
+              <Typography className="px-4 text-center uppercase text-secondary !leading-[1.1] text-3xl md:text-4xl font-semibold mb-4 ">
                 {userCertificate?.nickName}
               </Typography>
-              <Typography className="mb-10 text-small-regular text-center">
-                For successfully completed recording TechTalk’s lecture
-              </Typography>
+
               <Box className={`w-full px-4`}>
                 <Swiper
                   className="md:max-w-[600px]"
@@ -163,7 +162,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
                     </SwiperSlide>
                   ))}
                 </Swiper>
-                <Box className="w-full flex justify-center my-8">
+                <Box className="w-full flex justify-center my-6">
                   <IconButton
                     onClick={handlePlayAudio}
                     disabled={userCertificate?.records.length === 0}

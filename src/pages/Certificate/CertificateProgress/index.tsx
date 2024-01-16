@@ -152,7 +152,7 @@ export default function CertificateProgressPage() {
   if (isFetching || isFetchingContent) return <Loading />;
 
   return (
-    <Box className="flex flex-col grow bg-gray-100 min-h-screen">
+    <Box className="flex flex-col grow bg-gray-100 min-h-screen overflow-y-auto overflow-x-hidden">
       {certificateContent && (
         <ModalCompleteCertificate
           correctSentences={result.correctSentences}
@@ -176,7 +176,7 @@ export default function CertificateProgressPage() {
           <IconButton onClick={onHandleClose}>
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
-          <Typography className="text-large-semibold grow">{`TechTalk certificate ${certificateName}`}</Typography>
+          <Typography className="text-large-semibold grow">{certificateName}</Typography>
         </Box>
       </Container>
 
