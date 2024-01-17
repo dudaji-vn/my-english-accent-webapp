@@ -6,6 +6,10 @@ import DrawerNavigate from "./components/DrawerNavigate";
 import Loading from "./components/Loading";
 import RecordSentenceList from "./pages/Record/RecordList";
 import AudioRecorder from "audio-recorder-polyfill";
+import { useIsLoginQuery } from "./core/services";
+import { toggleModal } from "@/core/store/index";
+import { useDispatch } from "react-redux";
+import { ModalType } from "./shared/const/modal-type.const";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
@@ -29,8 +33,23 @@ if (!supportsWebm) {
 }
 
 export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => {
+  const { data: isLogin, isFetching } = useIsLoginQuery();
+  const dispatch = useDispatch();
   const token = persist.getToken();
-  return !token ? <Navigate to={ROUTER.AUTH + ROUTER.LOGIN} /> : isShowDrawer ? <DrawerNavigate /> : <Outlet />;
+  if (!token) {
+    return <Navigate to={ROUTER.AUTH + ROUTER.LOGIN} />;
+  }
+
+  if (isFetching) {
+    return <Loading />;
+  }
+  if (!isLogin) {
+    persist.logout();
+    dispatch(toggleModal(ModalType.SESSION_EXPIRE));
+    return <Navigate to={ROUTER.AUTH + ROUTER.LOGIN} />;
+  }
+
+  return isShowDrawer ? <DrawerNavigate /> : <Outlet />;
 };
 
 export const PublishRoute = () => {
