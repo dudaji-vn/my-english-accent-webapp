@@ -100,7 +100,7 @@ export default function CertificateProgressPage() {
   };
 
   const onHandleClose = () => {
-    if (isStart && !userCertificate) {
+    if (isStart) {
       setIsOpenModalLeaveExam(true);
     } else {
       navigate(-1);
@@ -119,6 +119,7 @@ export default function CertificateProgressPage() {
   const handleTestAgain = async () => {
     await triggerGetCertificateContentById({ strategyType: "vocabulary", certificateId }).unwrap();
     setIsHideCertificate(true);
+
     setIsOpenModalCompleteCertificate(false);
 
     if (vocabularies && vocabularies[0]) {
@@ -146,6 +147,7 @@ export default function CertificateProgressPage() {
       refetch();
       setIsHideCertificate(false);
       setIsOpenModalCompleteCertificate(false);
+      setIsStart(false);
     }
   };
 
