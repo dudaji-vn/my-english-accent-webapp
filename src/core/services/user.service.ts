@@ -15,6 +15,13 @@ export const UserApi = createApi({
         return response.data;
       },
     }),
+    isLogin: builder.query<boolean, void>({
+      query: UserController.isLogin,
+      keepUnusedDataFor: 0,
+      transformResponse: (response: { data: boolean }) => {
+        return response.data;
+      },
+    }),
     checkUserCompleteEvent: builder.query<IIsUserWinEvent, void>({
       query: () => UserController.checkUserCompleteEvent(),
       transformResponse: (response: { data: IIsUserWinEvent }) => {
@@ -36,6 +43,7 @@ export const UserApi = createApi({
 
 export const {
   useRegisterMutation,
+  useIsLoginQuery,
   useGetAllUsersQuery,
   useLazyCheckUserCompleteEventQuery,
   useAddOrUpdateGoogleTranscriptMutation,

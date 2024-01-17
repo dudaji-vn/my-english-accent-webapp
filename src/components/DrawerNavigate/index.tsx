@@ -38,17 +38,6 @@ import CustomDrawerHeader from "../CustomMui/DrawerHeader";
 import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
 
-const settings = [
-  {
-    title: "Log out",
-    icon: LogoutIcon,
-    action: () => {
-      persist.logout();
-      window.location.reload();
-    },
-  },
-];
-
 const menu = [
   {
     name: "Record",
@@ -87,11 +76,20 @@ const menu = [
 
 const DrawerNavigate = ({ ...props }: any) => {
   const navigate = useNavigate();
+  const settings = [
+    {
+      title: "Log out",
+      icon: LogoutIcon,
+      action: () => {
+        persist.logout();
+      },
+    },
+  ];
   const { pathname } = useLocation();
   const path = pathname.replace("/", "");
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
   const [open, setOpen] = useState(!isSmallScreen);
-  const avatar = persist.getMyInfo().avatarUrl;
+  const avatar = persist.getMyInfo()?.avatarUrl;
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleDrawerOpen = () => {
