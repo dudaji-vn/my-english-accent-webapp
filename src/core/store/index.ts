@@ -8,6 +8,9 @@ import { ModalType } from "@/shared/const/modal-type.const";
 import { EVENT_STATUS } from "@/shared/const/event.const";
 
 interface GlobalStoreType {
+  user: {
+    isAuthenticated: boolean;
+  };
   recordPage: EnrollmentStep;
   recordAudio: {
     disableAllAction: boolean;
@@ -37,6 +40,7 @@ interface GlobalStoreType {
 }
 
 const initialState: GlobalStoreType = {
+  user: { isAuthenticated: false },
   recordPage: {
     currentStep: 0,
     enrollmentId: "",
@@ -69,6 +73,10 @@ const globalSlice = createSlice({
   name: Reducer.globalStore,
   initialState,
   reducers: {
+    setIsAuthenticated: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
+      state.user.isAuthenticated = action.payload;
+    },
+
     saveAudio: (
       state: GlobalStoreType,
       action: PayloadAction<{
@@ -212,6 +220,7 @@ export const {
   updateDisableAllAction,
   changeRecordTab,
   toggleModal,
+  setIsAuthenticated,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

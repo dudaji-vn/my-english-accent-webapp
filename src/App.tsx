@@ -1,15 +1,14 @@
-import { Suspense, lazy, useCallback, useEffect } from "react";
+import { Suspense, lazy, useCallback, useEffect, useLayoutEffect } from "react";
 import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import persist from "./shared/utils/persist.util";
 import ROUTER from "./shared/const/router.const";
 import DrawerNavigate from "./components/DrawerNavigate";
 import Loading from "./components/Loading";
 import RecordSentenceList from "./pages/Record/RecordList";
 import AudioRecorder from "audio-recorder-polyfill";
-import { useIsLoginQuery } from "./core/services";
-import { toggleModal } from "@/core/store/index";
+import { useLazyIsLoginQuery } from "./core/services";
+import { setIsAuthenticated } from "@/core/store/index";
 import { useDispatch } from "react-redux";
-import { ModalType } from "./shared/const/modal-type.const";
+import { useAppSelector } from "./core/store";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
@@ -33,34 +32,46 @@ if (!supportsWebm) {
 }
 
 export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => {
-  const { data: isLogin, isFetching } = useIsLoginQuery();
-  const dispatch = useDispatch();
-  const token = persist.getToken();
-  if (!token) {
-    return <Navigate to={ROUTER.AUTH + ROUTER.LOGIN} />;
-  }
+  const [triggerIsLogin, { data }] = useLazyIsLoginQuery();
+  const { isAuthenticated } = useAppSelector((state) => state.GlobalStore.user);
 
-  if (isFetching) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const isLogin = await triggerIsLogin().unwrap();
+        if (!isLogin) {
+          dispatch(setIsAuthenticated(false));
+          navigate(ROUTER.AUTH + ROUTER.LOGIN);
+        } else {
+          dispatch(setIsAuthenticated(true));
+        }
+      } catch (err) {
+        navigate(ROUTER.AUTH + ROUTER.LOGIN);
+        dispatch(setIsAuthenticated(false));
+      }
+    };
+    checkAuthentication();
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated && data) {
+      navigate(ROUTER.AUTH + ROUTER.LOGIN);
+    }
+  }, [isAuthenticated]);
+  if (!data) {
     return <Loading />;
   }
-  if (!isLogin) {
-    persist.logout();
-    dispatch(toggleModal(ModalType.SESSION_EXPIRE));
-    return <Navigate to={ROUTER.AUTH + ROUTER.LOGIN} />;
-  }
-
   return isShowDrawer ? <DrawerNavigate /> : <Outlet />;
 };
 
 export const PublishRoute = () => {
-  const navigate = useNavigate();
-  const token = persist.getToken();
+  const { isAuthenticated } = useAppSelector((state) => state.GlobalStore.user);
 
-  useEffect(() => {
-    if (token) {
-      navigate(ROUTER.ROOT);
-    }
-  }, [token]);
+  if (isAuthenticated) {
+    return <Navigate to={ROUTER.ROOT} />;
+  }
 
   return <Outlet />;
 };

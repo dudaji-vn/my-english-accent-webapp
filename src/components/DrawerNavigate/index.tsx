@@ -37,6 +37,8 @@ import CustomDrawerHeader from "../CustomMui/DrawerHeader";
 
 import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
+import { useDispatch } from "react-redux";
+import { setIsAuthenticated } from "@/core/store/index";
 
 const menu = [
   {
@@ -76,12 +78,14 @@ const menu = [
 
 const DrawerNavigate = ({ ...props }: any) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const settings = [
     {
       title: "Log out",
       icon: LogoutIcon,
       action: () => {
         persist.logout();
+        dispatch(setIsAuthenticated(false));
       },
     },
   ];
