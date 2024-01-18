@@ -53,6 +53,8 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
       return;
     }
     if (currentIndex === userCertificate.records.length - 1) {
+      swiperRef.current.swiper.slideTo(0);
+      setCurrentIndex(0);
       setIsPlaying(false);
       return;
     }
