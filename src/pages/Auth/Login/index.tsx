@@ -9,9 +9,11 @@ import { useNavigate } from "react-router-dom";
 import ModalExpireSession from "@/components/Modal/ModalExpireSession";
 import { useAppSelector } from "@/core/store";
 import { ModalType } from "@/shared/const/modal-type.const";
+import { useDispatch } from "react-redux";
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [login] = useLoginMutation();
   const { type } = useAppSelector((state) => state.GlobalStore.modal);
 
@@ -22,7 +24,6 @@ export default function Login() {
       navigate(ROUTER.AUTH + ROUTER.REGISTER);
     } else {
       navigate(ROUTER.RECORD);
-      // window.location.reload();
     }
   };
 

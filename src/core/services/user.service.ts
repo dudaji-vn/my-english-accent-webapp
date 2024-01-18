@@ -43,7 +43,7 @@ export const UserApi = createApi({
 
 export const {
   useRegisterMutation,
-  useIsLoginQuery,
+  useLazyIsLoginQuery,
   useGetAllUsersQuery,
   useLazyCheckUserCompleteEventQuery,
   useAddOrUpdateGoogleTranscriptMutation,

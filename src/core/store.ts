@@ -1,4 +1,4 @@
-import { configureStore, ThunkAction, Action, combineReducers } from "@reduxjs/toolkit";
+import { configureStore, ThunkAction, Action, combineReducers, Middleware } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
@@ -6,12 +6,23 @@ import { CertificateApi, FakeUserApi, LectureApi, UserApi, VocabularyApi } from 
 import RecordProgressApi from "@/core/services/recordProgress.service";
 import ClubStudyApi from "@/core/services/club.service";
 import ChallengeApi from "@/core/services/challenge.service";
-import GlobalReducer from "@/core/store/index";
+import GlobalReducer, { setIsAuthenticated, toggleModal } from "@/core/store/index";
 import RecordApi from "./services/record.service";
 import ListenApi from "./services/listen.service";
 import GoogleApi from "./services/google.service";
 import VoiceApi from "./services/voice.service";
-
+import persist from "../shared/utils/persist.util";
+import { ModalType } from "../shared/const/modal-type.const";
+const AuthorizationMiddleware: Middleware = (store) => (next) => async (action) => {
+  if (action.error && action.payload.status === 401) {
+    if (action?.payload?.data?.message === "jwt expired") {
+      store.dispatch(toggleModal(ModalType.SESSION_EXPIRE));
+    }
+    persist.logout();
+    store.dispatch(setIsAuthenticated(false));
+  }
+  return next(action);
+};
 const middleware = [
   LectureApi.middleware,
   VocabularyApi.middleware,
@@ -25,6 +36,7 @@ const middleware = [
   GoogleApi.middleware,
   VoiceApi.middleware,
   CertificateApi.middleware,
+  AuthorizationMiddleware,
 ] as any;
 
 export const store = configureStore({
