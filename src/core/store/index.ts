@@ -14,6 +14,7 @@ interface GlobalStoreType {
   recordPage: EnrollmentStep;
   recordAudio: {
     disableAllAction: boolean;
+    isInProgress: boolean;
   };
   clubPage: {
     voiceSrc: string;
@@ -49,6 +50,7 @@ const initialState: GlobalStoreType = {
   },
   recordAudio: {
     disableAllAction: false,
+    isInProgress: false,
   },
   clubPage: { recordId: "", voiceSrc: "", isPlayAll: false, audioIndex: 0 },
   listenPage: {
@@ -76,6 +78,9 @@ const globalSlice = createSlice({
     setIsAuthenticated: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
       state.user.isAuthenticated = action.payload;
     },
+    setIsInRecordProgress: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
+      state.recordAudio.isInProgress = action.payload;
+    },
 
     saveAudio: (
       state: GlobalStoreType,
@@ -99,6 +104,7 @@ const globalSlice = createSlice({
 
     updateDisableAllAction: (state: GlobalStoreType, action: PayloadAction<boolean>) => {
       state.recordAudio = {
+        ...state.recordAudio,
         disableAllAction: action.payload,
       };
     },
@@ -221,6 +227,7 @@ export const {
   changeRecordTab,
   toggleModal,
   setIsAuthenticated,
+  setIsInRecordProgress,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;
