@@ -34,7 +34,7 @@ export default function Login() {
     >
       <ModalExpireSession isOpen={type === ModalType.SESSION_EXPIRE} />
       <Box className="mb-8 mt-20">
-        <img src={logo} />M
+        <img src={logo} />
       </Box>
       <Typography className="text-2-extra-large-semibold">Start now for free</Typography>
       <Typography className="mb-8">Your colleagues are already using and learning. Join them!</Typography>
