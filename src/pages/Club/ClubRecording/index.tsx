@@ -26,14 +26,14 @@ export default function ClubRecordingPage() {
 
   const vocabularies = useMemo(() => {
     return data ? data.vocabularies : [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.vocabularies]);
 
   const isRerecord = useMemo(() => {
     if (data && data.participants) {
       return !!data.participants.find((user) => user === myId);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.participants]);
 
   const onHandleClose = () => setOpen(false);
@@ -91,7 +91,7 @@ export default function ClubRecordingPage() {
         );
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listRecord]);
 
   //re-recording
@@ -109,7 +109,7 @@ export default function ClubRecordingPage() {
         }
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRerecord]);
 
   if (vocabularies.length) {
@@ -119,31 +119,31 @@ export default function ClubRecordingPage() {
   }
 
   return (
-    <Box className='flex flex-col grow min-h-screen'>
-      <Container className='py-4 divider bg-white'>
-        <Box className='flex items-center gap-2'>
+    <Box className="flex flex-col grow min-h-screen">
+      <Container className="py-4 divider bg-white">
+        <Box className="flex items-center gap-2">
           <IconButton onClick={onHandleBack}>
-            <Avatar src={CloseIcon} className='w-6 h-6' />
+            <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
-          <Box className='flex flex-col'>
-            <Typography className='text-large-semibold'>{data?.challengeName}</Typography>
-            <Typography className='text-small-regular' variant='body2'>
+          <Box className="flex flex-col">
+            <Typography className="text-large-semibold">{data?.challengeName}</Typography>
+            <Typography className="text-small-regular" variant="body2">
               {currentStep + 1}/{vocabularies.length} sentences
             </Typography>
           </Box>
         </Box>
       </Container>
-      <Container id='translationCard' className='py-4 bg-gray-100 flex flex-col grow justify-between'>
-        <BoxCard classes='p-4'>
+      <Container id="translationCard" className="py-4 bg-gray-100 flex flex-col grow justify-between">
+        <BoxCard classes="p-4">
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography className='text-small-medium'>{vocabularies[currentStep]?.vtitleDisplayLanguage}</Typography>
+              <Typography className="text-small-medium">{vocabularies[currentStep]?.vtitleDisplayLanguage}</Typography>
             </Grid>
-            <Grid item xs={12} className='py-4'>
+            <Grid item xs={12} className="py-4">
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <Typography variant='body2' className='text-small-regular break-keep' component={"div"}>
+              <Typography variant="body2" className="text-small-regular break-keep" component={"div"}>
                 {vocabularies[currentStep]?.vphoneticDisplayLanguage}
                 {/* <TextToSpeech text={vocabularies[currentStep]?.vtitleDisplayLanguage} /> */}
               </Typography>
@@ -153,7 +153,7 @@ export default function ClubRecordingPage() {
         <ClubRecordingAudio onHandleNext={onHandleNext} />
       </Container>
 
-      <Modal open={open} onClose={onHandleClose} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+      <Modal open={open} onClose={onHandleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box
           sx={{
             position: "absolute" as "absolute",
@@ -171,17 +171,22 @@ export default function ClubRecordingPage() {
             flexDirection: "column",
           }}
         >
-          <Typography id='modal-modal-title' className='text-large-semibold'>
+          <Typography id="modal-modal-title" className="text-large-semibold">
             Are you sure you want to quit ?
           </Typography>
-          <Typography id='modal-modal-description' className='text-base-regular' variant='body2'>
+          <Typography id="modal-modal-description" className="text-base-regular" variant="body2">
             All progress will be lost
           </Typography>
           <Box display={"flex"} justifyContent={"space-around"}>
             <Button sx={{ flexGrow: 1 }} onClick={onHandleClose}>
               Stay
             </Button>
-            <Button sx={{ flexGrow: 1 }} variant='contained' color='error' onClick={() => navigate(ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + state.clubId)}>
+            <Button
+              sx={{ flexGrow: 1 }}
+              variant="contained"
+              color="error"
+              onClick={() => navigate(ROUTER.CLUB_DETAIL + ROUTER.CLUB_STUDY + "/" + state.clubId)}
+            >
               Quit
             </Button>
           </Box>

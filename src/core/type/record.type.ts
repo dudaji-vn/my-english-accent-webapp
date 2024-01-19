@@ -13,6 +13,7 @@ export interface RecordTypeResponse {
 export interface RecordRequest {
   voiceSrc: string;
   vocabularyId: string;
+  finalTranscript?: string;
   challengeId?: string;
 }
 

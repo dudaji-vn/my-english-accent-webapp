@@ -11,11 +11,11 @@ import {
 } from "@/core/services";
 import { useAddOrUpdateRecordMutation } from "@/core/services/record.service";
 import { useAppDispatch, useAppSelector } from "@/core/store";
-import { updateDisableAllAction } from "@/core/store/index";
+import { setIsInRecordProgress, updateDisableAllAction } from "@/core/store/index";
 import { EMPTY_TRANSCRIPT, VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import TextToSpeech from "@/shared/hook/useTextToSpeech";
 import persist from "@/shared/utils/persist.util";
-import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Button, Container, Divider, Grid, IconButton, Snackbar, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import useMicRecorder from "../useMicRecorder";
 import Bowser from "bowser";
@@ -43,6 +43,7 @@ export default function TranslationCard(
 
   const { status, startRecording, stopRecording, mediaFile, clearFile, mediaBase64 } = useMicRecorder();
   const [isHearing, setIsHearing] = useState<boolean>(false);
+  const [isShowUpdateMessage, setIsShowUpdateMessage] = useState(false);
 
   const [hideUpdateRecordBtn, setHideUpdateRecordBtn] = useState(true);
   const [hideContinueBtn, setHideContinueBtn] = useState(false);
@@ -80,6 +81,7 @@ export default function TranslationCard(
       alert("For better experience. Please use of Chrome browser to record our lectures");
       return <></>;
     }
+    dispatch(setIsInRecordProgress(true));
     if (isRecord) {
       stopRecording();
     } else {
@@ -114,6 +116,7 @@ export default function TranslationCard(
       const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
 
       const recordId = await addOrUpdateRecord({
+        finalTranscript: speakToTextData?.finalTranscript,
         vocabularyId: props.vocabularyId,
         voiceSrc: url,
       }).unwrap();
@@ -137,6 +140,7 @@ export default function TranslationCard(
             transcripts: speakToTextData.transcripts,
           });
         }
+        dispatch(setIsInRecordProgress(false));
       }
     }
   };
@@ -153,14 +157,20 @@ export default function TranslationCard(
       const recordId = await addOrUpdateRecord({
         vocabularyId: props.vocabularyId,
         voiceSrc: url,
+        finalTranscript: speakToTextData?.finalTranscript,
       }).unwrap();
       if (speakToTextData && recordId) {
+        setIsShowUpdateMessage(true);
+        setTimeout(() => {
+          setIsShowUpdateMessage(false);
+        }, 3000);
         addOrUpdateGoogleTranscript({
           finalTranscript: speakToTextData.finalTranscript,
           recordId: recordId,
           transcripts: speakToTextData.transcripts,
         });
       }
+      dispatch(setIsInRecordProgress(false));
     }
   };
 
@@ -171,6 +181,9 @@ export default function TranslationCard(
 
   return (
     <Container className="py-4 bg-gray-100 flex flex-col grow justify-between items-center">
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={isShowUpdateMessage} autoHideDuration={3000}>
+        <Alert severity="success">Your voice recording has been updated successfully.</Alert>
+      </Snackbar>
       <BoxCard classes="p-4 mb-4 max-w-[375px] w-full">
         <Grid container textAlign={"center"} gap={5}>
           <Grid item xs={12}>
@@ -183,7 +196,10 @@ export default function TranslationCard(
                 {props.vphoneticDisplayLanguage}
                 <TextToSpeech text={props.vtitleDisplayLanguage} />
               </Typography>
-              <WordHighLight sentence={props.vtitleDisplayLanguage} transcript={speakToTextData?.finalTranscript || ""} />
+              <WordHighLight
+                sentence={props.vtitleDisplayLanguage}
+                transcript={speakToTextData?.finalTranscript || props.finalTranscript}
+              />
             </Box>
           </Grid>
           <Grid item xs={12}>
