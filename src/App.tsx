@@ -1,28 +1,23 @@
-import { Suspense, lazy, useCallback, useEffect } from "react";
+import { Suspense, lazy, useCallback, useEffect, useLayoutEffect } from "react";
 import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import persist from "./shared/utils/persist.util";
 import ROUTER from "./shared/const/router.const";
 import DrawerNavigate from "./components/DrawerNavigate";
 import Loading from "./components/Loading";
 import RecordSentenceList from "./pages/Record/RecordList";
 import AudioRecorder from "audio-recorder-polyfill";
-import AudioRecorderMPEG from "audio-recorder-polyfill/mpeg-encoder";
+import { useLazyIsLoginQuery } from "./core/services";
+import { setIsAuthenticated } from "@/core/store/index";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "./core/store";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
 const RecordingPage = lazy(() => import("@/pages/Record"));
 const RecordingProgressPage = lazy(() => import("@/pages/Record/RecordProgress"));
 const RerecordingProgressPage = lazy(() => import("@/pages/Club/ClubRerecordProgress"));
-const ClubPage = lazy(() => import("@/pages/Club"));
-const AddNewClubPage = lazy(() => import("@/pages/Club/AddNewClub"));
-const ClubAddMemberPage = lazy(() => import("@/pages/Club/ClubAddMember"));
-const ClubRecordingPage = lazy(() => import("@/pages/Club/ClubRecording"));
-const ClubListeningPage = lazy(() => import("@/pages/Club/ClubListening"));
-const ClubRecordingSummaryPage = lazy(() => import("@/pages/Club/ClubRecordingSummary"));
-const ClubDetailPage = lazy(() => import("@/pages/Club/ClubDetail"));
-const ClubStudyPage = lazy(() => import("@/pages/Club/ClubStudy"));
-const ClubMemberPage = lazy(() => import("@/pages/Club/ClubMember"));
-const ClubInfoPage = lazy(() => import("@/pages/Club/ClubInfo"));
+const CertificatePage = lazy(() => import("@/pages/Certificate"));
+const CertificateUserPage = lazy(() => import("@/pages/Certificate/CertificateUser"));
+const CertificateProgressPage = lazy(() => import("@/pages/Certificate/CertificateProgress"));
 const ListenPage = lazy(() => import("@/pages/Listen"));
 const ManagePlaylistPage = lazy(() => import("@/pages/Listen/ManagePlaylist"));
 const CreatePlaylistPage = lazy(() => import("@/pages/Listen/CreatePlaylist"));
@@ -33,31 +28,58 @@ const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 const supportsWebm = typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported("audio/webm");
 
 if (!supportsWebm) {
-  // AudioRecorder.encoder = AudioRecorderMPEG;
-  // AudioRecorder.prototype.mimeType = "audio/mpeg";
   window.MediaRecorder = AudioRecorder;
 }
 
 export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => {
-  const token = persist.getToken();
-  return !token ? <Navigate to={ROUTER.AUTH + ROUTER.LOGIN} /> : isShowDrawer ? <DrawerNavigate /> : <Outlet />;
+  const [triggerIsLogin, { data }] = useLazyIsLoginQuery();
+  const { isAuthenticated } = useAppSelector((state) => state.GlobalStore.user);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const isLogin = await triggerIsLogin().unwrap();
+        if (!isLogin) {
+          dispatch(setIsAuthenticated(false));
+          navigate(ROUTER.AUTH + ROUTER.LOGIN);
+        } else {
+          dispatch(setIsAuthenticated(true));
+        }
+      } catch (err) {
+        navigate(ROUTER.AUTH + ROUTER.LOGIN);
+        dispatch(setIsAuthenticated(false));
+      }
+    };
+    checkAuthentication();
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated && data) {
+      navigate(ROUTER.AUTH + ROUTER.LOGIN);
+    }
+  }, [isAuthenticated]);
+  if (!data) {
+    return <Loading />;
+  }
+  return isShowDrawer ? <DrawerNavigate /> : <Outlet />;
 };
 
 export const PublishRoute = () => {
-  const navigate = useNavigate();
-  const token = persist.getToken();
+  const { isAuthenticated } = useAppSelector((state) => state.GlobalStore.user);
 
-  useEffect(() => {
-    if (token) {
-      navigate(ROUTER.ROOT);
-    }
-  }, [token]);
+  if (isAuthenticated) {
+    return <Navigate to={ROUTER.ROOT} />;
+  }
 
+  return <Outlet />;
+};
+const AnonymousRoute = () => {
   return <Outlet />;
 };
 
 function App() {
-  // return <Box className='bg-gray-100 min-h-screen h-full flex flex-col'>{routing}</Box>;
   const removeSlash = useCallback((value: string) => {
     return value.replace("/", "");
   }, []);
@@ -70,37 +92,29 @@ function App() {
           <Route path={removeSlash(ROUTER.REGISTER)} element={<Register />} />
         </Route>
         <Route path={ROUTER.ROOT} element={<ProtectedRoute />}>
-          {/* RECORD */}
+          {/* RECORD DETAIL */}
           <Route path={ROUTER.RECORD + "/:category"} element={<RecordingProgressPage />} />
           <Route path={ROUTER.RECORD_LIST} element={<RecordSentenceList />} />
           <Route path={ROUTER.RERECORD + "/:category"} element={<RerecordingProgressPage />} />
-          {/* CLUB DETAIL*/}
-          <Route path={ROUTER.CLUB_DETAIL} element={<ClubDetailPage />}>
-            <Route index path={removeSlash(ROUTER.CLUB_STUDY) + "/:clubId"} element={<ClubStudyPage />} />
-            <Route path={removeSlash(ROUTER.CLUB_MEMBER) + "/:clubId"} element={<ClubMemberPage />} />
-            <Route path={removeSlash(ROUTER.CLUB_INFO) + "/:clubId"} element={<ClubInfoPage />} />
-          </Route>
-
-          <Route path={ROUTER.CLUB_RECORDING_SUMMARY} element={<ClubRecordingSummaryPage />} />
-          <Route path={ROUTER.CLUB_RECORDING} element={<ClubRecordingPage />} />
-          <Route path={ROUTER.CLUB_LISTENING} element={<ClubListeningPage />} />
-          <Route path={ROUTER.ADD_CLUB} element={<AddNewClubPage />} />
-          <Route path={ROUTER.CLUB_ADD_MEMBER} element={<ClubAddMemberPage />} />
 
           {/* LISTEN  */}
           <Route path={ROUTER.LISTENING + ROUTER.MANAGE_PLAYLIST} element={<ManagePlaylistPage />} />
           <Route path={ROUTER.LISTENING + ROUTER.CREATE_PLAYLIST} element={<CreatePlaylistPage />} />
           <Route path={ROUTER.LISTENING + ROUTER.SELECT_LECTURE} element={<SelectLecturePage />} />
+          {/** CERTIFICATE */}
+          <Route path={ROUTER.CERTIFICATE + "/:category"} element={<CertificateProgressPage />} />
+        </Route>
+        <Route path={ROUTER.ROOT} element={<AnonymousRoute />}>
+          <Route path={ROUTER.CERTIFICATE_USER + "/:slug"} element={<CertificateUserPage />} />
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
           <Route index element={<Navigate replace to={ROUTER.RECORD} />} />
           <Route path={ROUTER.RECORD} element={<RecordingPage />} />
-          {/* TODO: create LISTENING PAGE */}
+          <Route path={ROUTER.RECORD} element={<RecordingPage />} />
+          <Route path={ROUTER.CERTIFICATE} element={<CertificatePage />} />
           <Route path={ROUTER.LISTENING} element={<ListenPage />} />
           <Route path={ROUTER.LISTENING_EMPTY_PLAYLIST} element={<NoLectureInListenPage />} />
-          {/* CLUB */}
-          <Route path={ROUTER.CLUB} element={<ClubPage />} />
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>

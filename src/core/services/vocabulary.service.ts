@@ -2,7 +2,13 @@ import VocabularyController from "@/core/controllers/vocabulary.controller";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import _ from "lodash";
 import Reducer from "@/shared/const/store.const";
-import { EnrollmentRequest, EnrollmentStep, NativeVocabularyTypeResponse, VocabularyGroupByLecture, VocabularyTypeResponse } from "../type";
+import {
+  EnrollmentRequest,
+  EnrollmentStep,
+  NativeVocabularyTypeResponse,
+  VocabularyGroupByLecture,
+  VocabularyTypeResponse,
+} from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
 
@@ -16,6 +22,7 @@ export const VocabularyApi = createApi({
       transformResponse: (response: { data: VocabularyGroupByLecture }) => {
         return response.data;
       },
+      keepUnusedDataFor: 0,
       forceRefetch: (params) => {
         return params.currentArg == params.previousArg;
       },

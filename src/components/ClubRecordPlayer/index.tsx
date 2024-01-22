@@ -1,10 +1,9 @@
-import { Box, IconButton, Avatar, Typography } from "@mui/material";
-import { useState } from "react";
-import { useReactMediaRecorder } from "react-media-recorder-2";
-import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
-import HearingIcon from "@/assets/icon/hearing-icon.svg";
-import SoundIcon from "@/assets/icon/sound-icon.svg";
 import ArrowRight from "@/assets/icon/arrow-right-color-icon.svg";
+import HearingIcon from "@/assets/icon/hearing-icon.svg";
+import MicrophoneIcon from "@/assets/icon/microphone-outline-icon.svg";
+import SoundIcon from "@/assets/icon/sound-icon.svg";
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { useState } from "react";
 import useMicRecorder from "../useMicRecorder";
 
 interface ClubRecordingAudioProps {
@@ -14,7 +13,7 @@ interface ClubRecordingAudioProps {
 export default function ClubRecordingAudio(props: ClubRecordingAudioProps) {
   const audio = new Audio();
 
-  const { status, startRecording, stopRecording, mediaFile, clearFile } = useMicRecorder();
+  const { status, startRecording, stopRecording, mediaFile } = useMicRecorder();
 
   const [isRecord, setIsRecord] = useState(() => {
     return status === "recording";
@@ -45,26 +44,26 @@ export default function ClubRecordingAudio(props: ClubRecordingAudioProps) {
   };
 
   return (
-    <Box className='text-center'>
+    <Box className="text-center">
       <Box className={`flex items-center p-7 ${toggleSubBtn ? "justify-between" : "justify-center"}`}>
         {toggleSubBtn && (
-          <IconButton onClick={onRepeat} className='border border-stroke border-solid'>
-            <Avatar src={HearingIcon} className='w-6 h-6' />
+          <IconButton onClick={onRepeat} className="border border-stroke border-solid">
+            <Avatar src={HearingIcon} className="w-6 h-6" />
           </IconButton>
         )}
 
         <Box>
-          <IconButton className='bg-primary p-5' onClick={onHandlePlay}>
+          <IconButton className="bg-primary p-5" onClick={onHandlePlay}>
             <Avatar src={isRecord ? SoundIcon : MicrophoneIcon} />
           </IconButton>
         </Box>
         {toggleSubBtn && (
-          <IconButton onClick={onHandleNext} className='border border-stroke border-solid'>
-            <Avatar src={ArrowRight} className='w-6 h-6' />
+          <IconButton onClick={onHandleNext} className="border border-stroke border-solid">
+            <Avatar src={ArrowRight} className="w-6 h-6" />
           </IconButton>
         )}
       </Box>
-      <Typography variant='body2' className='text-small-regular mt-4'>
+      <Typography variant="body2" className="text-small-regular mt-4">
         {isRecord ? "Speak now" : "Tap the icon above and record your voice"}
       </Typography>
     </Box>

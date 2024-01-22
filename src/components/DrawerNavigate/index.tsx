@@ -1,6 +1,5 @@
 import { MouseEvent, useState } from "react";
 import { NavigateFunction, Outlet, useLocation, useNavigate } from "react-router-dom";
-
 import {
   Avatar,
   Box,
@@ -30,31 +29,16 @@ import RecordCheckedIcon from "@/assets/icon/microphone-2-color-icon.svg";
 import RecordIcon from "@/assets/icon/microphone-2-icon.svg";
 import MusicCheckedIcon from "@/assets/icon/music-play-color-icon.svg";
 import MusicIcon from "@/assets/icon/music-play-icon.svg";
-import ClubCheckedIcon from "@/assets/icon/people-color-icon.svg";
-import ClubIcon from "@/assets/icon/people-icon.svg";
-import AccountIcon from "@/assets/icon/settings-icon.svg";
+import CertificateIcon from "@/assets/icon/certificate-icon.svg";
+import CertificateCheckedIcon from "@/assets/icon/certificate-color-icon.svg";
 import CustomAppbar from "../CustomMui/Appbar";
 import CustomDrawer from "../CustomMui/Drawer";
 import CustomDrawerHeader from "../CustomMui/DrawerHeader";
 
 import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
-
-const settings = [
-  // {
-  //   title: "Account",
-  //   icon: AccountIcon,
-  //   action: () => {},
-  // },
-  {
-    title: "Log out",
-    icon: LogoutIcon,
-    action: () => {
-      persist.logout();
-      window.location.reload();
-    },
-  },
-];
+import { useDispatch } from "react-redux";
+import { setIsAuthenticated } from "@/core/store/index";
 
 const menu = [
   {
@@ -73,6 +57,15 @@ const menu = [
       navigate(ROUTER.LISTENING);
     },
   },
+  {
+    name: "Certificate",
+    icon: CertificateIcon,
+    iconChecked: CertificateCheckedIcon,
+    action: (navigate: NavigateFunction) => {
+      navigate(ROUTER.CERTIFICATE);
+    },
+  },
+
   // {
   //   name: "Club",
   //   icon: ClubIcon,
@@ -85,11 +78,22 @@ const menu = [
 
 const DrawerNavigate = ({ ...props }: any) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const settings = [
+    {
+      title: "Log out",
+      icon: LogoutIcon,
+      action: () => {
+        persist.logout();
+        dispatch(setIsAuthenticated(false));
+      },
+    },
+  ];
   const { pathname } = useLocation();
   const path = pathname.replace("/", "");
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
   const [open, setOpen] = useState(!isSmallScreen);
-  const avatar = persist.getMyInfo().avatarUrl;
+  const avatar = persist.getMyInfo()?.avatarUrl;
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleDrawerOpen = () => {
@@ -143,7 +147,7 @@ const DrawerNavigate = ({ ...props }: any) => {
                 height: "16px",
               }}
             />
-            <Typography textAlign='center' paddingLeft={"12px"}>
+            <Typography textAlign="center" paddingLeft={"12px"}>
               {setting.title}
             </Typography>
           </MenuItem>
@@ -164,8 +168,8 @@ const DrawerNavigate = ({ ...props }: any) => {
               px: 2.5,
             }}
             onClick={() => {
-              isSmallScreen && handleDrawerClose()
-              item.action(navigate)
+              isSmallScreen && handleDrawerClose();
+              item.action(navigate);
             }}
           >
             <ListItemIcon
@@ -177,11 +181,15 @@ const DrawerNavigate = ({ ...props }: any) => {
             >
               <Checkbox
                 checked={path === item.name.toLowerCase()}
-                icon={<Avatar src={item.icon} alt='uncheck-icon' sx={{ width: 24, height: 24 }} />}
-                checkedIcon={<Avatar src={item.iconChecked} alt='check-icon' sx={{ width: 24, height: 24 }} />}
+                icon={<Avatar src={item.icon} alt="uncheck-icon" sx={{ width: 24, height: 24 }} />}
+                checkedIcon={<Avatar src={item.iconChecked} alt="check-icon" sx={{ width: 24, height: 24 }} />}
               />
             </ListItemIcon>
-            <ListItemText primary={item.name} sx={{ opacity: open ? 1 : 0 }} primaryTypographyProps={{ fontWeight: path === item.name.toLowerCase() ? 500 : 400 }} />
+            <ListItemText
+              primary={item.name}
+              sx={{ opacity: open ? 1 : 0 }}
+              primaryTypographyProps={{ fontWeight: path === item.name.toLowerCase() ? 500 : 400 }}
+            />
           </ListItemButton>
         </ListItem>
       ))}
@@ -192,10 +200,10 @@ const DrawerNavigate = ({ ...props }: any) => {
       <CustomAppbar open={open}>
         <Toolbar>
           <IconButton
-            color='inherit'
-            aria-label='open drawer'
+            color="inherit"
+            aria-label="open drawer"
             onClick={handleDrawerOpen}
-            edge='start'
+            edge="start"
             sx={{
               marginRight: 5,
               display: "flex",
@@ -207,21 +215,24 @@ const DrawerNavigate = ({ ...props }: any) => {
             <Avatar src={MenuIcon} sx={{ width: 24, height: 24 }} />
             <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600 }}>{path}</Typography>
           </IconButton>
-          <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600, ...(!open && { display: "none" }) }}>{path}</Typography>
+          <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600, ...(!open && { display: "none" }) }}>
+            {path}
+          </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box>
-            <Tooltip title='Open settings'>
-              <Box onClick={handleOpenUserMenu}
-                 sx={{
-                   "&:hover": {
-                      background: '#49454F14',
+            <Tooltip title="Open settings">
+              <Box
+                onClick={handleOpenUserMenu}
+                sx={{
+                  "&:hover": {
+                    background: "#49454F14",
                   },
                 }}
-                 className="cursor-pointer flex items-center rounded-lg px-2 py-1"
+                className="cursor-pointer flex items-center rounded-lg px-2 py-1"
               >
                 <IconButton disableRipple>
                   <Avatar
-                    alt='avatar-icon'
+                    alt="avatar-icon"
                     sx={{
                       width: "24px",
                       height: "24px",
@@ -229,18 +240,18 @@ const DrawerNavigate = ({ ...props }: any) => {
                     src={avatar}
                   />
                 </IconButton>
-                <Avatar alt='arrow-down-icon' src={ArrowdownIcon} sx={{ width: 12, height: 12 }} />
+                <Avatar alt="arrow-down-icon" src={ArrowdownIcon} sx={{ width: 12, height: 12 }} />
               </Box>
             </Tooltip>
             {getMenu()}
           </Box>
         </Toolbar>
       </CustomAppbar>
-        <CustomDrawer key={Number(open)} open={open} onClose={handleDrawerClose}>
+      <CustomDrawer key={Number(open)} open={open} onClose={handleDrawerClose}>
         <CustomDrawerHeader>
           {open && (
             <>
-              <img alt='logo-app' src={LogoApp} />
+              <img alt="logo-app" src={LogoApp} />
               <IconButton disableRipple onClick={handleDrawerClose}>
                 <Avatar src={Chervon} sx={{ width: "24px", height: "24px" }} />
               </IconButton>
@@ -250,7 +261,7 @@ const DrawerNavigate = ({ ...props }: any) => {
         <Divider />
         {getList()}
       </CustomDrawer>
-      <Box component='main' sx={{ minHeight: "100vh", flexGrow: 1, background: "#f3f4f6" }}>
+      <Box component="main" sx={{ minHeight: "100vh", flexGrow: 1, background: "#f3f4f6" }}>
         <CustomDrawerHeader />
         {/* main */}
         <Outlet />

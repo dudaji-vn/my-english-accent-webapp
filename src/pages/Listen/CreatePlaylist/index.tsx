@@ -1,14 +1,14 @@
 import CloseIcon from "@/assets/icon/close-icon.svg";
-import { Avatar, Box, Button, Container, Divider, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import { Avatar, Box, Button, Divider, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
 
 import FooterCard from "@/components/FooterBtn";
 import LecturePlaylist from "@/components/LecturePlaylist";
 import UserPlaylist from "@/components/UserPlaylist";
+import { useCreateOrUpdatePlaylistMutation, useGetPlaylistSummaryQuery } from "@/core/services/listen.service";
+import ROUTER from "@/shared/const/router.const";
 import { pluralize } from "@/shared/utils/pluralize.util";
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCreateOrUpdatePlaylistMutation, useGetPlaylistSummaryQuery } from "@/core/services/listen.service";
-import ROUTER from "@/shared/const/router.const";
 
 const steps = ["Select lectures", "Select people"];
 

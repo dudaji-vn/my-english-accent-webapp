@@ -45,7 +45,7 @@ export default function PlaylistPod() {
 
         setUsersRecord(() => newUserRecord);
         dispatch(updateIsPlaying(isPlaying));
-        if (vocabularyIndex + 1 != playlistDetail.participants.length) {
+        if (vocabularyIndex + 1 !== playlistDetail.participants.length) {
           dispatch(updateIsTheLastVocabulary(false));
         }
       } else {

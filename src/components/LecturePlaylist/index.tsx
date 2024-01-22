@@ -16,11 +16,11 @@ export default function LecturePlaylist({ lectureList, setLectureList }: { lectu
   const onHandleSelect = (val: string) => {
     const existed = lectureList.includes(val);
     if (existed) {
-      const removed = lectureList.filter((id) => id != val);
+      const removed = lectureList.filter((id) => id !== val);
       setLectureList(removed);
     } else {
-      const newlist = [...lectureList, val];
-      setLectureList(newlist);
+      const newLectures = [...lectureList, val];
+      setLectureList(newLectures);
     }
   };
 

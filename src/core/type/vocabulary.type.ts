@@ -72,4 +72,5 @@ export interface VocabularyRequest {
 export interface VocabularyTypeWithNativeLanguageResponse extends NativeVocabularyTypeResponse, VocabularyTypeResponse {
   voiceSrc: string;
   enrollmentId: string;
+  finalTranscript: string;
 }

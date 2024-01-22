@@ -12,6 +12,8 @@ const ROUTER = {
   SELECT_LECTURE: "/select-lecture",
 
   RECORD: "/record",
+  CERTIFICATE: "/certificate",
+  CERTIFICATE_USER: "/TechTalk-Certificate",
   RECORD_LIST: "/record/list",
   RERECORD: "/rerecord",
   CLUB: "/club",

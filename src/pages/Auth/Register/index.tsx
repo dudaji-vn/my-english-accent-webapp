@@ -61,6 +61,7 @@ export default function Register() {
     if (step === MAX_STEP) {
       return !nativeLanguage;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider, nickName, nativeLanguage]);
 
   const renderNational = (selected: Language | null, isNativeLanguage: boolean) => {
@@ -83,13 +84,13 @@ export default function Register() {
         element = (
           <Box className='flex flex-col gap-8 w-full'>
             <Typography component={"h6"} className='text-center'>
-              What’s your nick name?
+              What’s your full name?
             </Typography>
 
             <InputBase
               className='px-5 py-3 border border-stroke border-solid rounded-md bg-white text-base-regular'
               value={nickName}
-              placeholder='Your nick name'
+              placeholder='Your full name'
               onChange={(e) => setNickName(() => e.target.value)}
             />
           </Box>

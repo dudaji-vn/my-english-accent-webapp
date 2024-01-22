@@ -20,6 +20,11 @@ const UserController = {
     return response.json();
   },
 
+  isLogin: () => {
+    return {
+      url: "/auth/isLogin",
+    };
+  },
   register: (payload: IUSerRegister) => {
     return {
       url: `/auth/register`,
