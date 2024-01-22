@@ -56,6 +56,7 @@ export interface IUserCertificate {
   certificateName: string;
   certificateId: string;
   archivedDate: string;
+  slug: string;
   star: number;
 }
 
@@ -76,6 +77,5 @@ export interface IUserRecordCertificate {
 }
 
 export interface IGetUserCertificateQuery {
-  certificateId: string;
-  userId: string;
+  slug: string;
 }

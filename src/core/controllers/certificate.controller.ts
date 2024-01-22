@@ -18,7 +18,7 @@ const CertificateController = {
   },
   getUserRecordCertificate: (params: IGetUserCertificateQuery) => {
     return {
-      url: `/certificate/getUserRecordsCertificate?certificateId=${params.certificateId}&userId=${params.userId}`,
+      url: `/certificate/getUserRecordsCertificate?slug=${params.slug}`,
     };
   },
   isArchived: (certificateId: string) => {

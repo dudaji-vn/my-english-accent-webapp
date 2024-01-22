@@ -20,7 +20,7 @@ interface IModalCompleteCertificateProps {
 const ResultCertificate = (props: IModalCompleteCertificateProps) => {
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
   const { userCertificate, onClickTestAgain } = props;
-  const { archivedDate, certificateName, nickName, score, totalScore, star, userId, certificateId } = userCertificate;
+  const { archivedDate, certificateName, nickName, score, totalScore, star, certificateId, slug } = userCertificate;
 
   const handleDownloadCertificate = () => {
     const input = document.getElementById("download-certificate");
@@ -105,7 +105,7 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
           >
             Download
           </Button>
-          <Link target="_blank" to={`${ROUTER.CERTIFICATE_USER}/${userId}?id=${certificateId}`}>
+          <Link target="_blank" to={`${ROUTER.CERTIFICATE_USER}/${slug}`}>
             <Button
               fullWidth={isSmallScreen}
               startIcon={<ShareIcon />}

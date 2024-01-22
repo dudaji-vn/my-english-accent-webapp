@@ -105,7 +105,7 @@ function App() {
           <Route path={ROUTER.CERTIFICATE + "/:category"} element={<CertificateProgressPage />} />
         </Route>
         <Route path={ROUTER.ROOT} element={<AnonymousRoute />}>
-          <Route path={ROUTER.CERTIFICATE_USER + "/:userId"} element={<CertificateUserPage />} />
+          <Route path={ROUTER.CERTIFICATE_USER + "/:slug"} element={<CertificateUserPage />} />
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>

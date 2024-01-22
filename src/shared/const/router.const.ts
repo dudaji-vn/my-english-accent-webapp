@@ -13,7 +13,7 @@ const ROUTER = {
 
   RECORD: "/record",
   CERTIFICATE: "/certificate",
-  CERTIFICATE_USER: "/certificate/user",
+  CERTIFICATE_USER: "/TechTalk-Certificate",
   RECORD_LIST: "/record/list",
   RERECORD: "/rerecord",
   CLUB: "/club",
