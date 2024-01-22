@@ -5,24 +5,22 @@ import StarIcon from "@/assets/icon/star-icon.svg";
 import StartActiveIcon from "@/assets/icon/start-color-icon.svg";
 import CopyIcon from "@/components/icons/copy-icon";
 import { useGetUserRecordCertificateQuery } from "@/core/services";
-import { Alert, AlertTitle, Avatar, Box, Button, IconButton, Snackbar, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Button, IconButton, Snackbar, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperClass, SwiperRef, SwiperSlide } from "swiper/react";
-import Loading from "../../../components/Loading";
+import Loading from "@/components/Loading";
 interface IModalCompleteCertificateProps {}
 const CertificateUser = (props: IModalCompleteCertificateProps) => {
   const swiperRef = useRef<SwiperRef>(null);
   const trackingSwiper = useRef(Date.now());
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [searchParams] = useSearchParams();
-  const { userId } = useParams();
 
-  const certificateId = searchParams.get("id") ?? "";
+  const { slug } = useParams();
+
   const { data: userCertificate, isFetching } = useGetUserRecordCertificateQuery({
-    certificateId: certificateId,
-    userId: userId ?? "",
+    slug: slug ?? "",
   });
 
   const [currentIndex, setCurrentIndex] = useState(0);
