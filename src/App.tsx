@@ -24,6 +24,7 @@ const CreatePlaylistPage = lazy(() => import("@/pages/Listen/CreatePlaylist"));
 const SelectLecturePage = lazy(() => import("@/pages/Listen/SelectLecture"));
 const NoLectureInListenPage = lazy(() => import("@/pages/Listen/EmptyPlaylist"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
+const ProfilePage = lazy(() => import("@/pages/Profile"));
 
 const supportsWebm = typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported("audio/webm");
 
@@ -113,6 +114,7 @@ function App() {
           <Route path={ROUTER.RECORD} element={<RecordingPage />} />
           <Route path={ROUTER.RECORD} element={<RecordingPage />} />
           <Route path={ROUTER.CERTIFICATE} element={<CertificatePage />} />
+          <Route path={ROUTER.PROFILE} element={<ProfilePage />} />
           <Route path={ROUTER.LISTENING} element={<ListenPage />} />
           <Route path={ROUTER.LISTENING_EMPTY_PLAYLIST} element={<NoLectureInListenPage />} />
         </Route>

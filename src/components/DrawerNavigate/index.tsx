@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useRef, useState } from "react";
 import { NavigateFunction, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -39,6 +39,7 @@ import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
 import { useDispatch } from "react-redux";
 import { setIsAuthenticated } from "@/core/store/index";
+import useClickOutside from "../../shared/hook/use-click-out-side";
 
 const menu = [
   {
@@ -81,8 +82,16 @@ const DrawerNavigate = ({ ...props }: any) => {
   const dispatch = useDispatch();
   const settings = [
     {
-      title: "Log out",
+      title: "My profile",
+      action: () => {
+        navigate(ROUTER.PROFILE);
+        setOpenProfile(false);
+      },
+    },
+    {
+      title: "Sign out",
       icon: LogoutIcon,
+      color: "#EF4444",
       action: () => {
         persist.logout();
         dispatch(setIsAuthenticated(false));
@@ -93,8 +102,16 @@ const DrawerNavigate = ({ ...props }: any) => {
   const path = pathname.replace("/", "");
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
   const [open, setOpen] = useState(!isSmallScreen);
-  const avatar = persist.getMyInfo()?.avatarUrl;
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const [openProfile, setOpenProfile] = useState<boolean>(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+  useClickOutside(profileRef, () => {
+    setOpenProfile(false);
+  });
+
+  const avatarUrl = persist.getMyInfo()?.avatarUrl;
+  const nickName = persist.getMyInfo()?.nickName;
+  const email = persist.getMyInfo()?.email;
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -104,55 +121,35 @@ const DrawerNavigate = ({ ...props }: any) => {
     setOpen(false);
   };
 
-  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+  const handleToggleProfileMenu = (event: MouseEvent<HTMLElement>) => {
+    setOpenProfile(!openProfile);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
-  const getMenu = () => {
+  const renderProfile = () => {
     return (
-      <Menu
-        sx={{ mt: "40px" }}
-        anchorEl={anchorElUser}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={Boolean(anchorElUser)}
-        onClose={handleCloseUserMenu}
+      <Box
+        className={`z-100 duration-300 absolute right-0 p-4 shadow-lg rounded-lg bg-white min-w-[200px] max-w-[90vw] ${
+          openProfile ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
       >
-        {settings.map((setting) => (
-          <MenuItem
-            key={setting.title}
-            onClick={handleCloseUserMenu}
-            sx={{ paddingY: "0.5rem" }}
-            onClickCapture={() => {
-              setting.action();
-              navigate(ROUTER.AUTH + ROUTER.LOGIN);
-            }}
-          >
-            <Avatar
-              alt={setting.title + "icon"}
-              src={setting.icon}
-              sx={{
-                width: "16px",
-                height: "16px",
-              }}
-            />
-            <Typography textAlign="center" paddingLeft={"12px"}>
-              {setting.title}
-            </Typography>
-          </MenuItem>
-        ))}
-      </Menu>
+        <Box className="p-4">
+          <Typography className="text-extra-large-semibold">Profile</Typography>
+        </Box>
+        <Box className="flex gap-3 p-4 items-center ">
+          <Avatar alt="avatar-icon" className="w-13 h-13" src={avatarUrl} />
+          <Box>
+            <Typography className="font-semibold text-sm">{nickName}</Typography>
+            <Typography>{email}</Typography>
+          </Box>
+        </Box>
+        {settings.map((item, index) => {
+          return (
+            <Box onClick={item.action} className="rounded-2xl cursor-pointer hover:bg-[#E2E8F0] p-4" key={index}>
+              <Typography color={item.color}>{item.title}</Typography>
+            </Box>
+          );
+        })}
+      </Box>
     );
   };
 
@@ -219,10 +216,10 @@ const DrawerNavigate = ({ ...props }: any) => {
             {path}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box>
+          <Box ref={profileRef} className="relative">
             <Tooltip title="Open settings">
               <Box
-                onClick={handleOpenUserMenu}
+                onClick={handleToggleProfileMenu}
                 sx={{
                   "&:hover": {
                     background: "#49454F14",
@@ -237,13 +234,17 @@ const DrawerNavigate = ({ ...props }: any) => {
                       width: "24px",
                       height: "24px",
                     }}
-                    src={avatar}
+                    src={avatarUrl}
                   />
                 </IconButton>
-                <Avatar alt="arrow-down-icon" src={ArrowdownIcon} sx={{ width: 12, height: 12 }} />
+                <Avatar
+                  alt="arrow-down-icon"
+                  src={ArrowdownIcon}
+                  sx={{ rotate: openProfile ? " -180deg" : "", width: 12, height: 12, transition: "all linear 0.2s" }}
+                />
               </Box>
             </Tooltip>
-            {getMenu()}
+            {renderProfile()}
           </Box>
         </Toolbar>
       </CustomAppbar>
