@@ -1,7 +1,7 @@
 import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfigModule from "./tailwind.config";
-
+const rootElement = document.getElementById("root");
 const tailwindConfig = resolveConfig(tailwindConfigModule);
 const theme = extendTheme({
   colorSchemes: {
@@ -102,7 +102,16 @@ const theme = extendTheme({
         },
       },
     },
-
+    // MuiDialog: {
+    //   defaultProps: {
+    //     container: rootElement,
+    //   },
+    // },
+    MuiModal: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
     MuiTextField: {
       defaultProps: {
         fullWidth: true,
