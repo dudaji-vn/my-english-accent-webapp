@@ -15,6 +15,7 @@ const ModalEditProfile = (props: IModalEditProfileProps) => {
   const { open, onClose } = props;
   const { SnackbarComponent, showSnackbar } = useSnackbar();
   const { nickName, nativeLanguage } = persist.getMyInfo();
+
   const [trigger, { isLoading }] = useUpdateProfileMutation();
   const [userProfile, setUserProfile] = useState({
     nickName: nickName,
@@ -29,7 +30,6 @@ const ModalEditProfile = (props: IModalEditProfileProps) => {
     console.log(userProfile);
     const data = await trigger(userProfile).unwrap();
     if (data) {
-      console.log(data);
       persist.updateProfile(data);
       setTimeout(() => {
         window.location.reload();

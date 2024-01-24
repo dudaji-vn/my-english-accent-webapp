@@ -542,6 +542,14 @@ h6 {
   max-height: 208px;
 }
 
+#root :is(.max-h-\[80vh\]) {
+  max-height: 80vh;
+}
+
+#root :is(.max-h-\[50vh\]) {
+  max-height: 50vh;
+}
+
 #root :is(.min-h-\[100px\]) {
   min-height: 100px;
 }
