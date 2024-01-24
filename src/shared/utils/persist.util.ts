@@ -17,8 +17,8 @@ const persist = {
     if (payload.avatarUrl) {
       myInfo.avatarUrl = payload.avatarUrl;
     }
-    if (payload.nativeLanguege) {
-      myInfo.nativeLanguage = payload.nativeLanguege;
+    if (payload.nativeLanguage) {
+      myInfo.nativeLanguage = payload.nativeLanguage;
     }
     if (payload.nickName) {
       myInfo.nickName = payload.nickName;

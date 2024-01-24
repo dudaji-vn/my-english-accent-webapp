@@ -55,7 +55,7 @@ export interface IIsUserWinEvent {
 }
 
 export interface IUserProfile {
-  nativeLanguege?: Language;
+  nativeLanguage?: Language;
   avatarUrl?: string;
   nickName?: string;
 }
