@@ -15,10 +15,10 @@ export const UserApi = createApi({
         return response.data;
       },
     }),
-    isLogin: builder.query<boolean, void>({
+    isLogin: builder.query<IUserProfile, void>({
       query: UserController.isLogin,
       keepUnusedDataFor: 0,
-      transformResponse: (response: { data: boolean }) => {
+      transformResponse: (response: { data: IUserProfile }) => {
         return response.data;
       },
     }),
