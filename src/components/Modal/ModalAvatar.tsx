@@ -8,6 +8,7 @@ import UploadFileController from "@/core/controllers/uploadFile.controller";
 import { useUpdateProfileMutation } from "@/core/services";
 import useSnackbar from "@/shared/hook/use-snack-bar";
 import persist from "@/shared/utils/persist.util";
+import CloseIcon from "../icons/close-icon";
 
 interface IModalAvatarProps extends IModalProps {
   onConfirm?: () => void;
@@ -62,17 +63,19 @@ const ModalAvatar = (props: IModalAvatarProps) => {
       <SnackbarComponent />
       <Modal open={open}>
         <div className={false ? "pointer-events-none cursor-not-allowed" : ""}>
-          <div className="flex gap-4 justify-between ">
-            <Typography
-              sx={{
-                marginY: "16px",
-                textAlign: "left",
-                fontWeight: 600,
+          <div className="flex gap-4 justify-between mt-4 mb-8">
+            <Typography className="font-semibold text-xl text-left">Upload avatar</Typography>
+            <Box
+              onClick={() => {
+                setImage(null);
+                onClose && onClose();
               }}
+              className="p-0"
             >
-              Change avatar
-            </Typography>
+              <CloseIcon />
+            </Box>
           </div>
+
           <Box
             onClick={() => !image && handleOpenFile()}
             sx={{
@@ -100,8 +103,9 @@ const ModalAvatar = (props: IModalAvatarProps) => {
               <div>
                 {image ? (
                   <Cropper
+                    className="max-h-[300px] md:max-h-[350px]"
                     ref={cropperRef}
-                    style={{ height: 400, width: "100%" }}
+                    style={{ height: 350, width: "100%" }}
                     zoomTo={0.5}
                     aspectRatio={1}
                     initialAspectRatio={1}
@@ -135,15 +139,12 @@ const ModalAvatar = (props: IModalAvatarProps) => {
             }}
           >
             <Button
-              className="py-[10px] flex gap-4"
-              onClick={() => {
-                setImage(null);
-                onClose && onClose();
-              }}
+              fullWidth
+              className="rounded-[20px] py-[10px] flex gap-4"
+              disabled={!image}
+              onClick={handleUpdateImage}
+              variant="contained"
             >
-              Cancel
-            </Button>
-            <Button className="py-[10px] flex gap-4" disabled={!image} onClick={handleUpdateImage} variant="contained">
               {isLoading && <CircularProgress size={24} sx={{ color: "#fff" }} />}
               Save
             </Button>
