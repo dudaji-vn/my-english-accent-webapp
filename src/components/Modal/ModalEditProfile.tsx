@@ -117,10 +117,10 @@ const ModalEditProfile = (props: IModalEditProfileProps) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: "20px",
             }}
           >
             <Button
+              sx={{ borderRadius: "20px" }}
               disabled={isDisable || isLoading}
               className="py-[10px] flex gap-4"
               fullWidth

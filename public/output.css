@@ -550,6 +550,10 @@ h6 {
   max-height: 50vh;
 }
 
+#root :is(.max-h-\[300px\]) {
+  max-height: 300px;
+}
+
 #root :is(.min-h-\[100px\]) {
   min-height: 100px;
 }
@@ -781,6 +785,10 @@ h6 {
 
 #root :is(.rounded-md) {
   border-radius: 0.375rem;
+}
+
+#root :is(.rounded-\[20px\]) {
+  border-radius: 20px;
 }
 
 #root :is(.rounded-t-2xl) {
@@ -1235,6 +1243,10 @@ h6 {
 
   #root :is(.md\:h-screen) {
     height: 100vh;
+  }
+
+  #root :is(.md\:max-h-\[350px\]) {
+    max-height: 350px;
   }
 
   #root :is(.md\:w-\[400px\]) {
