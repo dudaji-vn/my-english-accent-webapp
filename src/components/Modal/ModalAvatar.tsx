@@ -18,7 +18,7 @@ const ModalAvatar = (props: IModalAvatarProps) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const cropperRef = createRef<ReactCropperElement>();
   const { SnackbarComponent, showSnackbar } = useSnackbar();
-  const [image, setImage] = useState<string>();
+  const [image, setImage] = useState<string | null>();
   const [trigger, { isLoading }] = useUpdateProfileMutation();
 
   const handleUpdateImage = async () => {
@@ -137,6 +137,7 @@ const ModalAvatar = (props: IModalAvatarProps) => {
             <Button
               className="py-[10px] flex gap-4"
               onClick={() => {
+                setImage(null);
                 onClose && onClose();
               }}
             >
