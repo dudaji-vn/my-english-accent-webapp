@@ -4,6 +4,7 @@ const ROUTER = {
   AUTH: "/auth",
   LOGIN: "/login",
   REGISTER: "/register",
+  PROFILE: "/profile",
 
   LISTENING: "/listening",
   LISTENING_EMPTY_PLAYLIST: "/listening-empty-playlist",
