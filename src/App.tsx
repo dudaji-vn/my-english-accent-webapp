@@ -9,6 +9,7 @@ import { useLazyIsLoginQuery } from "./core/services";
 import { setIsAuthenticated } from "@/core/store/index";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "./core/store";
+import persist from "./shared/utils/persist.util";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
@@ -41,11 +42,12 @@ export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => 
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const isLogin = await triggerIsLogin().unwrap();
-        if (!isLogin) {
+        const user = await triggerIsLogin().unwrap();
+        if (!user) {
           dispatch(setIsAuthenticated(false));
           navigate(ROUTER.AUTH + ROUTER.LOGIN);
         } else {
+          persist.updateProfile(user);
           dispatch(setIsAuthenticated(true));
         }
       } catch (err) {
