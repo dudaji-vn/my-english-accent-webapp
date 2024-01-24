@@ -9,6 +9,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider, StyledEngineProvider }
 import { CssBaseline } from "@mui/material";
 
 import "./input.css";
+import "cropperjs/dist/cropper.css";
 import App from "@/App";
 import theme from "../theme";
 import { store } from "./core/store";

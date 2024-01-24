@@ -1,4 +1,4 @@
-export type Language = "vn" | "us" | "kr";
+export type Language = "vn" | "kr";
 
 type NationalType = {
   [T in Language]: string;
@@ -7,7 +7,6 @@ type NationalType = {
 export const NATIONAL: NationalType = {
   vn: "Việt Nam",
   kr: "한국인",
-  us: "English (US)",
 };
 
 export interface UserResponseType {
@@ -53,4 +52,10 @@ export interface UserModal {
 export interface IIsUserWinEvent {
   status: string;
   message: string;
+}
+
+export interface IUserProfile {
+  nativeLanguege?: Language;
+  avatarUrl?: string;
+  nickName?: string;
 }

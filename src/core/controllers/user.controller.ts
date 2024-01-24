@@ -1,4 +1,4 @@
-import { EnrollmentRequest, IAddOrUpdateGoogleTranscript, IUSerRegister, IUserLogin } from "@/core/type";
+import { EnrollmentRequest, IAddOrUpdateGoogleTranscript, IUSerRegister, IUserLogin, IUserProfile } from "@/core/type";
 import { StageExercise } from "@/shared/type";
 
 const userPath = "user";
@@ -29,6 +29,13 @@ const UserController = {
     return {
       url: `/auth/register`,
       method: "POST",
+      body: payload,
+    };
+  },
+  updateProfile: (payload: IUserProfile) => {
+    return {
+      url: "/user/updateProfile",
+      method: "PATCH",
       body: payload,
     };
   },
