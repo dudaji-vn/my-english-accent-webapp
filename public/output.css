@@ -958,6 +958,16 @@ h6 {
   padding-bottom: 2.5;
 }
 
+#root :is(.py-2) {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#root :is(.py-6) {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
 #root :is(.pb-10) {
   padding-bottom: 2.5rem;
 }
