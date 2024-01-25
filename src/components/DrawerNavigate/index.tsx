@@ -42,6 +42,7 @@ import persist from "@/shared/utils/persist.util";
 import { useDispatch } from "react-redux";
 import { setIsAuthenticated } from "@/core/store/index";
 import useClickOutside from "@/shared/hook/use-click-out-side";
+import MailIcon from "../icons/mail-icon";
 
 const menu = [
   {
@@ -267,6 +268,12 @@ const DrawerNavigate = ({ ...props }: any) => {
                 <Avatar src={Chervon} sx={{ width: "24px", height: "24px" }} />
               </IconButton>
             </>
+          )}
+          {open && (
+            <Box className="fixed ml-2 mb-4 bottom-0 flex items-center justify-center gap-2">
+              <MailIcon />
+              <Typography className="text-sm text-textSecondary">contact@dudaji.vn</Typography>
+            </Box>
           )}
         </CustomDrawerHeader>
         <Divider />
