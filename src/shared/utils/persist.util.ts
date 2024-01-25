@@ -23,7 +23,6 @@ const persist = {
     if (payload.nickName) {
       myInfo.nickName = payload.nickName;
     }
-    console.log({ myInfo, payload });
     localStorage.setItem(USER_INFO, JSON.stringify(myInfo));
   },
   getMyInfo: (): UserResponseType => {

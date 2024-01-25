@@ -15,7 +15,6 @@ const UploadFileController = {
     formData.append("cloud_name", cloudName);
     try {
       let res = await axios.post<ICloudinaryResponse>(cloudiaryUrl, formData);
-      console.log(res.data);
       return res.data.secure_url;
     } catch (err) {
       console.log(err);
