@@ -34,7 +34,6 @@ const ModalAvatar = (props: IModalAvatarProps) => {
     }).unwrap();
 
     if (data) {
-      console.log(data);
       persist.updateProfile(data);
       setTimeout(() => {
         window.location.reload();

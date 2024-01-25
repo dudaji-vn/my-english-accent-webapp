@@ -31,6 +31,8 @@ import MusicCheckedIcon from "@/assets/icon/music-play-color-icon.svg";
 import MusicIcon from "@/assets/icon/music-play-icon.svg";
 import CertificateIcon from "@/assets/icon/certificate-icon.svg";
 import CertificateCheckedIcon from "@/assets/icon/certificate-color-icon.svg";
+import LeaderBoardIcon from "@/assets/icon/leader-board-icon.svg";
+import LeaderBoardColorIcon from "@/assets/icon/leader-board-color-icon.svg";
 import CustomAppbar from "../CustomMui/Appbar";
 import CustomDrawer from "../CustomMui/Drawer";
 import CustomDrawerHeader from "../CustomMui/DrawerHeader";
@@ -39,7 +41,8 @@ import ROUTER from "@/shared/const/router.const";
 import persist from "@/shared/utils/persist.util";
 import { useDispatch } from "react-redux";
 import { setIsAuthenticated } from "@/core/store/index";
-import useClickOutside from "../../shared/hook/use-click-out-side";
+import useClickOutside from "@/shared/hook/use-click-out-side";
+import MailIcon from "../icons/mail-icon";
 
 const menu = [
   {
@@ -64,6 +67,14 @@ const menu = [
     iconChecked: CertificateCheckedIcon,
     action: (navigate: NavigateFunction) => {
       navigate(ROUTER.CERTIFICATE);
+    },
+  },
+  {
+    name: "Leaderboard",
+    icon: LeaderBoardIcon,
+    iconChecked: LeaderBoardColorIcon,
+    action: (navigate: NavigateFunction) => {
+      navigate(ROUTER.LEADER_BOARD);
     },
   },
 
@@ -257,6 +268,12 @@ const DrawerNavigate = ({ ...props }: any) => {
                 <Avatar src={Chervon} sx={{ width: "24px", height: "24px" }} />
               </IconButton>
             </>
+          )}
+          {open && (
+            <Box className="fixed ml-2 mb-4 bottom-0 flex items-center justify-center gap-2">
+              <MailIcon />
+              <Typography className="text-sm text-textSecondary">contact@dudaji.vn</Typography>
+            </Box>
           )}
         </CustomDrawerHeader>
         <Divider />

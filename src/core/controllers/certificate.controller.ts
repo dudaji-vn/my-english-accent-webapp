@@ -27,7 +27,6 @@ const CertificateController = {
     };
   },
   addOrUpdateUserContentCertificate: (payload: IUserCertificateRequest) => {
-    console.log({ payload });
     return {
       url: `/certificate/addOrUpdateUserContentCertificate`,
       method: "PUT",

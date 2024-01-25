@@ -27,7 +27,6 @@ const ModalEditProfile = (props: IModalEditProfileProps) => {
   }, [userProfile]);
 
   const handleEditProfile = async () => {
-    console.log(userProfile);
     const data = await trigger(userProfile).unwrap();
     if (data) {
       persist.updateProfile(data);
