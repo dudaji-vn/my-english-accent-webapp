@@ -1,6 +1,13 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { IAddOrUpdateGoogleTranscript, IIsUserWinEvent, IUSerRegister, IUserProfile, UserResponseType } from "../type";
+import {
+  IAddOrUpdateGoogleTranscript,
+  IIsUserWinEvent,
+  IUSerRegister,
+  IUserProfile,
+  IUsersRanking,
+  UserResponseType,
+} from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
 
@@ -42,6 +49,12 @@ export const UserApi = createApi({
       query: UserController.updateProfile,
       transformResponse: (response: { data: IUserProfile }) => response.data,
     }),
+    getUsersRanking: builder.query<IUsersRanking[], void>({
+      query: UserController.getUsersRanking,
+      transformResponse: (response: { data: IUsersRanking[] }) => {
+        return response.data;
+      },
+    }),
   }),
 });
 
@@ -52,6 +65,7 @@ export const {
   useLazyCheckUserCompleteEventQuery,
   useUpdateProfileMutation,
   useAddOrUpdateGoogleTranscriptMutation,
+  useGetUsersRankingQuery,
 } = UserApi;
 
 export default UserApi;

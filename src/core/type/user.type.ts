@@ -59,3 +59,12 @@ export interface IUserProfile {
   avatarUrl?: string;
   nickName?: string;
 }
+
+export interface IUsersRanking {
+  userId: string;
+  userName: string;
+  avatarUrl: string;
+  totalScore: number;
+  isMe: boolean;
+  nativeLanguage: Language;
+}

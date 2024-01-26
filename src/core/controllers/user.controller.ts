@@ -73,6 +73,11 @@ const UserController = {
       body: payload,
     };
   },
+  getUsersRanking: () => {
+    return {
+      url: "/user/getUsersRanking",
+    };
+  },
 };
 
 export default UserController;

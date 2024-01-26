@@ -22,6 +22,7 @@ import Bowser from "bowser";
 import WordHighLight from "../WordHighLight";
 import { EVENTS } from "@/shared/const/event.const";
 import { StageExercise } from "@/shared/type";
+import { removeSpecialCharacters } from "@/shared/utils/string.util";
 
 export default function TranslationCard(
   props: VocabularyTypeWithNativeLanguageResponse & { nextVocabulary: Function; index: number; totalVoca: number }
@@ -114,11 +115,19 @@ export default function TranslationCard(
       dispatch(updateDisableAllAction(true));
       setHideContinueBtn(() => true);
       const url = await UploadFileController.uploadAudio(mediaFile, props.vocabularyId, myId, false);
+      let score = 0;
+      if (
+        speakToTextData?.finalTranscript &&
+        removeSpecialCharacters(props.vtitleDisplayLanguage) === removeSpecialCharacters(speakToTextData?.finalTranscript)
+      ) {
+        score = 1;
+      }
 
       const recordId = await addOrUpdateRecord({
         finalTranscript: speakToTextData?.finalTranscript,
         vocabularyId: props.vocabularyId,
         voiceSrc: url,
+        score: score,
       }).unwrap();
 
       if (recordId) {
@@ -154,10 +163,18 @@ export default function TranslationCard(
       props.nextVocabulary({ voiceSrc: url, index: props.index, isUpdate: true });
       clearFile();
       dispatch(updateDisableAllAction(false));
+      let score = 0;
+      if (
+        speakToTextData?.finalTranscript &&
+        removeSpecialCharacters(props.vtitleDisplayLanguage) === removeSpecialCharacters(speakToTextData?.finalTranscript)
+      ) {
+        score = 1;
+      }
       const recordId = await addOrUpdateRecord({
         vocabularyId: props.vocabularyId,
         voiceSrc: url,
         finalTranscript: speakToTextData?.finalTranscript,
+        score: score,
       }).unwrap();
       if (speakToTextData && recordId) {
         setIsShowUpdateMessage(true);

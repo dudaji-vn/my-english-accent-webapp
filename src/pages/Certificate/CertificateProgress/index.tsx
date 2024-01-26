@@ -55,7 +55,7 @@ export default function CertificateProgressPage() {
     const unitPoint = certificateContent.totalScore / renderVocabulary.length;
     renderVocabulary.forEach((item) => {
       if (item.result) {
-        if (removeSpecialCharacters(item.result.toLowerCase()) === removeSpecialCharacters(item.title).toLowerCase()) {
+        if (removeSpecialCharacters(item.result) === removeSpecialCharacters(item.title)) {
           point += unitPoint;
           correctSentences++;
         }
