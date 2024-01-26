@@ -4,50 +4,17 @@ import LeaderTable from "./LeaderTable";
 import ArrowDownIcon from "@/components/icons/arrow-down-icon";
 import { useNavigate } from "react-router-dom";
 import ROUTER from "@/shared/const/router.const";
+import { useGetUsersRankingQuery } from "@/core/services";
+import Loading from "@/components/Loading";
 
 const LeaderBoard = () => {
   const navigate = useNavigate();
-  const listUsers = [
-    {
-      rank: 1,
-      nickName: "Lora jdjdjd djdjdj ",
-      nativeLanguage: "vn",
-      score: 500,
-      avatarUrl: "https://lh3.googleusercontent.com/a/ACg8ocKvUL-nmfluws7Zezcv5hlCio571QBrCm4v5JoV2OyE=s96-c",
-    },
-    {
-      rank: 2,
-      score: 400,
-      nickName: "Hao",
-      nativeLanguage: "vn",
-      avatarUrl: "https://lh3.googleusercontent.com/a/ACg8ocKvUL-nmfluws7Zezcv5hlCio571QBrCm4v5JoV2OyE=s96-c",
-    },
-    {
-      rank: 3,
-      score: 300,
-      nickName: "Nhi",
-      nativeLanguage: "vn",
-      avatarUrl: "https://lh3.googleusercontent.com/a/ACg8ocKvUL-nmfluws7Zezcv5hlCio571QBrCm4v5JoV2OyE=s96-c",
-    },
-  ];
-  const myBoard = {
-    score: 10,
-    rank: 22,
-    nickName: "Linh",
-    nativeLanguage: "vn",
-    avatarUrl: "https://lh3.googleusercontent.com/a/ACg8ocKvUL-nmfluws7Zezcv5hlCio571QBrCm4v5JoV2OyE=s96-c",
-  };
+  const { data: listUsers, isLoading } = useGetUsersRankingQuery();
+  if (isLoading) {
+    return <Loading />;
+  }
 
-  Array.from(Array(10).keys()).map((item) => {
-    listUsers.push({
-      score: item + 100,
-      rank: item + 4,
-      nickName: `Test ${item}`,
-      nativeLanguage: "vn",
-      avatarUrl: "https://lh3.googleusercontent.com/a/ACg8ocKvUL-nmfluws7Zezcv5hlCio571QBrCm4v5JoV2OyE=s96-c",
-    });
-  });
-  if (false && 1 + 1 === 2) {
+  if (!listUsers) {
     return (
       <div className="px-4 py-16 flex flex-col items-center text-center">
         <img className="mb-6" alt="" src={RankingIcon} />
@@ -65,23 +32,15 @@ const LeaderBoard = () => {
       <Typography className="text-xl font-semibold mb-2">Leaderboards</Typography>
       <Typography className="mb-6">Top 3 users in this week</Typography>
       <LeaderTable data={listUsers.slice(0, 3)} />
-      <div className="flex gap-4 items-center justify-center py-6 px-4">
-        <ArrowDownIcon />
-        <Typography className="text-secondary font-semibold">Promotion Zone</Typography>
-        <ArrowDownIcon />
-      </div>
-      <LeaderTable data={listUsers.slice(3, 10)} />
-
-      {myBoard.rank > 10 && (
-        <>
+      {listUsers && listUsers.length > 3 && (
+        <div>
           <div className="flex gap-4 items-center justify-center py-6 px-4">
             <ArrowDownIcon />
-            <Typography className="text-secondary font-semibold">My ranking</Typography>
+            <Typography className="text-secondary font-semibold">Promotion Zone</Typography>
             <ArrowDownIcon />
           </div>
-
-          <LeaderTable data={[myBoard]} />
-        </>
+          <LeaderTable data={listUsers.slice(3, listUsers.length)} />
+        </div>
       )}
     </div>
   );

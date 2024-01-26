@@ -34,14 +34,14 @@ const LeaderTable = (props: ILeaderTableProps) => {
   };
   return (
     <div className="w-[90vw] md:w-[50vw] bg-white rounded-2xl shadow-md">
-      {data.map((item) => {
+      {data.map((item, index) => {
         return (
           <div
             onClick={handleGotoLeaderBoardUser}
             className="hover:bg-gray-100 cursor-pointer flex justify-between px-4 py-3 border-solid border-0 border-b border-[#CBD5E1] last:border-b-0 "
           >
             <div className="flex items-center gap-2 pl-2">
-              {renderMedal(item.rank)}
+              {renderMedal(item.ranking)}
               <div className="relative">
                 <Avatar sx={{ width: 36, height: 36 }} src={item.avatarUrl} />
                 <div className="absolute -bottom-3 -right-1">
@@ -57,9 +57,9 @@ const LeaderTable = (props: ILeaderTableProps) => {
                 {item.nickName}
               </Typography>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
               <ScoreIcon type="fill" />
-              {item.score}
+              {item.totalScore}
             </div>
           </div>
         );
