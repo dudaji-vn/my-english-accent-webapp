@@ -5,7 +5,7 @@ import { removeSpecialCharacters } from "../../shared/utils/string.util";
 
 function WordHighlight({ sentence = "", transcript = "" }: { sentence: string; transcript: string }) {
   const isHighLight = useMemo(() => {
-    return removeSpecialCharacters(sentence).toLowerCase() === removeSpecialCharacters(transcript).toLowerCase();
+    return removeSpecialCharacters(sentence) === removeSpecialCharacters(transcript);
   }, [sentence, transcript]);
 
   return (
