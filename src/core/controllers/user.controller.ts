@@ -1,4 +1,11 @@
-import { EnrollmentRequest, IAddOrUpdateGoogleTranscript, IUSerRegister, IUserLogin, IUserProfile } from "@/core/type";
+import {
+  EnrollmentRequest,
+  IAddOrUpdateGoogleTranscript,
+  IPlaylistUserRequest,
+  IUSerRegister,
+  IUserLogin,
+  IUserProfile,
+} from "@/core/type";
 import { StageExercise } from "@/shared/type";
 
 const userPath = "user";
@@ -76,6 +83,17 @@ const UserController = {
   getUsersRanking: () => {
     return {
       url: "/user/getUsersRanking",
+    };
+  },
+  getPlaylistSummaryByUser: (userId: string) => {
+    return {
+      url: `/user/getPlaylistSummaryByUser?userId=${userId}`,
+    };
+  },
+  getPlaylistByUser: (payload: IPlaylistUserRequest) => {
+    const { lectureId, userId } = payload;
+    return {
+      url: `/user/getPlaylistByUser?userId=${userId}&lectureId=${lectureId}`,
     };
   },
 };
