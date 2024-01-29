@@ -3,10 +3,13 @@ import Reducer from "@/shared/const/store.const";
 import {
   IAddOrUpdateGoogleTranscript,
   IIsUserWinEvent,
+  IPlaylistUserRequest,
   IUSerRegister,
+  IPlaylistUserSummaryResponse,
   IUserProfile,
-  IUsersRanking,
+  IUserRanking,
   UserResponseType,
+  IPlaylistUserResponse,
 } from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
@@ -49,9 +52,21 @@ export const UserApi = createApi({
       query: UserController.updateProfile,
       transformResponse: (response: { data: IUserProfile }) => response.data,
     }),
-    getUsersRanking: builder.query<IUsersRanking[], void>({
+    getUsersRanking: builder.query<IUserRanking[], void>({
       query: UserController.getUsersRanking,
-      transformResponse: (response: { data: IUsersRanking[] }) => {
+      transformResponse: (response: { data: IUserRanking[] }) => {
+        return response.data;
+      },
+    }),
+    getPlaylistSummaryByUser: builder.query<IPlaylistUserSummaryResponse, string>({
+      query: (userId) => UserController.getPlaylistSummaryByUser(userId),
+      transformResponse: (response: { data: IPlaylistUserSummaryResponse }) => {
+        return response.data;
+      },
+    }),
+    getPlaylistByUser: builder.query<IPlaylistUserResponse, IPlaylistUserRequest>({
+      query: (payload) => UserController.getPlaylistByUser(payload),
+      transformResponse: (response: { data: IPlaylistUserResponse }) => {
         return response.data;
       },
     }),
@@ -66,6 +81,8 @@ export const {
   useUpdateProfileMutation,
   useAddOrUpdateGoogleTranscriptMutation,
   useGetUsersRankingQuery,
+  useGetPlaylistSummaryByUserQuery,
+  useLazyGetPlaylistByUserQuery,
 } = UserApi;
 
 export default UserApi;

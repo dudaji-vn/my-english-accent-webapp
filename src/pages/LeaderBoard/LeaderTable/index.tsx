@@ -7,8 +7,9 @@ import VietNamFlagIcon from "@/components/icons/vietnam-flag-icon";
 import ROUTER from "@/shared/const/router.const";
 import { Avatar, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { IUserRanking } from "@/core/type";
 interface ILeaderTableProps {
-  data: any[];
+  data: IUserRanking[];
 }
 const LeaderTable = (props: ILeaderTableProps) => {
   const navigate = useNavigate();
@@ -29,15 +30,15 @@ const LeaderTable = (props: ILeaderTableProps) => {
     return <img src={rankingMapping[ranking]} alt="" />;
   };
   const { data } = props;
-  const handleGotoLeaderBoardUser = () => {
-    navigate(`${ROUTER.LEADER_BOARD}/82736730`);
+  const handleGotoLeaderBoardUser = (item: IUserRanking) => {
+    navigate(`${ROUTER.LEADER_BOARD}/${item.userId}`);
   };
   return (
     <div className="w-[90vw] md:w-[50vw] bg-white rounded-2xl shadow-md">
       {data.map((item, index) => {
         return (
           <div
-            onClick={handleGotoLeaderBoardUser}
+            onClick={() => handleGotoLeaderBoardUser(item)}
             className="hover:bg-gray-100 cursor-pointer flex justify-between px-4 py-3 border-solid border-0 border-b border-[#CBD5E1] last:border-b-0 "
           >
             <div className="flex items-center gap-2 pl-2">

@@ -30,7 +30,7 @@ const LeaderBoard = () => {
     <div className="px-4 py-6 flex flex-col items-center">
       <img className="mb-6" alt="" src={RankingIcon} />
       <Typography className="text-xl font-semibold mb-2">Leaderboards</Typography>
-      <Typography className="mb-6">Top 3 users in this week</Typography>
+      <Typography className="mb-6">Top 3 users in Techtalk's leaderboard.</Typography>
       <LeaderTable data={listUsers.slice(0, 3)} />
       {listUsers && listUsers.length > 3 && (
         <div>

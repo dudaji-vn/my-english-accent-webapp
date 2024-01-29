@@ -1,3 +1,5 @@
+import { ILectureDisplay, LectureResponseType } from "./lecture.type";
+
 export type Language = "vn" | "kr";
 
 type NationalType = {
@@ -60,11 +62,34 @@ export interface IUserProfile {
   nickName?: string;
 }
 
-export interface IUsersRanking {
+export interface IUserRanking {
   userId: string;
-  userName: string;
+  nickName: string;
   avatarUrl: string;
   totalScore: number;
+  ranking: number;
   isMe: boolean;
   nativeLanguage: Language;
+}
+
+export interface IPlaylistUserRequest {
+  lectureId: string;
+  userId: string;
+}
+
+export interface IPlaylistUserSummaryResponse {
+  userId: string;
+  nickName: string;
+  lectures: LectureResponseType[];
+}
+
+export interface IPlaylistUserResponse {
+  likes: number;
+  isLiked: boolean;
+  records: {
+    recordId: string;
+    voiceSrc: string;
+    title: string;
+    phonetic: string;
+  }[];
 }
