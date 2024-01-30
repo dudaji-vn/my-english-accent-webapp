@@ -28,6 +28,7 @@ const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
 const LeaderBoardPage = lazy(() => import("@/pages/LeaderBoard"));
 const UserPlaylistPage = lazy(() => import("@/pages/LeaderBoard/UserPlaylist"));
+const LeaderBoardSelectLecturePage = lazy(() => import("@/pages/LeaderBoard/SelectLecture"));
 
 const supportsWebm = typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported("audio/webm");
 
@@ -108,10 +109,12 @@ function App() {
           <Route path={ROUTER.LISTENING + ROUTER.SELECT_LECTURE} element={<SelectLecturePage />} />
           {/** CERTIFICATE */}
           <Route path={ROUTER.CERTIFICATE + "/:category"} element={<CertificateProgressPage />} />
+          {/** LEADER BOARD */}
+          <Route path={ROUTER.LEADER_BOARD + "/:userId"} element={<UserPlaylistPage />} />
+          <Route path={ROUTER.LEADER_BOARD_SELECT_LECTURE} element={<LeaderBoardSelectLecturePage />} />
         </Route>
         <Route path={ROUTER.ROOT} element={<AnonymousRoute />}>
           <Route path={ROUTER.CERTIFICATE_USER + "/:slug"} element={<CertificateUserPage />} />
-          <Route path={ROUTER.LEADER_BOARD + "/:userId"} element={<UserPlaylistPage />} />
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
