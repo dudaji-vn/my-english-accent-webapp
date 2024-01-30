@@ -5,6 +5,7 @@ import {
   IUSerRegister,
   IUserLogin,
   IUserProfile,
+  IUserRankingRequest,
 } from "@/core/type";
 import { StageExercise } from "@/shared/type";
 
@@ -94,6 +95,13 @@ const UserController = {
     const { lectureId, userId } = payload;
     return {
       url: `/user/getPlaylistByUser?userId=${userId}&lectureId=${lectureId}`,
+    };
+  },
+  likeOrUnlikePlaylistByUser: (payload: IUserRankingRequest) => {
+    return {
+      url: "/user/likeOrUnlikePlaylistByUser",
+      method: "PATCH",
+      body: payload,
     };
   },
 };

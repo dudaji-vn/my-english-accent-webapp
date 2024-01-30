@@ -10,6 +10,7 @@ import {
   IUserRanking,
   UserResponseType,
   IPlaylistUserResponse,
+  IUserRankingRequest,
 } from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
@@ -53,22 +54,33 @@ export const UserApi = createApi({
       transformResponse: (response: { data: IUserProfile }) => response.data,
     }),
     getUsersRanking: builder.query<IUserRanking[], void>({
+      keepUnusedDataFor: 0,
       query: UserController.getUsersRanking,
       transformResponse: (response: { data: IUserRanking[] }) => {
         return response.data;
       },
     }),
     getPlaylistSummaryByUser: builder.query<IPlaylistUserSummaryResponse, string>({
+      keepUnusedDataFor: 0,
       query: (userId) => UserController.getPlaylistSummaryByUser(userId),
       transformResponse: (response: { data: IPlaylistUserSummaryResponse }) => {
         return response.data;
       },
     }),
     getPlaylistByUser: builder.query<IPlaylistUserResponse, IPlaylistUserRequest>({
-      query: (payload) => UserController.getPlaylistByUser(payload),
+      query: UserController.getPlaylistByUser,
       transformResponse: (response: { data: IPlaylistUserResponse }) => {
         return response.data;
       },
+      providesTags: (result, error, arg) => {
+        return arg ? [{ type: "User" as const, lectureId: arg.lectureId, userId: arg.userId }, "User"] : ["User"];
+      },
+    }),
+    likeOrUnlikePlaylistByUser: builder.mutation<boolean, IUserRankingRequest>({
+      query: UserController.likeOrUnlikePlaylistByUser,
+      transformResponse: (response: { data: boolean }) => response.data,
+      invalidatesTags: (result, error, arg) =>
+        arg ? [{ type: "User" as const, lectureId: arg.lectureId, userId: arg.userId }, "User"] : ["User"],
     }),
   }),
 });
@@ -83,6 +95,7 @@ export const {
   useGetUsersRankingQuery,
   useGetPlaylistSummaryByUserQuery,
   useLazyGetPlaylistByUserQuery,
+  useLikeOrUnlikePlaylistByUserMutation,
 } = UserApi;
 
 export default UserApi;
