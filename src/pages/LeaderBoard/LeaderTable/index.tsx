@@ -38,8 +38,11 @@ const LeaderTable = (props: ILeaderTableProps) => {
       {data.map((item, index) => {
         return (
           <div
+            key={item.userId}
             onClick={() => handleGotoLeaderBoardUser(item)}
-            className="hover:bg-gray-100 cursor-pointer flex justify-between px-4 py-3 border-solid border-0 border-b border-[#CBD5E1] last:border-b-0 "
+            className={`hover:bg-gray-100 cursor-pointer flex justify-between px-4 py-3 border-solid border-0 border-b border-[#CBD5E1] last:border-b-0 ${
+              item.ranking > 3 && item.isMe && "bg-[#FFFBEB]"
+            }`}
           >
             <div className="flex items-center gap-2 pl-2">
               {renderMedal(item.ranking)}
