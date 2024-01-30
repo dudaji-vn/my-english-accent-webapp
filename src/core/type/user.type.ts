@@ -93,3 +93,9 @@ export interface IPlaylistUserResponse {
     phonetic: string;
   }[];
 }
+
+export interface IUserRankingRequest {
+  userId: string;
+  lectureId: string;
+  emoji?: "like" | "unlike";
+}

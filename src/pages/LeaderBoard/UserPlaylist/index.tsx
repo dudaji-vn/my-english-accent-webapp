@@ -12,9 +12,16 @@ import Loading from "@/components/Loading";
 import CopyIcon from "@/components/icons/copy-icon";
 import LikeIcon from "@/components/icons/like-icon";
 import LikedIcon from "@/components/icons/liked-icon";
-import { useGetPlaylistSummaryByUserQuery, useLazyGetPlaylistByUserQuery } from "@/core/services";
+import {
+  useGetPlaylistSummaryByUserQuery,
+  useLazyGetPlaylistByUserQuery,
+  useLikeOrUnlikePlaylistByUserMutation,
+} from "@/core/services";
+import { useAppDispatch, useAppSelector } from "@/core/store";
+import { updateIndexLectureLeaderPage } from "@/core/store/index";
+import { IPlaylistUserResponse } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
-import { Alert, Avatar, Box, Button, Container, IconButton, Snackbar, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Button, Container, IconButton, Snackbar, Tooltip, Typography } from "@mui/material";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -29,54 +36,64 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { userId } = useParams();
-  const { data: playlistSummary, isLoading: isLoadingPlaylistSummary } = useGetPlaylistSummaryByUserQuery(userId ?? skipToken);
+  const { data: playlistSummary, isFetching: isLoadingPlaylistSummary } = useGetPlaylistSummaryByUserQuery(userId ?? skipToken);
 
-  const [trigger, { data: userPlaylist, isFetching: isUserPlaylistLoading }] = useLazyGetPlaylistByUserQuery();
+  const [trigger] = useLazyGetPlaylistByUserQuery();
+  const [userPlaylist, setUserPlaylist] = useState<IPlaylistUserResponse>();
+  const { lectureId, lectures, currentLectureIndex } = useAppSelector((state) => state.GlobalStore.leaderBoardPage);
+  const dispatch = useAppDispatch();
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentIndexLecture, setCurrentIndexLecture] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
+  const [isLoop, setIsLoop] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likesCount, setLikesCount] = useState<number>(0);
+  const [triggerLikeOrUnlike] = useLikeOrUnlikePlaylistByUserMutation();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (userPlaylist?.isLiked) {
       setIsLiked(userPlaylist?.isLiked);
+    } else {
+      setIsLiked(false);
     }
     setLikesCount(userPlaylist?.likes ?? 0);
   }, [userPlaylist]);
-
-  const currentLecture = useMemo(() => {
-    if (currentIndexLecture < 0 || !playlistSummary || playlistSummary?.lectures.length === 0) {
-      return null;
-    }
-    return playlistSummary.lectures[currentIndexLecture];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndexLecture, playlistSummary?.lectures.length]);
 
   const isDisableNext = useMemo(() => {
     if (!playlistSummary) {
       return true;
     }
-    return currentIndexLecture >= playlistSummary.lectures.length - 1;
-  }, [currentIndexLecture, playlistSummary]);
+    return currentLectureIndex >= playlistSummary.lectures.length - 1;
+  }, [currentLectureIndex, playlistSummary]);
   const isDisablePrevious = useMemo(() => {
-    return currentIndexLecture <= 0;
-  }, [currentIndexLecture]);
+    return currentLectureIndex <= 0;
+  }, [currentLectureIndex]);
 
   useEffect(() => {
-    if (!userId || !currentLecture) {
+    setIsLoading(true);
+    if (!userId || !lectureId) {
       return;
     }
 
-    trigger({
-      userId: userId,
-      lectureId: currentLecture?.lectureId,
-    });
+    trigger(
+      {
+        userId: userId,
+        lectureId: lectureId,
+      },
+      true
+    )
+      .unwrap()
+      .then((data) => {
+        setUserPlaylist(data);
+        if (data) {
+          setIsLoading(false);
+        }
+      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentLecture]);
+  }, [lectureId, userId]);
 
   const handleCopyClick = async () => {
     await navigator.clipboard.writeText(window.location.href);
@@ -89,8 +106,20 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
     if (!isLiked) {
       setLikesCount(likesCount + 1);
     } else {
-      setLikesCount(likesCount - 1);
+      if (likesCount > 0) {
+        setLikesCount(likesCount - 1);
+      }
     }
+    if (!userId || !lectureId) {
+      return;
+    }
+
+    triggerLikeOrUnlike({
+      userId: userId,
+      lectureId: lectureId,
+      emoji: isLiked ? "unlike" : "like",
+    });
+
     setIsLiked(!isLiked);
   };
   const handlePlayAudio = () => {
@@ -110,20 +139,27 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
       return;
     }
     if (currentIndex === userPlaylist.records.length - 1) {
-      swiperRef.current.swiper.slideTo(0);
-      setCurrentIndex(0);
-      setIsPlaying(false);
+      if (currentLectureIndex >= lectures.length - 1) {
+        dispatch(updateIndexLectureLeaderPage(-lectures.length + 1));
+        swiperRef.current.swiper.slideTo(0);
+        setCurrentIndex(0);
+        if (!isLoop) {
+          setIsPlaying(false);
+        }
+
+        return;
+      }
+      handleGotoNext();
       return;
     }
-
     swiperRef.current.swiper.slideTo(currentIndex + 1);
     setCurrentIndex(currentIndex + 1);
   };
   const onSlideChange = (val: SwiperClass) => {
-    const isManualSwipe = trackingSwiper.current && Date.now() - trackingSwiper.current < 300;
-    if (isManualSwipe) {
-      setIsPlaying(false);
-    }
+    // const isManualSwipe = trackingSwiper.current && Date.now() - trackingSwiper.current < 300;
+    // if (isManualSwipe) {
+    //   // setIsPlaying(false);
+    // }
     if (audioRef && audioRef.current) {
       audioRef.current.pause();
       setCurrentIndex(val.activeIndex);
@@ -131,13 +167,21 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
   };
 
   const handleGotoNext = () => {
-    setCurrentIndexLecture(currentIndexLecture + 1);
+    audioRef.current?.pause();
+    dispatch(updateIndexLectureLeaderPage(1));
+    setTimeout(() => {
+      audioRef.current?.play();
+    }, 300);
   };
   const handleGotoPrevious = () => {
-    setCurrentIndexLecture(currentIndexLecture - 1);
+    audioRef.current?.pause();
+    dispatch(updateIndexLectureLeaderPage(-1));
+    setTimeout(() => {
+      audioRef.current?.play();
+    }, 300);
   };
 
-  if (isLoadingPlaylistSummary || !currentLecture || !playlistSummary) {
+  if (isLoadingPlaylistSummary || !lectureId || !playlistSummary) {
     return <Loading />;
   }
   return (
@@ -166,14 +210,14 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
               height: "64px",
               marginBottom: "16px",
             }}
-            src={currentLecture.imgSrc}
+            src={lectures[currentLectureIndex].imgSrc}
             variant="square"
             alt="gallery-icon"
           />
 
           <>
-            {currentLecture.lectureName && (
-              <Typography className="text-xl font-semibold mb-6">{currentLecture.lectureName}</Typography>
+            {lectures[currentLectureIndex].lectureName && (
+              <Typography className="text-xl font-semibold mb-6">{lectures[currentLectureIndex].lectureName}</Typography>
             )}
 
             <Box className={`w-full px-4`}>
@@ -190,7 +234,7 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
                 onTouchEnd={() => (trackingSwiper.current = Date.now())}
                 onReachEnd={() => {}}
               >
-                {isUserPlaylistLoading ? (
+                {isLoading || !userPlaylist?.records || userPlaylist.records.length === 0 ? (
                   <div className="bg-gray-50 p-4 pb-10 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border h-[150px]">
                     <Loading />
                   </div>
@@ -208,9 +252,16 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
                 )}
               </Swiper>
               <Box className="w-full flex items-center justify-around mt-6 mb-12">
-                <IconButton>
-                  <Avatar src={false ? ActivedLoopIcon : LoopIcon} alt="wave-icon" className="w-6 h-6" />
-                </IconButton>
+                <Tooltip title="Replay">
+                  <IconButton
+                    onClick={() => {
+                      setIsLoop(!isLoop);
+                    }}
+                  >
+                    <Avatar src={isLoop ? ActivedLoopIcon : LoopIcon} alt="wave-icon" className="w-6 h-6" />
+                  </IconButton>
+                </Tooltip>
+
                 <IconButton disabled={isDisablePrevious} onClick={handleGotoPrevious}>
                   <Avatar src={isDisablePrevious ? DisablePreviosIcon : PreviosIcon} alt="wave-icon" className="w-6 h-6" />
                 </IconButton>
@@ -226,29 +277,32 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
                 </IconButton>
                 <IconButton
                   onClick={() => {
-                    navigate(ROUTER.LISTENING + ROUTER.SELECT_LECTURE);
+                    navigate(ROUTER.LEADER_BOARD_SELECT_LECTURE);
                   }}
                 >
                   <Avatar variant="square" src={LectureListIcon} alt="wave-icon" className="w-6 h-6" />
                 </IconButton>
               </Box>
-              {userPlaylist && userPlaylist?.records && (
+              {userPlaylist && userPlaylist?.records && userPlaylist.records.length > 0 && currentIndex >= 0 && (
                 <audio
                   autoPlay={isPlaying}
                   onEnded={handleEnded}
                   ref={audioRef}
-                  src={userPlaylist?.records[currentIndex].voiceSrc}
+                  src={userPlaylist?.records[currentIndex]?.voiceSrc}
                 />
               )}
             </Box>
 
             <Box className="mb-4 w-full  flex items-center gap-8 justify-around">
-              <Box className="flex items-center">
+              <Box
+                className={`${isLoading ? "opacity-0 pointer-events-none" : "opacity-1"} transition-opacity flex items-center`}
+              >
                 <IconButton className="" onClick={handleLike}>
                   {isLiked ? <LikedIcon /> : <LikeIcon />}
                 </IconButton>
                 <Typography className="text-primary">{likesCount}</Typography>
               </Box>
+
               <Button
                 onClick={handleCopyClick}
                 startIcon={<CopyIcon />}
