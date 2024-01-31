@@ -61,10 +61,12 @@ export const UserApi = createApi({
       },
     }),
     getPlaylistSummaryByUser: builder.query<IPlaylistUserSummaryResponse, string>({
-      keepUnusedDataFor: 0,
       query: (userId) => UserController.getPlaylistSummaryByUser(userId),
       transformResponse: (response: { data: IPlaylistUserSummaryResponse }) => {
         return response.data;
+      },
+      providesTags: (result, error, arg) => {
+        return arg ? [{ type: "User" as const, userId: arg }, "User"] : ["User"];
       },
     }),
     getPlaylistByUser: builder.query<IPlaylistUserResponse, IPlaylistUserRequest>({
@@ -74,6 +76,9 @@ export const UserApi = createApi({
       },
       providesTags: (result, error, arg) => {
         return arg ? [{ type: "User" as const, lectureId: arg.lectureId, userId: arg.userId }, "User"] : ["User"];
+      },
+      forceRefetch: (params) => {
+        return params.currentArg == params.previousArg;
       },
     }),
     likeOrUnlikePlaylistByUser: builder.mutation<boolean, IUserRankingRequest>({

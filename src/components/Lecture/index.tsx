@@ -14,6 +14,7 @@ export default function Lecture({
   stage,
   imgSrc,
   totalStep,
+  totalPoint,
 }: LectureResponseType & EnrollmentResponseType) {
   const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ export default function Lecture({
       <Box className="flex items-center gap-1">
         <ScoreIcon type="outline" />
         <Typography className="text-extra-small-regular">
-          {stage !== StageExercise.Open ? `${currentStep}/${totalStep} points` : `${totalStep} points`}
+          {stage !== StageExercise.Open ? `${totalPoint}/${totalStep} points` : `${totalStep} points`}
         </Typography>
       </Box>
     </BoxCard>
