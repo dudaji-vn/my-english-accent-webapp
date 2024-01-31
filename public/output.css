@@ -355,6 +355,14 @@ h6 {
   top: 50%;
 }
 
+#root :is(.bottom-5) {
+  bottom: 1.25rem;
+}
+
+#root :is(.bottom-4) {
+  bottom: 1rem;
+}
+
 #root :is(.z-10) {
   z-index: 10;
 }
@@ -380,6 +388,11 @@ h6 {
 #root :is(.my-6) {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+#root :is(.mx-4) {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 #root :is(.mb-1) {
@@ -518,6 +531,10 @@ h6 {
   height: 2.25rem;
 }
 
+#root :is(.h-\[150px\]) {
+  height: 150px;
+}
+
 #root :is(.h-\[208px\]) {
   height: 208px;
 }
@@ -534,26 +551,6 @@ h6 {
   height: 100vh;
 }
 
-#root :is(.h-\[160px\]) {
-  height: 160px;
-}
-
-#root :is(.h-\[158px\]) {
-  height: 158px;
-}
-
-#root :is(.h-\[110px\]) {
-  height: 110px;
-}
-
-#root :is(.h-\[120px\]) {
-  height: 120px;
-}
-
-#root :is(.h-\[150px\]) {
-  height: 150px;
-}
-
 #root :is(.max-h-\[208px\]) {
   max-height: 208px;
 }
@@ -566,16 +563,20 @@ h6 {
   min-height: 100px;
 }
 
-#root :is(.min-h-\[260px\]) {
-  min-height: 260px;
+#root :is(.min-h-\[150px\]) {
+  min-height: 150px;
 }
 
 #root :is(.min-h-screen) {
   min-height: 100vh;
 }
 
-#root :is(.min-h-\[200px\]) {
-  min-height: 200px;
+#root :is(.min-h-\[110px\]) {
+  min-height: 110px;
+}
+
+#root :is(.min-h-\[120px\]) {
+  min-height: 120px;
 }
 
 #root :is(.w-10) {
@@ -865,6 +866,11 @@ h6 {
   border-top-color: rgb(223 228 234 / var(--tw-border-opacity));
 }
 
+#root :is(.bg-\[\#FFFBEB\]) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 251 235 / var(--tw-bg-opacity));
+}
+
 #root :is(.bg-gray-100) {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
@@ -907,11 +913,6 @@ h6 {
 #root :is(.bg-yellow-400) {
   --tw-bg-opacity: 1;
   background-color: rgb(251 191 36 / var(--tw-bg-opacity));
-}
-
-#root :is(.bg-\[\#FFFBEB\]) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 251 235 / var(--tw-bg-opacity));
 }
 
 #root :is(.p-0) {
@@ -1027,6 +1028,34 @@ h6 {
 
 #root :is(.pt-6) {
   padding-top: 1.5rem;
+}
+
+#root :is(.pb-16) {
+  padding-bottom: 4rem;
+}
+
+#root :is(.pb-20) {
+  padding-bottom: 5rem;
+}
+
+#root :is(.pb-24) {
+  padding-bottom: 6rem;
+}
+
+#root :is(.pb-\[80px\]) {
+  padding-bottom: 80px;
+}
+
+#root :is(.pb-40) {
+  padding-bottom: 10rem;
+}
+
+#root :is(.pb-32) {
+  padding-bottom: 8rem;
+}
+
+#root :is(.pb-12) {
+  padding-bottom: 3rem;
 }
 
 #root :is(.text-left) {

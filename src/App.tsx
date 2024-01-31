@@ -59,6 +59,9 @@ export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => 
       }
     };
     checkAuthentication();
+    return () => {
+      persist.setIsSelectListenLecture(false);
+    };
   }, []);
 
   useEffect(() => {

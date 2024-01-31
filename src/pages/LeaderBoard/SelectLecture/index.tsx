@@ -5,14 +5,17 @@ import { updateLectureIdLeaderBoardPage } from "@/core/store/index";
 import ROUTER from "@/shared/const/router.const";
 import { Avatar, Box, Container, IconButton, Radio, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import persist from "@/shared/utils/persist.util";
 
 export default function SelectLecture() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { lectureId, lectures, userId } = useAppSelector((state) => state.GlobalStore.leaderBoardPage);
-
+  const { setIsSelectListenLecture } = persist;
   const onSelectLecture = (value: string) => {
     dispatch(updateLectureIdLeaderBoardPage(value));
+    setIsSelectListenLecture(true);
+
     navigate(`${ROUTER.LEADER_BOARD}/${userId}`);
   };
 

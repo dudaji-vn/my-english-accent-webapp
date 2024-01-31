@@ -14,7 +14,7 @@ import VoiceApi from "./services/voice.service";
 import persist from "../shared/utils/persist.util";
 import { ModalType } from "../shared/const/modal-type.const";
 const AuthorizationMiddleware: Middleware = (store) => (next) => async (action) => {
-  if (action.error && action.payload.status === 401) {
+  if (action.error && action.payload && action.payload?.status === 401) {
     if (action?.payload?.data?.message === "jwt expired") {
       store.dispatch(toggleModal(ModalType.SESSION_EXPIRE));
     }
