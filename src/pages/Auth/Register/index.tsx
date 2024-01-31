@@ -18,12 +18,12 @@ function LanguageComponent({ nation, selected, onClick }: { nation: Language; se
   };
 
   return (
-    <Box className='flex gap-2 p-3 bg-white divider items-center' onClick={onSelectLecture}>
+    <Box className="flex gap-2 p-3 bg-white divider items-center" onClick={onSelectLecture}>
       <ReactCountryFlag
         countryCode={nation}
         title={nation}
         svg
-        cdnSuffix='svg'
+        cdnSuffix="svg"
         style={{
           fontSize: "2rem",
           lineHeight: "2rem",
@@ -31,11 +31,11 @@ function LanguageComponent({ nation, selected, onClick }: { nation: Language; se
           objectFit: "cover",
         }}
       />
-      <Typography className='text-base-regular grow'>{NATIONAL[nation]}</Typography>
+      <Typography className="text-base-regular grow">{NATIONAL[nation]}</Typography>
       <Checkbox
         checked={nation === selected}
-        icon={<Avatar src={UncheckIcon} alt='uncheck-icon' className='w-4 h-4' />}
-        checkedIcon={<Avatar src={CheckIcon} alt='check-icon' className='w-4 h-4' />}
+        icon={<Avatar src={UncheckIcon} alt="uncheck-icon" className="w-4 h-4" />}
+        checkedIcon={<Avatar src={CheckIcon} alt="check-icon" className="w-4 h-4" />}
       />
     </Box>
   );
@@ -48,7 +48,7 @@ export default function Register() {
   const [step, setStep] = useState(0);
   const [nickName, setNickName] = useState("");
   const [nativeLanguage, setNativeLanguage] = useState<Language | null>(null);
-  const [displayLanguage] = useState<Language>("us");
+  const [displayLanguage] = useState<string>("us");
   const provider = persist.getProviderInfo();
 
   const [registerAccount] = useRegisterMutation();
@@ -61,7 +61,7 @@ export default function Register() {
     if (step === MAX_STEP) {
       return !nativeLanguage;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider, nickName, nativeLanguage]);
 
   const renderNational = (selected: Language | null, isNativeLanguage: boolean) => {
@@ -82,15 +82,15 @@ export default function Register() {
     switch (step) {
       case 0:
         element = (
-          <Box className='flex flex-col gap-8 w-full'>
-            <Typography component={"h6"} className='text-center'>
+          <Box className="flex flex-col gap-8 w-full">
+            <Typography component={"h6"} className="text-center">
               What’s your full name?
             </Typography>
 
             <InputBase
-              className='px-5 py-3 border border-stroke border-solid rounded-md bg-white text-base-regular'
+              className="px-5 py-3 border border-stroke border-solid rounded-md bg-white text-base-regular"
               value={nickName}
-              placeholder='Your full name'
+              placeholder="Your full name"
               onChange={(e) => setNickName(() => e.target.value)}
             />
           </Box>
@@ -98,8 +98,8 @@ export default function Register() {
         break;
       case 1:
         element = (
-          <Box className='flex flex-col w-full'>
-            <Typography component={"h6"} className='text-center mb-8 self-center w-80'>
+          <Box className="flex flex-col w-full">
+            <Typography component={"h6"} className="text-center mb-8 self-center w-80">
               What’s your native language?
             </Typography>
             {renderNational(nativeLanguage, true)}
@@ -142,14 +142,20 @@ export default function Register() {
   };
 
   return (
-    <Box className={`flex flex-col gap-16 h-screen`}>
-      <Box className='flex items-center divider p-4' onClick={onHandleBack}>
-        <Avatar src={step === 0 ? CloseIcon : ChervonIcon} className='w-6 h-6' />
-        <Typography className='text-large-semibold'>Setup your account</Typography>
+    <Box className={`flex flex-col gap-16 h-screen bg-gray-50`}>
+      <Box className="flex items-center divider p-4 bg-white" onClick={onHandleBack}>
+        <Avatar src={step === 0 ? CloseIcon : ChervonIcon} className="w-6 h-6" />
+        <Typography className="text-large-semibold">Setup your account</Typography>
       </Box>
-      <Container className='flex flex-col gap-4 items-center grow'>{displayLayoutRegister()}</Container>
-      <FooterCard classes='justify-center'>
-        <Button className='p-3 text-base-medium' variant='contained' fullWidth onClick={onHandleNext} disabled={disableContinueBtn}>
+      <Container className="max-w-[600px] flex flex-col gap-4 items-center grow">{displayLayoutRegister()}</Container>
+      <FooterCard classes="justify-center">
+        <Button
+          className="p-3 text-base-medium md:max-w-fit"
+          variant="contained"
+          fullWidth
+          onClick={onHandleNext}
+          disabled={disableContinueBtn}
+        >
           Continue
         </Button>
       </FooterCard>

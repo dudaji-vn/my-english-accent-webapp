@@ -53,7 +53,7 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
 
           <Box className="flex gap-5 mt-4 mb-3">
             {[1, 2, 3, 4].map((item) => {
-              return <Avatar className="w-5 h-5" variant="square" src={star < item ? StarIcon : StartActiveIcon} />;
+              return <Avatar key={item} className="w-5 h-5" variant="square" src={star < item ? StarIcon : StartActiveIcon} />;
             })}
           </Box>
           <Typography className="text-center text-2xl font-semibold mb-2 ">{certificateName}</Typography>
@@ -75,7 +75,7 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
 
           <Box className="flex gap-5 mt-4 mb-3">
             {[1, 2, 3, 4].map((item) => {
-              return <Avatar className="w-5 h-5" variant="square" src={star < item ? StarIcon : StartActiveIcon} />;
+              return <Avatar key={item} className="w-5 h-5" variant="square" src={star < item ? StarIcon : StartActiveIcon} />;
             })}
           </Box>
           <Typography className="text-center text-3xl font-semibold mb-6">{certificateName}</Typography>

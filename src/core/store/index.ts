@@ -38,6 +38,12 @@ interface GlobalStoreType {
   modal: {
     type: string;
   };
+  leaderBoardPage: {
+    lectures: LectureResponseType[];
+    lectureId: string;
+    userId: string;
+    currentLectureIndex: number;
+  };
 }
 
 const initialState: GlobalStoreType = {
@@ -68,6 +74,12 @@ const initialState: GlobalStoreType = {
   currentRecordTab: null,
   modal: {
     type: "",
+  },
+  leaderBoardPage: {
+    lectures: [],
+    lectureId: "",
+    userId: "",
+    currentLectureIndex: 0,
   },
 };
 
@@ -129,6 +141,15 @@ const globalSlice = createSlice({
         lectureId: action.payload,
       };
     },
+    updateLectureIdLeaderBoardPage: (state: GlobalStoreType, action: PayloadAction<string>) => {
+      const index = state.leaderBoardPage.lectures.findIndex((lecture) => lecture.lectureId === action.payload);
+
+      state.leaderBoardPage = {
+        ...state.leaderBoardPage,
+        currentLectureIndex: index,
+        lectureId: action.payload,
+      };
+    },
 
     updateIndexListenPage: (state: GlobalStoreType, action: PayloadAction<number>) => {
       const currentIndex = state.listenPage.currentLectureIndex;
@@ -142,6 +163,20 @@ const globalSlice = createSlice({
         ...state.listenPage,
         currentLectureIndex: newIndex,
         lectureId: state.listenPage.lectures[newIndex].lectureId,
+      };
+    },
+    updateIndexLectureLeaderPage: (state: GlobalStoreType, action: PayloadAction<number>) => {
+      const currentIndex = state.leaderBoardPage.currentLectureIndex;
+      const numberLectures = state.leaderBoardPage.lectures.length;
+      const newIndex = currentIndex + action.payload;
+
+      if (newIndex >= numberLectures) {
+        return;
+      }
+      state.leaderBoardPage = {
+        ...state.leaderBoardPage,
+        currentLectureIndex: newIndex,
+        lectureId: state.leaderBoardPage.lectures[newIndex].lectureId,
       };
     },
 
@@ -195,6 +230,16 @@ const globalSlice = createSlice({
         isTheLastVocabulary: false,
       };
     });
+    builder.addMatcher(UserApi.endpoints.getPlaylistSummaryByUser.matchFulfilled, (state, action) => {
+      const { lectures, userId } = action.payload;
+
+      state.leaderBoardPage = {
+        lectures,
+        lectureId: lectures[0]?.lectureId,
+        currentLectureIndex: 0,
+        userId: userId,
+      };
+    });
     builder.addMatcher(UserApi.endpoints.checkUserCompleteEvent.matchFulfilled, (state, action) => {
       const status = action.payload?.status || "";
       if (status === EVENT_STATUS.WIN) {
@@ -228,6 +273,8 @@ export const {
   toggleModal,
   setIsAuthenticated,
   setIsInRecordProgress,
+  updateLectureIdLeaderBoardPage,
+  updateIndexLectureLeaderPage,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

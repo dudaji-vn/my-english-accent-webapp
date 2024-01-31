@@ -15,6 +15,7 @@ export interface RecordRequest {
   vocabularyId: string;
   finalTranscript?: string;
   challengeId?: string;
+  score?: number;
 }
 
 export interface RecordModal {

@@ -1,4 +1,12 @@
-import { EnrollmentRequest, IAddOrUpdateGoogleTranscript, IUSerRegister, IUserLogin } from "@/core/type";
+import {
+  EnrollmentRequest,
+  IAddOrUpdateGoogleTranscript,
+  IPlaylistUserRequest,
+  IUSerRegister,
+  IUserLogin,
+  IUserProfile,
+  IUserRankingRequest,
+} from "@/core/type";
 import { StageExercise } from "@/shared/type";
 
 const userPath = "user";
@@ -29,6 +37,13 @@ const UserController = {
     return {
       url: `/auth/register`,
       method: "POST",
+      body: payload,
+    };
+  },
+  updateProfile: (payload: IUserProfile) => {
+    return {
+      url: "/user/updateProfile",
+      method: "PATCH",
       body: payload,
     };
   },
@@ -63,6 +78,29 @@ const UserController = {
     return {
       url: "/user/addOrUpdateGoogleTranscript",
       method: "PUT",
+      body: payload,
+    };
+  },
+  getUsersRanking: () => {
+    return {
+      url: "/user/getUsersRanking",
+    };
+  },
+  getPlaylistSummaryByUser: (userId: string) => {
+    return {
+      url: `/user/getPlaylistSummaryByUser?userId=${userId}`,
+    };
+  },
+  getPlaylistByUser: (payload: IPlaylistUserRequest) => {
+    const { lectureId, userId } = payload;
+    return {
+      url: `/user/getPlaylistByUser?userId=${userId}&lectureId=${lectureId}`,
+    };
+  },
+  likeOrUnlikePlaylistByUser: (payload: IUserRankingRequest) => {
+    return {
+      url: "/user/likeOrUnlikePlaylistByUser",
+      method: "PATCH",
       body: payload,
     };
   },

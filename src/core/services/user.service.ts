@@ -1,6 +1,17 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import Reducer from "@/shared/const/store.const";
-import { EnrollmentRequest, IAddOrUpdateGoogleTranscript, IIsUserWinEvent, IUSerRegister, UserResponseType } from "../type";
+import {
+  IAddOrUpdateGoogleTranscript,
+  IIsUserWinEvent,
+  IPlaylistUserRequest,
+  IUSerRegister,
+  IPlaylistUserSummaryResponse,
+  IUserProfile,
+  IUserRanking,
+  UserResponseType,
+  IPlaylistUserResponse,
+  IUserRankingRequest,
+} from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
 
@@ -15,10 +26,10 @@ export const UserApi = createApi({
         return response.data;
       },
     }),
-    isLogin: builder.query<boolean, void>({
+    isLogin: builder.query<IUserProfile, void>({
       query: UserController.isLogin,
       keepUnusedDataFor: 0,
-      transformResponse: (response: { data: boolean }) => {
+      transformResponse: (response: { data: IUserProfile }) => {
         return response.data;
       },
     }),
@@ -38,6 +49,44 @@ export const UserApi = createApi({
       query: UserController.addOrUpdateGoogleTranscript,
       transformResponse: (response: { data: boolean }) => response.data,
     }),
+    updateProfile: builder.mutation<IUserProfile, IUserProfile>({
+      query: UserController.updateProfile,
+      transformResponse: (response: { data: IUserProfile }) => response.data,
+    }),
+    getUsersRanking: builder.query<IUserRanking[], void>({
+      keepUnusedDataFor: 0,
+      query: UserController.getUsersRanking,
+      transformResponse: (response: { data: IUserRanking[] }) => {
+        return response.data;
+      },
+    }),
+    getPlaylistSummaryByUser: builder.query<IPlaylistUserSummaryResponse, string>({
+      query: (userId) => UserController.getPlaylistSummaryByUser(userId),
+      transformResponse: (response: { data: IPlaylistUserSummaryResponse }) => {
+        return response.data;
+      },
+      providesTags: (result, error, arg) => {
+        return arg ? [{ type: "User" as const, userId: arg }, "User"] : ["User"];
+      },
+    }),
+    getPlaylistByUser: builder.query<IPlaylistUserResponse, IPlaylistUserRequest>({
+      query: UserController.getPlaylistByUser,
+      transformResponse: (response: { data: IPlaylistUserResponse }) => {
+        return response.data;
+      },
+      providesTags: (result, error, arg) => {
+        return arg ? [{ type: "User" as const, lectureId: arg.lectureId, userId: arg.userId }, "User"] : ["User"];
+      },
+      forceRefetch: (params) => {
+        return params.currentArg == params.previousArg;
+      },
+    }),
+    likeOrUnlikePlaylistByUser: builder.mutation<boolean, IUserRankingRequest>({
+      query: UserController.likeOrUnlikePlaylistByUser,
+      transformResponse: (response: { data: boolean }) => response.data,
+      invalidatesTags: (result, error, arg) =>
+        arg ? [{ type: "User" as const, lectureId: arg.lectureId, userId: arg.userId }, "User"] : ["User"],
+    }),
   }),
 });
 
@@ -46,7 +95,12 @@ export const {
   useLazyIsLoginQuery,
   useGetAllUsersQuery,
   useLazyCheckUserCompleteEventQuery,
+  useUpdateProfileMutation,
   useAddOrUpdateGoogleTranscriptMutation,
+  useGetUsersRankingQuery,
+  useGetPlaylistSummaryByUserQuery,
+  useLazyGetPlaylistByUserQuery,
+  useLikeOrUnlikePlaylistByUserMutation,
 } = UserApi;
 
 export default UserApi;

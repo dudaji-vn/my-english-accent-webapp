@@ -4,6 +4,7 @@ const ROUTER = {
   AUTH: "/auth",
   LOGIN: "/login",
   REGISTER: "/register",
+  PROFILE: "/profile",
 
   LISTENING: "/listening",
   LISTENING_EMPTY_PLAYLIST: "/listening-empty-playlist",
@@ -14,6 +15,8 @@ const ROUTER = {
   RECORD: "/record",
   CERTIFICATE: "/certificate",
   CERTIFICATE_USER: "/TechTalk-Certificate",
+  LEADER_BOARD: "/leaderboard",
+  LEADER_BOARD_SELECT_LECTURE: "/leaderboard/select-lecture",
   RECORD_LIST: "/record/list",
   RERECORD: "/rerecord",
   CLUB: "/club",

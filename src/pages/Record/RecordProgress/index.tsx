@@ -76,7 +76,6 @@ export default function RecordingProgressPage() {
   };
 
   const onHandleClose = () => {
-    console.log({ isInProgress });
     if (isInProgress) {
       setIsOpenModalLeaveRecord(true);
     } else {

@@ -1,4 +1,4 @@
-import { IUserLogin, UserResponseType } from "@/core/type";
+import { IUserLogin, IUserProfile, UserResponseType } from "@/core/type";
 
 const TOKEN = "token";
 const USER_INFO = "userInfo";
@@ -6,6 +6,23 @@ const GOOGLE_ID = "googleId";
 
 const persist = {
   saveMyInfo: (myInfo: UserResponseType) => {
+    localStorage.setItem(USER_INFO, JSON.stringify(myInfo));
+  },
+  updateProfile: (payload: IUserProfile) => {
+    const myInfoJson = localStorage.getItem(USER_INFO);
+    if (!myInfoJson) {
+      return;
+    }
+    const myInfo = JSON.parse(myInfoJson) as UserResponseType;
+    if (payload.avatarUrl) {
+      myInfo.avatarUrl = payload.avatarUrl;
+    }
+    if (payload.nativeLanguage) {
+      myInfo.nativeLanguage = payload.nativeLanguage;
+    }
+    if (payload.nickName) {
+      myInfo.nickName = payload.nickName;
+    }
     localStorage.setItem(USER_INFO, JSON.stringify(myInfo));
   },
   getMyInfo: (): UserResponseType => {

@@ -1,4 +1,6 @@
-export type Language = "vn" | "us" | "kr";
+import { ILectureDisplay, LectureResponseType } from "./lecture.type";
+
+export type Language = "vn" | "kr";
 
 type NationalType = {
   [T in Language]: string;
@@ -7,7 +9,6 @@ type NationalType = {
 export const NATIONAL: NationalType = {
   vn: "Việt Nam",
   kr: "한국인",
-  us: "English (US)",
 };
 
 export interface UserResponseType {
@@ -53,4 +54,48 @@ export interface UserModal {
 export interface IIsUserWinEvent {
   status: string;
   message: string;
+}
+
+export interface IUserProfile {
+  nativeLanguage?: Language;
+  avatarUrl?: string;
+  nickName?: string;
+}
+
+export interface IUserRanking {
+  userId: string;
+  nickName: string;
+  avatarUrl: string;
+  totalScore: number;
+  ranking: number;
+  isMe: boolean;
+  nativeLanguage: Language;
+}
+
+export interface IPlaylistUserRequest {
+  lectureId: string;
+  userId: string;
+}
+
+export interface IPlaylistUserSummaryResponse {
+  userId: string;
+  nickName: string;
+  lectures: LectureResponseType[];
+}
+
+export interface IPlaylistUserResponse {
+  likes: number;
+  isLiked: boolean;
+  records: {
+    recordId: string;
+    voiceSrc: string;
+    title: string;
+    phonetic: string;
+  }[];
+}
+
+export interface IUserRankingRequest {
+  userId: string;
+  lectureId: string;
+  emoji?: "like" | "unlike";
 }

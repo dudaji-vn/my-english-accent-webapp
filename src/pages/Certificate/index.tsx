@@ -33,6 +33,7 @@ const Certificate = () => {
         myCertificates.map((item, index) => {
           return (
             <BoxCard
+              key={index}
               onClick={() => gotoCertificateProgressPage(item)}
               classes="hover:shadow-xl cursor-pointer flex flex-col items-center px-6 pb-6"
             >
@@ -44,7 +45,9 @@ const Certificate = () => {
               />
               <Box className="flex gap-5 items-center">
                 {[1, 2, 3, 4].map((star) => {
-                  return <Avatar className="w-5 h-5" variant="square" src={item.star < star ? StarIcon : StartActiveIcon} />;
+                  return (
+                    <Avatar key={star} className="w-5 h-5" variant="square" src={item.star < star ? StarIcon : StartActiveIcon} />
+                  );
                 })}
               </Box>
 

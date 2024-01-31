@@ -9,6 +9,7 @@ import { useLazyIsLoginQuery } from "./core/services";
 import { setIsAuthenticated } from "@/core/store/index";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "./core/store";
+import persist from "./shared/utils/persist.util";
 
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
@@ -24,6 +25,10 @@ const CreatePlaylistPage = lazy(() => import("@/pages/Listen/CreatePlaylist"));
 const SelectLecturePage = lazy(() => import("@/pages/Listen/SelectLecture"));
 const NoLectureInListenPage = lazy(() => import("@/pages/Listen/EmptyPlaylist"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
+const ProfilePage = lazy(() => import("@/pages/Profile"));
+const LeaderBoardPage = lazy(() => import("@/pages/LeaderBoard"));
+const UserPlaylistPage = lazy(() => import("@/pages/LeaderBoard/UserPlaylist"));
+const LeaderBoardSelectLecturePage = lazy(() => import("@/pages/LeaderBoard/SelectLecture"));
 
 const supportsWebm = typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported("audio/webm");
 
@@ -40,11 +45,12 @@ export const ProtectedRoute = ({ isShowDrawer }: { isShowDrawer?: boolean }) => 
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const isLogin = await triggerIsLogin().unwrap();
-        if (!isLogin) {
+        const user = await triggerIsLogin().unwrap();
+        if (!user) {
           dispatch(setIsAuthenticated(false));
           navigate(ROUTER.AUTH + ROUTER.LOGIN);
         } else {
+          persist.updateProfile(user);
           dispatch(setIsAuthenticated(true));
         }
       } catch (err) {
@@ -103,6 +109,9 @@ function App() {
           <Route path={ROUTER.LISTENING + ROUTER.SELECT_LECTURE} element={<SelectLecturePage />} />
           {/** CERTIFICATE */}
           <Route path={ROUTER.CERTIFICATE + "/:category"} element={<CertificateProgressPage />} />
+          {/** LEADER BOARD */}
+          <Route path={ROUTER.LEADER_BOARD + "/:userId"} element={<UserPlaylistPage />} />
+          <Route path={ROUTER.LEADER_BOARD_SELECT_LECTURE} element={<LeaderBoardSelectLecturePage />} />
         </Route>
         <Route path={ROUTER.ROOT} element={<AnonymousRoute />}>
           <Route path={ROUTER.CERTIFICATE_USER + "/:slug"} element={<CertificateUserPage />} />
@@ -113,6 +122,8 @@ function App() {
           <Route path={ROUTER.RECORD} element={<RecordingPage />} />
           <Route path={ROUTER.RECORD} element={<RecordingPage />} />
           <Route path={ROUTER.CERTIFICATE} element={<CertificatePage />} />
+          <Route path={ROUTER.LEADER_BOARD} element={<LeaderBoardPage />} />
+          <Route path={ROUTER.PROFILE} element={<ProfilePage />} />
           <Route path={ROUTER.LISTENING} element={<ListenPage />} />
           <Route path={ROUTER.LISTENING_EMPTY_PLAYLIST} element={<NoLectureInListenPage />} />
         </Route>
