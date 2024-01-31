@@ -44,7 +44,10 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
   const dispatch = useAppDispatch();
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isContinuePlaying, setIsContinuePlaying] = useState(false);
+  const [isStopPlaying, setIsStopPlaying] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
   const [isLoop, setIsLoop] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -89,11 +92,16 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
         setUserPlaylist(data);
         if (data) {
           setIsLoading(false);
+          if (isContinuePlaying) {
+            setIsPlaying(true);
+          } else {
+            setIsPlaying(false);
+          }
         }
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lectureId, userId]);
+  }, [lectureId, userId, isContinuePlaying]);
 
   const handleCopyClick = async () => {
     await navigator.clipboard.writeText(window.location.href);
@@ -130,6 +138,7 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
       setIsPlaying(false);
       audioRef.current.pause();
     } else {
+      setIsStopPlaying(false);
       setIsPlaying(true);
       audioRef.current.play();
     }
@@ -143,12 +152,16 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
         dispatch(updateIndexLectureLeaderPage(-lectures.length + 1));
         swiperRef.current.swiper.slideTo(0);
         setCurrentIndex(0);
+
         if (!isLoop) {
           setIsPlaying(false);
+          setIsContinuePlaying(false);
+          setIsStopPlaying(true);
         }
 
         return;
       }
+
       handleGotoNext();
       return;
     }
@@ -156,10 +169,7 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
     setCurrentIndex(currentIndex + 1);
   };
   const onSlideChange = (val: SwiperClass) => {
-    // const isManualSwipe = trackingSwiper.current && Date.now() - trackingSwiper.current < 300;
-    // if (isManualSwipe) {
-    //   // setIsPlaying(false);
-    // }
+    setIsStopPlaying(false);
     if (audioRef && audioRef.current) {
       audioRef.current.pause();
       setCurrentIndex(val.activeIndex);
@@ -167,18 +177,21 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
   };
 
   const handleGotoNext = () => {
-    audioRef.current?.pause();
+    setIsStopPlaying(false);
+
+    if (isPlaying) {
+      setIsContinuePlaying(true);
+      setIsPlaying(false);
+    }
+
     dispatch(updateIndexLectureLeaderPage(1));
-    setTimeout(() => {
-      audioRef.current?.play();
-    }, 300);
   };
   const handleGotoPrevious = () => {
-    audioRef.current?.pause();
+    if (isPlaying) {
+      setIsContinuePlaying(true);
+      setIsPlaying(false);
+    }
     dispatch(updateIndexLectureLeaderPage(-1));
-    setTimeout(() => {
-      audioRef.current?.play();
-    }, 300);
   };
 
   if (isLoadingPlaylistSummary || !lectureId || !playlistSummary) {
@@ -204,23 +217,14 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
           }}
           className="p-6 shadow-xl bg-white rounded-2xl flex flex-col items-center justify-center w-[100vw] lg:w-[500px]"
         >
-          <Avatar
-            sx={{
-              width: "auto",
-              height: "64px",
-              marginBottom: "16px",
-            }}
-            src={lectures[currentLectureIndex].imgSrc}
-            variant="square"
-            alt="gallery-icon"
-          />
+          <img className="h-16 mb-4" src={lectures[currentLectureIndex].imgSrc} alt="gallery-icon" />
 
           <>
             {lectures[currentLectureIndex].lectureName && (
               <Typography className="text-xl font-semibold mb-6">{lectures[currentLectureIndex].lectureName}</Typography>
             )}
 
-            <Box className={`w-full px-4`}>
+            <Box className={"w-full px-4"}>
               <Swiper
                 className="md:max-w-[600px] "
                 pagination={{
@@ -285,7 +289,7 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
               </Box>
               {userPlaylist && userPlaylist?.records && userPlaylist.records.length > 0 && currentIndex >= 0 && (
                 <audio
-                  autoPlay={isPlaying}
+                  autoPlay={isPlaying && !isStopPlaying}
                   onEnded={handleEnded}
                   ref={audioRef}
                   src={userPlaylist?.records[currentIndex]?.voiceSrc}

@@ -10,6 +10,7 @@ export interface EnrollmentResponseType {
   created: string;
   enrollmentId: string;
   totalStep: number;
+  totalPoint: number;
 }
 
 export interface EnrollmentModal {
