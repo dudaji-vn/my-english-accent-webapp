@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "@/core/store";
 import { updateIndexLectureLeaderPage } from "@/core/store/index";
 import { IPlaylistUserResponse } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
+import persist from "@/shared/utils/persist.util";
 import { Alert, Avatar, Box, Button, Container, IconButton, Snackbar, Tooltip, Typography } from "@mui/material";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -42,6 +43,7 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
   const [userPlaylist, setUserPlaylist] = useState<IPlaylistUserResponse>();
   const { lectureId, lectures, currentLectureIndex } = useAppSelector((state) => state.GlobalStore.leaderBoardPage);
   const dispatch = useAppDispatch();
+  const { setIsSelectListenLecture } = persist;
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -201,7 +203,12 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
     <Box className="h-screen bg-gray-100">
       <Container className="py-4 divider bg-gray-100 sticky top-0 z-10">
         <Box className="flex items-center gap-2">
-          <IconButton onClick={() => navigate(ROUTER.LEADER_BOARD)}>
+          <IconButton
+            onClick={() => {
+              setIsSelectListenLecture(false);
+              navigate(ROUTER.LEADER_BOARD);
+            }}
+          >
             <Avatar src={CloseIcon} className="w-6 h-6" />
           </IconButton>
           <Typography className="text-large-semibold grow">{`${playlistSummary?.nickName}'s voice recording`}</Typography>
@@ -229,7 +236,7 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
                 className="md:max-w-[600px] "
                 pagination={{
                   enabled: true,
-                  horizontalClass: "bottom-0",
+                  // horizontalClass: "bottom-0",
                 }}
                 slidesPerView={"auto"}
                 modules={[Pagination]}
@@ -245,7 +252,7 @@ const UserPlaylist = (props: IModalCompleteCertificateProps) => {
                 ) : (
                   userPlaylist?.records.map((record) => (
                     <SwiperSlide key={record.recordId}>
-                      <Box className="bg-gray-50 p-4 pb-10 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border min-h-[100px]">
+                      <Box className="bg-gray-50 p-4 flex flex-col items-center text-center gap-4 swiper-slide-transform rounded-lg border-stroke border-solid border max-h-[208px] h-[208px]">
                         <Typography className="text-small-medium break-words ">{record.title}</Typography>
                         <Typography className="text-small-regular break-all" variant="body2">
                           {record.phonetic}
