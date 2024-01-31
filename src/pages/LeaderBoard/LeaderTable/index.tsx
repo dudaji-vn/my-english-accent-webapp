@@ -8,6 +8,7 @@ import ROUTER from "@/shared/const/router.const";
 import { Avatar, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { IUserRanking } from "@/core/type";
+import persist from "@/shared/utils/persist.util";
 interface ILeaderTableProps {
   data: IUserRanking[];
 }
@@ -31,6 +32,7 @@ const LeaderTable = (props: ILeaderTableProps) => {
   };
   const { data } = props;
   const handleGotoLeaderBoardUser = (item: IUserRanking) => {
+    persist.setIsSelectListenLecture(false);
     navigate(`${ROUTER.LEADER_BOARD}/${item.userId}`);
   };
   return (

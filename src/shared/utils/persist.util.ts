@@ -3,6 +3,7 @@ import { IUserLogin, IUserProfile, UserResponseType } from "@/core/type";
 const TOKEN = "token";
 const USER_INFO = "userInfo";
 const GOOGLE_ID = "googleId";
+const IS_SELECT_LISTEN_LECTURE = "isSelectListenLecture";
 
 const persist = {
   saveMyInfo: (myInfo: UserResponseType) => {
@@ -46,6 +47,12 @@ const persist = {
     localStorage.removeItem(USER_INFO);
     localStorage.removeItem(GOOGLE_ID);
     localStorage.removeItem(TOKEN);
+  },
+  setIsSelectListenLecture(data: boolean) {
+    localStorage.setItem(IS_SELECT_LISTEN_LECTURE, JSON.stringify(data));
+  },
+  isSelectListenLecture() {
+    return localStorage.getItem(IS_SELECT_LISTEN_LECTURE) === "true";
   },
 };
 

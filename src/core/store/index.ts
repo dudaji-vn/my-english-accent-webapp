@@ -6,6 +6,7 @@ import ListenApi from "../services/listen.service";
 import { UserPlayingType } from "@/components/PlaylistPod";
 import { ModalType } from "@/shared/const/modal-type.const";
 import { EVENT_STATUS } from "@/shared/const/event.const";
+import persist from "@/shared/utils/persist.util";
 
 interface GlobalStoreType {
   user: {
@@ -231,6 +232,8 @@ const globalSlice = createSlice({
       };
     });
     builder.addMatcher(UserApi.endpoints.getPlaylistSummaryByUser.matchFulfilled, (state, action) => {
+      const { isSelectListenLecture } = persist;
+      if (isSelectListenLecture()) return;
       const { lectures, userId } = action.payload;
 
       state.leaderBoardPage = {
