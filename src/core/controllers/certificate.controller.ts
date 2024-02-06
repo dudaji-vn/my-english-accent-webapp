@@ -1,4 +1,4 @@
-import { IGetUserCertificateQuery, IUserCertificateRequest } from "../type";
+import { IGetUserCertificateQuery, IUserCertificateRequest } from "../type/index";
 
 const CertificateController = {
   progress: () => {

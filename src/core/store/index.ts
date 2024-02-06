@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserApi, VocabularyApi } from "../services";
 import { EnrollmentStep, LectureResponseType } from "../type";
 import ListenApi from "../services/listen.service";
-import { UserPlayingType } from "@/components/PlaylistPod";
+import { UserPlayingType } from "@/components/playlist-pod";
 import { ModalType } from "@/shared/const/modal-type.const";
 import { EVENT_STATUS } from "@/shared/const/event.const";
 import persist from "@/shared/utils/persist.util";

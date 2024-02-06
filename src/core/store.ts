@@ -3,7 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { CertificateApi, FakeUserApi, LectureApi, UserApi, VocabularyApi } from "@/core/services";
-import RecordProgressApi from "@/core/services/recordProgress.service";
+import RecordProgressApi from "@/core/services/record-progress.service";
 import ClubStudyApi from "@/core/services/club.service";
 import ChallengeApi from "@/core/services/challenge.service";
 import GlobalReducer, { setIsAuthenticated, toggleModal } from "@/core/store/index";
