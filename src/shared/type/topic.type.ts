@@ -6,6 +6,12 @@ export enum StageExercise {
   Close = 2,
 }
 
+export enum SentenceStatus {
+  NotRecord = 0,
+  NotPass = 1,
+  Pass = 2,
+}
+
 export const StageLabel: Record<StageExercise, string> = {
   [StageExercise.Inprogress]: "In progress",
   [StageExercise.Open]: "Explore",

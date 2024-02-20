@@ -1,7 +1,7 @@
 import { DocumentReference, Timestamp } from "firebase/firestore";
 import { Language } from "./user.type";
 import { EnrollmentResponseType } from "./enrollment.type";
-import { StageExercise } from "@/shared/type";
+import { SentenceStatus, StageExercise } from "@/shared/type";
 
 export interface VocabularyTypeResponse {
   vCreated: string;
@@ -42,6 +42,8 @@ export interface VocabularyGroupByLecture {
   stage: StageExercise;
   enrollmentId: string;
   vocabularies: VocabularyTypeWithNativeLanguageResponse[];
+  lectureName: string;
+  lectureImgUrl: string;
 }
 
 export interface VocabularyMergedEnrollMent extends EnrollmentResponseType {
@@ -73,4 +75,5 @@ export interface VocabularyTypeWithNativeLanguageResponse extends NativeVocabula
   voiceSrc: string;
   enrollmentId: string;
   finalTranscript: string;
+  status?: SentenceStatus;
 }

@@ -32,5 +32,7 @@ export interface EnrollmentStep {
   lectureId: string;
   enrollmentId: string;
   currentStep: number;
+  lectureName: string;
+  lectureImgUrl: string;
   stage: number;
 }
