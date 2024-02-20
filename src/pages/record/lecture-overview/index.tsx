@@ -22,7 +22,12 @@ const LectureOverview = (props: ILectureOverviewProps) => {
 
   return (
     <Box className="flex flex-col items-center">
-      <Box className="md:w-[600px] m-4 p-4 shadow-xl rounded-2xl bg-white">
+      <Box
+        sx={{
+          maxWidth: "calc(100% - 32px)",
+        }}
+        className="w-[600px] m-4 p-4 shadow-xl rounded-2xl bg-white"
+      >
         <Box className="flex flex-col items-center">
           <Box className="mb-4">
             <img className="h-16" src={imageUrl} alt="" />
