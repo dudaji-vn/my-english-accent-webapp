@@ -7,7 +7,7 @@ import { useGetAllVocabulariesInLectureQuery } from "@/core/services";
 import { useAppSelector } from "@/core/store";
 import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import ROUTER from "@/shared/const/router.const";
-import { StageExercise } from "@/shared/type";
+import { SentenceStatus, StageExercise } from "@/shared/type";
 import persist from "@/shared/utils/persist.util";
 import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -15,6 +15,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ModalLeaveRecord from "@/components/modal/modal-leave-record";
 import { useDispatch } from "react-redux";
 import { setIsInRecordProgress } from "@/core/store/index";
+import LectureOverview from "../lecture-overview";
 
 export default function RecordingProgressPage() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ export default function RecordingProgressPage() {
   const enrollmentData = useAppSelector((state) => state.GlobalStore.recordPage);
   const isInProgress = useAppSelector((state) => state.GlobalStore.recordAudio.isInProgress);
   const [isOpenModalLeaveRecord, setIsOpenModalLeaveRecord] = useState(false);
+  const [isOverview, setIsOverview] = useState<boolean>(true);
 
   const { data, isFetching } = useGetAllVocabulariesInLectureQuery(lectureId);
   const [isFinish, setIsFinish] = useState(data?.stage === StageExercise.Close);
@@ -87,7 +89,7 @@ export default function RecordingProgressPage() {
     if (renderVocabulary.length > 0 && parentRef.current && enrollmentData.stage !== StageExercise.Close && !isUpdate) {
       scrollToLastElement();
     }
-  }, [isUpdate, renderVocabulary]);
+  }, [isUpdate, renderVocabulary, isOverview]);
 
   useEffect(() => {
     if (data?.stage === StageExercise.Close) {
@@ -135,31 +137,47 @@ export default function RecordingProgressPage() {
           </IconButton>
         </Box>
       </Container>
-
-      <Box ref={parentRef} className="text-center grow bg-gray-100">
-        {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => (
-          <TranslationCard
-            {...val}
-            key={val.vocabularyId}
-            nextVocabulary={nextVocabulary}
-            enrollmentId={enrollmentData!.enrollmentId}
-            index={index}
-            totalVoca={vocabularies.length}
-          />
-        ))}
-        {isFinish && (
-          <Box className="bg-gray-100 flex flex-col items-center justify-center h-[500px] p-6 gap-2" key={myInfo}>
-            <Avatar src={Congratulation} className="w-16 h-16 mb-4"></Avatar>
-            <Typography className="text-extra-large-semibold">Nice job, {myInfo}</Typography>
-            <Typography variant={"body2"} className="mb-4">
-              You finally recorded all the lectures
-            </Typography>
-            <Button onClick={() => navigate(ROUTER.RECORD)} variant="outlined">
-              Finished
-            </Button>
-          </Box>
-        )}
-      </Box>
+      {isOverview ? (
+        <LectureOverview
+          onPractice={() => {
+            setIsOverview(false);
+          }}
+          data={{
+            stage: enrollmentData.stage,
+            lectureName: enrollmentData.lectureName,
+            currentStep: enrollmentData.currentStep,
+            imageUrl: enrollmentData.lectureImgUrl,
+            totalPoint: vocabularies.filter((item) => item.status === SentenceStatus.Pass).length,
+            totalStep: vocabularies.length,
+            sentences: vocabularies,
+          }}
+        />
+      ) : (
+        <Box ref={parentRef} className="text-center grow bg-gray-100">
+          {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => (
+            <TranslationCard
+              {...val}
+              key={val.vocabularyId}
+              nextVocabulary={nextVocabulary}
+              enrollmentId={enrollmentData!.enrollmentId}
+              index={index}
+              totalVoca={vocabularies.length}
+            />
+          ))}
+          {isFinish && (
+            <Box className="bg-gray-100 flex flex-col items-center justify-center h-[500px] p-6 gap-2" key={myInfo}>
+              <Avatar src={Congratulation} className="w-16 h-16 mb-4"></Avatar>
+              <Typography className="text-extra-large-semibold">Nice job, {myInfo}</Typography>
+              <Typography variant={"body2"} className="mb-4">
+                You finally recorded all the lectures
+              </Typography>
+              <Button onClick={() => navigate(ROUTER.RECORD)} variant="outlined">
+                Finished
+              </Button>
+            </Box>
+          )}
+        </Box>
+      )}
     </Box>
   );
 }

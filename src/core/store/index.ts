@@ -53,6 +53,8 @@ const initialState: GlobalStoreType = {
     currentStep: 0,
     enrollmentId: "",
     lectureId: "",
+    lectureImgUrl: "",
+    lectureName: "",
     stage: 0,
   },
   recordAudio: {
