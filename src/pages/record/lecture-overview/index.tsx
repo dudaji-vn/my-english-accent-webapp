@@ -24,9 +24,10 @@ const LectureOverview = (props: ILectureOverviewProps) => {
     <Box className="flex flex-col items-center">
       <Box
         sx={{
+          width: "600px",
           maxWidth: "calc(100% - 32px)",
         }}
-        className="w-[600px] m-4 p-4 shadow-xl rounded-2xl bg-white"
+        className="m-4 p-4 shadow-xl rounded-2xl bg-white"
       >
         <Box className="flex flex-col items-center">
           <Box className="mb-4">
