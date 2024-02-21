@@ -1,26 +1,33 @@
-import React from "react";
-import { Avatar, Container, Typography } from "@mui/material";
-import PeopleIcon from "@/assets/icon/people-icon.svg";
-import MicrophoneIcon from "@/assets/icon/microphone-2-color-icon.svg";
-import ROUTER from "@/shared/const/router.const";
-import { useNavigate } from "react-router-dom";
-import BoxCard from "@/components/box-card";
+import { Box, Button, Typography } from "@mui/material";
 
 export default function HomePage() {
-  const navigate = useNavigate();
-
   return (
-    <Container className="py-4">
-      <BoxCard classes="flex flex-col gap-2 p-4 mb-4" onClick={() => navigate(ROUTER.CLUB)}>
-        <Avatar src={PeopleIcon}></Avatar>
-        <Typography className="text-large-semibold">Club study</Typography>
-        <Typography variant="body2">Enhance your communication skills by study with your colleagues</Typography>
-      </BoxCard>
-      <BoxCard classes="flex flex-col gap-2 p-4 mb-4" onClick={() => navigate(ROUTER.RECORD)}>
-        <Avatar src={MicrophoneIcon} alt="headphone-icon"></Avatar>
-        <Typography className="text-large-semibold">Practice pronunciation</Typography>
-        <Typography variant="body2">Common phrase practice for work</Typography>
-      </BoxCard>
-    </Container>
+    <Box className="m-4 bg-white rounded-2xl shadow-md">
+      <Box className="p-4">
+        <Typography>Practice speaking</Typography>
+        <Typography>
+          Complete a lecture to practice your English speaking skills and compete against other TechTalkers in Leaderboards.
+        </Typography>
+        <Button className="bg-[#E8DEF8] shadow-sm text-textPrimary">Start a lecture</Button>
+      </Box>
+      <Box className="p-4">
+        <Typography>Build vocabulary</Typography>
+        <Typography>Practice words and sentences where you have spoken incorrectly during the lectures</Typography>
+        <Box className="flex items-center">
+          <Button className="bg-[#E8DEF8] shadow-sm text-textPrimary">Start now</Button>
+          <Typography>0</Typography>
+          <Typography>incorrect words and sentences</Typography>
+        </Box>
+      </Box>
+      <Box className="p-4">
+        <Typography>TechTalk Certificates</Typography>
+        <Typography>Gain credibility and show off your English speaking skills through a test.</Typography>
+        <Box className="flex items-center">
+          <Button className="bg-[#E8DEF8] shadow-sm text-textPrimary">Start a certificate</Button>
+          <Typography>0/2</Typography>
+          <Typography>TechTalk certificates</Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 }

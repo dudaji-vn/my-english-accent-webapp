@@ -25,6 +25,8 @@ import Chervon from "@/assets/icon/chevron-left-icon.svg";
 import LogoutIcon from "@/assets/icon/log-out-icon.svg";
 import LogoApp from "@/assets/icon/logo-icon.svg";
 import MenuIcon from "@/assets/icon/menu-icon.svg";
+import HomeCheckedIcon from "@/assets/icon/active-home-icon.svg";
+import HomeIcon from "@/assets/icon/home-icon.svg";
 import RecordCheckedIcon from "@/assets/icon/microphone-2-color-icon.svg";
 import RecordIcon from "@/assets/icon/microphone-2-icon.svg";
 import MusicCheckedIcon from "@/assets/icon/music-play-color-icon.svg";
@@ -45,6 +47,14 @@ import useClickOutside from "@/shared/hook/use-click-out-side";
 import MailIcon from "../icons/mail-icon";
 
 const menu = [
+  {
+    name: "Home",
+    icon: HomeIcon,
+    iconChecked: HomeCheckedIcon,
+    action: (navigate: NavigateFunction) => {
+      navigate(ROUTER.HOME);
+    },
+  },
   {
     name: "Record",
     icon: RecordIcon,
@@ -77,15 +87,6 @@ const menu = [
       navigate(ROUTER.LEADER_BOARD);
     },
   },
-
-  // {
-  //   name: "Club",
-  //   icon: ClubIcon,
-  //   iconChecked: ClubCheckedIcon,
-  //   action: (navigate: NavigateFunction) => {
-  //     navigate(ROUTER.CLUB);
-  //   },
-  // },
 ];
 
 const DrawerNavigate = ({ ...props }: any) => {
@@ -221,10 +222,13 @@ const DrawerNavigate = ({ ...props }: any) => {
             disableRipple
           >
             <Avatar src={MenuIcon} sx={{ width: 24, height: 24 }} />
-            <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600 }}>{path}</Typography>
+            <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600 }}>
+              {" "}
+              {path === "home" ? `Welcome, ${persist.getMyInfo().nickName}` : path}
+            </Typography>
           </IconButton>
           <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600, ...(!open && { display: "none" }) }}>
-            {path}
+            {path === "home" ? `Welcome, ${persist.getMyInfo().nickName}` : path}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box ref={profileRef} className="relative">
