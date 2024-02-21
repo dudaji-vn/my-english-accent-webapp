@@ -13,6 +13,7 @@ import persist from "./shared/utils/persist.util";
 
 const Login = lazy(() => import("@/pages/auth/login"));
 const Register = lazy(() => import("@/pages/auth/register"));
+const HomePage = lazy(() => import("@/pages/home"));
 const RecordingPage = lazy(() => import("@/pages/record"));
 const RecordingProgressPage = lazy(() => import("@/pages/record/record-progress"));
 const RerecordingProgressPage = lazy(() => import("@/pages/club/club-rerecord-progress"));
@@ -122,7 +123,7 @@ function App() {
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
           <Route index element={<Navigate replace to={ROUTER.RECORD} />} />
-          <Route path={ROUTER.RECORD} element={<RecordingPage />} />
+          <Route path={ROUTER.HOME} element={<HomePage />} />
           <Route path={ROUTER.RECORD} element={<RecordingPage />} />
           <Route path={ROUTER.CERTIFICATE} element={<CertificatePage />} />
           <Route path={ROUTER.LEADER_BOARD} element={<LeaderBoardPage />} />
