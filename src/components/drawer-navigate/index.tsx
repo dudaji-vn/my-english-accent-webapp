@@ -224,11 +224,11 @@ const DrawerNavigate = ({ ...props }: any) => {
             <Avatar src={MenuIcon} sx={{ width: 24, height: 24 }} />
             <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600 }}>
               {" "}
-              {path === "home" ? `Welcome, ${persist.getMyInfo().nickName}` : path}
+              {path === "home" ? `Welcome, ${persist.getMyInfo()?.nickName}` : path}
             </Typography>
           </IconButton>
           <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600, ...(!open && { display: "none" }) }}>
-            {path === "home" ? `Welcome, ${persist.getMyInfo().nickName}` : path}
+            {path === "home" ? `Welcome, ${persist.getMyInfo()?.nickName}` : path}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box ref={profileRef} className="relative">
