@@ -122,7 +122,7 @@ function App() {
         </Route>
 
         <Route path={ROUTER.ROOT} element={<ProtectedRoute isShowDrawer />}>
-          <Route index element={<Navigate replace to={ROUTER.RECORD} />} />
+          <Route index element={<Navigate replace to={ROUTER.HOME} />} />
           <Route path={ROUTER.HOME} element={<HomePage />} />
           <Route path={ROUTER.RECORD} element={<RecordingPage />} />
           <Route path={ROUTER.CERTIFICATE} element={<CertificatePage />} />

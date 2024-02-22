@@ -23,7 +23,7 @@ export default function Login() {
     if (isSuccess) {
       navigate(ROUTER.AUTH + ROUTER.REGISTER);
     } else {
-      navigate(ROUTER.RECORD);
+      navigate(ROUTER.HOME);
     }
   };
 
