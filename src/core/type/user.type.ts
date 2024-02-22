@@ -99,3 +99,17 @@ export interface IUserRankingRequest {
   lectureId: string;
   emoji?: "like" | "unlike";
 }
+
+export interface ISummaryUserResponse {
+  resumeLecture: {
+    lectureId: string;
+    lectureName: string;
+    lectureImgSrc: string;
+    point: number;
+    totalPoint: number;
+    totalSentences: number;
+    currentStep: number;
+  };
+  totalArchivedCertificate: number;
+  totalCertificate: number;
+}

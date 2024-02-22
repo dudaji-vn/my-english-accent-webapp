@@ -11,6 +11,7 @@ import {
   UserResponseType,
   IPlaylistUserResponse,
   IUserRankingRequest,
+  ISummaryUserResponse,
 } from "../type";
 import baseQuery from "..";
 import UserController from "../controllers/user.controller";
@@ -82,6 +83,13 @@ export const UserApi = createApi({
       invalidatesTags: (result, error, arg) =>
         arg ? [{ type: "User" as const, lectureId: arg.lectureId, userId: arg.userId }, "User"] : ["User"],
     }),
+    getSummary: builder.query<ISummaryUserResponse, void>({
+      keepUnusedDataFor: 0,
+      query: UserController.getSummary,
+      transformResponse: (response: { data: ISummaryUserResponse }) => {
+        return response.data;
+      },
+    }),
   }),
 });
 
@@ -97,6 +105,7 @@ export const {
   useLazyGetPlaylistByUserQuery,
   useLazyGetPlaylistSummaryByUserQuery,
   useLikeOrUnlikePlaylistByUserMutation,
+  useGetSummaryQuery,
 } = UserApi;
 
 export default UserApi;
