@@ -104,6 +104,11 @@ const UserController = {
       body: payload,
     };
   },
+  getSummary: () => {
+    return {
+      url: "/user/getSummary",
+    };
+  },
 };
 
 export default UserController;

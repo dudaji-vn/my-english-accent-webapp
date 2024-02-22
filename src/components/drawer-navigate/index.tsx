@@ -222,13 +222,10 @@ const DrawerNavigate = ({ ...props }: any) => {
             disableRipple
           >
             <Avatar src={MenuIcon} sx={{ width: 24, height: 24 }} />
-            <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600 }}>
-              {" "}
-              {path === "home" ? `Welcome, ${persist.getMyInfo()?.nickName}` : path}
-            </Typography>
+            <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600 }}> {path}</Typography>
           </IconButton>
           <Typography sx={{ textTransform: "capitalize", fontSize: "20px", fontWeight: 600, ...(!open && { display: "none" }) }}>
-            {path === "home" ? `Welcome, ${persist.getMyInfo()?.nickName}` : path}
+            {path}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box ref={profileRef} className="relative">
