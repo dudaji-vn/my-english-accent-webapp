@@ -56,7 +56,7 @@ const Certificate = () => {
 
                 <Typography className="text-center text-textSecondary font-semibold mb-9">
                   {item.star !== CertificateStatus.NONE
-                    ? `Highest result: ${(item.score * 100) / item.totalScore}%`
+                    ? `Result: ${(item.score * 100) / item.totalScore}%`
                     : "Test to see your result"}
                 </Typography>
                 <Typography className="text-base-semibold" color={"primary"}>

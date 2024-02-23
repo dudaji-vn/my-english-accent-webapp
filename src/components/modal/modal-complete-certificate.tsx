@@ -54,7 +54,7 @@ const ModalCompleteCertificate = (props: IModalCompleteCertificateProps) => {
             );
           })}
         </Box>
-        <Typography sx={{ marginBottom: "16px", fontSize: "20px", fontWeight: 600 }}>Highest result: {percent * 100}%</Typography>
+        <Typography sx={{ marginBottom: "16px", fontSize: "20px", fontWeight: 600 }}>Result: {percent * 100}%</Typography>
         <Typography
           sx={{
             marginBottom: "40px",

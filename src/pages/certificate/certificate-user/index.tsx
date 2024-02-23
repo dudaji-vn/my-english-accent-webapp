@@ -121,7 +121,7 @@ const CertificateUser = (props: IModalCompleteCertificateProps) => {
             <Typography className="text-2xl font-semibold mb-2">{userCertificate?.certificateName}</Typography>
           )}
           {userCertificate?.score && userCertificate.totalScore && (
-            <Typography className="text-textSecondary font-semibold mb-6">{`  Highest result: ${
+            <Typography className="text-textSecondary font-semibold mb-6">{`  Result: ${
               (userCertificate!.score * 100) / userCertificate!.totalScore
             }%`}</Typography>
           )}
