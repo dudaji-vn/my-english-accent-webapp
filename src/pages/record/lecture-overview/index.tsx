@@ -52,15 +52,13 @@ const LectureOverview = (props: ILectureOverviewProps) => {
           </Box>
 
           <Box>
-            {totalStep > 7 && (
-              <Button onClick={props.onPractice} className="py-[10px] px-6 rounded-2xl text-base mb-4" variant="contained">
-                {stage === StageExercise.Open
-                  ? "Start speaking"
-                  : stage === StageExercise.Inprogress
-                  ? "Continue speaking"
-                  : "Practice again"}
-              </Button>
-            )}
+            <Button onClick={props.onPractice} className="py-[10px] px-6 rounded-2xl text-base mb-4" variant="contained">
+              {stage === StageExercise.Open
+                ? "Start speaking"
+                : stage === StageExercise.Inprogress
+                ? "Continue speaking"
+                : "Practice again"}
+            </Button>
           </Box>
         </Box>
 
