@@ -1,5 +1,5 @@
 import { Language, NATIONAL } from "@/core/type";
-import { Box, Button, CircularProgress, InputBase, MenuItem, Select, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, InputBase, MenuItem, Select, TextField, Typography } from "@mui/material";
 import Modal, { IModalProps } from ".";
 import CloseIcon from "../icons/close-icon";
 import { ChangeEvent, useMemo, useState } from "react";
@@ -23,10 +23,16 @@ const ModalEditProfile = (props: IModalEditProfileProps) => {
   });
 
   const isDisable = useMemo(() => {
-    return userProfile.nickName === nickName && userProfile.nativeLanguage === nativeLanguage;
+    return (
+      !userProfile.nickName ||
+      userProfile.nickName.trim().length === 0 ||
+      userProfile.nickName.trim().length > 40 ||
+      (userProfile.nickName === nickName && userProfile.nativeLanguage === nativeLanguage)
+    );
   }, [userProfile]);
 
   const handleEditProfile = async () => {
+    userProfile.nickName = userProfile.nickName.trim();
     const data = await trigger(userProfile).unwrap();
     if (data) {
       persist.updateProfile(data);
@@ -54,7 +60,7 @@ const ModalEditProfile = (props: IModalEditProfileProps) => {
     <>
       <SnackbarComponent />
       <Modal open={open} onClose={onClose}>
-        <div className={false ? "pointer-events-none cursor-not-allowed" : ""}>
+        <div>
           <div className="flex gap-4 justify-between my-4">
             <Typography className="font-semibold text-xl text-left">Edit profile</Typography>
             <Box onClick={onClose} className="p-0">
@@ -74,12 +80,29 @@ const ModalEditProfile = (props: IModalEditProfileProps) => {
           >
             <Box className="flex flex-col w-full mb-4">
               <Typography className="text-left mb-2">Full name</Typography>
-              <InputBase
+              <TextField
                 name="nickName"
                 onChange={handleChangeInfo}
-                className="hover:border-primary px-5 py-3 border border-stroke border-solid rounded-md bg-white text-base-regular"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !isDisable) {
+                    handleEditProfile();
+                  }
+                }}
                 value={userProfile.nickName}
                 placeholder="Your full name"
+                error={userProfile.nickName.length > 40}
+                helperText={userProfile.nickName.length > 40 && "Full name character limit – 40 characters"}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      border: "1px solid #DFE4EA",
+                    },
+                    "&:hover fieldset": {
+                      borderWidth: "1px",
+                    },
+                    "&.Mui-focused fieldset": {},
+                  },
+                }}
               />
             </Box>
             <Box>
@@ -100,7 +123,7 @@ const ModalEditProfile = (props: IModalEditProfileProps) => {
                   },
                   ".MuiSvgIcon-root ": {},
                 }}
-                className="text-left "
+                className="text-left"
                 fullWidth
                 value={userProfile.nativeLanguage}
               >

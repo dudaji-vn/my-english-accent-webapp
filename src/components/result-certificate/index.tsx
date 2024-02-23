@@ -57,7 +57,7 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
             })}
           </Box>
           <Typography className="text-center text-2xl font-semibold mb-2 ">{certificateName}</Typography>
-          <Typography className="text-center text-textSecondary font-semibold mb-2">{`Highest result: ${
+          <Typography className="text-center text-textSecondary font-semibold mb-2">{`Result: ${
             (score * 100) / totalScore
           }%`}</Typography>
 
@@ -79,7 +79,7 @@ const ResultCertificate = (props: IModalCompleteCertificateProps) => {
             })}
           </Box>
           <Typography className="text-center text-3xl font-semibold mb-6">{certificateName}</Typography>
-          <Typography className="text-center text-textSecondary font-semibold mb-6">{`  Highest result: ${
+          <Typography className="text-center text-textSecondary font-semibold mb-6">{`  Result: ${
             (score * 100) / totalScore
           }%`}</Typography>
 
