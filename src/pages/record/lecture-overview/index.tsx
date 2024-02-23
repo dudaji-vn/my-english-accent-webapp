@@ -1,9 +1,10 @@
+import ArrowdownIcon from "@/assets/icon/arrow-down-icon.svg";
 import CheckIcon from "@/components/icons/check-icon";
 import LectureIcon from "@/components/icons/lecture-icon";
 import ScoreIcon from "@/components/icons/score-icon";
 import { VocabularyTypeWithNativeLanguageResponse } from "@/core/type";
 import { SentenceStatus, StageExercise } from "@/shared/type";
-import { Box, Button, Typography } from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 
 interface ILectureOverviewProps {
   data: {
@@ -63,7 +64,7 @@ const LectureOverview = (props: ILectureOverviewProps) => {
           </Box>
         </Box>
 
-        <Box>
+        <Box className="mb-6">
           {sentences.map((item) => {
             return (
               <Box
@@ -97,15 +98,14 @@ const LectureOverview = (props: ILectureOverviewProps) => {
             );
           })}
         </Box>
-        <Box className="text-center mt-10 mb-6">
-          <Button onClick={props.onPractice} className="py-[10px] px-6 rounded-2xl text-base" variant="contained">
-            {stage === StageExercise.Open
-              ? "Start speaking"
-              : stage === StageExercise.Inprogress
-              ? "Continue speaking"
-              : "Practice again"}
-          </Button>
-        </Box>
+      </Box>
+      <Box
+        onClick={() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        className="fixed bottom-10 z-10 right-10 bg-purple-200 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:opacity-80"
+      >
+        <Avatar className="rotate-180" sx={{ width: 16, height: 12 }} src={ArrowdownIcon} />
       </Box>
     </Box>
   );
