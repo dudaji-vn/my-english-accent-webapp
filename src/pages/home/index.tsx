@@ -63,7 +63,7 @@ export default function HomePage() {
           </Box>
         )}
       </Box>
-      <Box className="p-6 border-solid border-0 border-b border-[#CBD5E1]">
+      {/* <Box className="p-6 border-solid border-0 border-b border-[#CBD5E1]">
         <Typography className="text-lg font-semibold mb-2">Build vocabulary</Typography>
         <Typography className="mb-6">
           Practice words and sentences where you have spoken incorrectly during the lectures
@@ -79,7 +79,7 @@ export default function HomePage() {
             </Typography>
           </Box>
         </Box>
-      </Box>
+      </Box> */}
       <Box className="p-6">
         <Typography className="text-lg font-semibold mb-2">TechTalk Certificates</Typography>
         <Typography className="mb-6">Gain credibility and show off your English speaking skills through a test.</Typography>
