@@ -1,10 +1,10 @@
 import MessageIcon from "@/assets/icon/message-icon.svg";
 import { Language } from "@/core/type";
-import { PeopleistenTypeResponse } from "@/core/type/listen.type";
+import { PeopleListenTypeResponse } from "@/core/type/listen.type";
 import { Avatar, Box, Typography } from "@mui/material";
 import NationalityCard from "../person-info";
 
-export default function UserListen(props: PeopleistenTypeResponse) {
+export default function UserListen(props: PeopleListenTypeResponse) {
   const language = (language: Language) => {
     const lang = {
       vn: "Vietnamese",

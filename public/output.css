@@ -335,12 +335,20 @@ h6 {
   bottom: 0px;
 }
 
+#root :is(.bottom-10) {
+  bottom: 2.5rem;
+}
+
 #root :is(.left-0) {
   left: 0px;
 }
 
 #root :is(.right-0) {
   right: 0px;
+}
+
+#root :is(.right-10) {
+  right: 2.5rem;
 }
 
 #root :is(.top-0) {
@@ -353,14 +361,6 @@ h6 {
 
 #root :is(.top-2\/4) {
   top: 50%;
-}
-
-#root :is(.bottom-10) {
-  bottom: 2.5rem;
-}
-
-#root :is(.right-10) {
-  right: 2.5rem;
 }
 
 #root :is(.z-10) {
@@ -652,12 +652,20 @@ h6 {
   width: 100%;
 }
 
+#root :is(.w-\[500px\]) {
+  width: 500px;
+}
+
 #root :is(.min-w-\[200px\]) {
   min-width: 200px;
 }
 
 #root :is(.max-w-\[375px\]) {
   max-width: 375px;
+}
+
+#root :is(.max-w-\[400px\]) {
+  max-width: 400px;
 }
 
 #root :is(.max-w-\[600px\]) {
@@ -670,6 +678,10 @@ h6 {
 
 #root :is(.max-w-\[95\%\]) {
   max-width: 95%;
+}
+
+#root :is(.max-w-\[500px\]) {
+  max-width: 500px;
 }
 
 #root :is(.grow) {
@@ -929,6 +941,11 @@ h6 {
   background-color: rgb(251 191 36 / var(--tw-bg-opacity));
 }
 
+#root :is(.bg-\[\#fff\]) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
 #root :is(.p-0) {
   padding: 0px;
 }
@@ -965,11 +982,6 @@ h6 {
 #root :is(.px-4) {
   padding-left: 1rem;
   padding-right: 1rem;
-}
-
-#root :is(.px-5) {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
 }
 
 #root :is(.px-6) {
@@ -1269,11 +1281,6 @@ h6 {
   border-bottom-width: 0px;
 }
 
-#root :is(.hover\:border-primary:hover) {
-  --tw-border-opacity: 1;
-  border-color: rgb(127 86 217 / var(--tw-border-opacity));
-}
-
 #root :is(.hover\:bg-\[\#E2E8F0\]:hover) {
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity));
@@ -1368,6 +1375,14 @@ h6 {
     width: fit-content;
   }
 
+  #root :is(.md\:w-\[600px\]) {
+    width: 600px;
+  }
+
+  #root :is(.md\:w-\[500px\]) {
+    width: 500px;
+  }
+
   #root :is(.md\:max-w-\[50\%\]) {
     max-width: 50%;
   }
@@ -1380,6 +1395,10 @@ h6 {
     max-width: -webkit-fit-content;
     max-width: -moz-fit-content;
     max-width: fit-content;
+  }
+
+  #root :is(.md\:max-w-\[500px\]) {
+    max-width: 500px;
   }
 
   #root :is(.md\:grid-cols-2) {
@@ -1409,6 +1428,26 @@ h6 {
   #root :is(.md\:px-\[120px\]) {
     padding-left: 120px;
     padding-right: 120px;
+  }
+
+  #root :is(.md\:px-\[200px\]) {
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+
+  #root :is(.md\:px-\[400px\]) {
+    padding-left: 400px;
+    padding-right: 400px;
+  }
+
+  #root :is(.md\:px-\[600px\]) {
+    padding-left: 600px;
+    padding-right: 600px;
+  }
+
+  #root :is(.md\:px-\[500px\]) {
+    padding-left: 500px;
+    padding-right: 500px;
   }
 
   #root :is(.md\:pb-4) {

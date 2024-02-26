@@ -11,7 +11,7 @@ export interface LectureListenTypeResponse {
   isSelected: boolean;
 }
 
-export interface PeopleistenTypeResponse {
+export interface PeopleListenTypeResponse {
   numberSelectedLectures: number;
   numberCompletedLectures: number;
   userId: string;
