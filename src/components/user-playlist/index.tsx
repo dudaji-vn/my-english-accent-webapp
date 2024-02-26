@@ -93,7 +93,7 @@ export default function UserPlaylist({ peopleList, setPeopleList }: { peopleList
             }}
           />
         </Box>
-        <Box className="flex justify-between items-center md:w-[500px]">
+        <Box className="flex justify-between items-center w-full md:w-[500px]">
           <Typography variant="body2" className="text-extra-small-regular">
             {pluralize(data.length ?? 0, "people", "")}
           </Typography>

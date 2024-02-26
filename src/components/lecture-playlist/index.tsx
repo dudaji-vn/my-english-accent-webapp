@@ -92,7 +92,7 @@ export default function LecturePlaylist({ lectureList, setLectureList }: { lectu
             }}
           />
         </Box>
-        <Box className="flex justify-between items-center md:w-[500px]">
+        <Box className="flex justify-between items-center w-full md:w-[500px]">
           <Typography variant="body2" className="text-extra-small-regular">
             {pluralize(data.length ?? 0, "lecture")}
           </Typography>

@@ -67,7 +67,7 @@ const ActionControlPlaylist = forwardRef(({ usersRecord, setUsersRecord, onNextS
         dispatch(updateIndexListenPage(-1));
       }
     }
-    dispatch(updateIsPlaying(false));
+    dispatch(updateIsPlaying(true));
   };
 
   const getNewUserRecord = (currentIndex: number, isEnded?: boolean) => {
