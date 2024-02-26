@@ -4,7 +4,7 @@ import UncheckIcon from "@/assets/icon/circle-uncheck-icon.svg";
 import CloseIcon from "@/assets/icon/close-icon.svg";
 import WarningIcon from "@/assets/icon/warning-icon.svg";
 import { useGetUsersAvailableQuery } from "@/core/services/listen.service";
-import { PeopleistenTypeResponse } from "@/core/type/listen.type";
+import { PeopleListenTypeResponse } from "@/core/type/listen.type";
 import { Avatar, Box, Button, Checkbox, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import BoxCard from "../box-card";
 import UserListen from "../user-listen";
@@ -103,7 +103,7 @@ export default function UserPlaylist({ peopleList, setPeopleList }: { peopleList
         </Box>
       </Box>
       <Box className="flex flex-col gap-4 items-center">
-        {filterUsersAvailable.map((user: PeopleistenTypeResponse) => (
+        {filterUsersAvailable.map((user: PeopleListenTypeResponse) => (
           <BoxCard classes="flex justify-between items-start p-4 w-full md:w-[500px] " key={user.userId}>
             <Box className="flex flex-col gap-2">
               <UserListen {...user} />
