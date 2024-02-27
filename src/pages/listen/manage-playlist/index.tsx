@@ -55,10 +55,10 @@ export default function ManagePlaylist() {
     switch (activeTab) {
       case "Lectures":
         const bareLectureList = LectureData?.filter((val) => val.isSelected).map((val) => val.lectureId);
-        return !lectureList.length || _.isEqual(bareLectureList, lectureList);
+        return !lectureList.length || _.isEqual(_.sortBy(bareLectureList), _.sortBy(lectureList));
       case "People":
         const barePeopleList = PeopleData?.filter((val) => val.isSelected).map((val) => val.userId);
-        return !peopleList.length || _.isEqual(barePeopleList, peopleList);
+        return !peopleList.length || _.isEqual(_.sortBy(barePeopleList), _.sortBy(peopleList));
     }
   }, [activeTab, lectureList, peopleList, PeopleData, LectureData]);
 
