@@ -5,6 +5,7 @@ type StatusType = "recording" | "stopped" | "idle";
 const recorder = new MicRecorder({ bitRate: 128 });
 export default function useMicRecorder() {
   const [status, setStatus] = useState<StatusType>("idle");
+  const [isError, setIsError] = useState<boolean>(false);
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaBase64, setMediaBase64] = useState<string>("");
 
@@ -14,21 +15,20 @@ export default function useMicRecorder() {
       reader.readAsDataURL(file);
       reader.onload = () => {
         const base64String = reader.result?.toString().replace("data:", "").replace(/^.+,/, "");
-        //const base64String = reader.result?.toString();
-
         return resolve(base64String);
       };
       reader.onerror = reject;
     });
 
   const startRecording = () => {
+    setIsError(false);
     recorder
       .start()
       .then((stream: any) => {
         setStatus(() => "recording");
       })
       .catch((e: any) => {
-        console.error(e);
+        setIsError(true);
       });
   };
 
@@ -60,6 +60,7 @@ export default function useMicRecorder() {
     status,
     mediaFile,
     mediaBase64,
+    isError,
     startRecording,
     stopRecording,
     clearFile,
