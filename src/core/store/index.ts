@@ -218,6 +218,7 @@ const globalSlice = createSlice({
     });
     builder.addMatcher(VocabularyApi.endpoints.enrollLecture.matchFulfilled, (state, action) => {
       state.recordPage = {
+        ...state.recordPage,
         ...action.payload,
       };
     });
