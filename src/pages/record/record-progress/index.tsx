@@ -27,9 +27,11 @@ export default function RecordingProgressPage() {
   const lectureId = searchParams.get("lectureId") ?? "";
   const parentRef = useRef<HTMLDivElement>(null);
   const enrollmentData = useAppSelector((state) => state.GlobalStore.recordPage);
+
   const isInProgress = useAppSelector((state) => state.GlobalStore.recordAudio.isInProgress);
   const [isOpenModalLeaveRecord, setIsOpenModalLeaveRecord] = useState(false);
   const [isOverview, setIsOverview] = useState<boolean>(true);
+  const [isExist, setIsExist] = useState<boolean>(false);
 
   const { data, isFetching } = useGetAllVocabulariesInLectureQuery(lectureId);
   const [isFinish, setIsFinish] = useState(data?.stage === StageExercise.Close);
@@ -78,10 +80,15 @@ export default function RecordingProgressPage() {
   };
 
   const onHandleClose = () => {
+    setIsExist(true);
     if (isInProgress) {
       setIsOpenModalLeaveRecord(true);
     } else {
-      navigate(-1);
+      if (!isOverview) {
+        window.location.reload();
+      } else {
+        navigate(-1);
+      }
     }
   };
 
@@ -122,7 +129,7 @@ export default function RecordingProgressPage() {
         }}
         onClose={() => {
           dispatch(setIsInRecordProgress(false));
-          navigate(-1);
+          window.location.reload();
         }}
         open={isOpenModalLeaveRecord}
       />
@@ -156,6 +163,7 @@ export default function RecordingProgressPage() {
         <Box ref={parentRef} className="text-center grow bg-gray-100">
           {renderVocabulary.map((val: VocabularyTypeWithNativeLanguageResponse, index: number) => (
             <TranslationCard
+              isExist={isExist}
               {...val}
               key={val.vocabularyId}
               nextVocabulary={nextVocabulary}
